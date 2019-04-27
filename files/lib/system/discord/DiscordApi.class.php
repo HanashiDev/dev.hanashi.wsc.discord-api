@@ -376,6 +376,85 @@ class DiscordApi {
         return $this->execute($url, 'DELETE');
     }
 
+    /**
+     * Post a typing indicator for the specified channel.
+     * Generally bots should not implement this route.
+     * However, if a bot is responding to a command and expects the computation to take a few seconds, this endpoint may be called to let the user know that the bot is processing their message.
+     * Returns a 204 empty response on success.
+     * Fires a Typing Start Gateway event.
+     * 
+     * @param   integer $channelID      Channel-ID
+     * @return  array
+     */
+    public function triggerTypingIndicator($channelID) {
+        $url = $this->apiUrl . '/channels/'.$channelID.'/typing';
+        return $this->execute($url, 'POST');
+    }
+
+    /**
+     * Returns all pinned messages in the channel as an array of message objects.
+     * 
+     * @param   integer $channelID      Channel-ID
+     * @return  array
+     */
+    public function getPinnedMessages($channelID) {
+        $url = $this->apiUrl . '/channels/'.$channelID.'/pins';
+        return $this->execute($url);
+    }
+
+    /**
+     * Pin a message in a channel.
+     * Requires the MANAGE_MESSAGES permission.
+     * Returns a 204 empty response on success.
+     * 
+     * @param   integer $channelID      Channel-ID
+     * @param   integer $messageID  ID der Nachricht
+     * @return  array
+     */
+    public function addPinnedChannelMessage($channelID, $messageID) {
+        $url = $this->apiUrl . '/channels/'.$channelID.'/pins/'.$messageID;
+        return $this->execute($url, 'PUT');
+    }
+
+    /**
+     * Delete a pinned message in a channel.
+     * Requires the MANAGE_MESSAGES permission.
+     * Returns a 204 empty response on success.
+     * 
+     * @param   integer $channelID      Channel-ID
+     * @param   integer $messageID  ID der Nachricht
+     * @return  array
+     */
+    public function deletePinnedChannelMessage($channelID, $messageID) {
+        $url = $this->apiUrl . '/channels/'.$channelID.'/pins/'.$messageID;
+        return $this->execute($url, 'DELETE');
+    }
+
+    /**
+     * Adds a recipient to a Group DM using their access token
+     * 
+     * @param   integer $channelID  Channel-ID
+     * @param   integer $userID     User that should join
+     * @param   array   $params     optionale Parameter
+     * @return  array
+     */
+    public function groupDMAddRecipient($channelID, $userID, $params = []) {
+        $url = $this->apiUrl . '/channels/'.$channelID.'/recipients/'.$userID;
+        return $this->execute($url, 'PUT', $params, 'application/json');
+    }
+
+    /**
+     * Removes a recipient from a Group DM
+     * 
+     * @param   integer $channelID  Channel-ID
+     * @param   integer $userID     User that should join
+     * @return  array
+     */
+    public function groupDMRemoveRecipient($channelID, $userID) {
+        $url = $this->apiUrl . '/channels/'.$channelID.'/recipients/'.$userID;
+        return $this->execute($url, 'DELETE');
+    }
+
     /////////////////////////////////////
     // Channels End
     /////////////////////////////////////

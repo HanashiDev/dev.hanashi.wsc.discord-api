@@ -8,6 +8,6 @@ class DiscordTestAction extends AbstractAction {
         parent::execute();
 
         $discord = new DiscordApi(388240292400332802, 388240410889289728, 'jXXAp5DAGQnpL5WP1dIL43jt72lZm8cf', 'Mzg4MjQwNDEwODg5Mjg5NzI4.XMP3zw._sA_XWOEqVXsygFvIOI6gdNB0ZI');
-        wcfDebug($discord->createChannelInvite(390423090036736006));
+        wcfDebug($discord->deletePinnedChannelMessage(390423090036736006,571620642902769664));
     }
 }
