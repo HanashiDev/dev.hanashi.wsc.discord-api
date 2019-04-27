@@ -35,20 +35,6 @@ class DiscordApi {
     protected $guildID;
 
     /**
-     * Client-ID der Discord-Anwendung
-     * 
-     * @var integer
-     */
-    protected $clientID;
-
-    /**
-     * Geheimer Schlüssel der Discord-Anwendung
-     * 
-     * @var string
-     */
-    protected $clientSecret;
-
-    /**
      * Geheimer Schlüssel des Discord-Bots
      * 
      * @var string
@@ -73,10 +59,8 @@ class DiscordApi {
      * @param   string  $botToken       Geheimer Schlüssel des Discord-Bots
      * @param   string  $botType        Bot-Typ
      */
-    public function __construct($guildID, $clientID, $clientSecret, $botToken, $botType = 'Bot') {
+    public function __construct($guildID, $botToken, $botType = 'Bot') {
         $this->guildID = $guildID;
-        $this->clientID = $clientID;
-        $this->clientSecret = $clientSecret;
         $this->botToken = $botToken;
         $this->botType = $botType;
     }
@@ -1223,6 +1207,11 @@ class DiscordApi {
     // Voice Start
     /////////////////////////////////////
 
+    /**
+     * Returns an array of voice region objects that can be used when creating servers.
+     * 
+     * @return  array
+     */
     public function listVoiceRegions() {
         $url = $this->apiUrl . '/voice/regions';
         return $this->execute($url);
@@ -1230,6 +1219,182 @@ class DiscordApi {
 
     /////////////////////////////////////
     // Voice End
+    /////////////////////////////////////
+
+    /////////////////////////////////////
+    // Webhook Start
+    /////////////////////////////////////
+
+    /**
+     * Create a new webhook.
+     * Requires the MANAGE_WEBHOOKS permission.
+     * Returns a webhook object on success.
+     * 
+     * @param   integer $channelID  ID des Channels
+     * @param   string  $name       Name des Webhooks
+     * @param   string  $avatar     Avatar des Webhooks
+     * @return  array
+     */
+    public function createWebhook($channelID, $name, $avatar = null) {
+        $url = $this->apiUrl . '/channels/'.$channelID.'/webhooks';
+        $params = [
+            'name' => $name
+        ];
+        if (!empty($avatar)) {
+            $params['avatar'] = $avatar;
+        }
+        return $this->execute($url, 'POST', $params, 'application/json');
+    }
+
+    /**
+     * Returns a list of channel webhook objects.
+     * Requires the MANAGE_WEBHOOKS permission.
+     * 
+     * @param   integer $channelID  ID des Channels
+     * @return  array
+     */
+    public function getChannelWebhooks($channelID) {
+        $url = $this->apiUrl . '/channels/'.$channelID.'/webhooks';
+        return $this->execute($url);
+    }
+
+    /**
+     * Returns a list of guild webhook objects.
+     * Requires the MANAGE_WEBHOOKS permission.
+     * 
+     * @return array
+     */
+    public function getGuildWebhooks() {
+        $url = $this->apiUrl . '/guilds/'.$this->guildID.'/webhooks';
+        return $this->execute($url);
+    }
+
+    /**
+     * Returns the new webhook object for the given id.
+     * 
+     * @param   integer $webhookID  ID des Webhooks
+     * @return  array
+     */
+    public function getWebhook($webhookID) {
+        $url = $this->apiUrl . '/webhooks/'.$webhookID;
+        return $this->execute($url);
+    }
+
+    /**
+     * Same as above, except this call does not require authentication and returns no user in the webhook object.
+     * 
+     * @param   integer $webhookID      ID des Webhooks
+     * @param   string  $webhookToken   Token des Webhooks
+     * @return  array
+     */
+    public function getWebhookWithToken($webhookID, $webhookToken) {
+        $url = $this->apiUrl . '/webhooks/'.$webhookID.'/'.$webhookToken;
+        return $this->execute($url);
+    }
+
+    /**
+     * Modify a webhook.
+     * Requires the MANAGE_WEBHOOKS permission.
+     * Returns the updated webhook object on success.
+     * 
+     * @param   integer $webhookID  ID des Webhooks
+     * @param   array   $params     Parameter
+     * @return  array
+     */
+    public function modifyWebhook($webhookID, $params) {
+        $url = $this->apiUrl . '/webhooks/'.$webhookID;
+        return $this->execute($url, 'PATCH', $params, 'application/json');
+    }
+
+    /**
+     * Same as above, except this call does not require authentication, does not accept a channel_id parameter in the body, and does not return a user in the webhook object.
+     * 
+     * @param   integer $webhookID      ID des Webhooks
+     * @param   string  $webhookToken   Token des Webhooks
+     * @param   array   $params         Parameter
+     * @return  array
+     */
+    public function modifyWebhookWithToken($webhookID, $webhookToken, $params) {
+        $url = $this->apiUrl . '/webhooks/'.$webhookID.'/'.$webhookToken;
+        return $this->execute($url, 'PATCH', $params, 'application/json');
+    }
+
+    /**
+     * Delete a webhook permanently.
+     * User must be owner.
+     * Returns a 204 NO CONTENT response on success.
+     * 
+     * @param   integer $webhookID  ID des Webhooks
+     * @return  array
+     */
+    public function deleteWebhook($webhookID) {
+        $url = $this->apiUrl . '/webhooks/'.$webhookID;
+        return $this->execute($url, 'DELETE');
+    }
+
+    /**
+     * Same as above, except this call does not require authentication.
+     * 
+     * @param   integer $webhookID      ID des Webhooks
+     * @param   string  $webhookToken   Token des Webhooks
+     * @return  array
+     */
+    public function deleteWebhookWithToken($webhookID, $webhookToken) {
+        $url = $this->apiUrl . '/webhooks/'.$webhookID.'/'.$webhookToken;
+        return $this->execute($url, 'DELETE');
+    }
+
+    /**
+     * executes a webhook
+     * 
+     * @param   integer $webhookID      ID des Webhooks
+     * @param   string  $webhookToken   Token des Webhooks
+     * @param   array   $params         Parameter
+     * @param   boolean $wait           waits for server confirmation of message send before response, and returns the created message body (defaults to false; when false a message that is not saved does not return an error)
+     * @return  array
+     */
+    public function executeWebhook($webhookID, $webhookToken, $params, $wait = false) {
+        $url = $this->apiUrl . '/webhooks/'.$webhookID.'/'.$webhookToken;
+        if ($wait) {
+            $url .= '?wait=true';
+        }
+        $contentType = 'application/json';
+        if (isset($params['file'])) {
+            $contentType = 'multipart/form-data';
+        }
+        return $this->execute($url, 'POST', $params, $contentType);
+    }
+
+    /**
+     * Refer to Slack's documentation for more information. We do not support Slack's channel, icon_emoji, mrkdwn, or mrkdwn_in properties.
+     * 
+     * @param   integer $webhookID      ID des Webhooks
+     * @param   string  $webhookToken   Token des Webhooks
+     * @param   array   $params         Parameter
+     * @param   boolean $wait           waits for server confirmation of message send before response, and returns the created message body (defaults to false; when false a message that is not saved does not return an error)
+     * @return  array
+     */
+    public function executeSlackCompatibleWebhook($webhookID, $webhookToken, $params, $wait = false) {
+        $url = $this->apiUrl . '/webhooks/'.$webhookID.'/'.$webhookToken.'/slack';
+        return $this->execute($url, 'POST', $params, 'application/json');
+    }
+
+    /**
+     * Add a new webhook to your GitHub repo (in the repo's settings), and use this endpoint as the "Payload URL." You can choose what events your Discord channel receives by choosing the "Let me select individual events" option and selecting individual events for the new webhook you're configuring.
+     * 
+     * @param   integer $webhookID      ID des Webhooks
+     * @param   string  $webhookToken   Token des Webhooks
+     * @param   array   $params         Parameter
+     * @param   boolean $wait           waits for server confirmation of message send before response, and returns the created message body (defaults to false; when false a message that is not saved does not return an error)
+     * @return  array
+     */
+    public function executeGithubCompatibleWebhook($webhookID, $webhookToken, $params, $wait = false) {
+        $url = $this->apiUrl . '/webhooks/'.$webhookID.'/'.$webhookToken.'/github';
+        return $this->execute($url, 'POST', $params, 'application/json');
+    }
+
+    /////////////////////////////////////
+    // Webhook End
     /////////////////////////////////////
 
     /**
