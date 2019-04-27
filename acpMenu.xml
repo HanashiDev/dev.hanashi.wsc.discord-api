@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<data xmlns="https://www.woltlab.com" xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="https://www.woltlab.com https://www.woltlab.com/XSD/vortex/acpMenu.xsd">
+	<import>
+		<acpmenuitem name="wcf.acp.menu.link.configuration.discord">
+			<parent>wcf.acp.menu.link.configuration</parent>
+		</acpmenuitem>
+		<acpmenuitem name="wcf.acp.menu.link.management.discord">
+			<parent>wcf.acp.menu.link.management</parent>
+		</acpmenuitem>
+		<acpmenuitem name="wcf.acp.menu.link.configuration.discord.discordBotList">
+			<controller>wcf\acp\page\DiscordBotListPage</controller>
+			<parent>wcf.acp.menu.link.configuration.discord</parent>
+			<permissions>admin.discord.canManageConnection</permissions>
+		</acpmenuitem>
+		<acpmenuitem name="wcf.acp.menu.link.configuration.discord.discordBotList.add">
+			<controller>wcf\acp\form\DiscordBotAddForm</controller>
+			<parent>wcf.acp.menu.link.configuration.discord.discordBotList</parent>
+			<permissions>admin.discord.canManageConnection</permissions>
+			<icon>fa-plus</icon>
+		</acpmenuitem>
+	</import>
+</data>

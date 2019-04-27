@@ -27,13 +27,13 @@
         <instruction type="file" />
 		
 		<!-- templates -->
-		<!-- <instruction type="acpTemplate" /> -->
+		<instruction type="acpTemplate" />
 		
 		<!-- language -->
         <instruction type="language"/>
 		
 		<!-- config -->
-        <!-- <instruction type="acpMenu" /> -->
+        <instruction type="acpMenu" />
         <instruction type="sql" />
         <!-- <instruction type="cronjob" /> -->
         <instruction type="userGroupOption" />
