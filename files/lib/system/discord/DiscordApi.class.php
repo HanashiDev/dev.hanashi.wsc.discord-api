@@ -983,11 +983,253 @@ class DiscordApi {
      * @return  array
      */
     public function modifyGuildIntegration($integrationID, $params) {
+        $url = $this->apiUrl . '/guilds/'.$this->guildID.'/integrations/'.$integrationID;
+        return $this->execute($url, 'PATCH', $params, 'application/json');
+    }
 
+    /**
+     * Delete the attached integration object for the guild.
+     * Requires the MANAGE_GUILD permission.
+     * Returns a 204 empty response on success.
+     * Fires a Guild Integrations Update Gateway event.
+     * 
+     * @param   integer $integrationID  ID der Integration
+     * @return  array
+     */
+    public function deleteIntegration($integrationID) {
+        $url = $this->apiUrl . '/guilds/'.$this->guildID.'/integrations/'.$integrationID;
+        return $this->execute($url, 'DELETE');
+    }
+
+    /**
+     * Sync an integration. Requires the MANAGE_GUILD permission.
+     * Returns a 204 empty response on success.
+     * 
+     * @param   integer $integrationID  ID der Integration
+     * @return  array
+     */
+    public function syncGuildIntegration($integrationID) {
+        $url = $this->apiUrl . '/guilds/'.$this->guildID.'/integrations/'.$integrationID.'/sync';
+        return $this->execute($url, 'POST');
+    }
+
+    /**
+     * Returns the guild embed object. Requires the MANAGE_GUILD permission.
+     * 
+     * @return  array
+     */
+    public function getGuildEmbed() {
+        $url = $this->apiUrl . '/guilds/'.$this->guildID.'/embed';
+        return $this->execute($url);
+    }
+
+    /**
+     * Modify a guild embed object for the guild.
+     * All attributes may be passed in with JSON and modified.
+     * Requires the MANAGE_GUILD permission.
+     * Returns the updated guild embed object.
+     * 
+     * @param   array   $params Parameter?
+     * @return  array
+     */
+    public function modifyGuildEmbed($params = []) {
+        $url = $this->apiUrl . '/guilds/'.$this->guildID.'/embed';
+        return $this->execute($url, 'PATCH', $params, 'application/json');
+    }
+
+    /**
+     * Returns a partial invite object for guilds with that feature enabled.
+     * Requires the MANAGE_GUILD permission.
+     * code will be null if a vanity url for the guild is not set.
+     * 
+     * @return array
+     */
+    public function getGuildVanityUrl() {
+        $url = $this->apiUrl . '/guilds/'.$this->guildID.'/vanity-url';
+        return $this->execute($url);
+    }
+
+    /**
+     * Returns a PNG image widget for the guild.
+     * Requires no permissions or authentication.
+     * The same documentation also applies to embed.png.
+     * 
+     * @param   string  $style  Stil (shield, banner1, banner2, banner3, banner4)
+     * @return  array
+     */
+    public function getGuildWidgetImage($style = 'shield') {
+        $url = $this->apiUrl . '/guilds/'.$this->guildID.'/widget.png?style='.$style;
+        return $this->execute($url);
     }
 
     /////////////////////////////////////
     // Guild End
+    /////////////////////////////////////
+
+    /////////////////////////////////////
+    // Invite Start
+    /////////////////////////////////////
+
+    /**
+     * Returns an invite object for the given code.
+     * 
+     * @param   string  $inviteCode EinladungsCode
+     * @param   boolean $withCounts whether the invite should contain approximate member counts
+     * @return  array
+     */
+    public function getInvite($inviteCode, $withCounts = false) {
+        $url = $this->apiUrl . '/invites/'.$inviteCode;
+        if ($withCounts) {
+            $url .= '?with_counts=1';
+        }
+        return $this->execute($url);
+    }
+
+    /**
+     * Delete an invite.
+     * Requires the MANAGE_CHANNELS permission on the channel this invite belongs to, or MANAGE_GUILD to remove any invite across the guild.
+     * Returns an invite object on success.
+     * 
+     * @param   string  $inviteCode EinladungsCode
+     * @return  array
+     */
+    public function deleteInvite($inviteCode) {
+        $url = $this->apiUrl . '/invites/'.$inviteCode;
+        return $this->execute($url, 'DELETE');
+    }
+
+    /////////////////////////////////////
+    // Invite End
+    /////////////////////////////////////
+
+    /////////////////////////////////////
+    // User Start
+    /////////////////////////////////////
+
+    /**
+     * Returns the user object of the requester's account.
+     * For OAuth2, this requires the identify scope, which will return the object without an email, and optionally the email scope, which returns the object with an email.
+     * 
+     * @return array
+     */
+    public function getCurrentUser() {
+        $url = $this->apiUrl . '/users/@me';
+        return $this->execute($url);
+    }
+
+    /**
+     * Returns a user object for a given user ID.
+     * 
+     * @param   integer $userID ID des Benutzers
+     * @return  array
+     */
+    public function getUser($userID) {
+        $url = $this->apiUrl . '/users/'.$userID;
+        return $this->execute($url);
+    }
+
+    /**
+     * Modify the requester's user account settings. Returns a user object on success.
+     * 
+     * @param   array   $params Parameter
+     * @return  array
+     */
+    public function modifyCurrentUser($params) {
+        $url = $this->apiUrl . '/users/@me';
+        return $this->execute($url, 'PATCH', $params, 'application/json');
+    }
+
+    /**
+     * Returns a list of partial guild objects the current user is a member of.
+     * Requires the guilds OAuth2 scope.
+     * 
+     * @return array
+     */
+    public function getCurrentUserGuilds($params = []) {
+        $url = $this->apiUrl . '/users/@me/guilds';
+        if (!empty($params)) {
+            $url .= '?'.http_build_query($params);
+        }
+        return $this->execute($url);
+    }
+
+    /**
+     * Leave a guild.
+     * Returns a 204 empty response on success.
+     * 
+     * @return array
+     */
+    public function leaveGuild() {
+        $url = $thid->apiUrl . '/users/@me/guilds/'.$this->guildID;
+        return $this->execute($url, 'DELETE');
+    }
+
+    /**
+     * Returns a list of DM channel objects.
+     * For bots, this is no longer a supported method of getting recent DMs, and will return an empty array.
+     * 
+     * @return array
+     */
+    public function getUserDMs() {
+        $url = $this->apiUrl . '/users/@me/channels';
+        return $this->execute($url);
+    }
+
+    /**
+     * Create a new DM channel with a user.
+     * Returns a DM channel object.
+     * 
+     * @param   integer $recipientID    ID des Empfängers
+     * @return  array
+     */
+    public function createDM($recipientID) {
+        $url = $this->apiUrl . '/users/@me/channels';
+        $params = [
+            'recipient_id' => $recipientID
+        ];
+        return $this->execute($url, 'POST', $params, 'application/json');
+    }
+
+    /**
+     * Create a new group DM channel with multiple users.
+     * Returns a DM channel object.
+     * This endpoint was intended to be used with the now-deprecated GameBridge SDK.
+     * DMs created with this endpoint will not be shown in the Discord client
+     * 
+     * @param   array   $params Parameter
+     * @return  array
+     */
+    public function createGroupDM($params) {
+        $url = $this->apiUrl . '/users/@me/channels';
+        return $this->execute($url, 'POST', $params, 'application/json');
+    }
+
+    /**
+     * Returns a list of connection objects.
+     * Requires the connections OAuth2 scope.
+     * 
+     * @return  array
+     */
+    public function getUserConnections() {
+        $url = $this->apiUrl . '/users/@me/connections';
+        return $this->execute($url);
+    }
+
+    /////////////////////////////////////
+    // User End
+    /////////////////////////////////////
+
+    /////////////////////////////////////
+    // Voice Start
+    /////////////////////////////////////
+
+    public function listVoiceRegions() {
+        $url = $this->apiUrl . '/voice/regions';
+        return $this->execute($url);
+    }
+
+    /////////////////////////////////////
+    // Voice End
     /////////////////////////////////////
 
     /**
