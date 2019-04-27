@@ -459,6 +459,35 @@ class DiscordApi {
     // Channels End
     /////////////////////////////////////
 
+    /////////////////////////////////////
+    // Emoji Start
+    /////////////////////////////////////
+
+    /**
+     * Returns a list of emoji objects for the given guild.
+     * 
+     * @return  array
+     */
+    public function listGuildEmojis() {
+        $url = $this->apiUrl . '/guilds/'.$this->guildID.'/emojis';
+        return $this->execute($url);
+    }
+
+    /**
+     * Returns an emoji object for the given guild and emoji IDs
+     * 
+     * @param   integer $emojiID    ID des Emojis
+     * @return array
+     */
+    public function getGuildEmoji($emojiID) {
+        $url = $this->apiUrl . '/guilds/'.$this->guildID.'/emojis/'.$emojiID;
+        return $this->execute($url);
+    }
+
+    /////////////////////////////////////
+    // Emoji End
+    /////////////////////////////////////
+
     /**
      * führt eine API-Anfrage aus
      * 
