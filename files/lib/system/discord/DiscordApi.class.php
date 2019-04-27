@@ -66,6 +66,28 @@ class DiscordApi {
     }
 
     /////////////////////////////////////
+    // Audit Log Start
+    /////////////////////////////////////
+
+    /**
+     * Returns an audit log object for the guild.
+     * Requires the 'VIEW_AUDIT_LOG' permission.
+     * 
+     * @return array
+     */
+    public function getGuildAuditLog($params = []) {
+        $url = $this->apiUrl . '/guilds/'.$this->guildID.'/audit-logs';
+        if (!empty($params)) {
+            $url .= '?'.http_build_query($params);
+        }
+        return $this->execute($url);
+    }
+
+    /////////////////////////////////////
+    // Audit Log End
+    /////////////////////////////////////
+
+    /////////////////////////////////////
     // Channels Start
     /////////////////////////////////////
 
