@@ -1397,6 +1397,64 @@ class DiscordApi {
     // Webhook End
     /////////////////////////////////////
 
+    /////////////////////////////////////
+    // OAuth2 Start
+    /////////////////////////////////////
+
+    /**
+     * methode to gnerate OAuth2 Link
+     * 
+     * @param   integer $clientID       ID der Awnedung
+     * @param   array   $scope          Scope-Inhalt, was Benutzer alles authorisieren soll
+     * @param   string  $redirectUri    die Redirect-URI der Website
+     * @return  string
+     */
+    public function oauth2Authorize($clientID, $scope, $redirectUri) {
+        $url = $this->apiUrl . '/oauth2/authorize?response_type=code&client_id='.$clientID.'&';
+        $params = [
+            'scope' => implode(' ', $scope),
+            'redirect_uri' => $redirectUri
+        ];
+        $url .= http_build_query($params);
+        return $url;
+    }
+
+    /**
+     * Verifiziert den Code
+     * 
+     * @param   integer $clientID       ID der Awnedung
+     * @param   string  $clientSecret   Geheimer Schlüssel der Anwendung
+     * @param   string  $code           OAuth2-Code
+     * @param   string  $redirectUri    die Redirect-URI der Website
+     * @param   string  $grantType      Grant-Type (authorization_code, refresh_token, client_credentials)
+     * @return  array
+     */
+    public function oauth2Token($clientID, $clientSecret, $code, $redirectUri, $grantType = 'authorization_code') {
+        $url = $this->apiUrl . '/oauth2/token';
+        $params = [
+            'client_id' => $clientID,
+			'client_secret' => $clientSecret,
+			'grant_type' => $grantType,
+			'code' => $code,
+			'redirect_uri' => $redirectUri
+        ];
+        return $this->execute($url, 'POST', $params);
+    }
+    
+    /**
+     * Returns the bot's OAuth2 application info.
+     * 
+     * @return array
+     */
+    public function getCurrentApplicationInformation() {
+        $url = $this->apiUrl . '/oauth2/applications/@me';
+        return $this->execute($url);
+    }
+
+    /////////////////////////////////////
+    // OAuth2 End
+    /////////////////////////////////////
+
     /**
      * führt eine API-Anfrage aus
      * 
