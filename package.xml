@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<package name="dev.hanashi.wsc.discord-api" xmlns="https://www.woltlab.com" xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="https://www.woltlab.com https://www.woltlab.com/XSD/vortex/package.xsd">
+    <packageinformation>
+        <packagename><![CDATA[Discord API]]></packagename>
+        <packagename language="de"><![CDATA[Discord-API]]></packagename>
+        <packagedescription><![CDATA[API to cummincate with Discord.]]></packagedescription>
+        <packagedescription language="de"><![CDATA[API um mit Discord zu kommunizieren.]]></packagedescription>
+        <version>1.0.0 Alpha 1</version>
+        <date>2019-05-01</date>
+    </packageinformation>
+
+    <authorinformation>
+        <author><![CDATA[Hanashi]]></author>
+        <authorurl><![CDATA[https://hanashi.eu/]]></authorurl>
+    </authorinformation>
+	
+	<compatibility>
+		<api version="2018" />
+	</compatibility>
+
+    <requiredpackages>
+        <requiredpackage minversion="3.1.9">com.woltlab.wcf</requiredpackage>
+    </requiredpackages>
+
+    <instructions type="install">
+		<!-- files -->
+        <instruction type="file" />
+		
+		<!-- templates -->
+		<!-- <instruction type="acpTemplate" /> -->
+		
+		<!-- language -->
+        <instruction type="language"/>
+		
+		<!-- config -->
+        <!-- <instruction type="acpMenu" /> -->
+        <instruction type="sql" />
+        <!-- <instruction type="cronjob" /> -->
+        <instruction type="userGroupOption" />
+        <instruction type="option" />
+    </instructions>
+</package>
