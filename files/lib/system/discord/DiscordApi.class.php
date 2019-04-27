@@ -484,6 +484,60 @@ class DiscordApi {
         return $this->execute($url);
     }
 
+    /**
+     * Create a new emoji for the guild.
+     * Requires the MANAGE_EMOJIS permission.
+     * Returns the new emoji object on success.
+     * Fires a Guild Emojis Update Gateway event.
+     * Emojis and animated emojis have a maximum file size of 256kb.
+     * Attempting to upload an emoji larger than this limit will fail and return 400 Bad Request and an error message, but not a JSON status code.
+     * 
+     * @param   string  $name   Name des Emojis
+     * @param   string  $image  Bild als base64 code
+     * @param   array   $roles  Gruppen die diesen Emoji nutzen dürfen
+     * @return  array
+     */
+    public function createGuildEmoji($name, $image, $roles = []) {
+        $url = $this->apiUrl . '/guilds/'.$this->guildID.'/emojis';
+        $params = [
+            'name' => $name,
+            'image' => $image
+        ];
+        if (count($roles) > 0) {
+            $params['roles'] = $roles;
+        }
+        return $this->execute($url, 'POST', $params, 'application/json');
+    }
+
+    /**
+     * Modify the given emoji.
+     * Requires the MANAGE_EMOJIS permission.
+     * Returns the updated emoji object on success.
+     * Fires a Guild Emojis Update Gateway event.
+     * 
+     * @param   integer $emojiID    ID des Emojis
+     * @param   array   $params     Parameter
+     * @return  array
+     */
+    public function modifyGuildEmoji($emojiID, array $params) {
+        $url = $this->apiUrl . '/guilds/'.$this->guildID.'/emojis/'.$emojiID;
+        return $this->execute($url, 'PATCH', $params, 'application/json');
+    }
+
+    /**
+     * Delete the given emoji.
+     * Requires the MANAGE_EMOJIS permission.
+     * Returns 204 No Content on success.
+     * Fires a Guild Emojis Update Gateway event.
+     * 
+     * @param   integer $emojiID    ID des Emojis
+     * @return  array
+     */
+    public function deleteGuildEmoji($emojiID) {
+        $url = $this->apiUrl . '/guilds/'.$this->guildID.'/emojis/'.$emojiID;
+        return $this->execute($url, 'DELETE');
+    }
+
     /////////////////////////////////////
     // Emoji End
     /////////////////////////////////////
