@@ -542,6 +542,454 @@ class DiscordApi {
     // Emoji End
     /////////////////////////////////////
 
+    /////////////////////////////////////
+    // Guild Start
+    /////////////////////////////////////
+
+    /**
+     * Create a new guild. Returns a guild object on success. Fires a Guild Create Gateway event.
+     * 
+     * @param   array   $params     Paramter
+     * @return  array
+     */
+    public function createGuild($params) {
+        $url = $this->apiUrl . '/guilds';
+        return $this->execute($url, 'POST', $params, 'application/json');
+    }
+
+    /**
+     * Returns the guild object for the given id.
+     * 
+     * @return  array
+     */
+    public function getGuild() {
+        $url = $this->apiUrl . '/guilds/'.$this->guildID;
+        return $this->execute($url);
+    }
+
+    /**
+     * Modify a guild's settings.
+     * Requires the MANAGE_GUILD permission.
+     * Returns the updated guild object on success.
+     * Fires a Guild Update Gateway event.
+     * 
+     * @param   array   $params     Parameter
+     * @return  array
+     */
+    public function modifyGuild($params) {
+        $url = $this->apiUrl . '/guilds/'.$this->guildID;
+        return $this->execute($url, 'PATCH', $params, 'application/json');
+    }
+
+    /**
+     * Delete a guild permanently.
+     * User must be owner.
+     * Returns 204 No Content on success.
+     * Fires a Guild Delete Gateway event.
+     * 
+     * @return  array
+     */
+    public function deleteGuild() {
+        $url = $this->apiUrl . '/guilds/'.$this->guildID;
+        return $this->execute($url, 'DELETE');
+    }
+
+    /**
+     * Returns a list of guild channel objects.
+     * 
+     * @return  array
+     */
+    public function getGuildChannels() {
+        $url = $this->apiUrl . '/guilds/'.$this->guildID.'/channels';
+        return $this->execute($url);
+    }
+
+    /**
+     * Create a new channel object for the guild.
+     * Requires the MANAGE_CHANNELS permission.
+     * Returns the new channel object on success.
+     * Fires a Channel Create Gateway event.
+     * 
+     * @param   array   $params     JSON-Parameter
+     * @return  array
+     */
+    public function createGuildChannel($params) {
+        $url = $this->apiUrl . '/guilds/'.$this->guildID.'/channels';
+        return $this->execute($url, 'POST', $params, 'application/json');
+    }
+
+    /**
+     * Modify the positions of a set of channel objects for the guild.
+     * Requires MANAGE_CHANNELS permission.
+     * Returns a 204 empty response on success.
+     * Fires multiple Channel Update Gateway events.
+     * Only channels to be modified are required, with the minimum being a swap between at least two channels.
+     * 
+     * @param   integer     $channelID  ID des Channels
+     * @param   integer     $position   Position wo der Channel landen soll
+     * @return  array
+     */
+    public function modifyGuildChannelPositions($channelID, $position) {
+        $url = $this->apiUrl . '/guilds/'.$this->guildID.'/channels';
+        $params = [
+            'id' => $channelID,
+            'position' => $position
+        ];
+        return $this->execute($url, 'PATCH', $params, 'application/json');
+    }
+
+    /**
+     * Returns a guild member object for the specified user.
+     * 
+     * @param   integer     $userID     ID des Benutzer
+     * @return  array
+     */
+    public function getGuildMember($userID) {
+        $url = $this->apiUrl . '/guilds/'.$this->guildID.'/members/'.$userID;
+        return $this->execute($url);
+    }
+
+    /**
+     * Returns a list of guild member objects that are members of the guild.
+     * 
+     * @param   array   $params     Parameter
+     * @return  array
+     */
+    public function listGuildMembers($params = []) {
+        $url = $this->apiUrl . '/guilds/'.$this->guildID.'/members';
+        if (!empty($params)) {
+            $url .= '?'.http_build_query($params);
+        }
+        return $this->execute($url);
+    }
+
+    /**
+     * Adds a user to the guild, provided you have a valid oauth2 access token for the user with the guilds.join scope.
+     * Returns a 201 Created with the guild member as the body, or 204 No Content if the user is already a member of the guild.
+     * Fires a Guild Member Add Gateway event.
+     * Requires the bot to have the CREATE_INSTANT_INVITE permission.
+     * All parameters to this endpoint except for access_token are optional.
+     * 
+     * @param   integer     $userID         ID des Benutzers
+     * @param   string      $accessToken    Access-Token des Benutzer
+     * @param   array       $params         Zusätzliche optionale Parameter
+     * @return  array
+     */
+    public function addGuildMember($userID, $accessToken, $params = []) {
+        // TODO: testen
+        $url = $this->apiUrl . '/guilds/'.$this->guildID.'/members/'.$userID;
+        $params = array_merge([
+            'access_token' => $accessToken
+        ], $params);
+        return $this->execute($url, 'PUT', $params, 'application/json');
+    }
+
+    /**
+     * Modify attributes of a guild member.
+     * Returns a 204 empty response on success.
+     * Fires a Guild Member Update Gateway event.
+     * All parameters to this endpoint are optional.
+     * When moving members to channels, the API user must have permissions to both connect to the channel and have the MOVE_MEMBERS permission.
+     * 
+     * @param   integer $userID     ID des Benutzers
+     * @param   array   $params     JSON-Parameter
+     * @return  array
+     */
+    public function modifyGuildMember($userID, $params) {
+        $url = $this->apiUrl . '/guilds/'.$this->guildID.'/members/'.$userID;
+        return $this->execute($url, 'PATCH', $params, 'application/json');
+    }
+
+    /**
+     * Modifies the nickname of the current user in a guild.
+     * Returns a 200 with the nickname on success.
+     * Fires a Guild Member Update Gateway event.
+     * 
+     * @param   string  $nick   Neuer Nickname
+     * @return  array
+     */
+    public function modifyCurrentUserNick($nick) {
+        $url = $this->apiUrl . '/guilds/'.$this->guildID.'/members/@me/nick';
+        $params = [
+            'nick' => $nick
+        ];
+        return $this->execute($url, 'PATCH', $params, 'application/json');
+    }
+
+    /**
+     * Adds a role to a guild member.
+     * Requires the MANAGE_ROLES permission.
+     * Returns a 204 empty response on success.
+     * Fires a Guild Member Update Gateway event.
+     * 
+     * @param   integer     $userID     ID des Benutzer
+     * @param   integer     $roleID     ID der Benutzergruppe
+     * @return  array
+     */
+    public function addGuildMemberRole($userID, $roleID) {
+        // TODO: testen
+        $url = $this->apiUrl . '/guilds/'.$this->guildID.'/members/'.$userID.'/roles/'.$roleID;
+        return $this->execute($url, 'PUT');
+    }
+
+    /**
+     * Removes a role from a guild member.
+     * Requires the MANAGE_ROLES permission.
+     * Returns a 204 empty response on success.
+     * Fires a Guild Member Update Gateway event.
+     * 
+     * @param   integer     $userID     ID des Benutzer
+     * @param   integer     $roleID     ID der Benutzergruppe
+     * @return  array
+     */
+    public function removeGuildMemberRole($userID, $roleID) {
+        // TODO: testen
+        $url = $this->apiUrl . '/guilds/'.$this->guildID.'/members/'.$userID.'/roles/'.$roleID;
+        return $this->execute($url, 'DELETE');
+    }
+
+    /**
+     * Remove a member from a guild.
+     * Requires KICK_MEMBERS permission.
+     * Returns a 204 empty response on success.
+     * Fires a Guild Member Remove Gateway event.
+     * 
+     * @param   integer     $userID     ID des Benutzer
+     * @return  array
+     */
+    public function removeGuildMember($userID) {
+        // TODO: testen
+        $url = $this->apiUrl . '/guilds/'.$this->guildID.'/members/'.$userID;
+        return $this->execute($url, 'DELETE');
+    }
+
+    /**
+     * Returns a list of ban objects for the users banned from this guild.
+     * Requires the BAN_MEMBERS permission.
+     * 
+     * @return array
+     */
+    public function getGuildBans() {
+        $url = $this->apiUrl . '/guilds/'.$this->guildID.'/bans';
+        return $this->execute($url);
+    }
+
+    /**
+     * Returns a ban object for the given user or a 404 not found if the ban cannot be found.
+     * Requires the BAN_MEMBERS permission.
+     * 
+     * @param   integer     $userID     ID des Benutzer
+     * @return  array
+     */
+    public function getGuildBan($userID) {
+        $url = $this->apiUrl . '/guilds/'.$this->guildID.'/bans/'.$userID;
+        return $this->execute($url);
+    }
+
+    /**
+     * Create a guild ban, and optionally delete previous messages sent by the banned user.
+     * Requires the BAN_MEMBERS permission.
+     * Returns a 204 empty response on success.
+     * Fires a Guild Ban Add Gateway event.
+     * 
+     * @param   integer     $userID     ID des Benutzer
+     * @param   array       $params     optionale Parameter
+     * @return  array
+     */
+    public function createGuildBan($userID, $params = []) {
+        $url = $this->apiUrl . '/guilds/'.$this->guildID.'/bans/'.$userID;
+        return $this->execute($url, 'PUT', $params, 'application/json');
+    }
+
+    /**
+     * Remove the ban for a user. Requires the BAN_MEMBERS permissions. Returns a 204 empty response on success. Fires a Guild Ban Remove Gateway event.
+     * 
+     * @param   integer     $userID     ID des Benutzer
+     * @return  array
+     */
+    public function removeGuildBan($userID) {
+        $url = $this->apiUrl . '/guilds/'.$this->guildID.'/bans/'.$userID;
+        return $this->execute($url, 'DELETE');
+    }
+
+    /**
+     * Returns a list of role objects for the guild.
+     * 
+     * @return array
+     */
+    public function getGuildRoles() {
+        $url = $this->apiUrl . '/guilds/'.$this->guildID.'/roles';
+        return $this->execute($url);
+    }
+
+    /**
+     * Create a new role for the guild.
+     * Requires the MANAGE_ROLES permission.
+     * Returns the new role object on success.
+     * Fires a Guild Role Create Gateway event.
+     * All JSON params are optional.
+     * 
+     * @param   array   $params     optionale Parameter für das Gruppenrecht
+     * @return  array
+     */
+    public function createGuildRole($params = []) {
+        $url = $this->apiUrl . '/guilds/'.$this->guildID.'/roles';
+        return $this->execute($url, 'POST', $params, 'application/json');
+    }
+
+    /**
+     * Modify the positions of a set of role objects for the guild.
+     * Requires the MANAGE_ROLES permission.
+     * Returns a list of all of the guild's role objects on success.
+     * Fires multiple Guild Role Update Gateway events.
+     * 
+     * @param   integer     $roleID     ID der Benutzergruppe
+     * @param   integer     $position   Position
+     * @return  array
+     */
+    public function modifyGuildRolePosition($roleID, $position) {
+        $url = $this->apiUrl . '/guilds/'.$this->guildID.'/roles';
+        $params = [
+            'id' => $roleID,
+            'position' => $position
+        ];
+        return $this->execute($url, 'PATCH', $params, 'application/json');
+    }
+
+    /**
+     * Modify a guild role.
+     * Requires the MANAGE_ROLES permission.
+     * Returns the updated role on success.
+     * Fires a Guild Role Update Gateway event.
+     * 
+     * @param   integer     $roleID     ID der Benutzergruppe
+     * @param   array       $params     Parameter
+     * @return  array
+     */
+    public function modifyGuildRole($roleID, $params = []) {
+        $url = $this->apiUrl . '/guilds/'.$this->guildID.'/roles/'.$roleID;
+        return $this->execute($url, 'PATCH', $params, 'application/json');
+    }
+
+    /**
+     * Delete a guild role.
+     * Requires the MANAGE_ROLES permission.
+     * Returns a 204 empty response on success.
+     * Fires a Guild Role Delete Gateway event.
+     * 
+     * @param   integer     $roleID     ID der Benutzergruppe
+     * @return  array
+     */
+    public function deleteGuildRole($roleID) {
+        $url = $this->apiUrl . '/guilds/'.$this->guildID.'/roles/'.$roleID;
+        return $this->execute($url, 'DELETE');
+    }
+
+    /**
+     * Returns an object with one 'pruned' key indicating the number of members that would be removed in a prune operation.
+     * Requires the KICK_MEMBERS permission.
+     * 
+     * @param   integer     $days       number of days to count prune for (1 or more)
+     * @return  array
+     */
+    public function getGuildPruneCount($days = 1) {
+        $url = $this->apiUrl . '/guilds/'.$this->guildID.'/prune';
+        $url .= '?'.http_build_query([
+            'days' => $days
+        ]);
+        return $this->execute($url);
+    }
+
+    /**
+     * Begin a prune operation.
+     * Requires the KICK_MEMBERS permission.
+     * Returns an object with one 'pruned' key indicating the number of members that were removed in the prune operation.
+     * For large guilds it's recommended to set the compute_prune_count option to false, forcing 'pruned' to null.
+     * Fires multiple Guild Member Remove Gateway events.
+     * 
+     * @param   integer     $days               number of days to count prune for (1 or more)
+     * @param   boolean     $computePruneCount  whether 'pruned' is returned, discouraged for large guilds
+     * @return  array
+     */
+    public function beginGuildPrune($days, $computePruneCount = false) {
+        $url = $this->apiUrl . '/guilds/'.$this->guildID.'/prune';
+        $params = [
+            'days' => $days,
+            'compute_prune_count' => $computePruneCount
+        ];
+        return $this->execute($url, 'POST', $params);
+    }
+
+    /**
+     * Returns a list of voice region objects for the guild.
+     * Unlike the similar /voice route, this returns VIP servers when the guild is VIP-enabled.
+     * 
+     * @return  array
+     */
+    public function getGuildVoiceRegions() {
+        $url = $this->apiUrl . '/guilds/'.$this->guildID.'/regions';
+        return $this->execute($url);
+    }
+
+    /**
+     * Returns a list of invite objects (with invite metadata) for the guild.
+     * Requires the MANAGE_GUILD permission.
+     * 
+     * @return  array
+     */
+    public function getGuildInvites() {
+        $url = $this->apiUrl . '/guilds/'.$this->guildID.'/invites';
+        return $this->execute($url);
+    }
+
+    /**
+     * Returns a list of integration objects for the guild.
+     * Requires the MANAGE_GUILD permission.
+     * 
+     * @return  array
+     */
+    public function getGuildIntegrations() {
+        $url = $this->apiUrl . '/guilds/'.$this->guildID.'/integrations';
+        return $this->execute($url);
+    }
+
+    /**
+     * Attach an integration object from the current user to the guild.
+     * Requires the MANAGE_GUILD permission.
+     * Returns a 204 empty response on success.
+     * Fires a Guild Integrations Update Gateway event.
+     * 
+     * @param   string  $type   the integration type
+     * @param   integer $id     the integration id
+     * @return  array
+     */
+    public function createGuildIntegration($type, $id) {
+        $url = $this->apiUrl . '/guilds/'.$this->guildID.'/integrations';
+        $params = [
+            'type' => $type,
+            'id' => $id
+        ];
+        return $this->execute($url, 'POST', $params, 'application/json');
+    }
+
+    /**
+     * Modify the behavior and settings of an integration object for the guild.
+     * Requires the MANAGE_GUILD permission.
+     * Returns a 204 empty response on success.
+     * Fires a Guild Integrations Update Gateway event.
+     * 
+     * @param   integer $integrationID  ID der Integration
+     * @param   array   $params         Parameter
+     * @return  array
+     */
+    public function modifyGuildIntegration($integrationID, $params) {
+
+    }
+
+    /////////////////////////////////////
+    // Guild End
+    /////////////////////////////////////
+
     /**
      * führt eine API-Anfrage aus
      * 

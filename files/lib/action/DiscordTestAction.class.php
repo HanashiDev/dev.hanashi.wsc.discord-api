@@ -8,6 +8,6 @@ class DiscordTestAction extends AbstractAction {
         parent::execute();
 
         $discord = new DiscordApi(388240292400332802, 388240410889289728, 'jXXAp5DAGQnpL5WP1dIL43jt72lZm8cf', 'Mzg4MjQwNDEwODg5Mjg5NzI4.XMP3zw._sA_XWOEqVXsygFvIOI6gdNB0ZI');
-        wcfDebug($discord->deleteGuildEmoji(571695744327614475));
+        wcfDebug($discord->getGuildIntegrations());
     }
 }
