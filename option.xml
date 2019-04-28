@@ -16,7 +16,7 @@
         <options>
             <option name="hanashi_test_discord">
                 <categoryname>discord.general</categoryname>
-                <optiontype>DiscordBotSelect</optiontype>
+                <optiontype>DiscordChannelSelect</optiontype>
             </option>
         </options>
     </import>
