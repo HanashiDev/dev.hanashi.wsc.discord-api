@@ -44,7 +44,7 @@ class DiscordWebhookChannelSelectOptionType extends DiscordChannelSelectOptionTy
             }
 
             if (!in_array($channelID, $discordWebhooks)) {
-                $discordApi = new DiscordApi($discordBots[$botID]->guildID, $discordBots[$botID]->botToken);
+                $discordApi = $discordBots[$botID]->getDiscordApi();
                 $response = $discordApi->createWebhook($channelID, $discordBots[$botID]->webhookName);
                 if (!$response['error']) {
                     $action = new DiscordWebhookAction([], 'create', [

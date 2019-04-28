@@ -3,7 +3,6 @@ ALTER TABLE wcf1_category ADD discordPostPrefix VARCHAR(30);
 ALTER TABLE wcf1_category ADD discordPostTitleInContext TINYINT(1) NOT NULL DEFAULT 0;
 ALTER TABLE wcf1_category ADD discordPostType TINYINT(1) NOT NULL DEFAULT 0;
 
--- TODO: nächtlicher Cronjob um aktuelle Guild-Informationen für Bot abzurufen
 CREATE TABLE wcf1_discord_bot (
     botID INT(10) NOT NULL AUTO_INCREMENT,
     botName VARCHAR(50) NOT NULL,

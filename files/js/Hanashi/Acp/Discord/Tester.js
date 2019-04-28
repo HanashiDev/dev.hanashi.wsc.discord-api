@@ -29,8 +29,7 @@ define(['EventHandler', './../../Discord/Gateway', 'Ajax', 'Language', 'Ui/Dialo
         },
 
         _testBotConnection: function(botToken) {
-            // TODO: lang
-            this._template = '<div id="BotTestText"><span class="icon icon24 fa-spinner"></span> <span style="margin-left: 10px">Verbindet mit Gateway</span></div>';
+            this._template = '<div id="BotTestText"><span class="icon icon24 fa-spinner"></span> <span style="margin-left: 10px">' + Language.get('wcf.acp.discordBotList.gateway.connecting') + '</span></div>';
             UiDialog.destroy(this);
             UiDialog.open(this);
             
@@ -51,16 +50,14 @@ define(['EventHandler', './../../Discord/Gateway', 'Ajax', 'Language', 'Ui/Dialo
             if (data.t == 'READY') {
                 this._connected = true;
                 var botTestText = elById('BotTestText');
-                // TODO: lang
-                botTestText.innerHTML = '<div id="BotTestText"><span class="icon icon24 fa-check-circle green"></span> <span style="margin-left: 10px">Erfolgreich verbunden.</span></div>';
+                botTestText.innerHTML = '<div id="BotTestText"><span class="icon icon24 fa-check-circle green"></span> <span style="margin-left: 10px">' + Language.get('wcf.acp.discordBotList.gateway.connected') + '</span></div>';
             }
         },
 
         _connectionError: function() {
             if (!this._connected) {
                 var botTestText = elById('BotTestText');
-                // TODO: lang
-                botTestText.innerHTML = '<div id="BotTestText"><span class="icon icon24 fa-times-circle red"></span> <span style="margin-left: 10px">Konnte keine Verbindung zum Gateway herstellen (Timeout).</span></div>';
+                botTestText.innerHTML = '<div id="BotTestText"><span class="icon icon24 fa-times-circle red"></span> <span style="margin-left: 10px">' + Language.get('wcf.acp.discordBotList.gateway.error') + '</span></div>';
             }
         },
 
@@ -69,7 +66,7 @@ define(['EventHandler', './../../Discord/Gateway', 'Ajax', 'Language', 'Ui/Dialo
                 id: DomUtil.getUniqueId(),
                 source: DomUtil.createFragmentFromHtml(this._template),
                 options: {
-                    title: 'Bot einmalig verbinden' // TODO: lang
+                    title: Language.get('wcf.acp.discordBotList.connectOnce')
                 }
             }
         },

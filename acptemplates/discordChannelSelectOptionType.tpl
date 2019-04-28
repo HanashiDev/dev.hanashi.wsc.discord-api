@@ -52,6 +52,5 @@
         {/foreach}
     </select>
 {else}
-    {* TODO: lang *}
-    <p class="info">Du hast noch keinen Discord-Bot angelegt. Dies kannst du unter <a href="{link controller="DiscordBotAdd"}{/link}">Discord-Bot</a> erledigen.</p>
+    <p class="info">{lang}wcf.acp.discordBotSelectOptionType.noBot{/lang}</p>
 {/if}

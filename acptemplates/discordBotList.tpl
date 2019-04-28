@@ -33,11 +33,10 @@
 			<thead>
 				<tr>
                     <th class="columnIcon"></th>
-                    {* TODO: Lang *}
                     <th class="columnID columnBotID{if $sortField == 'botID'} active {@$sortOrder}{/if}"><a href="{link controller='DiscordBotList'}pageNo={@$pageNo}&sortField=botID&sortOrder={if $sortField == 'botID' && $sortOrder == 'ASC'}DESC{else}ASC{/if}{/link}">{lang}wcf.global.objectID{/lang}</a></th>
-                    <th class="columnTitle columnBotName{if $sortField == 'botName'} active {@$sortOrder}{/if}"><a href="{link controller='DiscordBotList'}pageNo={@$pageNo}&sortField=botName&sortOrder={if $sortField == 'botName' && $sortOrder == 'ASC'}DESC{else}ASC{/if}{/link}">Bot-Name</a></th>
-                    <th class="columnText columnGuildName{if $sortField == 'guildName'} active {@$sortOrder}{/if}"><a href="{link controller='DiscordBotList'}pageNo={@$pageNo}&sortField=guildName&sortOrder={if $sortField == 'guildName' && $sortOrder == 'ASC'}DESC{else}ASC{/if}{/link}">Server</a></th>
-                    <th class="columnDate columnBotTime{if $sortField == 'botTime'} active {@$sortOrder}{/if}"><a href="{link controller='DiscordBotList'}pageNo={@$pageNo}&sortField=botTime&sortOrder={if $sortField == 'botTime' && $sortOrder == 'ASC'}DESC{else}ASC{/if}{/link}">Datum</a></th>
+                    <th class="columnTitle columnBotName{if $sortField == 'botName'} active {@$sortOrder}{/if}"><a href="{link controller='DiscordBotList'}pageNo={@$pageNo}&sortField=botName&sortOrder={if $sortField == 'botName' && $sortOrder == 'ASC'}DESC{else}ASC{/if}{/link}">{lang}wcf.acp.discordBotList.botName{/lang}</a></th>
+                    <th class="columnText columnGuildName{if $sortField == 'guildName'} active {@$sortOrder}{/if}"><a href="{link controller='DiscordBotList'}pageNo={@$pageNo}&sortField=guildName&sortOrder={if $sortField == 'guildName' && $sortOrder == 'ASC'}DESC{else}ASC{/if}{/link}">{lang}wcf.acp.discordBotList.server{/lang}</a></th>
+                    <th class="columnDate columnBotTime{if $sortField == 'botTime'} active {@$sortOrder}{/if}"><a href="{link controller='DiscordBotList'}pageNo={@$pageNo}&sortField=botTime&sortOrder={if $sortField == 'botTime' && $sortOrder == 'ASC'}DESC{else}ASC{/if}{/link}">{lang}wcf.global.date{/lang}</a></th>
 
                     {event name='columns'}
                 </tr>
@@ -48,9 +47,8 @@
                     <tr class="jsRow">
                         <td class="columnIcon">
                             <a href="{link controller='DiscordBotEdit' id=$discordBot->botID}{/link}" title="{lang}wcf.global.button.edit{/lang}" class="jsTooltip"><span class="icon icon24 fa-pencil"></span></a>
-                            {* TODO: lang *}
-							<a href="#" class="jsDeleteButton jsTooltip" title="{lang}wcf.global.button.delete{/lang}" data-confirm-message-html="Discord-Bot wirklich löschen?" data-object-id="{@$discordBot->botID}"><span class="icon icon24 fa-times"></span></a>
-                            <a href="#" class="jsConnectBot jsTooltip" title="Bot einmalig verbinden" data-object-id="{@$discordBot->botID}"><span class="icon icon24 fa-power-off"></span></a>
+							<a href="#" class="jsDeleteButton jsTooltip" title="{lang}wcf.global.button.delete{/lang}" data-confirm-message-html="{lang}wcf.acp.discordBotList.deleteRequest{/lang}" data-object-id="{@$discordBot->botID}"><span class="icon icon24 fa-times"></span></a>
+                            <a href="#" class="jsConnectBot jsTooltip" title="{lang}wcf.acp.discordBotList.connectOnce{/lang}" data-object-id="{@$discordBot->botID}"><span class="icon icon24 fa-power-off"></span></a>
 
                             {event name='icons'}
                         </td>
@@ -99,7 +97,14 @@
 {/if}
 
 <script data-relocate="true">
-    require(['Hanashi/Acp/Discord/Tester'], function (DiscordTester) {
+    require(['Hanashi/Acp/Discord/Tester', 'Language'], function (DiscordTester, Language) {
+        Language.addObject({
+            'wcf.acp.discordBotList.connectOnce': '{lang}wcf.acp.discordBotList.connectOnce{/lang}',
+            'wcf.acp.discordBotList.gateway.connecting': '{lang}wcf.acp.discordBotList.gateway.connecting{/lang}',
+            'wcf.acp.discordBotList.gateway.connected': '{lang}wcf.acp.discordBotList.gateway.connected{/lang}',
+            'wcf.acp.discordBotList.gateway.error': '{lang}wcf.acp.discordBotList.gateway.error{/lang}'
+        });
+        
         new DiscordTester();
     });
 </script>

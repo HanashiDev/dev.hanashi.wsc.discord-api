@@ -21,9 +21,9 @@
 
 <form method="post" action="{if $action == 'add'}{link controller='DiscordBotAdd'}{/link}{else}{link controller='DiscordBotEdit' id=$discordBotID}{/link}{/if}">
 	<section class="section">
-        <h2 class="sectionTitle">Bot-Einstellungen</h2>
+        <h2 class="sectionTitle">{lang}wcf.acp.discordBotAdd.botSettings{/lang}</h2>
 		<dl{if $errorField == 'botName'} class="formError"{/if}>
-			<dt><label for="botName">Bot-Name</label></dt>
+			<dt><label for="botName">{lang}wcf.acp.discordBotList.botName{/lang}</label></dt>
 			<dd>
 				<input type="text" name="botName" id="botName" value="{$botName}" class="long" required>
 				{if $errorField == 'botName'}
@@ -31,15 +31,15 @@
 						{if $errorType == 'empty'}
 							{lang}wcf.global.form.error.empty{/lang}
 						{else if $errorType == 'tooLong'}
-							Der eingegebene Bot-Name ist zu lang. Die maximale Länge beträgt 50 Zeichen.
+							{lang}wcf.acp.discordBotAdd.botName.error.tooLong{/lang}
 						{/if}
 					</small>
 				{/if}
-                <small>Wählen Sie einen Anzeigenamen für diesen Bot aus. Dies dient lediglich dazu die Bots im ACP auseinanderhalten zu können.</small>
+                <small>{lang}wcf.acp.discordBotAdd.botName.description{/lang}</small>
 			</dd>
 		</dl>
 		<dl{if $errorField == 'botToken'} class="formError"{/if}>
-			<dt><label for="botToken">Bot-Token</label></dt>
+			<dt><label for="botToken">{lang}wcf.acp.discordBotAdd.botToken{/lang}</label></dt>
 			<dd>
 				<input type="password" name="botToken" id="botToken" value="{$botToken}" class="long" required>
 				{if $errorField == 'botToken'}
@@ -52,7 +52,7 @@
 			</dd>
 		</dl>
 		<dl{if $errorField == 'guildID'} class="formError"{/if}>
-			<dt><label for="guildID">Server-ID</label></dt>
+			<dt><label for="guildID">{lang}wcf.acp.discordBotAdd.guildID{/lang}</label></dt>
 			<dd>
 				<input type="number" name="guildID" id="guildID" value="{$guildID}" class="long" required>
 				{if $errorField == 'guildID'}
@@ -60,15 +60,15 @@
 						{if $errorType == 'empty'}
 							{lang}wcf.global.form.error.empty{/lang}
 						{else if $errorType == 'invalid'}
-							Die eingetrage Server-ID ist ungültig.
+							{lang}wcf.acp.discordBotAdd.guildID.error.invalid{/lang}
 						{/if}
 					</small>
 				{/if}
-                <small>Geben Sie die ID Ihres Discord-Servers ein. Diese wird für einige Funktionen verschiedener Plugins benötigt.</small>
+                <small>{lang}wcf.acp.discordBotAdd.guildID.description{/lang}</small>
 			</dd>
 		</dl>
 		<dl{if $errorField == 'webhookName'} class="formError"{/if}>
-			<dt><label for="webhookName">Webhook-Name</label></dt>
+			<dt><label for="webhookName">{lang}wcf.acp.discordBotAdd.webhookName{/lang}</label></dt>
 			<dd>
 				<input type="text" name="webhookName" id="webhookName" value="{$webhookName}" class="long" required>
 				{if $errorField == 'webhookName'}
@@ -76,11 +76,11 @@
 						{if $errorType == 'empty'}
 							{lang}wcf.global.form.error.empty{/lang}
 						{else if $errorType == 'tooLong'}
-							Der eingegebene Webhook-Name ist zu lang. Die maximale Länge beträgt 50 Zeichen.
+							{lang}wcf.acp.discordBotAdd.webhookName.error.tooLong{/lang}
 						{/if}
 					</small>
 				{/if}
-                <small>Wenn durch diesen Bot ein Webhook erstellt wird, wird der Webhook automatisch den hier eingestellten Namen erhalten.</small>
+                <small>{lang}wcf.acp.discordBotAdd.webhookName.description{/lang}</small>
 			</dd>
 		</dl>
 
@@ -88,10 +88,10 @@
     </section>
 
     <section class="section">
-        <h2 class="sectionTitle">OAuth2-Einstellungen</h2>
+        <h2 class="sectionTitle">{lang}wcf.acp.discordBotAdd.oauth2Settings{/lang}</h2>
         
 		<dl{if $errorField == 'clientID'} class="formError"{/if}>
-			<dt><label for="clientID">Client-ID</label></dt>
+			<dt><label for="clientID">{lang}wcf.acp.discordBotAdd.clientID{/lang}</label></dt>
 			<dd>
 				<input type="number" name="clientID" id="clientID" value="{$clientID}" class="long">
 				{if $errorField == 'clientID'}
@@ -99,15 +99,15 @@
 						{if $errorType == 'empty'}
 							{lang}wcf.global.form.error.empty{/lang}
 						{else if $errorType == 'invalid'}
-							Die eingetrage Client-ID ist ungültig.
+							{lang}wcf.acp.discordBotAdd.clientID.error.invalid{/lang}
 						{/if}
 					</small>
 				{/if}
-                <small>Geben Sie die Client-ID Ihrer Anwendung ein um diese für OAuth2-Funktionen zu nutzen.</small>
+                <small>{lang}wcf.acp.discordBotAdd.clientID.description{/lang}</small>
 			</dd>
 		</dl>
 		<dl{if $errorField == 'clientSecret'} class="formError"{/if}>
-			<dt><label for="clientSecret">Client-Secret</label></dt>
+			<dt><label for="clientSecret">{lang}wcf.acp.discordBotAdd.clientSecret{/lang}</label></dt>
 			<dd>
 				<input type="password" name="clientSecret" id="clientSecret" value="{$clientSecret}" class="long">
 				{if $errorField == 'clientSecret'}

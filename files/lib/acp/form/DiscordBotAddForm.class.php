@@ -44,7 +44,6 @@ class DiscordBotAddForm extends AbstractForm {
     public function validate() {
         parent::validate();
 
-        // TODO: lang
         if (empty($this->botName)) {
             throw new UserInputException('botName');
         }

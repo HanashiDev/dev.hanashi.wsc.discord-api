@@ -94,7 +94,7 @@ class DiscordChannelSelectOptionType extends AbstractOptionType {
     protected function getGuildChannels() {
         if ($this->guildChannels === null) {
             foreach ($this->getDiscordBotList() as $discordBot) {
-                $discordApi = new DiscordApi($discordBot->guildID, $discordBot->botToken);
+                $discordApi = $discordBot->getDiscordApi();
                 $this->guildChannels[$discordBot->botID] = $discordApi->getGuildChannels();
             }
         }

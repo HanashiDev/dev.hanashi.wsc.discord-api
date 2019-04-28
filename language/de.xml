@@ -20,4 +20,40 @@
 		<item name="wcf.acp.menu.link.configuration.discord.discordBotList.edit"><![CDATA[Discord-Bot bearbeiten]]></item>
 		<item name="wcf.acp.menu.link.configuration.discord.discordWebhookList"><![CDATA[Discord-Webhooks]]></item>
 	</category>
+	<category name="wcf.acp.discordBotAdd">
+		<item name="wcf.acp.discordBotAdd.botSettings"><![CDATA[Bot-Einstellungen]]></item>
+		<item name="wcf.acp.discordBotAdd.botName.error.tooLong"><![CDATA[Der eingegebene Bot-Name ist zu lang. Die maximale Länge beträgt 50 Zeichen.]]></item>
+		<item name="wcf.acp.discordBotAdd.botName.description"><![CDATA[Wählen Sie einen Anzeigenamen für diesen Bot aus. Dies dient lediglich dazu die Bots im ACP auseinanderhalten zu können.]]></item>
+		<item name="wcf.acp.discordBotAdd.botToken"><![CDATA[Bot-Token]]></item>
+		<item name="wcf.acp.discordBotAdd.guildID"><![CDATA[Server-ID]]></item>
+		<item name="wcf.acp.discordBotAdd.guildID.error.invalid"><![CDATA[Die eingetrage Server-ID ist ungültig.]]></item>
+		<item name="wcf.acp.discordBotAdd.guildID.description"><![CDATA[Geben Sie die ID Ihres Discord-Servers ein. Diese wird für einige Funktionen verschiedener Plugins benötigt.]]></item>
+		<item name="wcf.acp.discordBotAdd.webhookName"><![CDATA[Webhook-Name]]></item>
+		<item name="wcf.acp.discordBotAdd.webhookName.description"><![CDATA[Wenn durch diesen Bot ein Webhook erstellt wird, wird der Webhook automatisch den hier eingestellten Namen erhalten.]]></item>
+		<item name="wcf.acp.discordBotAdd.webhookName.error.tooLong"><![CDATA[Der eingegebene Webhook-Name ist zu lang. Die maximale Länge beträgt 50 Zeichen.]]></item>
+		<item name="wcf.acp.discordBotAdd.oauth2Settings"><![CDATA[OAuth2-Einstellungen]]></item>
+		<item name="wcf.acp.discordBotAdd.clientID"><![CDATA[Client-ID]]></item>
+		<item name="wcf.acp.discordBotAdd.clientID.description"><![CDATA[Geben Sie die Client-ID Ihrer Anwendung ein um diese für OAuth2-Funktionen zu nutzen.]]></item>
+		<item name="wcf.acp.discordBotAdd.clientID.error.invalid"><![CDATA[Die eingetrage Client-ID ist ungültig.]]></item>
+		<item name="wcf.acp.discordBotAdd.clientSecret"><![CDATA[Client-Secret]]></item>
+	</category>
+	<category name="wcf.acp.discordBotList">
+		<item name="wcf.acp.discordBotList.botName"><![CDATA[Bot-Name]]></item>
+		<item name="wcf.acp.discordBotList.server"><![CDATA[Server]]></item>
+		<item name="wcf.acp.discordBotList.deleteRequest"><![CDATA[Discord-Bot wirklich löschen?]]></item>
+		<item name="wcf.acp.discordBotList.connectOnce"><![CDATA[Bot einmalig verbinden]]></item>
+
+		<item name="wcf.acp.discordBotList.gateway.connecting"><![CDATA[Verbindet mit Gateway...]]></item>
+		<item name="wcf.acp.discordBotList.gateway.connected"><![CDATA[Erfolgreich verbunden.]]></item>
+		<item name="wcf.acp.discordBotList.gateway.error"><![CDATA[Konnte keine Verbindung zum Gateway herstellen (Timeout).]]></item>
+	</category>
+	<category name="wcf.acp.discordWebhookList">
+		<item name="wcf.acp.discordWebhookList.channelID"><![CDATA[Channel-ID]]></item>
+		<item name="wcf.acp.discordWebhookList.webhookTitle"><![CDATA[Webhook-Titel]]></item>
+		<item name="wcf.acp.discordWebhookList.webhookName"><![CDATA[Webhook-Name]]></item>
+		<item name="wcf.acp.discordWebhookList.deleteRequest"><![CDATA[Webhook wirklich löschen?]]></item>
+	</category>
+	<category name="wcf.acp.discordBotSelectOptionType">
+		<item name="wcf.acp.discordBotSelectOptionType.noBot"><![CDATA[Du hast noch keinen Discord-Bot angelegt. Dies kannst du unter <a href="{link controller="DiscordBotAdd"}{/link}">Discord-Bot</a> erledigen.]]></item>
+	</category>
 </language>

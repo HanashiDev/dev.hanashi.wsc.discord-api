@@ -81,7 +81,7 @@ class DiscordApi {
         $discordBot = new DiscordBot($botID);
         if (!$discordBot->botID) return null;
 
-        $discordApi = new DiscordApi($discordBot->guildID, $discordBot->botToken);
+        $discordApi = $discordBot->getDiscordApi();
         $discordApi->discordBot($discordBot);
         return $discordApi;
     }

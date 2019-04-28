@@ -15,7 +15,6 @@ class DiscordBot extends DatabaseObject {
 	 */
 	protected static $databaseTableIndexName = 'botID';
 
-	// TODO: überall DiscordAPI erstzen :D
 	public function getDiscordApi() {
 		return new DiscordApi($this->guildID, $this->botToken);
 	}
