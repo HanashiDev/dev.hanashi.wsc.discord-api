@@ -27,10 +27,16 @@
 		<item name="wcf.acp.discordBotAdd.botToken"><![CDATA[Bot-Token]]></item>
 		<item name="wcf.acp.discordBotAdd.guildID"><![CDATA[Server-ID]]></item>
 		<item name="wcf.acp.discordBotAdd.guildID.error.invalid"><![CDATA[Die eingetrage Server-ID ist ungültig.]]></item>
+		<item name="wcf.acp.discordBotAdd.guildID.error.permissionDenied"><![CDATA[Der Bot hat keinen Zugriff auf den angegebenen Server.]]></item>
 		<item name="wcf.acp.discordBotAdd.guildID.description"><![CDATA[Geben Sie die ID Ihres Discord-Servers ein. Diese wird für einige Funktionen verschiedener Plugins benötigt.]]></item>
+		<item name="wcf.acp.discordBotAdd.webhookSettings"><![CDATA[Webhook-Einstellungen]]></item>
 		<item name="wcf.acp.discordBotAdd.webhookName"><![CDATA[Webhook-Name]]></item>
 		<item name="wcf.acp.discordBotAdd.webhookName.description"><![CDATA[Wenn durch diesen Bot ein Webhook erstellt wird, wird der Webhook automatisch den hier eingestellten Namen erhalten.]]></item>
 		<item name="wcf.acp.discordBotAdd.webhookName.error.tooLong"><![CDATA[Der eingegebene Webhook-Name ist zu lang. Die maximale Länge beträgt 50 Zeichen.]]></item>
+		<item name="wcf.acp.discordBotAdd.webhookIcon"><![CDATA[Webhook-Icon]]></item>
+		<item name="wcf.acp.discordBotAdd.webhookIcon.description"><![CDATA[Wähle ein voreingestelltes Icon für den Webhook aus (Maximal 256 KB).]]></item>
+		<item name="wcf.acp.discordBotAdd.webhookIcon.error.tooBig"><![CDATA[Die hochgeladene Datei ist zu groß (maximal 256 KB).]]></item>
+		<item name="wcf.acp.discordBotAdd.webhookIcon.error.unknownFormat"><![CDATA[Die Datei hat ein ungültiges Format (erlaubt: jpg, png, gif).]]></item>
 		<item name="wcf.acp.discordBotAdd.oauth2Settings"><![CDATA[OAuth2-Einstellungen]]></item>
 		<item name="wcf.acp.discordBotAdd.clientID"><![CDATA[Client-ID]]></item>
 		<item name="wcf.acp.discordBotAdd.clientID.description"><![CDATA[Geben Sie die Client-ID Ihrer Anwendung ein um diese für OAuth2-Funktionen zu nutzen.]]></item>

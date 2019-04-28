@@ -76,6 +76,13 @@ class DiscordBotAddForm extends AbstractForm {
     protected $clientSecret;
 
     /**
+     * Hochgeladenes Icon
+     * 
+     * @var array
+     */
+    protected $webhookIcon;
+
+    /**
      * Name des Discord-Servers
      * 
      * @var string
@@ -101,6 +108,7 @@ class DiscordBotAddForm extends AbstractForm {
         if (isset($_POST['webhookName'])) $this->webhookName = StringUtil::trim($_POST['webhookName']);
         if (isset($_POST['clientID'])) $this->clientID = StringUtil::trim($_POST['clientID']);
         if (isset($_POST['clientSecret'])) $this->clientSecret = StringUtil::trim($_POST['clientSecret']);
+        if (isset($_FILES['webhookIcon'])) $this->webhookIcon = $_FILES['webhookIcon'];
     }
 
     /**
@@ -134,6 +142,15 @@ class DiscordBotAddForm extends AbstractForm {
             throw new UserInputException('webhookName', 'tooLong');
         }
 
+        if (!empty($this->webhookIcon['size'])) {
+            if ($this->webhookIcon['size'] > 256000) {
+                throw new UserInputException('webhookIcon', 'tooBig');
+            }
+            if (!in_array($this->webhookIcon['type'], ['image/jpeg', 'image/png', 'image/gif'])) {
+                throw new UserInputException('webhookIcon', 'unknownFormat');
+            }
+        }
+
         if (empty($this->clientID)) {
             throw new UserInputException('clientID');
         }
@@ -160,6 +177,9 @@ class DiscordBotAddForm extends AbstractForm {
      */
     public function save() {
         parent::save();
+
+        // TODO: Webhook-Icon irgendwo hinspeichern (Dateisystem)
+        // TODO: webhook-Icon nutzen beim Anlegen
 
         $action = new DiscordBotAction([], 'create', [
             'data' => [
