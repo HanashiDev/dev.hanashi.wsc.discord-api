@@ -7,7 +7,7 @@ use wcf\system\discord\DiscordApi;
 use wcf\system\exception\UserInputException;
 use wcf\system\WCF;
 
-class DiscordChannelSelectOptionType extends AbstractOptionType {
+class DiscordChannelMultiSelectOptionType extends AbstractOptionType {
     protected $discordBotList;
 
     protected $guildChannels;
@@ -52,7 +52,7 @@ class DiscordChannelSelectOptionType extends AbstractOptionType {
 			'option' => $option,
 			'value' => unserialize($value)
 		]);
-        return WCF::getTPL()->fetch('discordChannelSelectOptionType');
+        return WCF::getTPL()->fetch('discordChannelMultiSelectOptionType');
     }
 
     /**
@@ -60,16 +60,18 @@ class DiscordChannelSelectOptionType extends AbstractOptionType {
      */
     public function validate(Option $option, $newValue) {
         $guildChannels = $this->getGuildChannels();
-        foreach ($newValue as $botID => $channelID) {
-            if (empty($channelID)) continue;
+        foreach ($newValue as $botID => $channelIDs) {
+            if (empty($channelIDs)) continue;
 
             if (!isset($guildChannels[$botID])) {
                 throw new UserInputException($option->optionName);
             }
             $channels = $guildChannels[$botID]['body'];
-            $channelIDs = array_column($channels, 'id');
-            if (!in_array($channelID, $channelIDs)) {
-                throw new UserInputException($option->optionName);
+            $channelIDsTmp = array_column($channels, 'id');
+            foreach ($channelIDs as $channelID) {
+                if (!in_array($channelID, $channelIDsTmp)) {
+                    throw new UserInputException($option->optionName);
+                }
             }
         }
     }
