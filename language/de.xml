@@ -2,6 +2,8 @@
 <language xmlns="https://www.woltlab.com" xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="https://www.woltlab.com https://www.woltlab.com/XSD/vortex/language.xsd" languagecode="de">
 	<category name="wcf.acp.option">
 		<item name="wcf.acp.option.category.discord"><![CDATA[Discord]]></item>
+		<item name="wcf.acp.option.error.webhooksMaximumReached"><![CDATA[Das Maximum der Webhooks in einem Channel wurde übertroffen.]]></item>
+		<item name="wcf.acp.option.error.webhooksUnknown"><![CDATA[Unbekannter Fehler beim Erstellen eines Webhooks]]></item>
 	</category>
 	<category name="wcf.acp.group">
 		<item name="wcf.acp.group.option.category.user.discord"><![CDATA[Discord]]></item>

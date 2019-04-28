@@ -14,13 +14,13 @@
 
         <!-- TODO: delete -->
         <options>
-            <option name="hanashi_test_discord1">
+            <option name="hanashi_test_discord">
                 <categoryname>discord.general</categoryname>
-                <optiontype>DiscordChannelMultiSelect</optiontype>
+                <optiontype>DiscordWebhookChannelSelect</optiontype>
             </option>
         </options>
     </import>
     <delete>
-        <option name="hanashi_test_discord" />
+        <option name="hanashi_test_discord1" />
     </delete>
 </data>

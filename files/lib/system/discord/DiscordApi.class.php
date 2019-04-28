@@ -1,5 +1,6 @@
 <?php
 namespace wcf\system\discord;
+use wcf\data\discord\bot\DiscordBot;
 use wcf\system\exception\DiscordException;
 use wcf\system\exception\DiscordHttpException;
 use wcf\system\exception\HTTPNotFoundException;
@@ -51,11 +52,16 @@ class DiscordApi {
     protected $botType;
 
     /**
+     * Instanz des Discord-Bot-Objekts
+     * 
+     * @var DiscordBot
+     */
+    protected $discordBot;
+
+    /**
      * Konstruktor
      * 
      * @param   integer $guildID        Server-ID des Discord-Servers
-     * @param   integer $clientID       Client-ID der Discord-Anwendung
-     * @param   string  $clientSecret   Geheimer Schlüssel der Discord-Anwendung
      * @param   string  $botToken       Geheimer Schlüssel des Discord-Bots
      * @param   string  $botType        Bot-Typ
      */
@@ -63,6 +69,25 @@ class DiscordApi {
         $this->guildID = $guildID;
         $this->botToken = $botToken;
         $this->botType = $botType;
+    }
+
+    /**
+     * Erstellt ein API-Objekt anhand der Bot-ID
+     * 
+     * @param   integer $botID  ID des Bots
+     * @return  DiscordApi
+     */
+    public static function getApiByID($botID) {
+        $discordBot = new DiscordBot($botID);
+        if (!$discordBot->botID) return null;
+
+        $discordApi = new DiscordApi($discordBot->guildID, $discordBot->botToken);
+        $discordApi->discordBot($discordBot);
+        return $discordApi;
+    }
+
+    public function discordBot($bot) {
+        $this->discordBot = $bot;
     }
 
     /////////////////////////////////////
