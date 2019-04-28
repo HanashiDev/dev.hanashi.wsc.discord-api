@@ -36,7 +36,7 @@
 		<!-- config -->
         <instruction type="acpMenu" />
         <instruction type="sql" />
-        <!-- <instruction type="cronjob" /> -->
+        <instruction type="cronjob" />
         <instruction type="userGroupOption" />
         <instruction type="option" />
     </instructions>

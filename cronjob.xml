@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<data xmlns="https://www.woltlab.com" xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="https://www.woltlab.com https://www.woltlab.com/XSD/vortex/cronjob.xsd">
+	<import>
+		<cronjob name="dev.hanashi.wsc.discord-api.refresher">
+			<classname>wcf\system\cronjob\DiscordApiRefresherCronjob</classname>
+			<description><![CDATA[Refreshs data to discord server.]]></description>
+			<description language="de"><![CDATA[Aktualisiert Daten zum Discord-Server.]]></description>
+			<startminute>0</startminute>
+			<starthour>3</starthour>
+			<startdom>*</startdom>
+			<startmonth>*</startmonth>
+			<startdow>*</startdow>
+			<active>1</active>
+			<canbeedited>1</canbeedited>
+			<canbedisabled>1</canbedisabled>
+		</cronjob>
+	</import>
+</data>
