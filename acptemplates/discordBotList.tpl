@@ -98,4 +98,10 @@
 	<p class="info">{lang}wcf.global.noItems{/lang}</p>
 {/if}
 
+<script data-relocate="true">
+    require(['Hanashi/Acp/Discord/Tester'], function (DiscordTester) {
+        new DiscordTester();
+    });
+</script>
+
 {include file='footer'}
