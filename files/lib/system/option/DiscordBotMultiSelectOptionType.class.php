@@ -7,6 +7,14 @@ use wcf\system\exception\UserInputException;
 use wcf\system\WCF;
 use wcf\util\ArrayUtil;
 
+/**
+ * Option-Type für die Auswahl mehrere Discord-Bots
+ *
+ * @author	Peter Lohse <hanashi@hanashi.eu>
+ * @copyright	Hanashi
+ * @license	Freie Lizenz (https://hanashi.dev/freie-lizenz/)
+ * @package	WoltLabSuite\Core\System\Option
+ */
 class DiscordBotMultiSelectOptionType extends AbstractOptionType {
     /**
      * @inheritDoc

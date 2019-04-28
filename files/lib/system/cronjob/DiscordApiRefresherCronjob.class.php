@@ -8,6 +8,14 @@ use wcf\data\cronjob\Cronjob;
 use wcf\system\discord\DiscordApi;
 use wcf\system\WCF;
 
+/**
+ * Cronjob zum Aktualisieren der Discord Server-Informationen
+ *
+ * @author	Peter Lohse <hanashi@hanashi.eu>
+ * @copyright	Hanashi
+ * @license	Freie Lizenz (https://hanashi.dev/freie-lizenz/)
+ * @package	WoltLabSuite\Core\System\Cronjob
+ */
 class DiscordApiRefresherCronjob extends AbstractCronjob {
 	/**
 	 * @inheritDoc
@@ -19,6 +27,9 @@ class DiscordApiRefresherCronjob extends AbstractCronjob {
         $this->refreshWebhooks();
     }
 
+    /**
+     * Aktualisiert die Namen der Webhooks
+     */
     protected function refreshWebhooks() {
         $discordWebhookList = new DiscordWebhookList();
         $discordWebhookList->readObjects();
@@ -40,6 +51,9 @@ class DiscordApiRefresherCronjob extends AbstractCronjob {
         }
     }
     
+    /**
+     * Aktualisiert Namen und Icons der Server
+     */
     protected function refreshGuilds() {
         $discordBotList = new DiscordBotList();
         $discordBotList->readObjects();

@@ -6,6 +6,14 @@ use wcf\data\discord\bot\DiscordBotList;
 use wcf\system\exception\UserInputException;
 use wcf\system\WCF;
 
+/**
+ * Option-Type für die Auswahl eines Discord-Bots
+ *
+ * @author	Peter Lohse <hanashi@hanashi.eu>
+ * @copyright	Hanashi
+ * @license	Freie Lizenz (https://hanashi.dev/freie-lizenz/)
+ * @package	WoltLabSuite\Core\System\Option
+ */
 class DiscordBotSelectOptionType extends AbstractOptionType {
     /**
      * @inheritDoc

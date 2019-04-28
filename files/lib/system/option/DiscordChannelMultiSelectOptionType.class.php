@@ -7,9 +7,27 @@ use wcf\system\discord\DiscordApi;
 use wcf\system\exception\UserInputException;
 use wcf\system\WCF;
 
+/**
+ * Option-Type für die Auswahl mehrerer Discord-Channel
+ *
+ * @author	Peter Lohse <hanashi@hanashi.eu>
+ * @copyright	Hanashi
+ * @license	Freie Lizenz (https://hanashi.dev/freie-lizenz/)
+ * @package	WoltLabSuite\Core\System\Option
+ */
 class DiscordChannelMultiSelectOptionType extends AbstractOptionType {
+    /**
+     * Liste von Discord-Bots
+     * 
+     * @var DiscordBotList
+     */
     protected $discordBotList;
 
+    /**
+     * Liste von Server-Channeln
+     * 
+     * @var array
+     */
     protected $guildChannels;
 
     /**
@@ -84,6 +102,11 @@ class DiscordChannelMultiSelectOptionType extends AbstractOptionType {
 		return serialize($newValue);
     }
     
+    /**
+     * gibt Liste von Discord-Bots zurück
+     * 
+     * @return DiscordBotList
+     */
     protected function getDiscordBotList() {
         if ($this->discordBotList === null) {
             $this->discordBotList = new DiscordBotList();
@@ -93,6 +116,11 @@ class DiscordChannelMultiSelectOptionType extends AbstractOptionType {
         return $this->discordBotList;
     }
 
+    /**
+     * Gibt Liste von Discord-Channeln zurück
+     * 
+     * @return array
+     */
     protected function getGuildChannels() {
         if ($this->guildChannels === null) {
             foreach ($this->getDiscordBotList() as $discordBot) {

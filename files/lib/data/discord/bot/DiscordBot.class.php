@@ -4,6 +4,14 @@ use wcf\data\DatabaseObject;
 use wcf\system\discord\DiscordApi;
 use wcf\system\WCF;
 
+/**
+ * Discord-Bot-Objekt
+ *
+ * @author	Peter Lohse <hanashi@hanashi.eu>
+ * @copyright	Hanashi
+ * @license	Freie Lizenz (https://hanashi.dev/freie-lizenz/)
+ * @package	WoltLabSuite\Core\Data\Discord\Bot
+ */
 class DiscordBot extends DatabaseObject {
     /**
 	 * @inheritDoc

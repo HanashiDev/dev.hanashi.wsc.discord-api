@@ -1,8 +1,6 @@
 <?php
 namespace wcf\system\discord;
 use wcf\data\discord\bot\DiscordBot;
-use wcf\system\exception\DiscordException;
-use wcf\system\exception\DiscordHttpException;
 use wcf\system\exception\HTTPNotFoundException;
 use wcf\system\exception\HTTPServerErrorException;
 use wcf\system\exception\HTTPUnauthorizedException;

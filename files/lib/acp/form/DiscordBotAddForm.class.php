@@ -7,29 +7,91 @@ use wcf\system\exception\UserInputException;
 use wcf\system\WCF;
 use wcf\util\StringUtil;
 
+/**
+ * Form um Discord-Bot hinzuzufügen
+ *
+ * @author	Peter Lohse <hanashi@hanashi.eu>
+ * @copyright	Hanashi
+ * @license	Freie Lizenz (https://hanashi.dev/freie-lizenz/)
+ * @package	WoltLabSuite\Core\Acp\Form
+ */
 class DiscordBotAddForm extends AbstractForm {
+    /**
+     * @inheritDoc
+     */
     public $neededPermissions = ['admin.discord.canManageConnection'];
 
+    /**
+     * @inheritDoc
+     */
     public $activeMenuItem = 'wcf.acp.menu.link.configuration.discord.discordBotList.add';
 
+    /**
+     * ID des Discord-Bots
+     * 
+     * @var integer
+     */
     protected $discordBotID;
 
+    /**
+     * Anzeigename des Discord-Bots
+     * 
+     * @var string
+     */
     protected $botName = 'Default';
 
+    /**
+     * Token des Bots
+     * 
+     * @var string
+     */
     protected $botToken;
 
+    /**
+     * ID des Discord-Servers
+     * 
+     * @var integer
+     */
     protected $guildID;
 
+    /**
+     * standardisierte Webhook-Name
+     * 
+     * @var string
+     */
     protected $webhookName = PAGE_TITLE;
 
+    /**
+     * Client-ID der Discord-Anwendung
+     * 
+     * @var intger
+     */
     protected $clientID;
 
+    /**
+     * Geheimer Schlüssel der Discord-Anwendung
+     * 
+     * @var string
+     */
     protected $clientSecret;
 
+    /**
+     * Name des Discord-Servers
+     * 
+     * @var string
+     */
     protected $guildName;
 
+    /**
+     * Hash des Server-Icons
+     * 
+     * @var string
+     */
     protected $guildIcon;
 
+    /**
+     * @inheritDoc
+     */
     public function readFormParameters() {
         parent::readFormParameters();
 
@@ -41,6 +103,9 @@ class DiscordBotAddForm extends AbstractForm {
         if (isset($_POST['clientSecret'])) $this->clientSecret = StringUtil::trim($_POST['clientSecret']);
     }
 
+    /**
+     * @inheritDoc
+     */
     public function validate() {
         parent::validate();
 
@@ -90,6 +155,9 @@ class DiscordBotAddForm extends AbstractForm {
         if (!empty($guild['body']['icon'])) $this->guildIcon = $guild['body']['icon'];
     }
 
+    /**
+     * @inheritDoc 
+     */
     public function save() {
         parent::save();
 
@@ -111,6 +179,9 @@ class DiscordBotAddForm extends AbstractForm {
         $this->saved();
     }
 
+    /**
+     * @inheritDoc
+     */
     public function saved() {
         parent::saved();
 
@@ -119,6 +190,9 @@ class DiscordBotAddForm extends AbstractForm {
         ]);
     }
 
+    /**
+     * @inheritDoc
+     */
     public function assignVariables() {
         parent::assignVariables();
 

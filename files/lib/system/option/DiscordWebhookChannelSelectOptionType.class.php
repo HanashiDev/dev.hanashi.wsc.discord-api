@@ -7,6 +7,14 @@ use wcf\system\discord\DiscordApi;
 use wcf\system\exception\UserInputException;
 use wcf\system\WCF;
 
+/**
+ * Option-Type für die Auswahl eines Discord-Channels mit Webhook-Bezug
+ *
+ * @author	Peter Lohse <hanashi@hanashi.eu>
+ * @copyright	Hanashi
+ * @license	Freie Lizenz (https://hanashi.dev/freie-lizenz/)
+ * @package	WoltLabSuite\Core\System\Option
+ */
 class DiscordWebhookChannelSelectOptionType extends DiscordChannelSelectOptionType {
     /**
      * @inheritDoc
