@@ -5,6 +5,19 @@
             <category name="discord">
                 <parent/>
             </category>
+
+            <!-- TODO: delete -->
+            <category name="discord.general">
+                <parent>discord</parent>
+            </category>
         </categories>
+
+        <!-- TODO: delete -->
+        <options>
+            <option name="hanashi_test_discord">
+                <categoryname>discord.general</categoryname>
+                <optiontype>DiscordBotSelect</optiontype>
+            </option>
+        </options>
     </import>
 </data>
