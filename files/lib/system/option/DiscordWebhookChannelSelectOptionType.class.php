@@ -12,6 +12,8 @@ class DiscordWebhookChannelSelectOptionType extends DiscordChannelSelectOptionTy
      * @inheritDoc
      */
     public function validate(Option $option, $newValue) {
+        if (empty($newValue)) return;
+        
         $botIDs = array_keys($newValue);
         $discordBots = [];
         foreach ($this->getDiscordBotList() as $discordBot) {

@@ -18,7 +18,9 @@
                                 {if $channel['type'] == 4}
                                     <optgroup label="{$channel['name']}">
                                         {foreach from=$channel['childs'] item=$childChannel}
-                                            <option value="{$childChannel['id']}"{if !$value[$bot['botID']]|empty && $value[$bot['botID']]|is_array && $childChannel['id']|in_array:$value[$bot['botID']]} selected{/if}>{$childChannel['name']}</option>
+                                            {if $childChannel['type'] == 0}
+                                                <option value="{$childChannel['id']}"{if !$value[$bot['botID']]|empty && $value[$bot['botID']]|is_array && $childChannel['id']|in_array:$value[$bot['botID']]} selected{/if}>{$childChannel['name']}</option>
+                                            {/if}
                                         {/foreach}
                                     </optgroup>
                                 {else if $channel['type'] == 0}
@@ -37,7 +39,9 @@
             {if $channel['type'] == 4}
                 <optgroup label="{$channel['name']}">
                     {foreach from=$channel['childs'] item=$childChannel}
-                        <option value="{$childChannel['id']}"{if !$value[$bots[0]['botID']]|empty && $value[$bots[0]['botID']]|is_array && $childChannel['id']|in_array:$value[$bots[0]['botID']]} selected{/if}>{$childChannel['name']}</option>
+                        {if $childChannel['type'] == 0}
+                            <option value="{$childChannel['id']}"{if !$value[$bots[0]['botID']]|empty && $value[$bots[0]['botID']]|is_array && $childChannel['id']|in_array:$value[$bots[0]['botID']]} selected{/if}>{$childChannel['name']}</option>
+                        {/if}
                     {/foreach}
                 </optgroup>
             {else if $channel['type'] == 0}
