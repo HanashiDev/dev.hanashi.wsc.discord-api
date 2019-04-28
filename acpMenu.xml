@@ -18,5 +18,10 @@
 			<permissions>admin.discord.canManageConnection</permissions>
 			<icon>fa-plus</icon>
 		</acpmenuitem>
+		<acpmenuitem name="wcf.acp.menu.link.configuration.discord.discordWebhookList">
+			<controller>wcf\acp\page\DiscordWebhookListPage</controller>
+			<parent>wcf.acp.menu.link.configuration.discord</parent>
+			<permissions>admin.discord.canManageWebhooks</permissions>
+		</acpmenuitem>
 	</import>
 </data>

@@ -15,11 +15,12 @@
     </authorinformation>
 	
 	<compatibility>
+		<api version="2017" />
 		<api version="2018" />
 	</compatibility>
 
     <requiredpackages>
-        <requiredpackage minversion="3.1.9">com.woltlab.wcf</requiredpackage>
+        <requiredpackage minversion="3.0.0">com.woltlab.wcf</requiredpackage>
     </requiredpackages>
 
     <instructions type="install">

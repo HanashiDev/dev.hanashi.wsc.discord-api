@@ -6,21 +6,17 @@
                 <parent/>
             </category>
 
-            <!-- TODO: delete -->
+            <!-- TODO: DELETE -->
             <category name="discord.general">
                 <parent>discord</parent>
             </category>
         </categories>
 
-        <!-- TODO: delete -->
         <options>
-            <option name="hanashi_test_discord">
+            <option name="discord_peter_test">
                 <categoryname>discord.general</categoryname>
                 <optiontype>DiscordWebhookChannelMultiSelect</optiontype>
             </option>
         </options>
     </import>
-    <delete>
-        <option name="hanashi_test_discord1" />
-    </delete>
 </data>

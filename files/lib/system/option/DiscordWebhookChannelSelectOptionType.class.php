@@ -55,7 +55,8 @@ class DiscordWebhookChannelSelectOptionType extends DiscordChannelSelectOptionTy
                             'webhookToken' => $response['body']['token'],
                             'webhookName' => $response['body']['name'],
                             'webhookTitle' => WCF::getLanguage()->get('wcf.acp.option.'.$option->optionName),
-                            'usageBy' => $option->optionName
+                            'usageBy' => $option->optionName,
+                            'webhookTime' => TIME_NOW
                         ]
                     ]);
                     $action->executeAction();

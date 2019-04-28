@@ -14,13 +14,14 @@ CREATE TABLE wcf1_discord_bot (
 );
 
 CREATE TABLE wcf1_discord_webhook (
+    webhookID BIGINT(20) NOT NULL,
     channelID BIGINT(10) NOT NULL,
     botID INT(10) NOT NULL,
-    webhookID BIGINT(20) NOT NULL,
     webhookToken VARCHAR(100) NOT NULL,
     webhookName VARCHAR(50) NOT NULL,
     webhookTitle VARCHAR(100) NOT NULL,
     usageBy VARCHAR(100) NOT NULL,
-    PRIMARY KEY (channelID)
+    webhookTime INT(10) NOT NULL,
+    PRIMARY KEY (webhookID)
 );
 ALTER TABLE wcf1_discord_webhook ADD FOREIGN KEY (botID) REFERENCES wcf1_discord_bot (botID) ON DELETE CASCADE;

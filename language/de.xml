@@ -10,6 +10,7 @@
 		<item name="wcf.acp.group.option.category.mod.discord"><![CDATA[Discord]]></item>
 		<item name="wcf.acp.group.option.category.admin.discord"><![CDATA[Discord]]></item>
 		<item name="wcf.acp.group.option.admin.discord.canManageConnection"><![CDATA[Kann Discord-Server verwalten]]></item>
+		<item name="wcf.acp.group.option.admin.discord.canManageWebhooks"><![CDATA[Kann Discord-Webhooks verwalten]]></item>
 	</category>
 	<category name="wcf.acp.menu">
 		<item name="wcf.acp.menu.link.configuration.discord"><![CDATA[Discord]]></item>
@@ -17,5 +18,6 @@
 		<item name="wcf.acp.menu.link.configuration.discord.discordBotList"><![CDATA[Discord-Bots]]></item>
 		<item name="wcf.acp.menu.link.configuration.discord.discordBotList.add"><![CDATA[Discord-Bot hinzufügen]]></item>
 		<item name="wcf.acp.menu.link.configuration.discord.discordBotList.edit"><![CDATA[Discord-Bot bearbeiten]]></item>
+		<item name="wcf.acp.menu.link.configuration.discord.discordWebhookList"><![CDATA[Discord-Webhooks]]></item>
 	</category>
 </language>
