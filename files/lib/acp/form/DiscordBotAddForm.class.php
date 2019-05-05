@@ -178,9 +178,6 @@ class DiscordBotAddForm extends AbstractForm {
     public function save() {
         parent::save();
 
-        // TODO: Webhook-Icon irgendwo hinspeichern (Dateisystem)
-        // TODO: webhook-Icon nutzen beim Anlegen
-
         $action = new DiscordBotAction([], 'create', [
             'data' => [
                 'botName' => $this->botName,
@@ -194,7 +191,10 @@ class DiscordBotAddForm extends AbstractForm {
                 'botTime' => TIME_NOW
             ]
         ]);
-        $action->executeAction();
+        $discordBot = $action->executeAction()['returnValues'];
+        if (!empty($this->webhookIcon['tmp_name'])) {
+            move_uploaded_file($this->webhookIcon['tmp_name'], WCF_DIR.'images/discord_webhook/'.$discordBot->botID.'.pic');
+        }
 
         $this->saved();
     }

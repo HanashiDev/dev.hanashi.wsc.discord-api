@@ -53,7 +53,13 @@ class DiscordWebhookChannelSelectOptionType extends DiscordChannelSelectOptionTy
 
             if (!in_array($channelID, $discordWebhooks)) {
                 $discordApi = $discordBots[$botID]->getDiscordApi();
-                $response = $discordApi->createWebhook($channelID, $discordBots[$botID]->webhookName);
+                $avatar = null;
+                $avatarFile = WCF_DIR . 'images/discord_webhook/'.$botID.'.pic';
+                if (file_exists($avatarFile)) {
+                    $mimeType = FileUtil::getMimeType($avatarFile);
+                    $avatar = 'data:'.$mimeType.';base64,'.base64_encode(file_get_contents($avatarFile));
+                }
+                $response = $discordApi->createWebhook($channelID, $discordBots[$botID]->webhookName, $avatar);
                 if (!$response['error']) {
                     $action = new DiscordWebhookAction([], 'create', [
                         'data' => [

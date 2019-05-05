@@ -6,6 +6,7 @@ use wcf\data\option\Option;
 use wcf\system\discord\DiscordApi;
 use wcf\system\exception\UserInputException;
 use wcf\system\WCF;
+use wcf\util\FileUtil;
 
 /**
  * Option-Type für die Auswahl mehrerer Discord-Channel mit Webhook-Bezug
@@ -59,7 +60,13 @@ class DiscordWebhookChannelMultiSelectOptionType extends DiscordChannelMultiSele
 
                 if (!in_array($channelID, $discordWebhooks)) {
                     $discordApi = $discordBots[$botID]->getDiscordApi();
-                    $response = $discordApi->createWebhook($channelID, $discordBots[$botID]->webhookName);
+                    $avatar = null;
+                    $avatarFile = WCF_DIR . 'images/discord_webhook/'.$botID.'.pic';
+                    if (file_exists($avatarFile)) {
+                        $mimeType = FileUtil::getMimeType($avatarFile);
+                        $avatar = 'data:'.$mimeType.';base64,'.base64_encode(file_get_contents($avatarFile));
+                    }
+                    $response = $discordApi->createWebhook($channelID, $discordBots[$botID]->webhookName, $avatar);
                     if (!$response['error']) {
                         $action = new DiscordWebhookAction([], 'create', [
                             'data' => [
