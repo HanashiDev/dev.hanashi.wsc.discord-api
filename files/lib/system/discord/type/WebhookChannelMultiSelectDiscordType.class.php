@@ -7,10 +7,10 @@ use wcf\system\exception\UserInputException;
 use wcf\system\WCF;
 
 class WebhookChannelMultiSelectDiscordType extends ChannelMultiSelectDiscordType {
-    public function validate() {
-        if (empty($this->value)) return;
+    public function validate($newValue) {
+        if (empty($newValue)) return;
 
-        $botIDs = array_keys($this->value);
+        $botIDs = array_keys($newValue);
         $discordBots = [];
         foreach ($this->getDiscordBotList() as $discordBot) {
             if (in_array($discordBot->botID, $botIDs)) {
@@ -19,7 +19,7 @@ class WebhookChannelMultiSelectDiscordType extends ChannelMultiSelectDiscordType
         }
 
         $channelIDsMerged = [];
-        foreach ($this->value as $channelIDs) {
+        foreach ($newValue as $channelIDs) {
             $channelIDsMerged = array_merge($channelIDsMerged, $channelIDs);
         }
 
@@ -29,7 +29,7 @@ class WebhookChannelMultiSelectDiscordType extends ChannelMultiSelectDiscordType
         $discordWebhooks = $discordWebhookList->objectIDs;
 
         $guildChannels = $this->getGuildChannels();
-        foreach ($this->value as $botID => $channelIDs) {
+        foreach ($newValue as $botID => $channelIDs) {
             if (empty($channelIDs)) continue;
 
             if (!isset($guildChannels[$botID])) {
@@ -42,7 +42,7 @@ class WebhookChannelMultiSelectDiscordType extends ChannelMultiSelectDiscordType
             $channelIDsTmp = array_column($channels, 'id');
             foreach ($channelIDs as $channelID) {
                 if (!in_array($channelID, $channelIDsTmp)) {
-                    throw new UserInputException($this->optionName);
+                    throw new UserInputException($option->optionName);
                 }
 
                 if (!in_array($channelID, $discordWebhooks)) {

@@ -4,14 +4,8 @@ use wcf\system\WCF;
 
 abstract class AbstractDiscordType {
     protected $optionName;
-    protected $value;
 
-    public function __construct($optionName, $value = null) {
+    public function __construct($optionName) {
         $this->optionName = $optionName;
-        $this->value = $value;
-    }
-
-    public function setValue($value) {
-        $this->value = $value;
     }
 }

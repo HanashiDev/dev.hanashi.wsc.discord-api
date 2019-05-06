@@ -21,7 +21,7 @@ class ChannelMultiSelectDiscordType extends AbstractDiscordType {
      */
     protected $guildChannels;
 
-    public function getFormElement() {
+    public function getFormElement($value) {
         $channels = [];
         $guildChannels = $this->getGuildChannels();
         foreach ($this->getDiscordBotList() as $discordBot) {
@@ -54,30 +54,35 @@ class ChannelMultiSelectDiscordType extends AbstractDiscordType {
         }
 
         WCF::getTPL()->assign([
-            'bots' => $channels,
-            'optionName' => $this->optionName,
-            'value' => $this->value
-        ]);
+			'bots' => $channels,
+			'optionName' => $this->optionName,
+			'value' => unserialize($value)
+		]);
 
-        return [
-            'template' => WCF::getTPL()->fetch('discordChannelMultiSelect')
-        ];
+        return WCF::getTPL()->fetch('discordChannelMultiSelect');
     }
 
-    public function validate() {
+    public function validate($newValue) {
         $guildChannels = $this->getGuildChannels();
-        foreach ($this->value as $botID => $channelID) {
-            if (empty($channelID)) continue;
+        foreach ($newValue as $botID => $channelIDs) {
+            if (empty($channelIDs)) continue;
 
             if (!isset($guildChannels[$botID])) {
                 throw new UserInputException($this->optionName);
             }
             $channels = $guildChannels[$botID]['body'];
-            $channelIDs = array_column($channels, 'id');
-            if (!in_array($channelID, $channelIDs)) {
-                throw new UserInputException($this->optionName);
+            $channelIDsTmp = array_column($channels, 'id');
+            foreach ($channelIDs as $channelID) {
+                if (!in_array($channelID, $channelIDsTmp)) {
+                    throw new UserInputException($this->optionName);
+                }
             }
         }
+    }
+
+    public function getData($newValue) {
+        if (!is_array($newValue)) $newValue = [];
+		return serialize($newValue);
     }
 
     /**
