@@ -25,8 +25,13 @@ class WebhookChannelMultiSelectDiscordType extends ChannelMultiSelectDiscordType
 
         $discordWebhookList = new DiscordWebhookList();
         $discordWebhookList->getConditionBuilder()->add('channelID IN (?) AND usageBy = ?', [$channelIDsMerged, $this->optionName]);
-        $discordWebhookList->readObjectIDs();
-        $discordWebhooks = $discordWebhookList->objectIDs;
+        $discordWebhookList->readObjects();
+        $webhookChannelIDs = [];
+        foreach ($discordWebhookList as $discordWebhook) {
+            if (!in_array($discordWebhook->channelID, $webhookChannelIDs)) {
+                $webhookChannelIDs[] = $discordWebhook->channelID;
+            }
+        }
 
         $guildChannels = $this->getGuildChannels();
         foreach ($newValue as $botID => $channelIDs) {
@@ -45,7 +50,7 @@ class WebhookChannelMultiSelectDiscordType extends ChannelMultiSelectDiscordType
                     throw new UserInputException($option->optionName);
                 }
 
-                if (!in_array($channelID, $discordWebhooks)) {
+                if (!in_array($channelID, $webhookChannelIDs)) {
                     $discordApi = $discordBots[$botID]->getDiscordApi();
                     $avatar = null;
                     $avatarFile = WCF_DIR . 'images/discord_webhook/'.$botID.'.pic';
