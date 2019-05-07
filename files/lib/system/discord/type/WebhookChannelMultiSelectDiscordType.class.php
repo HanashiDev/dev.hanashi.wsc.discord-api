@@ -67,7 +67,7 @@ class WebhookChannelMultiSelectDiscordType extends ChannelMultiSelectDiscordType
                                 'webhookID' => $response['body']['id'],
                                 'webhookToken' => $response['body']['token'],
                                 'webhookName' => $response['body']['name'],
-                                'webhookTitle' => WCF::getLanguage()->get('wcf.acp.option.'.$this->optionName),
+                                'webhookTitle' => $this->optionName,
                                 'usageBy' => $this->optionName,
                                 'webhookTime' => TIME_NOW
                             ]
