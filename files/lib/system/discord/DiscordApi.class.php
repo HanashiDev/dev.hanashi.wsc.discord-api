@@ -705,7 +705,6 @@ class DiscordApi {
      * @return  array
      */
     public function addGuildMember($userID, $accessToken, $params = []) {
-        // TODO: testen
         $url = $this->apiUrl . '/guilds/'.$this->guildID.'/members/'.$userID;
         $params = array_merge([
             'access_token' => $accessToken
@@ -756,7 +755,6 @@ class DiscordApi {
      * @return  array
      */
     public function addGuildMemberRole($userID, $roleID) {
-        // TODO: testen
         $url = $this->apiUrl . '/guilds/'.$this->guildID.'/members/'.$userID.'/roles/'.$roleID;
         return $this->execute($url, 'PUT');
     }
@@ -772,7 +770,6 @@ class DiscordApi {
      * @return  array
      */
     public function removeGuildMemberRole($userID, $roleID) {
-        // TODO: testen
         $url = $this->apiUrl . '/guilds/'.$this->guildID.'/members/'.$userID.'/roles/'.$roleID;
         return $this->execute($url, 'DELETE');
     }
@@ -787,7 +784,6 @@ class DiscordApi {
      * @return  array
      */
     public function removeGuildMember($userID) {
-        // TODO: testen
         $url = $this->apiUrl . '/guilds/'.$this->guildID.'/members/'.$userID;
         return $this->execute($url, 'DELETE');
     }

@@ -5,8 +5,8 @@
         <packagename language="de"><![CDATA[Discord-API]]></packagename>
         <packagedescription><![CDATA[API to cummincate with Discord.]]></packagedescription>
         <packagedescription language="de"><![CDATA[API um mit Discord zu kommunizieren.]]></packagedescription>
-        <version>1.0.0 Alpha 1</version>
-        <date>2019-05-01</date>
+        <version>1.0.0</version>
+        <date>2019-07-13</date>
     </packageinformation>
 
     <authorinformation>
