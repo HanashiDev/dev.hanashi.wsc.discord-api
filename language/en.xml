@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<language xmlns="https://www.woltlab.com" xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="https://www.woltlab.com https://www.woltlab.com/XSD/vortex/language.xsd" languagecode="en">
+	<category name="wcf.acp.option">
+		<item name="wcf.acp.option.category.discord"><![CDATA[Discord]]></item>
+		<item name="wcf.acp.option.error.webhooksMaximumReached"><![CDATA[The maximum of webhooks in a channel was exceeded.]]></item>
+		<item name="wcf.acp.option.error.webhooksUnknown"><![CDATA[Unknown error when creating a webhook]]></item>
+	</category>
+	<category name="wcf.acp.group">
+		<item name="wcf.acp.group.option.category.user.discord"><![CDATA[Discord]]></item>
+		<item name="wcf.acp.group.option.category.mod.discord"><![CDATA[Discord]]></item>
+		<item name="wcf.acp.group.option.category.admin.discord"><![CDATA[Discord]]></item>
+		<item name="wcf.acp.group.option.admin.discord.canManageConnection"><![CDATA[Can manage Discord servers]]></item>
+		<item name="wcf.acp.group.option.admin.discord.canManageWebhooks"><![CDATA[Can manage Discord webhooks]]></item>
+	</category>
+	<category name="wcf.acp.menu">
+		<item name="wcf.acp.menu.link.configuration.discord"><![CDATA[Discord]]></item>
+		<item name="wcf.acp.menu.link.management.discord"><![CDATA[Discord]]></item>
+		<item name="wcf.acp.menu.link.configuration.discord.discordBotList"><![CDATA[Discord Bots]]></item>
+		<item name="wcf.acp.menu.link.configuration.discord.discordBotList.add"><![CDATA[Add Discord bot]]></item>
+		<item name="wcf.acp.menu.link.configuration.discord.discordBotList.edit"><![CDATA[Edit Discord bot]]></item>
+		<item name="wcf.acp.menu.link.configuration.discord.discordWebhookList"><![CDATA[Discord Webhooks]]></item>
+	</category>
+	<category name="wcf.acp.discordBotAdd">
+		<item name="wcf.acp.discordBotAdd.botSettings"><![CDATA[Bot Settings]]></item>
+		<item name="wcf.acp.discordBotAdd.botName.error.tooLong"><![CDATA[The bot name entered is too long. The maximum length is 50 characters.]]></item>
+		<item name="wcf.acp.discordBotAdd.botName.description"><![CDATA[Select a display name for this bot. This is only to distinguish the bots in the ACP.]]></item>
+		<item name="wcf.acp.discordBotAdd.botToken"><![CDATA[Bot Token]]></item>
+		<item name="wcf.acp.discordBotAdd.guildID"><![CDATA[Server ID]]></item>
+		<item name="wcf.acp.discordBotAdd.guildID.error.invalid"><![CDATA[The entered server ID is invalid.]]></item>
+		<item name="wcf.acp.discordBotAdd.guildID.error.permissionDenied"><![CDATA[The bot has no access to the specified server.]]></item>
+		<item name="wcf.acp.discordBotAdd.guildID.description"><![CDATA[Enter the ID of your Discord server. This is required for some functions of different plugins.]]></item>
+		<item name="wcf.acp.discordBotAdd.webhookSettings"><![CDATA[Webhook Settings]]></item>
+		<item name="wcf.acp.discordBotAdd.webhookName"><![CDATA[Webhook Name]]></item>
+		<item name="wcf.acp.discordBotAdd.webhookName.description"><![CDATA[If a webhook is created by this bot, the webhook will automatically get the name set here.]]></item>
+		<item name="wcf.acp.discordBotAdd.webhookName.error.tooLong"><![CDATA[The entered webhook name is too long. The maximum length is 50 characters.]]></item>
+		<item name="wcf.acp.discordBotAdd.webhookIcon"><![CDATA[Webhook Icon]]></item>
+		<item name="wcf.acp.discordBotAdd.webhookIcon.description"><![CDATA[Select a default icon for the webhook (maximum 256 KB).]]></item>
+		<item name="wcf.acp.discordBotAdd.webhookIcon.error.tooBig"><![CDATA[The uploaded file is too large (maximum 256 KB).]]></item>
+		<item name="wcf.acp.discordBotAdd.webhookIcon.error.unknownFormat"><![CDATA[The file has an invalid format (allowed: jpg, png, gif).]]></item>
+		<item name="wcf.acp.discordBotAdd.oauth2Settings"><![CDATA[OAuth2 Settings]]></item>
+		<item name="wcf.acp.discordBotAdd.clientID"><![CDATA[Client ID]]></item>
+		<item name="wcf.acp.discordBotAdd.clientID.description"><![CDATA[Enter the client ID of your application to use it for OAuth2 functions.]]></item>
+		<item name="wcf.acp.discordBotAdd.clientID.error.invalid"><![CDATA[The entered client ID is invalid.]]></item>
+		<item name="wcf.acp.discordBotAdd.clientSecret"><![CDATA[Client Secret]]></item>
+	</category>
+	<category name="wcf.acp.discordBotList">
+		<item name="wcf.acp.discordBotList.botName"><![CDATA[Bot Name]]></item>
+		<item name="wcf.acp.discordBotList.server"><![CDATA[Server]]></item>
+		<item name="wcf.acp.discordBotList.deleteRequest"><![CDATA[Discord bot really delete?]]></item>
+		<item name="wcf.acp.discordBotList.connectOnce"><![CDATA[Connect bot once]]></item>
+
+		<item name="wcf.acp.discordBotList.gateway.connecting"><![CDATA[Connects to Gateway...]]></item>
+		<item name="wcf.acp.discordBotList.gateway.connected"><![CDATA[Successfully connected.]]></item>
+		<item name="wcf.acp.discordBotList.gateway.error"><![CDATA[Could not connect to the gateway (timeout).]]></item>
+	</category>
+	<category name="wcf.acp.discordWebhookList">
+		<item name="wcf.acp.discordWebhookList.channelID"><![CDATA[Channel ID]]></item>
+		<item name="wcf.acp.discordWebhookList.webhookTitle"><![CDATA[Webhook Title]]></item>
+		<item name="wcf.acp.discordWebhookList.webhookName"><![CDATA[Webhook Name]]></item>
+		<item name="wcf.acp.discordWebhookList.deleteRequest"><![CDATA[Really delete Webhook?]]></item>
+	</category>
+	<category name="wcf.acp.discordBotSelectOptionType">
+		<item name="wcf.acp.discordBotSelectOptionType.noBot"><![CDATA[You haven't created a discord bot yet. You can do this under <a href="{link controller="DiscordBotAdd"}{/link}">Discord bot</a>.]]></item>
+	</category>
+</language>
