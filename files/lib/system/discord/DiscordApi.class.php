@@ -101,7 +101,7 @@ class DiscordApi {
     public function getGuildAuditLog($params = []) {
         $url = $this->apiUrl . '/guilds/'.$this->guildID.'/audit-logs';
         if (!empty($params)) {
-            $url .= '?'.http_build_query($params);
+            $url .= '?'.http_build_query($params, '', '&');
         }
         return $this->execute($url);
     }
@@ -178,7 +178,7 @@ class DiscordApi {
     public function getChannelMessages($channelID, $params = []) {
         $url = $this->apiUrl . '/channels/' . $channelID . '/messages';
         if (!empty($params)) {
-            $url .= '?'.http_build_query($params);
+            $url .= '?'.http_build_query($params, '', '&');
         }
         return $this->execute($url);
     }
@@ -275,7 +275,7 @@ class DiscordApi {
     public function getReactions($channelID, $messageID, $emoji, $params = []) {
         $url = $this->apiUrl . '/channels/'.$channelID.'/messages/'.$messageID.'/reactions/'.$emoji;
         if (!empty($params)) {
-            $url .= '?'.http_build_query($params);
+            $url .= '?'.http_build_query($params, '', '&');
         }
         return $this->execute($url);
     }
@@ -687,7 +687,7 @@ class DiscordApi {
     public function listGuildMembers($params = []) {
         $url = $this->apiUrl . '/guilds/'.$this->guildID.'/members';
         if (!empty($params)) {
-            $url .= '?'.http_build_query($params);
+            $url .= '?'.http_build_query($params, '', '&');
         }
         return $this->execute($url);
     }
@@ -921,7 +921,7 @@ class DiscordApi {
         $url = $this->apiUrl . '/guilds/'.$this->guildID.'/prune';
         $url .= '?'.http_build_query([
             'days' => $days
-        ]);
+        ], '', '&');
         return $this->execute($url);
     }
 
@@ -1173,7 +1173,7 @@ class DiscordApi {
     public function getCurrentUserGuilds($params = []) {
         $url = $this->apiUrl . '/users/@me/guilds';
         if (!empty($params)) {
-            $url .= '?'.http_build_query($params);
+            $url .= '?'.http_build_query($params, '', '&');
         }
         return $this->execute($url);
     }
@@ -1456,7 +1456,7 @@ class DiscordApi {
             'scope' => implode(' ', $scope),
             'redirect_uri' => $redirectUri
         ];
-        $url .= http_build_query($params);
+        $url .= http_build_query($params, '', '&');
         return $url;
     }
 
@@ -1527,7 +1527,59 @@ class DiscordApi {
         try {
             $request->execute();
             $reply = $this->parseReply($request->getReply());
-        } catch (HTTPNotFoundException | HTTPServerErrorException | HTTPUnauthorizedException | SystemException | HTTPException $e) {
+        } catch (HTTPNotFoundException $e) {
+            $reply = $this->parseReply($request->getReply());
+            $reply['error'] = [
+                'message' => $e->getMessage(),
+                'status' => $e->getCode(),
+                'url' => $url,
+                'method' => $method,
+                'parameters' => $parameters,
+                'contentType' => $contentType,
+                'guildID' => $this->guildID,
+                'botToken' => $this->botToken,
+                'botType' => $this->botType
+            ];
+        } catch (HTTPServerErrorException $e) {
+            $reply = $this->parseReply($request->getReply());
+            $reply['error'] = [
+                'message' => $e->getMessage(),
+                'status' => $e->getCode(),
+                'url' => $url,
+                'method' => $method,
+                'parameters' => $parameters,
+                'contentType' => $contentType,
+                'guildID' => $this->guildID,
+                'botToken' => $this->botToken,
+                'botType' => $this->botType
+            ];
+        } catch (HTTPUnauthorizedException $e) {
+            $reply = $this->parseReply($request->getReply());
+            $reply['error'] = [
+                'message' => $e->getMessage(),
+                'status' => $e->getCode(),
+                'url' => $url,
+                'method' => $method,
+                'parameters' => $parameters,
+                'contentType' => $contentType,
+                'guildID' => $this->guildID,
+                'botToken' => $this->botToken,
+                'botType' => $this->botType
+            ];
+        } catch (SystemException $e) {
+            $reply = $this->parseReply($request->getReply());
+            $reply['error'] = [
+                'message' => $e->getMessage(),
+                'status' => $e->getCode(),
+                'url' => $url,
+                'method' => $method,
+                'parameters' => $parameters,
+                'contentType' => $contentType,
+                'guildID' => $this->guildID,
+                'botToken' => $this->botToken,
+                'botType' => $this->botType
+            ];
+        } catch (HTTPException $e) {
             $reply = $this->parseReply($request->getReply());
             $reply['error'] = [
                 'message' => $e->getMessage(),

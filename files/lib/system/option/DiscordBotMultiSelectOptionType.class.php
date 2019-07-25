@@ -6,6 +6,7 @@ use wcf\data\discord\bot\DiscordBotList;
 use wcf\system\exception\UserInputException;
 use wcf\system\WCF;
 use wcf\util\ArrayUtil;
+use wcf\util\StringUtil;
 
 /**
  * Option-Type für die Auswahl mehrere Discord-Bots
@@ -55,6 +56,6 @@ class DiscordBotMultiSelectOptionType extends AbstractOptionType {
      */
     public function getData(Option $option, $newValue) {
 		if (!is_array($newValue)) $newValue = [];
-		return implode("\n", ArrayUtil::toIntegerArray($newValue));
+		return implode("\n", ArrayUtil::toIntegerArray(StringUtil::unifyNewlines($newValue)));
 	}
 }
