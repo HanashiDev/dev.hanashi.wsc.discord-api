@@ -5,7 +5,7 @@
         <packagename language="de"><![CDATA[Discord-API]]></packagename>
         <packagedescription><![CDATA[API to cummincate with Discord.]]></packagedescription>
         <packagedescription language="de"><![CDATA[API um mit Discord zu kommunizieren.]]></packagedescription>
-        <version>1.0.2</version>
+        <version>1.0.3</version>
         <date>2019-08-15</date>
     </packageinformation>
 
@@ -40,11 +40,8 @@
         <instruction type="userGroupOption" />
         <instruction type="option" />
     </instructions>
-	<instructions type="update" fromversion="1.0.1">
+	<instructions type="update" fromversion="1.0.2">
 		<!-- files -->
         <instruction type="file" />
-		
-		<!-- templates -->
-		<instruction type="acpTemplate" />
 	</instructions>
 </package>
