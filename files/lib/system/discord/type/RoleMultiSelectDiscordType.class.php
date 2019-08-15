@@ -29,60 +29,46 @@ class RoleMultiSelectDiscordType extends AbstractDiscordType {
             if (isset($guildRoles[$discordBot->botID])) {
                 $rolesTmp = $guildRoles[$discordBot->botID];
             }
-            // $rolesTmp = $rolesTmp['body'];
-        //     array_multisort(array_column($channelsTmp, 'position'), SORT_ASC, $channelsTmp);
-
-        //     $channelsGroupedTmp = [];
-        //     foreach ($channelsTmp as $channel) {
-        //         if (empty($channel['parent_id'])) {
-        //             $childs = [];
-        //             if (isset($channelsGroupedTmp[$channel['id']]['childs'])) {
-        //                 $childs = $channelsGroupedTmp[$channel['id']]['childs'];
-        //             }
-        //             $channel['childs'] = $childs;
-        //             $channelsGroupedTmp[$channel['id']] = $channel;
-        //         } else {
-        //             $channelsGroupedTmp[$channel['parent_id']]['childs'][] = $channel;
-        //         }
-        //     }
+            $rolesTmp = $rolesTmp['body'];
+            array_multisort(array_column($rolesTmp, 'position'), SORT_DESC, $rolesTmp);
             
-        //     $channels[] = [
-        //         'botID' => $discordBot->botID,
-        //         'botName' => $discordBot->botName,
-        //         'channels' => $channelsGroupedTmp
-        //     ];
+            $roles[] = [
+                'botID' => $discordBot->botID,
+                'botName' => $discordBot->botName,
+                'roles' => $rolesTmp
+            ];
         }
 
         WCF::getTPL()->assign([
 			'bots' => $roles,
 			'optionName' => $this->optionName,
-			'value' => explode(',', $value)
+			'value' => unserialize($value)
 		]);
 
         return WCF::getTPL()->fetch('discordRoleMultiSelect');
     }
 
     public function validate($newValue) {
-        // $guildChannels = $this->getGuildChannels();
-        // foreach ($newValue as $botID => $channelIDs) {
-        //     if (empty($channelIDs)) continue;
+        $guildRoles = $this->getGuildRoles();
+        foreach ($newValue as $botID => $roleIDs) {
+            if (empty($roleIDs)) continue;
 
-        //     if (!isset($guildChannels[$botID])) {
-        //         throw new UserInputException($this->optionName);
-        //     }
-        //     $channels = $guildChannels[$botID]['body'];
-        //     $channelIDsTmp = array_column($channels, 'id');
-        //     foreach ($channelIDs as $channelID) {
-        //         if (!in_array($channelID, $channelIDsTmp)) {
-        //             throw new UserInputException($this->optionName);
-        //         }
-        //     }
-        // }
+            if (!isset($guildRoles[$botID])) {
+                throw new UserInputException($this->optionName);
+            }
+            $roles = $guildRoles[$botID]['body'];
+            $roleIDsTmp = array_column($roles, 'id');
+            foreach ($roleIDs as $roleID) {
+                if (!in_array($roleID, $roleIDsTmp)) {
+                    throw new UserInputException($this->optionName);
+                }
+            }
+        }
     }
 
     public function getData($newValue) {
         if (!is_array($newValue)) $newValue = [];
-		return implode(',', $newValue);
+		return serialize($newValue);
     }
 
     /**
