@@ -23,7 +23,12 @@ class DiscordBot extends DatabaseObject {
 	 */
 	protected static $databaseTableIndexName = 'botID';
 
+	protected $discordApi;
+
 	public function getDiscordApi() {
-		return new DiscordApi($this->guildID, $this->botToken);
+		if ($this->discordApi === null) {
+			$this->discordApi = new DiscordApi($this->guildID, $this->botToken);
+		}
+		return $this->discordApi;
 	}
 }
