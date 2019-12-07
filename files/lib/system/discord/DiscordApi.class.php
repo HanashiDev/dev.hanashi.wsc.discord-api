@@ -1450,12 +1450,15 @@ class DiscordApi {
      * @param   string  $redirectUri    die Redirect-URI der Website
      * @return  string
      */
-    public function oauth2Authorize($clientID, $scope, $redirectUri) {
+    public function oauth2Authorize($clientID, $scope, $redirectUri, $state = null) {
         $url = $this->apiUrl . '/oauth2/authorize?response_type=code&client_id='.$clientID.'&';
         $params = [
             'scope' => implode(' ', $scope),
             'redirect_uri' => $redirectUri
         ];
+        if ($state !== null) {
+            $params['state'] = $state;
+        }
         $url .= http_build_query($params, '', '&');
         return $url;
     }
