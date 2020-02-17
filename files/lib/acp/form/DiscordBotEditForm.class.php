@@ -36,8 +36,8 @@ class DiscordBotEditForm extends DiscordBotAddForm {
 
         $this->botName = $this->discordBot->botName;
         $this->botToken = $this->discordBot->botToken;
-        $this->guildID = $this->discordBot->guildID;
-        $this->webhookName = $this->discordBot->webhookName;
+        // $this->guildID = $this->discordBot->guildID;
+        // $this->webhookName = $this->discordBot->webhookName;
         $this->clientID = $this->discordBot->clientID;
         $this->clientSecret = $this->discordBot->clientSecret;
     }
@@ -52,10 +52,10 @@ class DiscordBotEditForm extends DiscordBotAddForm {
             'data' => [
                 'botName' => $this->botName,
                 'botToken' => $this->botToken,
-                'guildID' => $this->guildID,
-                'guildName' => $this->guildName,
-                'guildIcon' => $this->guildIcon,
-                'webhookName' => $this->webhookName,
+                // 'guildID' => $this->guildID,
+                // 'guildName' => $this->guildName,
+                // 'guildIcon' => $this->guildIcon,
+                // 'webhookName' => $this->webhookName,
                 'clientID' => $this->clientID,
                 'clientSecret' => $this->clientSecret
             ]

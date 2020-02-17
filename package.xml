@@ -42,5 +42,16 @@
 	<instructions type="update" fromversion="1.0.2">
 		<!-- files -->
         <instruction type="file" />
+		
+		<!-- templates -->
+		<instruction type="acpTemplate" />
+		
+		<!-- language -->
+        <instruction type="language"/>
+
+		<!-- config -->
+        <instruction type="acpMenu" />
+        <!-- TODO: update script um webhooks umzuleiten -->
+        <instruction type="sql">update_1.1.0.sql</instruction>
 	</instructions>
 </package>

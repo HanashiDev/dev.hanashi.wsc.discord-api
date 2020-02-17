@@ -18,6 +18,9 @@
 		<item name="wcf.acp.menu.link.configuration.discord.discordBotList"><![CDATA[Discord-Bots]]></item>
 		<item name="wcf.acp.menu.link.configuration.discord.discordBotList.add"><![CDATA[Discord-Bot hinzufügen]]></item>
 		<item name="wcf.acp.menu.link.configuration.discord.discordBotList.edit"><![CDATA[Discord-Bot bearbeiten]]></item>
+		<item name="wcf.acp.menu.link.configuration.discord.discordServerList"><![CDATA[Discord-Server]]></item>
+		<item name="wcf.acp.menu.link.configuration.discord.discordServer.add"><![CDATA[Discord-Server hinzufügen]]></item>
+		<item name="wcf.acp.menu.link.configuration.discord.discordServer.edit"><![CDATA[Discord-Server bearbeiten]]></item>
 		<item name="wcf.acp.menu.link.configuration.discord.discordWebhookList"><![CDATA[Discord-Webhooks]]></item>
 	</category>
 	<category name="wcf.acp.discordBotAdd">
@@ -28,7 +31,7 @@
 		<item name="wcf.acp.discordBotAdd.guildID"><![CDATA[Server-ID]]></item>
 		<item name="wcf.acp.discordBotAdd.guildID.error.invalid"><![CDATA[Die eingetrage Server-ID ist ungültig.]]></item>
 		<item name="wcf.acp.discordBotAdd.guildID.error.permissionDenied"><![CDATA[Der Bot hat keinen Zugriff auf den angegebenen Server.]]></item>
-		<item name="wcf.acp.discordBotAdd.guildID.description"><![CDATA[{if LANGUAGE_USE_INFORMAL_VARIANT}Gib{else}Geben Sie{/if} die ID {if LANGUAGE_USE_INFORMAL_VARIANT}deines{else}Ihres{/if} Discord-Servers ein. Diese wird für einige Funktionen verschiedener Plugins benötigt.]]></item>
+		<item name="wcf.acp.discordBotAdd.guildID.description"><![CDATA[{if LANGUAGE_USE_INFORMAL_VARIANT}Gib{else}Geben Sie{/if} die ID {if LANGUAGE_USE_INFORMAL_VARIANT}deines{else}Ihres{/if} Discord-Servers ein.]]></item>
 		<item name="wcf.acp.discordBotAdd.webhookSettings"><![CDATA[Webhook-Einstellungen]]></item>
 		<item name="wcf.acp.discordBotAdd.webhookName"><![CDATA[Webhook-Name]]></item>
 		<item name="wcf.acp.discordBotAdd.webhookName.description"><![CDATA[Wenn durch diesen Bot ein Webhook erstellt wird, wird der Webhook automatisch den hier eingestellten Namen erhalten.]]></item>

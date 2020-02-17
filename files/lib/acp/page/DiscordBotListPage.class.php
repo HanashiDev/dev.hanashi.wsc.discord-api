@@ -40,5 +40,11 @@ class DiscordBotListPage extends SortablePage {
     /**
      * @inheritDoc
      */
-    public $validSortFields = ['botID', 'botName', 'guildID', 'guildName', 'botTime'];
+    public $validSortFields = [
+        'botID',
+        'botName',
+        // 'guildID',
+        // 'guildName',
+        'botTime'
+    ];
 }

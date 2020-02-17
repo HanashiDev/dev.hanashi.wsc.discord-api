@@ -18,6 +18,17 @@
 			<permissions>admin.discord.canManageConnection</permissions>
 			<icon>fa-plus</icon>
 		</acpmenuitem>
+		<acpmenuitem name="wcf.acp.menu.link.configuration.discord.discordServerList">
+			<controller>wcf\acp\page\DiscordServerListPage</controller>
+			<parent>wcf.acp.menu.link.configuration.discord</parent>
+			<permissions>admin.discord.canManageConnection</permissions>
+		</acpmenuitem>
+		<acpmenuitem name="wcf.acp.menu.link.configuration.discord.discordServerList.add">
+			<controller>wcf\acp\form\DiscordServerAddForm</controller>
+			<parent>wcf.acp.menu.link.configuration.discord.discordServerList</parent>
+			<permissions>admin.discord.canManageConnection</permissions>
+			<icon>fa-plus</icon>
+		</acpmenuitem>
 		<acpmenuitem name="wcf.acp.menu.link.configuration.discord.discordWebhookList">
 			<controller>wcf\acp\page\DiscordWebhookListPage</controller>
 			<parent>wcf.acp.menu.link.configuration.discord</parent>

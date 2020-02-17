@@ -35,7 +35,7 @@
                     <th class="columnIcon"></th>
                     <th class="columnID columnBotID{if $sortField == 'botID'} active {@$sortOrder}{/if}"><a href="{link controller='DiscordBotList'}pageNo={@$pageNo}&sortField=botID&sortOrder={if $sortField == 'botID' && $sortOrder == 'ASC'}DESC{else}ASC{/if}{/link}">{lang}wcf.global.objectID{/lang}</a></th>
                     <th class="columnTitle columnBotName{if $sortField == 'botName'} active {@$sortOrder}{/if}"><a href="{link controller='DiscordBotList'}pageNo={@$pageNo}&sortField=botName&sortOrder={if $sortField == 'botName' && $sortOrder == 'ASC'}DESC{else}ASC{/if}{/link}">{lang}wcf.acp.discordBotList.botName{/lang}</a></th>
-                    <th class="columnText columnGuildName{if $sortField == 'guildName'} active {@$sortOrder}{/if}"><a href="{link controller='DiscordBotList'}pageNo={@$pageNo}&sortField=guildName&sortOrder={if $sortField == 'guildName' && $sortOrder == 'ASC'}DESC{else}ASC{/if}{/link}">{lang}wcf.acp.discordBotList.server{/lang}</a></th>
+                    {* <th class="columnText columnGuildName{if $sortField == 'guildName'} active {@$sortOrder}{/if}"><a href="{link controller='DiscordBotList'}pageNo={@$pageNo}&sortField=guildName&sortOrder={if $sortField == 'guildName' && $sortOrder == 'ASC'}DESC{else}ASC{/if}{/link}">{lang}wcf.acp.discordBotList.server{/lang}</a></th> *}
                     <th class="columnDate columnBotTime{if $sortField == 'botTime'} active {@$sortOrder}{/if}"><a href="{link controller='DiscordBotList'}pageNo={@$pageNo}&sortField=botTime&sortOrder={if $sortField == 'botTime' && $sortOrder == 'ASC'}DESC{else}ASC{/if}{/link}">{lang}wcf.global.date{/lang}</a></th>
 
                     {event name='columns'}
@@ -58,12 +58,12 @@
                         <td class="columnTitle">
                             {$discordBot->botName}
                         </td>
-                        <td class="columnText">
+                        {* <td class="columnText">
                             {if !$discordBot->guildIcon|empty}
                                 <img src="https://cdn.discordapp.com/icons/{$discordBot->guildID}/{$discordBot->guildIcon}.png" style="max-width: 32px; border-radius: 50%; margin-right: 10px;">
                             {/if}
                             {$discordBot->guildName}
-                        </td>
+                        </td> *}
                         <td class="columnDate">
                             {@$discordBot->botTime|time}
                         </td>
