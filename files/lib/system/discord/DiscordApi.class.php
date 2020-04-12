@@ -1479,6 +1479,11 @@ class DiscordApi {
 			'code' => $code,
 			'redirect_uri' => $redirectUri
         ];
+        if ($grantType == 'refresh_token') {
+            $params['refresh_token'] = $code;
+        } else {
+            $params['code'] = $code;
+        }
         return $this->execute($url, 'POST', $params);
     }
     
