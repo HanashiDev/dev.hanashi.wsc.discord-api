@@ -1240,6 +1240,31 @@ class DiscordApi {
         return $this->execute($url);
     }
 
+    public function getUserFlagsArray($flag) {
+        $userFlags = [
+            1 => 'Discord Employee', // 1 << 0
+            2 => 'Discord Partner', // 1 << 1
+            4 => 'HypeSquad Events', // 1 << 2
+            8 => 'Bug Hunter Level 1', // 1 << 3
+            64 => 'House Bravery', // 1 << 6
+            128 => 'House Brilliance', // 1 << 7
+            256 => 'House Balance', // 1 << 8
+            512 => 'Early Supporter', // 1 << 9
+            1024 => 'Team User', // 1 << 10
+            4096 => 'System', // 1 << 12
+            16384 => 'Bug Hunter Level 2', // 1 << 14
+        ];
+        $flags = [];
+
+        foreach ($userFlags as $userFlag => $description) {
+            if (($flag & $userFlag) == $userFlag) {
+                $flags[] = $description;
+            }
+        }
+
+        return $flags;
+    }
+
     /////////////////////////////////////
     // User End
     /////////////////////////////////////
