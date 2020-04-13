@@ -1505,6 +1505,34 @@ class DiscordApi {
     /////////////////////////////////////
 
     /////////////////////////////////////
+    // Gateway Start
+    /////////////////////////////////////
+
+    /**
+     * Returns an object with a single valid WSS URL, which the client can use for Connecting. Clients should cache this value and only call this endpoint to retrieve a new URL if they are unable to properly establish a connection using the cached version of the URL.
+     * 
+     * @return array
+     */
+    public function getGateway() {
+        $url = $this->apiUrl . '/gateway';
+        return $this->execute($url);
+    }
+
+    /**
+     * Returns an object based on the information in Get Gateway, plus additional metadata that can help during the operation of large or sharded bots. Unlike the Get Gateway, this route should not be cached for extended periods of time as the value is not guaranteed to be the same per-call, and changes as the bot joins/leaves guilds.
+     * 
+     * @return array
+     */
+    public function getGatewayBot() {
+        $url = $this->apiUrl . '/gateway/bot';
+        return $this->execute($url);
+    }
+
+    /////////////////////////////////////
+    // Gateway End
+    /////////////////////////////////////
+
+    /////////////////////////////////////
     // Decoder Start
     /////////////////////////////////////
 
