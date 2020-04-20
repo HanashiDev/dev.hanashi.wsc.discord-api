@@ -6,6 +6,7 @@ use wcf\data\option\Option;
 use wcf\system\discord\DiscordApi;
 use wcf\system\exception\UserInputException;
 use wcf\system\WCF;
+use wcf\util\FileUtil;
 
 /**
  * Option-Type für die Auswahl eines Discord-Channels mit Webhook-Bezug

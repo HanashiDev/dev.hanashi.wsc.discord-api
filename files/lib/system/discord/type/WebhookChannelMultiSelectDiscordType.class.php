@@ -5,6 +5,7 @@ use wcf\data\discord\webhook\DiscordWebhookList;
 use wcf\system\discord\DiscordApi;
 use wcf\system\exception\UserInputException;
 use wcf\system\WCF;
+use wcf\util\FileUtil;
 
 class WebhookChannelMultiSelectDiscordType extends ChannelMultiSelectDiscordType {
     public function validate($newValue) {
