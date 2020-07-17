@@ -24,7 +24,7 @@ class DiscordApi {
      * 
      * @var string
      */
-    protected $apiUrl = 'https://discordapp.com/api';
+    protected $apiUrl = 'https://discord.com/api';
 
     /**
      * Server-ID des Discord-Servers
