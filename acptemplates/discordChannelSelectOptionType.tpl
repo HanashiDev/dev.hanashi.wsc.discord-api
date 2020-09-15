@@ -19,12 +19,12 @@
                                 {if $channel['type'] == 4}
                                     <optgroup label="{$channel['name']}">
                                         {foreach from=$channel['childs'] item=$childChannel}
-                                            {if $childChannel['type'] == 0}
+                                            {if $childChannel['type'] == 0 || $childChannel['type'] == 5}
                                                 <option value="{$childChannel['id']}"{if !$value[$bot['botID']]|empty && $childChannel['id'] == $value[$bot['botID']]} selected{/if}>{$childChannel['name']}</option>
                                             {/if}
                                         {/foreach}
                                     </optgroup>
-                                {else if $channel['type'] == 0}
+                                {else if $channel['type'] == 0 || $channel['type'] == 5}
                                     <option value="{$channel['id']}"{if !$value[$bot['botID']]|empty && $channel['id'] == $value[$bot['botID']]} selected{/if}>{$channel['name']}</option>
                                 {/if}
                             {/foreach}
@@ -41,12 +41,12 @@
             {if $channel['type'] == 4}
                 <optgroup label="{$channel['name']}">
                     {foreach from=$channel['childs'] item=$childChannel}
-                        {if $childChannel['type'] == 0}
+                        {if $childChannel['type'] == 0 || $childChannel['type'] == 5}
                             <option value="{$childChannel['id']}"{if !$value[$bots[0]['botID']]|empty && $childChannel['id'] == $value[$bots[0]['botID']]} selected{/if}>{$childChannel['name']}</option>
                         {/if}
                     {/foreach}
                 </optgroup>
-            {else if $channel['type'] == 0}
+            {else if $channel['type'] == 0 || $channel['type'] == 5}
                 <option value="{$channel['id']}"{if !$value[$bots[0]['botID']]|empty && $channel['id'] == $value[$bots[0]['botID']]} selected{/if}>{$channel['name']}</option>
             {/if}
         {/foreach}
