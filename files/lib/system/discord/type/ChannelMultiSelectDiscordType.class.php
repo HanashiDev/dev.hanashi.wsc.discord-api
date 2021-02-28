@@ -69,7 +69,10 @@ class ChannelMultiSelectDiscordType extends AbstractDiscordType {
             if (!isset($guildChannels[$botID])) {
                 throw new UserInputException($this->optionName);
             }
-            $channels = $guildChannels[$botID]['body'];
+            $channels = [];
+            if (isset($guildChannels[$botID]['body'])) {
+                $channels = $guildChannels[$botID]['body'];
+            }
             $channelIDsTmp = array_column($channels, 'id');
             foreach ($channelIDs as $channelID) {
                 if (!in_array($channelID, $channelIDsTmp)) {
