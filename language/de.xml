@@ -27,6 +27,7 @@
 		<item name="wcf.acp.discordBotAdd.botToken"><![CDATA[Bot-Token]]></item>
 		<item name="wcf.acp.discordBotAdd.guildID"><![CDATA[Server-ID]]></item>
 		<item name="wcf.acp.discordBotAdd.guildID.error.invalid"><![CDATA[Die eingetrage Server-ID ist ungültig.]]></item>
+		<item name="wcf.acp.discordBotAdd.guildID.error.noConnection"><![CDATA[Es konnte keine Verbindung zu discord.com aufgebaut werden. Bitte {if LANGUAGE_USE_INFORMAL_VARIANT}wende dich{else}wenden Sie sich{/if} an {if LANGUAGE_USE_INFORMAL_VARIANT}deinen{else}Ihren{/if} Serveradministrator.]]></item>
 		<item name="wcf.acp.discordBotAdd.guildID.error.permissionDenied"><![CDATA[Der Bot hat keinen Zugriff auf den angegebenen Server.]]></item>
 		<item name="wcf.acp.discordBotAdd.guildID.description"><![CDATA[{if LANGUAGE_USE_INFORMAL_VARIANT}Gib{else}Geben Sie{/if} die ID {if LANGUAGE_USE_INFORMAL_VARIANT}deines{else}Ihres{/if} Discord-Servers ein. Diese wird für einige Funktionen verschiedener Plugins benötigt.]]></item>
 		<item name="wcf.acp.discordBotAdd.webhookSettings"><![CDATA[Webhook-Einstellungen]]></item>

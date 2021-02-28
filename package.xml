@@ -43,6 +43,9 @@
 		<!-- files -->
         <instruction type="file" />
 		
+		<!-- templates -->
+		<instruction type="acpTemplate" />
+		
 		<!-- language -->
         <instruction type="language"/>
 	</instructions>

@@ -164,7 +164,9 @@ class DiscordBotAddForm extends AbstractForm {
 
         $discord = new DiscordApi($this->guildID, $this->botToken);
         $guild = $discord->getGuild();
-        if ($guild['status'] != 200) {
+        if ($guild['status'] == 0) {
+            throw new UserInputException('guildID', 'noConnection');
+        } else if ($guild['status'] != 200) {
             throw new UserInputException('guildID', 'permission_denied');
         }
         

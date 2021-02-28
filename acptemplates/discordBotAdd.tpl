@@ -61,6 +61,8 @@
 							{lang}wcf.global.form.error.empty{/lang}
 						{else if $errorType == 'invalid'}
 							{lang}wcf.acp.discordBotAdd.guildID.error.invalid{/lang}
+						{else if $errorType == 'noConnection'}
+							{lang}wcf.acp.discordBotAdd.guildID.error.noConnection{/lang}
 						{else if $errorType == 'permission_denied'}
 							{lang}wcf.acp.discordBotAdd.guildID.error.permissionDenied{/lang}
 						{/if}
