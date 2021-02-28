@@ -34,8 +34,8 @@
 		<item name="wcf.acp.discordBotAdd.webhookName.description"><![CDATA[If a webhook is created by this bot, the webhook will automatically get the name set here.]]></item>
 		<item name="wcf.acp.discordBotAdd.webhookName.error.tooLong"><![CDATA[The entered webhook name is too long. The maximum length is 50 characters.]]></item>
 		<item name="wcf.acp.discordBotAdd.webhookIcon"><![CDATA[Webhook Icon]]></item>
-		<item name="wcf.acp.discordBotAdd.webhookIcon.description"><![CDATA[Select a default icon for the webhook (maximum 256 KB).]]></item>
-		<item name="wcf.acp.discordBotAdd.webhookIcon.error.tooBig"><![CDATA[The uploaded file is too large (maximum 256 KB).]]></item>
+		<item name="wcf.acp.discordBotAdd.webhookIcon.description"><![CDATA[Select a default icon for the webhook (maximum 8 MB).]]></item>
+		<item name="wcf.acp.discordBotAdd.webhookIcon.error.tooBig"><![CDATA[The uploaded file is too large (maximum 8 MB).]]></item>
 		<item name="wcf.acp.discordBotAdd.webhookIcon.error.unknownFormat"><![CDATA[The file has an invalid format (allowed: jpg, png, gif).]]></item>
 		<item name="wcf.acp.discordBotAdd.oauth2Settings"><![CDATA[OAuth2 Settings]]></item>
 		<item name="wcf.acp.discordBotAdd.clientID"><![CDATA[Client ID]]></item>

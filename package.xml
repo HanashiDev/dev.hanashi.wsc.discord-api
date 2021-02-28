@@ -42,5 +42,8 @@
 	<instructions type="update" fromversion="1.0.5">
 		<!-- files -->
         <instruction type="file" />
+		
+		<!-- language -->
+        <instruction type="language"/>
 	</instructions>
 </package>
