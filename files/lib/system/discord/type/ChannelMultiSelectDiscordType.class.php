@@ -26,10 +26,9 @@ class ChannelMultiSelectDiscordType extends AbstractDiscordType {
         $guildChannels = $this->getGuildChannels();
         foreach ($this->getDiscordBotList() as $discordBot) {
             $channelsTmp = [];
-            if (isset($guildChannels[$discordBot->botID])) {
-                $channelsTmp = $guildChannels[$discordBot->botID];
+            if (isset($guildChannels[$discordBot->botID]['body'])) {
+                $channelsTmp = $guildChannels[$discordBot->botID]['body'];
             }
-            $channelsTmp = $channelsTmp['body'];
             array_multisort(array_column($channelsTmp, 'position'), SORT_ASC, $channelsTmp);
 
             $channelsGroupedTmp = [];
@@ -108,7 +107,11 @@ class ChannelMultiSelectDiscordType extends AbstractDiscordType {
         if ($this->guildChannels === null) {
             foreach ($this->getDiscordBotList() as $discordBot) {
                 $discordApi = $discordBot->getDiscordApi();
-                $this->guildChannels[$discordBot->botID] = $discordApi->getGuildChannels();
+                $guildChannelsTmp = $discordApi->getGuildChannels();
+                if ($guildChannelsTmp['status'] != 200) {
+                    continue;
+                }
+                $this->guildChannels[$discordBot->botID] = $guildChannelsTmp;
             }
         }
         return $this->guildChannels;
