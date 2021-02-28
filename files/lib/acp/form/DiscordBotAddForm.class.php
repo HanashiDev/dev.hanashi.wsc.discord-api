@@ -143,7 +143,7 @@ class DiscordBotAddForm extends AbstractForm {
         }
 
         if (!empty($this->webhookIcon['size'])) {
-            if ($this->webhookIcon['size'] > 256000) {
+            if ($this->webhookIcon['size'] > 8000000) {
                 throw new UserInputException('webhookIcon', 'tooBig');
             }
             if (!in_array($this->webhookIcon['type'], ['image/jpeg', 'image/png', 'image/gif'])) {
