@@ -1,8 +1,6 @@
 <?php
 namespace wcf\system\discord\type;
-use wcf\data\discord\bot\DiscordBot;
 use wcf\data\discord\bot\DiscordBotList;
-use wcf\system\discord\DiscordApi;
 use wcf\system\exception\UserInputException;
 use wcf\system\WCF;
 
@@ -30,6 +28,9 @@ class RoleMultiSelectDiscordType extends AbstractDiscordType {
                 $rolesTmp = $guildRoles[$discordBot->botID];
             }
             $rolesTmp = $rolesTmp['body'];
+            if (!is_array($rolesTmp)) {
+                $rolesTmp = [];
+            }
             array_multisort(array_column($rolesTmp, 'position'), SORT_DESC, $rolesTmp);
             
             $roles[] = [
