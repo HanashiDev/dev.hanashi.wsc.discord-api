@@ -1,25 +1,29 @@
 <?php
+
 namespace wcf\system\discord\type;
+
 use wcf\data\discord\bot\DiscordBotList;
 use wcf\system\exception\UserInputException;
 use wcf\system\WCF;
 
-class RoleMultiSelectDiscordType extends AbstractDiscordType {
+class RoleMultiSelectDiscordType extends AbstractDiscordType
+{
     /**
      * Liste von Discord-Bots
-     * 
+     *
      * @var DiscordBotList
      */
     protected $discordBotList;
 
     /**
      * Liste von Server-Rollen
-     * 
+     *
      * @var array
      */
     protected $guildRoles;
 
-    public function getFormElement($value) {
+    public function getFormElement($value)
+    {
         $roles = [];
         $guildRoles = $this->getGuildRoles();
         foreach ($this->getDiscordBotList() as $discordBot) {
@@ -32,7 +36,7 @@ class RoleMultiSelectDiscordType extends AbstractDiscordType {
                 $rolesTmp = [];
             }
             array_multisort(array_column($rolesTmp, 'position'), SORT_DESC, $rolesTmp);
-            
+
             $roles[] = [
                 'botID' => $discordBot->botID,
                 'botName' => $discordBot->botName,
@@ -41,18 +45,21 @@ class RoleMultiSelectDiscordType extends AbstractDiscordType {
         }
 
         WCF::getTPL()->assign([
-			'bots' => $roles,
-			'optionName' => $this->optionName,
-			'value' => unserialize($value)
-		]);
+            'bots' => $roles,
+            'optionName' => $this->optionName,
+            'value' => unserialize($value)
+        ]);
 
         return WCF::getTPL()->fetch('discordRoleMultiSelect');
     }
 
-    public function validate($newValue) {
+    public function validate($newValue)
+    {
         $guildRoles = $this->getGuildRoles();
         foreach ($newValue as $botID => $roleIDs) {
-            if (empty($roleIDs)) continue;
+            if (empty($roleIDs)) {
+                continue;
+            }
 
             if (!isset($guildRoles[$botID])) {
                 throw new UserInputException($this->optionName);
@@ -67,17 +74,21 @@ class RoleMultiSelectDiscordType extends AbstractDiscordType {
         }
     }
 
-    public function getData($newValue) {
-        if (!is_array($newValue)) $newValue = [];
-		return serialize($newValue);
+    public function getData($newValue)
+    {
+        if (!is_array($newValue)) {
+            $newValue = [];
+        }
+        return serialize($newValue);
     }
 
     /**
      * gibt Liste von Discord-Bots zurück
-     * 
+     *
      * @return DiscordBotList
      */
-    protected function getDiscordBotList() {
+    protected function getDiscordBotList()
+    {
         if ($this->discordBotList === null) {
             $this->discordBotList = new DiscordBotList();
             $this->discordBotList->sqlOrderBy = 'botName ASC';
@@ -88,10 +99,11 @@ class RoleMultiSelectDiscordType extends AbstractDiscordType {
 
     /**
      * Gibt Liste von Discord-Rollen zurück
-     * 
+     *
      * @return array
      */
-    protected function getGuildRoles() {
+    protected function getGuildRoles()
+    {
         if ($this->guildRoles === null) {
             foreach ($this->getDiscordBotList() as $discordBot) {
                 $discordApi = $discordBot->getDiscordApi();

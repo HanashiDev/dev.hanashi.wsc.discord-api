@@ -1,17 +1,20 @@
 <?php
+
 namespace wcf\acp\page;
+
 use wcf\data\discord\webhook\DiscordWebhookList;
 use wcf\page\SortablePage;
 
 /**
  * Übersicht der erstellten Discord-Webhooks
  *
- * @author	Peter Lohse <hanashi@hanashi.eu>
- * @copyright	Hanashi
- * @license	Freie Lizenz (https://hanashi.dev/freie-lizenz/)
- * @package	WoltLabSuite\Core\Acp\Page
+ * @author  Peter Lohse <hanashi@hanashi.eu>
+ * @copyright   Hanashi
+ * @license Freie Lizenz (https://hanashi.dev/freie-lizenz/)
+ * @package WoltLabSuite\Core\Acp\Page
  */
-class DiscordWebhookListPage extends SortablePage {
+class DiscordWebhookListPage extends SortablePage
+{
     /**
      * @inheritDoc
      */

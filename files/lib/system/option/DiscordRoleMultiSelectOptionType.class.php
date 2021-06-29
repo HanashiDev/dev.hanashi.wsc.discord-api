@@ -1,5 +1,7 @@
 <?php
+
 namespace wcf\system\option;
+
 use wcf\data\option\Option;
 use wcf\data\discord\bot\DiscordBot;
 use wcf\data\discord\bot\DiscordBotList;
@@ -11,18 +13,20 @@ use wcf\system\WCF;
 /**
  * Option-Type für die Auswahl mehrerer Discord-Rollen
  *
- * @author	Peter Lohse <hanashi@hanashi.eu>
- * @copyright	Hanashi
- * @license	Freie Lizenz (https://hanashi.dev/freie-lizenz/)
- * @package	WoltLabSuite\Core\System\Option
+ * @author  Peter Lohse <hanashi@hanashi.eu>
+ * @copyright   Hanashi
+ * @license Freie Lizenz (https://hanashi.dev/freie-lizenz/)
+ * @package WoltLabSuite\Core\System\Option
  */
-class DiscordRoleMultiSelectOptionType extends AbstractOptionType {
+class DiscordRoleMultiSelectOptionType extends AbstractOptionType
+{
     protected $roleMultiSelectType;
 
     /**
      * @inheritDoc
      */
-    public function getFormElement(Option $option, $value) {
+    public function getFormElement(Option $option, $value)
+    {
         if ($this->roleMultiSelectType === null) {
             $this->roleMultiSelectType = new RoleMultiSelectDiscordType($option->optionName);
         }
@@ -32,7 +36,8 @@ class DiscordRoleMultiSelectOptionType extends AbstractOptionType {
     /**
      * @inheritDoc
      */
-    public function validate(Option $option, $newValue) {
+    public function validate(Option $option, $newValue)
+    {
         if ($this->roleMultiSelectType === null) {
             $this->roleMultiSelectType = new RoleMultiSelectDiscordType($option->optionName);
         }
@@ -42,8 +47,9 @@ class DiscordRoleMultiSelectOptionType extends AbstractOptionType {
     /**
      * @inheritDoc
      */
-    public function getData(Option $option, $newValue) {
-		if ($this->roleMultiSelectType === null) {
+    public function getData(Option $option, $newValue)
+    {
+        if ($this->roleMultiSelectType === null) {
             $this->roleMultiSelectType = new RoleMultiSelectDiscordType($option->optionName);
         }
         return $this->roleMultiSelectType->getData($newValue);

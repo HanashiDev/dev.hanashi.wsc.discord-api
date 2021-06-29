@@ -1,5 +1,7 @@
 <?php
+
 namespace wcf\system\option;
+
 use wcf\data\option\Option;
 use wcf\data\discord\bot\DiscordBot;
 use wcf\data\discord\bot\DiscordBotList;
@@ -10,22 +12,23 @@ use wcf\system\WCF;
 /**
  * Option-Type für die Auswahl eines Discord-Channels
  *
- * @author	Peter Lohse <hanashi@hanashi.eu>
- * @copyright	Hanashi
- * @license	Freie Lizenz (https://hanashi.dev/freie-lizenz/)
- * @package	WoltLabSuite\Core\System\Option
+ * @author  Peter Lohse <hanashi@hanashi.eu>
+ * @copyright   Hanashi
+ * @license Freie Lizenz (https://hanashi.dev/freie-lizenz/)
+ * @package WoltLabSuite\Core\System\Option
  */
-class DiscordChannelSelectOptionType extends AbstractOptionType {
+class DiscordChannelSelectOptionType extends AbstractOptionType
+{
     /**
      * Liste von Discord-Bots
-     * 
+     *
      * @var DiscordBotList
      */
     protected $discordBotList;
 
     /**
      * Liste von Server-Channeln
-     * 
+     *
      * @var array
      */
     protected $guildChannels;
@@ -33,7 +36,8 @@ class DiscordChannelSelectOptionType extends AbstractOptionType {
     /**
      * @inheritDoc
      */
-    public function getFormElement(Option $option, $value) {
+    public function getFormElement(Option $option, $value)
+    {
         $channels = [];
         $guildChannels = $this->getGuildChannels();
         foreach ($this->getDiscordBotList() as $discordBot) {
@@ -57,7 +61,7 @@ class DiscordChannelSelectOptionType extends AbstractOptionType {
                     $channelsGroupedTmp[$channel['parent_id']]['childs'][] = $channel;
                 }
             }
-            
+
             $channels[] = [
                 'botID' => $discordBot->botID,
                 'botName' => $discordBot->botName,
@@ -66,20 +70,23 @@ class DiscordChannelSelectOptionType extends AbstractOptionType {
         }
 
         WCF::getTPL()->assign([
-			'bots' => $channels,
-			'option' => $option,
-			'value' => unserialize($value)
-		]);
+            'bots' => $channels,
+            'option' => $option,
+            'value' => unserialize($value)
+        ]);
         return WCF::getTPL()->fetch('discordChannelSelectOptionType');
     }
 
     /**
      * @inheritDoc
      */
-    public function validate(Option $option, $newValue) {
+    public function validate(Option $option, $newValue)
+    {
         $guildChannels = $this->getGuildChannels();
         foreach ($newValue as $botID => $channelID) {
-            if (empty($channelID)) continue;
+            if (empty($channelID)) {
+                continue;
+            }
 
             if (!isset($guildChannels[$botID])) {
                 throw new UserInputException($option->optionName);
@@ -95,17 +102,21 @@ class DiscordChannelSelectOptionType extends AbstractOptionType {
     /**
      * @inheritDoc
      */
-    public function getData(Option $option, $newValue) {
-		if (!is_array($newValue)) $newValue = [];
-		return serialize($newValue);
+    public function getData(Option $option, $newValue)
+    {
+        if (!is_array($newValue)) {
+            $newValue = [];
+        }
+        return serialize($newValue);
     }
-    
+
     /**
      * gibt Liste von Discord-Bots zurück
-     * 
+     *
      * @return DiscordBotList
      */
-    protected function getDiscordBotList() {
+    protected function getDiscordBotList()
+    {
         if ($this->discordBotList === null) {
             $this->discordBotList = new DiscordBotList();
             $this->discordBotList->sqlOrderBy = 'botName ASC';
@@ -116,10 +127,11 @@ class DiscordChannelSelectOptionType extends AbstractOptionType {
 
     /**
      * Gibt Liste von Discord-Channeln zurück
-     * 
+     *
      * @return array
      */
-    protected function getGuildChannels() {
+    protected function getGuildChannels()
+    {
         if ($this->guildChannels === null) {
             foreach ($this->getDiscordBotList() as $discordBot) {
                 $discordApi = $discordBot->getDiscordApi();

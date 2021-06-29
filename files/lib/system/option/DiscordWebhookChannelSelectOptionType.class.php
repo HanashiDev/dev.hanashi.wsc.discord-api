@@ -1,5 +1,7 @@
 <?php
+
 namespace wcf\system\option;
+
 use wcf\data\discord\webhook\DiscordWebhookAction;
 use wcf\data\discord\webhook\DiscordWebhookList;
 use wcf\data\option\Option;
@@ -11,18 +13,22 @@ use wcf\util\FileUtil;
 /**
  * Option-Type für die Auswahl eines Discord-Channels mit Webhook-Bezug
  *
- * @author	Peter Lohse <hanashi@hanashi.eu>
- * @copyright	Hanashi
- * @license	Freie Lizenz (https://hanashi.dev/freie-lizenz/)
- * @package	WoltLabSuite\Core\System\Option
+ * @author  Peter Lohse <hanashi@hanashi.eu>
+ * @copyright   Hanashi
+ * @license Freie Lizenz (https://hanashi.dev/freie-lizenz/)
+ * @package WoltLabSuite\Core\System\Option
  */
-class DiscordWebhookChannelSelectOptionType extends DiscordChannelSelectOptionType {
+class DiscordWebhookChannelSelectOptionType extends DiscordChannelSelectOptionType
+{
     /**
      * @inheritDoc
      */
-    public function validate(Option $option, $newValue) {
-        if (empty($newValue)) return;
-        
+    public function validate(Option $option, $newValue)
+    {
+        if (empty($newValue)) {
+            return;
+        }
+
         $botIDs = array_keys($newValue);
         $discordBots = [];
         foreach ($this->getDiscordBotList() as $discordBot) {
@@ -38,7 +44,9 @@ class DiscordWebhookChannelSelectOptionType extends DiscordChannelSelectOptionTy
 
         $guildChannels = $this->getGuildChannels();
         foreach ($newValue as $botID => $channelID) {
-            if (empty($channelID)) continue;
+            if (empty($channelID)) {
+                continue;
+            }
 
             if (!isset($guildChannels[$botID])) {
                 throw new UserInputException($option->optionName);
@@ -55,10 +63,10 @@ class DiscordWebhookChannelSelectOptionType extends DiscordChannelSelectOptionTy
             if (!in_array($channelID, $discordWebhooks)) {
                 $discordApi = $discordBots[$botID]->getDiscordApi();
                 $avatar = null;
-                $avatarFile = WCF_DIR . 'images/discord_webhook/'.$botID.'.pic';
+                $avatarFile = WCF_DIR . 'images/discord_webhook/' . $botID . '.pic';
                 if (file_exists($avatarFile)) {
                     $mimeType = FileUtil::getMimeType($avatarFile);
-                    $avatar = 'data:'.$mimeType.';base64,'.base64_encode(file_get_contents($avatarFile));
+                    $avatar = 'data:' . $mimeType . ';base64,' . base64_encode(file_get_contents($avatarFile));
                 }
                 $response = $discordApi->createWebhook($channelID, $discordBots[$botID]->webhookName, $avatar);
                 if (!$response['error']) {

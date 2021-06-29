@@ -1,17 +1,20 @@
 <?php
+
 namespace wcf\data\discord\webhook;
+
 use wcf\data\AbstractDatabaseObjectAction;
 use wcf\system\discord\DiscordApi;
 
 /**
  * Discord-Webhook-Objekt-Action
  *
- * @author	Peter Lohse <hanashi@hanashi.eu>
- * @copyright	Hanashi
- * @license	Freie Lizenz (https://hanashi.dev/freie-lizenz/)
- * @package	WoltLabSuite\Core\Data\Discord\Webhook
+ * @author  Peter Lohse <hanashi@hanashi.eu>
+ * @copyright   Hanashi
+ * @license Freie Lizenz (https://hanashi.dev/freie-lizenz/)
+ * @package WoltLabSuite\Core\Data\Discord\Webhook
  */
-class DiscordWebhookAction extends AbstractDatabaseObjectAction {
+class DiscordWebhookAction extends AbstractDatabaseObjectAction
+{
     /**
      * @inheritDoc
      */
@@ -20,7 +23,8 @@ class DiscordWebhookAction extends AbstractDatabaseObjectAction {
     /**
      * @inheritDoc
      */
-    public function delete() {
+    public function delete()
+    {
         foreach ($this->objects as $object) {
             $discordWebhook = $object->getDecoratedObject();
             $discordApi = $discordWebhook->getDiscordApi();

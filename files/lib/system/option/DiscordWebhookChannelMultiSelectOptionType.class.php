@@ -1,5 +1,7 @@
 <?php
+
 namespace wcf\system\option;
+
 use wcf\data\discord\webhook\DiscordWebhookAction;
 use wcf\data\discord\webhook\DiscordWebhookList;
 use wcf\data\option\Option;
@@ -11,16 +13,18 @@ use wcf\system\WCF;
 /**
  * Option-Type für die Auswahl mehrerer Discord-Channel mit Webhook-Bezug
  *
- * @author	Peter Lohse <hanashi@hanashi.eu>
- * @copyright	Hanashi
- * @license	Freie Lizenz (https://hanashi.dev/freie-lizenz/)
- * @package	WoltLabSuite\Core\System\Option
+ * @author  Peter Lohse <hanashi@hanashi.eu>
+ * @copyright   Hanashi
+ * @license Freie Lizenz (https://hanashi.dev/freie-lizenz/)
+ * @package WoltLabSuite\Core\System\Option
  */
-class DiscordWebhookChannelMultiSelectOptionType extends DiscordChannelMultiSelectOptionType {
+class DiscordWebhookChannelMultiSelectOptionType extends DiscordChannelMultiSelectOptionType
+{
     /**
      * @inheritDoc
      */
-    public function validate(Option $option, $newValue) {
+    public function validate(Option $option, $newValue)
+    {
         $channelMultiSelectType = new WebhookChannelMultiSelectDiscordType($option->optionName);
         $channelMultiSelectType->validate($newValue);
     }

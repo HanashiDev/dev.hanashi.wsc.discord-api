@@ -1,5 +1,7 @@
 <?php
+
 namespace wcf\acp\form;
+
 use wcf\data\discord\bot\DiscordBot;
 use wcf\data\discord\bot\DiscordBotAction;
 use wcf\form\AbstractForm;
@@ -9,15 +11,16 @@ use wcf\system\WCF;
 /**
  * Form um Discord-Bot zu bearbeiten
  *
- * @author	Peter Lohse <hanashi@hanashi.eu>
- * @copyright	Hanashi
- * @license	Freie Lizenz (https://hanashi.dev/freie-lizenz/)
- * @package	WoltLabSuite\Core\Acp\Form
+ * @author  Peter Lohse <hanashi@hanashi.eu>
+ * @copyright   Hanashi
+ * @license Freie Lizenz (https://hanashi.dev/freie-lizenz/)
+ * @package WoltLabSuite\Core\Acp\Form
  */
-class DiscordBotEditForm extends DiscordBotAddForm {
+class DiscordBotEditForm extends DiscordBotAddForm
+{
     /**
      * Objekt eines Discord-Bots
-     * 
+     *
      * @var DiscordBot
      */
     protected $discordBot;
@@ -25,13 +28,16 @@ class DiscordBotEditForm extends DiscordBotAddForm {
     /**
      * @inheritDoc
      */
-    public function readParameters() {
+    public function readParameters()
+    {
         parent::readParameters();
 
-        if (isset($_REQUEST['id'])) $this->discordBotID = intval($_REQUEST['id']);
+        if (isset($_REQUEST['id'])) {
+            $this->discordBotID = intval($_REQUEST['id']);
+        }
         $this->discordBot = new DiscordBot($this->discordBotID);
         if (!$this->discordBot->botID) {
-			throw new IllegalLinkException();
+            throw new IllegalLinkException();
         }
 
         $this->botName = $this->discordBot->botName;
@@ -45,7 +51,8 @@ class DiscordBotEditForm extends DiscordBotAddForm {
     /**
      * @inheritDoc
      */
-    public function save() {
+    public function save()
+    {
         AbstractForm::save();
 
         $action = new DiscordBotAction([$this->discordBot], 'update', [
@@ -68,7 +75,8 @@ class DiscordBotEditForm extends DiscordBotAddForm {
     /**
      * @inheritDoc
      */
-    public function assignVariables() {
+    public function assignVariables()
+    {
         parent::assignVariables();
 
         WCF::getTPL()->assign([

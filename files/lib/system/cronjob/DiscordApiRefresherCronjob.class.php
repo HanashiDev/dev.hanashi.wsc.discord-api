@@ -1,5 +1,7 @@
 <?php
+
 namespace wcf\system\cronjob;
+
 use wcf\data\discord\bot\DiscordBotAction;
 use wcf\data\discord\bot\DiscordBotList;
 use wcf\data\discord\webhook\DiscordWebhookAction;
@@ -11,18 +13,20 @@ use wcf\system\WCF;
 /**
  * Cronjob zum Aktualisieren der Discord Server-Informationen
  *
- * @author	Peter Lohse <hanashi@hanashi.eu>
- * @copyright	Hanashi
- * @license	Freie Lizenz (https://hanashi.dev/freie-lizenz/)
- * @package	WoltLabSuite\Core\System\Cronjob
+ * @author  Peter Lohse <hanashi@hanashi.eu>
+ * @copyright   Hanashi
+ * @license Freie Lizenz (https://hanashi.dev/freie-lizenz/)
+ * @package WoltLabSuite\Core\System\Cronjob
  */
-class DiscordApiRefresherCronjob extends AbstractCronjob {
-	/**
-	 * @inheritDoc
-	 */
-	public function execute(Cronjob $cronjob) {
+class DiscordApiRefresherCronjob extends AbstractCronjob
+{
+    /**
+     * @inheritDoc
+     */
+    public function execute(Cronjob $cronjob)
+    {
         parent::execute($cronjob);
-        
+
         $this->refreshGuilds();
         $this->refreshWebhooks();
     }
@@ -30,7 +34,8 @@ class DiscordApiRefresherCronjob extends AbstractCronjob {
     /**
      * Aktualisiert die Namen der Webhooks
      */
-    protected function refreshWebhooks() {
+    protected function refreshWebhooks()
+    {
         $discordWebhookList = new DiscordWebhookList();
         $discordWebhookList->readObjects();
 
@@ -38,8 +43,10 @@ class DiscordApiRefresherCronjob extends AbstractCronjob {
 
         foreach ($discordWebhookList as $discordWebhook) {
             $webhook = $discordApi->getWebhookWithToken($discordWebhook->webhookID, $discordWebhook->webhookToken);
-            if ($webhook['status'] != 200) continue;
-            
+            if ($webhook['status'] != 200) {
+                continue;
+            }
+
             $webhookName = $discordWebhook->webhookName;
             if (!empty($webhook['body']['name'])) {
                 $webhookName = $webhook['body']['name'];
@@ -50,18 +57,21 @@ class DiscordApiRefresherCronjob extends AbstractCronjob {
             $action->executeAction();
         }
     }
-    
+
     /**
      * Aktualisiert Namen und Icons der Server
      */
-    protected function refreshGuilds() {
+    protected function refreshGuilds()
+    {
         $discordBotList = new DiscordBotList();
         $discordBotList->readObjects();
 
         foreach ($discordBotList as $discordBot) {
             $discordApi = $discordBot->getDiscordApi();
             $guild = $discordApi->getGuild();
-            if ($guild['status'] != 200) continue;
+            if ($guild['status'] != 200) {
+                continue;
+            }
 
             $guildName = $discordBot->guildName;
             $guildIcon = $discordBot->guildIcon;
@@ -71,7 +81,7 @@ class DiscordApiRefresherCronjob extends AbstractCronjob {
             if (!empty($guild['body']['icon'])) {
                 $guildIcon = $guild['body']['icon'];
             }
-            
+
             $action = new DiscordBotAction([$discordBot], 'update', [
                 'guildName' => $guildName,
                 'guildIcon' => $guildIcon

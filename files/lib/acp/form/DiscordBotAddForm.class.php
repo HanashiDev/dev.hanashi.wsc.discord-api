@@ -1,5 +1,7 @@
 <?php
+
 namespace wcf\acp\form;
+
 use wcf\data\discord\bot\DiscordBotAction;
 use wcf\form\AbstractForm;
 use wcf\system\discord\DiscordApi;
@@ -10,12 +12,13 @@ use wcf\util\StringUtil;
 /**
  * Form um Discord-Bot hinzuzufügen
  *
- * @author	Peter Lohse <hanashi@hanashi.eu>
- * @copyright	Hanashi
- * @license	Freie Lizenz (https://hanashi.dev/freie-lizenz/)
- * @package	WoltLabSuite\Core\Acp\Form
+ * @author  Peter Lohse <hanashi@hanashi.eu>
+ * @copyright   Hanashi
+ * @license Freie Lizenz (https://hanashi.dev/freie-lizenz/)
+ * @package WoltLabSuite\Core\Acp\Form
  */
-class DiscordBotAddForm extends AbstractForm {
+class DiscordBotAddForm extends AbstractForm
+{
     /**
      * @inheritDoc
      */
@@ -28,70 +31,70 @@ class DiscordBotAddForm extends AbstractForm {
 
     /**
      * ID des Discord-Bots
-     * 
+     *
      * @var integer
      */
     protected $discordBotID;
 
     /**
      * Anzeigename des Discord-Bots
-     * 
+     *
      * @var string
      */
     protected $botName = 'Default';
 
     /**
      * Token des Bots
-     * 
+     *
      * @var string
      */
     protected $botToken;
 
     /**
      * ID des Discord-Servers
-     * 
+     *
      * @var integer
      */
     protected $guildID;
 
     /**
      * standardisierte Webhook-Name
-     * 
+     *
      * @var string
      */
     protected $webhookName = PAGE_TITLE;
 
     /**
      * Client-ID der Discord-Anwendung
-     * 
+     *
      * @var intger
      */
     protected $clientID;
 
     /**
      * Geheimer Schlüssel der Discord-Anwendung
-     * 
+     *
      * @var string
      */
     protected $clientSecret;
 
     /**
      * Hochgeladenes Icon
-     * 
+     *
      * @var array
      */
     protected $webhookIcon;
 
     /**
      * Name des Discord-Servers
-     * 
+     *
      * @var string
      */
     protected $guildName;
 
     /**
      * Hash des Server-Icons
-     * 
+     *
      * @var string
      */
     protected $guildIcon;
@@ -99,22 +102,38 @@ class DiscordBotAddForm extends AbstractForm {
     /**
      * @inheritDoc
      */
-    public function readFormParameters() {
+    public function readFormParameters()
+    {
         parent::readFormParameters();
 
-        if (isset($_POST['botName'])) $this->botName = StringUtil::trim($_POST['botName']);
-        if (isset($_POST['botToken'])) $this->botToken = StringUtil::trim($_POST['botToken']);
-        if (isset($_POST['guildID'])) $this->guildID = StringUtil::trim($_POST['guildID']);
-        if (isset($_POST['webhookName'])) $this->webhookName = StringUtil::trim($_POST['webhookName']);
-        if (isset($_POST['clientID'])) $this->clientID = StringUtil::trim($_POST['clientID']);
-        if (isset($_POST['clientSecret'])) $this->clientSecret = StringUtil::trim($_POST['clientSecret']);
-        if (isset($_FILES['webhookIcon'])) $this->webhookIcon = $_FILES['webhookIcon'];
+        if (isset($_POST['botName'])) {
+            $this->botName = StringUtil::trim($_POST['botName']);
+        }
+        if (isset($_POST['botToken'])) {
+            $this->botToken = StringUtil::trim($_POST['botToken']);
+        }
+        if (isset($_POST['guildID'])) {
+            $this->guildID = StringUtil::trim($_POST['guildID']);
+        }
+        if (isset($_POST['webhookName'])) {
+            $this->webhookName = StringUtil::trim($_POST['webhookName']);
+        }
+        if (isset($_POST['clientID'])) {
+            $this->clientID = StringUtil::trim($_POST['clientID']);
+        }
+        if (isset($_POST['clientSecret'])) {
+            $this->clientSecret = StringUtil::trim($_POST['clientSecret']);
+        }
+        if (isset($_FILES['webhookIcon'])) {
+            $this->webhookIcon = $_FILES['webhookIcon'];
+        }
     }
 
     /**
      * @inheritDoc
      */
-    public function validate() {
+    public function validate()
+    {
         parent::validate();
 
         if (empty($this->botName)) {
@@ -166,18 +185,23 @@ class DiscordBotAddForm extends AbstractForm {
         $guild = $discord->getGuild();
         if ($guild['status'] == 0) {
             throw new UserInputException('guildID', 'noConnection');
-        } else if ($guild['status'] != 200) {
+        } elseif ($guild['status'] != 200) {
             throw new UserInputException('guildID', 'permission_denied');
         }
-        
-        if (!empty($guild['body']['name'])) $this->guildName = $guild['body']['name'];
-        if (!empty($guild['body']['icon'])) $this->guildIcon = $guild['body']['icon'];
+
+        if (!empty($guild['body']['name'])) {
+            $this->guildName = $guild['body']['name'];
+        }
+        if (!empty($guild['body']['icon'])) {
+            $this->guildIcon = $guild['body']['icon'];
+        }
     }
 
     /**
-     * @inheritDoc 
+     * @inheritDoc
      */
-    public function save() {
+    public function save()
+    {
         parent::save();
 
         $action = new DiscordBotAction([], 'create', [
@@ -195,7 +219,7 @@ class DiscordBotAddForm extends AbstractForm {
         ]);
         $discordBot = $action->executeAction()['returnValues'];
         if (!empty($this->webhookIcon['tmp_name'])) {
-            move_uploaded_file($this->webhookIcon['tmp_name'], WCF_DIR.'images/discord_webhook/'.$discordBot->botID.'.pic');
+            move_uploaded_file($this->webhookIcon['tmp_name'], WCF_DIR . 'images/discord_webhook/' . $discordBot->botID . '.pic');
         }
 
         $this->saved();
@@ -204,7 +228,8 @@ class DiscordBotAddForm extends AbstractForm {
     /**
      * @inheritDoc
      */
-    public function saved() {
+    public function saved()
+    {
         parent::saved();
 
         WCF::getTPL()->assign([
@@ -215,7 +240,8 @@ class DiscordBotAddForm extends AbstractForm {
     /**
      * @inheritDoc
      */
-    public function assignVariables() {
+    public function assignVariables()
+    {
         parent::assignVariables();
 
         WCF::getTPL()->assign([

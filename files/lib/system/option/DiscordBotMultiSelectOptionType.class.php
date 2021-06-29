@@ -1,5 +1,7 @@
 <?php
+
 namespace wcf\system\option;
+
 use wcf\data\option\Option;
 use wcf\data\discord\bot\DiscordBot;
 use wcf\data\discord\bot\DiscordBotList;
@@ -11,33 +13,38 @@ use wcf\util\StringUtil;
 /**
  * Option-Type für die Auswahl mehrere Discord-Bots
  *
- * @author	Peter Lohse <hanashi@hanashi.eu>
- * @copyright	Hanashi
- * @license	Freie Lizenz (https://hanashi.dev/freie-lizenz/)
- * @package	WoltLabSuite\Core\System\Option
+ * @author  Peter Lohse <hanashi@hanashi.eu>
+ * @copyright   Hanashi
+ * @license Freie Lizenz (https://hanashi.dev/freie-lizenz/)
+ * @package WoltLabSuite\Core\System\Option
  */
-class DiscordBotMultiSelectOptionType extends AbstractOptionType {
+class DiscordBotMultiSelectOptionType extends AbstractOptionType
+{
     /**
      * @inheritDoc
      */
-    public function getFormElement(Option $option, $value) {
+    public function getFormElement(Option $option, $value)
+    {
         $discordBotList = new DiscordBotList();
         $discordBotList->sqlOrderBy = 'botName ASC';
         $discordBotList->readObjects();
 
         WCF::getTPL()->assign([
-			'discordBotList' => $discordBotList,
-			'option' => $option,
-			'value' => !is_array($value) ? explode("\n", $value) : $value
-		]);
+            'discordBotList' => $discordBotList,
+            'option' => $option,
+            'value' => !is_array($value) ? explode("\n", $value) : $value
+        ]);
         return WCF::getTPL()->fetch('discordBotMultiSelectOptionType');
     }
 
     /**
      * @inheritDoc
      */
-    public function validate(Option $option, $newValue) {
-        if (!is_array($newValue)) $newValue = [];
+    public function validate(Option $option, $newValue)
+    {
+        if (!is_array($newValue)) {
+            $newValue = [];
+        }
         $newValue = ArrayUtil::toIntegerArray($newValue);
 
         $discordBotList = new DiscordBotList();
@@ -54,8 +61,11 @@ class DiscordBotMultiSelectOptionType extends AbstractOptionType {
     /**
      * @inheritDoc
      */
-    public function getData(Option $option, $newValue) {
-		if (!is_array($newValue)) $newValue = [];
-		return implode("\n", ArrayUtil::toIntegerArray(StringUtil::unifyNewlines($newValue)));
-	}
+    public function getData(Option $option, $newValue)
+    {
+        if (!is_array($newValue)) {
+            $newValue = [];
+        }
+        return implode("\n", ArrayUtil::toIntegerArray(StringUtil::unifyNewlines($newValue)));
+    }
 }
