@@ -1268,7 +1268,7 @@ class DiscordApi
      */
     public function leaveGuild()
     {
-        $url = $thid->apiUrl . '/users/@me/guilds/' . $this->guildID;
+        $url = $this->apiUrl . '/users/@me/guilds/' . $this->guildID;
         return $this->execute($url, 'DELETE');
     }
 
