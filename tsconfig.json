@@ -23,6 +23,7 @@
                 "node_modules/@woltlab/wcf/ts/*"
             ]
         },
-        "importHelpers": false
+        "importHelpers": false,
+        "newLine": "lf"
     }
 }
