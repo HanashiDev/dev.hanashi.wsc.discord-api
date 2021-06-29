@@ -105,7 +105,7 @@
             'wcf.acp.discordBotList.gateway.error': '{lang}wcf.acp.discordBotList.gateway.error{/lang}'
         });
         
-        new DiscordTester();
+        new DiscordTester.default();
     });
 </script>
 
