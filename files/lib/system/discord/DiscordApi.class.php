@@ -1624,6 +1624,40 @@ class DiscordApi
     }
 
     /**
+     * Returns a guild widget object. Requires the MANAGE_GUILD permission.
+     *
+     * @return array
+     */
+    public function getGuildWidgetSettings()
+    {
+        $url = $this->apiUrl . '/guilds/' . $this->guildID . '/widget';
+        return $this->execute($url, 'GET');
+    }
+
+    /**
+     * Modify a guild widget object for the guild. All attributes may be passed in with JSON and modified. Requires the MANAGE_GUILD permission. Returns the updated guild widget object.
+     *
+     * @param  array $params
+     * @return array
+     */
+    public function modifyGuildWidget($params)
+    {
+        $url = $this->apiUrl . '/guilds/' . $this->guildID . '/widget';
+        return $this->execute($url, 'PATCH', $params, 'application/json');
+    }
+
+    /**
+     * Returns the widget for the guild.
+     *
+     * @return array
+     */
+    public function getGuildWidget()
+    {
+        $url = $this->apiUrl . '/guilds/' . $this->guildID . '/widget.json';
+        return $this->execute($url, 'GET');
+    }
+
+    /**
      * Returns a partial invite object for guilds with that feature enabled.
      * Requires the MANAGE_GUILD permission.
      * code will be null if a vanity url for the guild is not set.
