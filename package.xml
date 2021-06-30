@@ -34,10 +34,10 @@
 		
 		<!-- config -->
         <instruction type="acpMenu" />
-        <instruction type="sql" />
         <instruction type="cronjob" />
         <instruction type="userGroupOption" />
         <instruction type="option" />
+        <instruction type="script">acp/install_dev.hanashi.wsc.discord-api.php</instruction>
     </instructions>
 	<instructions type="update" fromversion="1.0.8">
 		<!-- files -->
