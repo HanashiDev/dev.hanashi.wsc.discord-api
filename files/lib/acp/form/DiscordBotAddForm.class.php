@@ -105,7 +105,8 @@ class DiscordBotAddForm extends AbstractFormBuilderForm
                         ->description('wcf.acp.discordBotAdd.webhookIcon.description')
                         ->maximum(1)
                         ->imageOnly()
-                        ->maximumFilesize(8000000),
+                        ->maximumFilesize(8000000)
+                        ->setAcceptableFiles(['image/jpeg', 'image/png', 'image/gif']),
                 ]),
             FormContainer::create('oauth2Settings')
                 ->label('wcf.acp.discordBotAdd.oauth2Settings')
