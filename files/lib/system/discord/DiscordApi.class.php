@@ -94,6 +94,358 @@ class DiscordApi
     }
 
     /////////////////////////////////////
+    // Slash Commands Start
+    /////////////////////////////////////
+
+    /**
+     * Fetch all of the global commands for your application. Returns an array of ApplicationCommand objects.
+     *
+     * @param  integer   $applicationID
+     * @return array
+     */
+    public function getGlobalApplicationCommands($applicationID)
+    {
+        $url = $this->apiUrl . '/applications/' . $applicationID . '/commands';
+        return $this->execute($url);
+    }
+
+    /**
+     * Create a new global command. New global commands will be available in all guilds after 1 hour. Returns 201 and an ApplicationCommand object.
+     *
+     * @param  integer $applicationID
+     * @param  array $params
+     * @return array
+     */
+    public function createGlobalApplicationCommand($applicationID, $params)
+    {
+        $url = $this->apiUrl . '/applications/' . $applicationID . '/commands';
+        return $this->execute($url, 'POST', $params, 'application/json');
+    }
+
+    /**
+     * Fetch a global command for your application. Returns an ApplicationCommand object.
+     *
+     * @param  integer $applicationID
+     * @param  integer $commandID
+     * @return array
+     */
+    public function getGlobalApplicationCommand($applicationID, $commandID)
+    {
+        $url = $this->apiUrl . '/applications/' . $applicationID . '/commands/' . $commandID;
+        return $this->execute($url);
+    }
+
+    /**
+     * Edit a global command. Updates will be available in all guilds after 1 hour. Returns 200 and an ApplicationCommand object.
+     *
+     * @param  integer $applicationID
+     * @param  integer $commandID
+     * @param  array $params
+     * @return array
+     */
+    public function editGlobalApplicationCommand($applicationID, $commandID, $params)
+    {
+        $url = $this->apiUrl . '/applications/' . $applicationID . '/commands/' . $commandID;
+        return $this->execute($url, 'PATCH', $params, 'application/json');
+    }
+    
+    /**
+     * Deletes a global command. Returns 204.
+     *
+     * @param  integer $applicationID
+     * @param  integer $commandID
+     * @return array
+     */
+    public function deleteGlobalApplicationCommand($applicationID, $commandID)
+    {
+        $url = $this->apiUrl . '/applications/' . $applicationID . '/commands/' . $commandID;
+        return $this->execute($url, 'DELETE');
+    }
+
+    /**
+     * Fetch all of the guild commands for your application for a specific guild. Returns an array of ApplicationCommand objects.
+     *
+     * @param  integer $applicationID
+     * @param  integer $commandID
+     * @return array
+     */
+    public function getGuildApplicationCommands($applicationID, $commandID)
+    {
+        $url = $this->apiUrl . '/applications/' . $applicationID . '/commands/' . $commandID;
+        return $this->execute($url, 'GET');
+    }
+
+    /**
+     * Takes a list of application commands, overwriting existing commands that are registered globally for this application. Updates will be available in all guilds after 1 hour. Returns 200 and a list of ApplicationCommand objects. Commands that do not already exist will count toward daily application command create limits.
+     *
+     * @param  integer $applicationID
+     * @return array
+     */
+    public function bulkOverwriteGlobalApplicationCommands($applicationID)
+    {
+        $url = $this->apiUrl . '/applications/' . $applicationID . '/commands';
+        return $this->execute($url, 'PUT');
+    }
+
+    /**
+     * Create a new guild command. New guild commands will be available in the guild immediately. Returns 201 and an ApplicationCommand object. If the command did not already exist, it will count toward daily application command create limits.
+     *
+     * @param  integer $applicationID
+     * @param  integer $guildID
+     * @param  array $params
+     * @return array
+     */
+    public function createGuildApplicationCommand($applicationID, $guildID, $params)
+    {
+        $url = $this->apiUrl . '/applications/' . $applicationID . '/guilds/' . $guildID . '/commands';
+        return $this->execute($url, 'POST', $params, 'application/json');
+    }
+
+    /**
+     * Fetch a guild command for your application. Returns an ApplicationCommand object.
+     *
+     * @param  integer $applicationID
+     * @param  integer $guildID
+     * @param  integer $commandID
+     * @return array
+     */
+    public function getGuildApplicationCommand($applicationID, $guildID, $commandID)
+    {
+        $url = $this->apiUrl . '/applications/' . $applicationID . '/guilds/' . $guildID . '/commands/' . $commandID;
+        return $this->execute($url, 'GET');
+    }
+
+    /**
+     * Edit a guild command. Updates for guild commands will be available immediately. Returns 200 and an ApplicationCommand object.
+     *
+     * @param  integer $applicationID
+     * @param  integer $guildID
+     * @param  integer $commandID
+     * @param  array $params
+     * @return array
+     */
+    public function editGuildApplicationCommand($applicationID, $guildID, $commandID, $params)
+    {
+        $url = $this->apiUrl . '/applications/' . $applicationID . '/guilds/' . $guildID . '/commands/' . $commandID;
+        return $this->execute($url, 'PATCH', $params, 'application/json');
+    }
+
+    /**
+     * Delete a guild command. Returns 204 on success.
+     *
+     * @param  integer $applicationID
+     * @param  integer $guildID
+     * @param  integer $commandID
+     * @return array
+     */
+    public function deleteGuildApplicationCommand($applicationID, $guildID, $commandID)
+    {
+        $url = $this->apiUrl . '/applications/' . $applicationID . '/guilds/' . $guildID . '/commands/' . $commandID;
+        return $this->execute($url, 'DELETE');
+    }
+
+    /**
+     * Takes a list of application commands, overwriting existing commands for the guild. Returns 200 and a list of ApplicationCommand objects.
+     *
+     * @param  integer $applicationID
+     * @param  integer $guildID
+     * @return array
+     */
+    public function bulkOverwriteGuildApplicationCommands($applicationID, $guildID)
+    {
+        $url = $this->apiUrl . '/applications/' . $applicationID . '/guilds/' . $guildID . '/commands';
+        return $this->execute($url, 'PUT');
+    }
+
+    /**
+     * Create a response to an Interaction from the gateway. Takes an Interaction response.
+     *
+     * @param  integer $interactionID
+     * @param  string $interactionToken
+     * @param  array $params
+     * @return array
+     */
+    public function createInteractionResponse($interactionID, $interactionToken, $params)
+    {
+        $url = $this->apiUrl . '/interactions/' . $interactionID . '/' . $interactionToken . '/callback';
+        return $this->execute($url, 'POST', $params, 'application/json');
+    }
+
+    /**
+     * Returns the initial Interaction response. Functions the same as Get Webhook Message.
+     *
+     * @param  integer $applicationID
+     * @param  string $interactionToken
+     * @return array
+     */
+    public function getOriginalInteractionResponse($applicationID, $interactionToken)
+    {
+        $url = $this->apiUrl . '/webhooks/' . $applicationID . '/' . $interactionToken . '/messages/@original';
+        return $this->execute($url, 'GET');
+    }
+
+    /**
+     * Edits the initial Interaction response. Functions the same as Edit Webhook Message.
+     *
+     * @param  integer $applicationID
+     * @param  string $interactionToken
+     * @param  array $params
+     * @return array
+     */
+    public function editOriginalInteractionResponse($applicationID, $interactionToken, $params)
+    {
+        $url = $this->apiUrl . '/webhooks/' . $applicationID . '/' . $interactionToken . '/messages/@original';
+        return $this->execute($url, 'PATCH', $params, 'application/json');
+    }
+
+    /**
+     * Deletes the initial Interaction response. Returns 204 on success.
+     *
+     * @param  integer $applicationID
+     * @param  string $interactionToken
+     * @return array
+     */
+    public function deleteOriginalInteractionResponse($applicationID, $interactionToken)
+    {
+        $url = $this->apiUrl . '/webhooks/' . $applicationID . '/' . $interactionToken . '/messages/@original';
+        return $this->execute($url, 'DELETE');
+    }
+
+    /**
+     * Create a followup message for an Interaction. Functions the same as Execute Webhook, but wait is always true, and flags can be set to 64 in the body to send an ephemeral message. The thread_id query parameter is not required (and is furthermore ignored) when using this endpoint for interaction followups.
+     *
+     * @param  integer $applicationID
+     * @param  string $interactionToken
+     * @param  array $params
+     * @return array
+     */
+    public function createFollowupMessage($applicationID, $interactionToken, $params)
+    {
+        $url = $this->apiUrl . '/webhooks/' . $applicationID . '/' . $interactionToken;
+        return $this->execute($url, 'POST', $params, 'application/json');
+    }
+
+    /**
+     * Edits a followup message for an Interaction. Functions the same as Edit Webhook Message.
+     *
+     * @param  integer $applicationID
+     * @param  string $interactionToken
+     * @param  integer $messageID
+     * @param  array $params
+     * @return array
+     */
+    public function editFollowupMessage($applicationID, $interactionToken, $messageID, $params)
+    {
+        $url = $this->apiUrl . '/webhooks/' . $applicationID . '/' . $interactionToken . '/messages/' . $messageID;
+        return $this->execute($url, 'PATCH', $params, 'application/json');
+    }
+
+    /**
+     * Deletes a followup message for an Interaction. Returns 204 on success.
+     *
+     * @param  integer $applicationID
+     * @param  string $interactionToken
+     * @param  integer $messageID
+     * @return array
+     */
+    public function deleteFollowupMessage($applicationID, $interactionToken, $messageID)
+    {
+        $url = $this->apiUrl . '/webhooks/' . $applicationID . '/' . $interactionToken . '/messages/' . $messageID;
+        return $this->execute($url, 'DELETE');
+    }
+
+    /**
+     * Fetches command permissions for all commands for your application in a guild. Returns an array of GuildApplicationCommandPermissions objects.
+     *
+     * @param  integer $applicationID
+     * @param  integer $guildID
+     * @return array
+     */
+    public function getGuildApplicationCommandPermissions($applicationID, $guildID)
+    {
+        $url = $this->apiUrl . '/applications/' . $applicationID . '/guilds/' . $guildID . '/commands/permissions';
+        return $this->execute($url, 'GET');
+    }
+
+    /**
+     * Fetches command permissions for a specific command for your application in a guild. Returns a GuildApplicationCommandPermissions object.
+     *
+     * @param  integer $applicationID
+     * @param  integer $guildID
+     * @param  integer $commandID
+     * @return array
+     */
+    public function getApplicationCommandPermissions($applicationID, $guildID, $commandID)
+    {
+        $url = $this->apiUrl . '/applications/' . $applicationID . '/guilds/' . $guildID . '/commands/' . $commandID . '/permissions';
+        return $this->execute($url, 'GET');
+    }
+
+    /**
+     * Edits command permissions for a specific command for your application in a guild. You can only add up to 10 permission overwrites for a command. Returns a GuildApplicationCommandPermissions object.
+     * 
+     * This endpoint will overwrite existing permissions for the command in that guild
+     * 
+     * Deleting or renaming a command will permanently delete all permissions for that command
+     *
+     * @param  integer $applicationID
+     * @param  integer $guildID
+     * @param  integer $commandID
+     * @param  array $permissions
+     * @return array
+     */
+    public function editApplicationCommandPermissions($applicationID, $guildID, $commandID, $permissions)
+    {
+        $url = $this->apiUrl . '/applications/' . $applicationID . '/guilds/' . $guildID . '/commands/' . $commandID . '/permissions';
+        return $this->execute($url, 'PUT', ['permissions' => $permissions], 'application/json');
+    }
+
+    /**
+     * batchEditApplicationCommandPermissions
+     *
+     * @param  integer $applicationID
+     * @param  integer $guildID
+     * @param  array $params
+     * @return array
+     */
+    public function batchEditApplicationCommandPermissions($applicationID, $guildID, $params)
+    {
+        $url = $this->apiUrl . '/applications/' . $applicationID . '/guilds/' . $guildID . '/commands/permissions';
+        return $this->execute($url, 'PUT', $params, 'application/json');
+    }
+
+    /**
+     * verify a request from discord webhook
+     *
+     * @param  string $publicKey
+     * @param  string $body
+     * @return boolean
+     */
+    public function verifyRequest($publicKey, $body) {
+        $headers = \getallheaders();
+        if (empty($headers['X-Signature-Ed25519'])) {
+            return false;
+        }
+        if (empty($headers['X-Signature-Timestamp'])) {
+            return false;
+        }
+
+        $publicKey = sodium_hex2bin($publicKey);
+        $signature = sodium_hex2bin($headers['X-Signature-Ed25519']);
+        $timestamp = $headers['X-Signature-Timestamp'];
+        
+        if (!sodium_crypto_sign_verify_detached($signature, $timestamp.$body, $publicKey)) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /////////////////////////////////////
+    // Slash Commands End
+    /////////////////////////////////////
+
+    /////////////////////////////////////
     // Audit Log Start
     /////////////////////////////////////
 
