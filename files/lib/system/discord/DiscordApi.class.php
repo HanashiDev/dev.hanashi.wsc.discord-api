@@ -1617,7 +1617,7 @@ class DiscordApi
      * @param   integer $integrationID  ID der Integration
      * @return  array
      */
-    public function deleteIntegration($integrationID)
+    public function deleteGuildIntegration($integrationID)
     {
         $url = $this->apiUrl . '/guilds/' . $this->guildID . '/integrations/' . $integrationID;
         return $this->execute($url, 'DELETE');
