@@ -148,7 +148,7 @@ class DiscordApi
         $url = $this->apiUrl . '/applications/' . $applicationID . '/commands/' . $commandID;
         return $this->execute($url, 'PATCH', $params, 'application/json');
     }
-    
+
     /**
      * Deletes a global command. Returns 204.
      *
@@ -383,9 +383,9 @@ class DiscordApi
 
     /**
      * Edits command permissions for a specific command for your application in a guild. You can only add up to 10 permission overwrites for a command. Returns a GuildApplicationCommandPermissions object.
-     * 
+     *
      * This endpoint will overwrite existing permissions for the command in that guild
-     * 
+     *
      * Deleting or renaming a command will permanently delete all permissions for that command
      *
      * @param  integer $applicationID
@@ -421,7 +421,8 @@ class DiscordApi
      * @param  string $body
      * @return boolean
      */
-    public function verifyRequest($publicKey, $body) {
+    public function verifyRequest($publicKey, $body)
+    {
         $headers = \getallheaders();
         if (empty($headers['X-Signature-Ed25519'])) {
             return false;
@@ -433,7 +434,7 @@ class DiscordApi
         $publicKey = sodium_hex2bin($publicKey);
         $signature = sodium_hex2bin($headers['X-Signature-Ed25519']);
         $timestamp = $headers['X-Signature-Timestamp'];
-        
+
         if (!sodium_crypto_sign_verify_detached($signature, $timestamp.$body, $publicKey)) {
             return false;
         }
@@ -781,7 +782,7 @@ class DiscordApi
         $url = $this->apiUrl . '/channels/' . $channelID . '/permissions/' . $overwriteID;
         return $this->execute($url, 'DELETE');
     }
-    
+
     /**
      * Follow a News Channel to send messages to a target channel. Requires the MANAGE_WEBHOOKS permission in the target channel. Returns a followed channel object.
      *
