@@ -2,14 +2,11 @@
 
 namespace wcf\system\discord;
 
+use GuzzleHttp\Exception\ClientException;
+use GuzzleHttp\Psr7\Request;
 use wcf\data\discord\bot\DiscordBot;
-use wcf\system\exception\HTTPNotFoundException;
-use wcf\system\exception\HTTPServerErrorException;
-use wcf\system\exception\HTTPUnauthorizedException;
 use wcf\system\exception\SystemException;
-use wcf\system\WCF;
-use wcf\util\exception\HTTPException;
-use wcf\util\HTTPRequest;
+use wcf\system\io\HttpFactory;
 use wcf\util\JSON;
 
 /**
@@ -1756,29 +1753,32 @@ class DiscordApi
      */
     protected function execute($url, $method = 'GET', $parameters = [], $contentType = 'application/x-www-form-urlencoded')
     {
-        $options = [
-            'method' => $method,
-            'timeout' => 2
-        ];
-        if ($contentType == 'application/json') {
-            $parameters = JSON::encode($parameters);
-        }
-        $request = new HTTPRequest($url, $options, $parameters);
-        $request->addHeader('authorization', $this->botType . ' ' . $this->botToken);
+        $reply = [];
 
+        $headers = [
+            'Authorization' => $this->botType . ' ' . $this->botToken,
+            'Content-Type' => $contentType
+        ];
         if ($method !== 'GET') {
             if (empty($parameters)) {
-                $request->addHeader('content-length', '0');
+                $headers['Content-Length'] = 0;
             }
-            $request->addHeader('content-type', $contentType);
         }
 
-        $reply = [];
+        if ($contentType == 'application/x-www-form-urlencoded') {
+            $parameters = \http_build_query($parameters, "", '&');
+        } else if ($contentType == 'application/json') {
+            $parameters = JSON::encode($parameters);
+        }
+
+        $client = HttpFactory::getDefaultClient();
+        $request = new Request($method, $url, $headers, $parameters);
+
         try {
-            $request->execute();
-            $reply = $this->parseReply($request->getReply());
-        } catch (HTTPNotFoundException $e) {
-            $reply = $this->parseReply($request->getReply());
+            $response = $client->send($request, ['timeout' => 2]);
+            $reply = $this->parseReply($response);
+        } catch (ClientException $e) {
+            $reply = $this->parseReply($e->getResponse());
             $reply['error'] = [
                 'message' => $e->getMessage(),
                 'status' => $e->getCode(),
@@ -1790,57 +1790,22 @@ class DiscordApi
                 'botToken' => $this->botToken,
                 'botType' => $this->botType
             ];
-        } catch (HTTPServerErrorException $e) {
-            $reply = $this->parseReply($request->getReply());
-            $reply['error'] = [
-                'message' => $e->getMessage(),
-                'status' => $e->getCode(),
-                'url' => $url,
-                'method' => $method,
-                'parameters' => $parameters,
-                'contentType' => $contentType,
-                'guildID' => $this->guildID,
-                'botToken' => $this->botToken,
-                'botType' => $this->botType
-            ];
-        } catch (HTTPUnauthorizedException $e) {
-            $reply = $this->parseReply($request->getReply());
-            $reply['error'] = [
-                'message' => $e->getMessage(),
-                'status' => $e->getCode(),
-                'url' => $url,
-                'method' => $method,
-                'parameters' => $parameters,
-                'contentType' => $contentType,
-                'guildID' => $this->guildID,
-                'botToken' => $this->botToken,
-                'botType' => $this->botType
-            ];
-        } catch (SystemException $e) {
-            $reply = $this->parseReply($request->getReply());
-            $reply['error'] = [
-                'message' => $e->getMessage(),
-                'status' => $e->getCode(),
-                'url' => $url,
-                'method' => $method,
-                'parameters' => $parameters,
-                'contentType' => $contentType,
-                'guildID' => $this->guildID,
-                'botToken' => $this->botToken,
-                'botType' => $this->botType
-            ];
-        } catch (HTTPException $e) {
-            $reply = $this->parseReply($request->getReply());
-            $reply['error'] = [
-                'message' => $e->getMessage(),
-                'status' => $e->getCode(),
-                'url' => $url,
-                'method' => $method,
-                'parameters' => $parameters,
-                'contentType' => $contentType,
-                'guildID' => $this->guildID,
-                'botToken' => $this->botToken,
-                'botType' => $this->botType
+        } catch (\Exception $e) {
+            $reply = [
+                'error' => [
+                    'message' => $e->getMessage(),
+                    'status' => $e->getCode(),
+                    'url' => $url,
+                    'method' => $method,
+                    'parameters' => $parameters,
+                    'contentType' => $contentType,
+                    'guildID' => $this->guildID,
+                    'botToken' => $this->botToken,
+                    'botType' => $this->botType
+                ],
+                'status' => 0,
+                'body' => $e->getMessage(),
+                'rateLimit' => 'false'
             ];
         }
 
@@ -1853,27 +1818,27 @@ class DiscordApi
      * @param   array   $replyTmp   die Antwort von der API
      * @return  array
      */
-    protected function parseReply($replyTmp)
+    protected function parseReply($response)
     {
-        $body = $replyTmp['body'];
+        $body = (string)$response->getBody();
         try {
             $body = JSON::decode($body, true);
         } catch (SystemException $e) {
         }
         $reply = [
             'error' => false,
-            'status' => $replyTmp['statusCode'],
+            'status' => $response->getStatusCode(),
             'body' => $body,
             'rateLimit' => false
         ];
-        if (isset($replyTmp['httpHeaders']['x-ratelimit-limit'][0])) {
-            $reply['rateLimit']['limit'] = $replyTmp['httpHeaders']['x-ratelimit-limit'][0];
+        if ($response->hasHeader('x-ratelimit-limit')) {
+            $reply['rateLimit']['limit'] = $response->getHeader('x-ratelimit-limit');
         }
-        if (isset($replyTmp['httpHeaders']['x-ratelimit-remaining'][0])) {
-            $reply['rateLimit']['remaining'] = $replyTmp['httpHeaders']['x-ratelimit-remaining'][0];
+        if ($response->hasHeader('x-ratelimit-remaining')) {
+            $reply['rateLimit']['remaining'] = $response->getHeader('x-ratelimit-remaining');
         }
-        if (isset($replyTmp['httpHeaders']['x-ratelimit-reset'][0])) {
-            $reply['rateLimit']['reset'] = $replyTmp['httpHeaders']['x-ratelimit-reset'][0];
+        if ($response->hasHeader('x-ratelimit-reset')) {
+            $reply['rateLimit']['reset'] = $response->getHeader('x-ratelimit-reset');
         }
         return $reply;
     }
