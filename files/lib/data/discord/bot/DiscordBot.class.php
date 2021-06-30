@@ -35,7 +35,8 @@ class DiscordBot extends DatabaseObject
         return $this->discordApi;
     }
 
-    public function getWebhookIconUploadFileLocations() {
+    public function getWebhookIconUploadFileLocations()
+    {
         $files = [];
 
         $filename = WCF_DIR . 'images/discord_webhook/' . $this->botID . '.png';

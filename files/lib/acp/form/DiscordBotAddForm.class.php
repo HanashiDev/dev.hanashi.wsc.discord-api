@@ -67,7 +67,7 @@ class DiscordBotAddForm extends AbstractFormBuilderForm
                         ->label('wcf.acp.discordBotAdd.guildID')
                         ->description('wcf.acp.discordBotAdd.guildID.description')
                         ->required()
-                        ->addValidator(new FormFieldValidator('guildIDCheck', function(IntegerFormField $formField) {
+                        ->addValidator(new FormFieldValidator('guildIDCheck', function (IntegerFormField $formField) {
                             $requestData = $this->form->getRequestData();
                             $discord = new DiscordApi($formField->getValue(), $requestData['botToken']);
                             $guild = $discord->getGuild();

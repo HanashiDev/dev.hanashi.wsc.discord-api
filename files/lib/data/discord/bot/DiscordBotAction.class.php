@@ -81,14 +81,15 @@ class DiscordBotAction extends AbstractDatabaseObjectAction
 
         return $returnValues;
     }
-    
+
     /**
      * verarbeitet hochgeladenes Icon
      *
      * @param  mixed $botID
      * @return void
      */
-    protected function processWebhookIcon(int $botID) {
+    protected function processWebhookIcon(int $botID)
+    {
         $iconFile = \reset($this->parameters['webhookIcon']);
         if ($iconFile instanceof UploadFile && !$iconFile->isProcessed()) {
             $filename = WCF_DIR . 'images/discord_webhook/' . $botID . '.png';
