@@ -89,5 +89,5 @@ $tables = [
 (new DatabaseTableChangeProcessor(
     $this->installation->getPackage(),
     $tables,
-    WCF::getDB()->getEditor())
-)->process();
+    WCF::getDB()->getEditor()
+))->process();
