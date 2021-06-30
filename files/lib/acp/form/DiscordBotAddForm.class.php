@@ -3,21 +3,17 @@
 namespace wcf\acp\form;
 
 use wcf\data\discord\bot\DiscordBotAction;
-use wcf\form\AbstractForm;
+use wcf\form\AbstractFormBuilderForm;
 use wcf\system\discord\DiscordApi;
-use wcf\system\exception\UserInputException;
-use wcf\system\WCF;
-use wcf\util\StringUtil;
+use wcf\system\form\builder\container\FormContainer;
+use wcf\system\form\builder\field\HaPasswordFormField;
+use wcf\system\form\builder\field\IntegerFormField;
+use wcf\system\form\builder\field\TextFormField;
+use wcf\system\form\builder\field\UploadFormField;
+use wcf\system\form\builder\field\validation\FormFieldValidationError;
+use wcf\system\form\builder\field\validation\FormFieldValidator;
 
-/**
- * Form um Discord-Bot hinzuzufügen
- *
- * @author  Peter Lohse <hanashi@hanashi.eu>
- * @copyright   Hanashi
- * @license Freie Lizenz (https://hanashi.dev/freie-lizenz/)
- * @package WoltLabSuite\Core\Acp\Form
- */
-class DiscordBotAddForm extends AbstractForm
+class DiscordBotAddForm extends AbstractFormBuilderForm
 {
     /**
      * @inheritDoc
@@ -30,60 +26,9 @@ class DiscordBotAddForm extends AbstractForm
     public $activeMenuItem = 'wcf.acp.menu.link.configuration.discord.discordBotList.add';
 
     /**
-     * ID des Discord-Bots
-     *
-     * @var integer
+     * @inheritDoc
      */
-    protected $discordBotID;
-
-    /**
-     * Anzeigename des Discord-Bots
-     *
-     * @var string
-     */
-    protected $botName = 'Default';
-
-    /**
-     * Token des Bots
-     *
-     * @var string
-     */
-    protected $botToken;
-
-    /**
-     * ID des Discord-Servers
-     *
-     * @var integer
-     */
-    protected $guildID;
-
-    /**
-     * standardisierte Webhook-Name
-     *
-     * @var string
-     */
-    protected $webhookName = PAGE_TITLE;
-
-    /**
-     * Client-ID der Discord-Anwendung
-     *
-     * @var intger
-     */
-    protected $clientID;
-
-    /**
-     * Geheimer Schlüssel der Discord-Anwendung
-     *
-     * @var string
-     */
-    protected $clientSecret;
-
-    /**
-     * Hochgeladenes Icon
-     *
-     * @var array
-     */
-    protected $webhookIcon;
+    public $objectActionClass = DiscordBotAction::class;
 
     /**
      * Name des Discord-Servers
@@ -102,99 +47,78 @@ class DiscordBotAddForm extends AbstractForm
     /**
      * @inheritDoc
      */
-    public function readFormParameters()
+    protected function createForm()
     {
-        parent::readFormParameters();
+        parent::createForm();
 
-        if (isset($_POST['botName'])) {
-            $this->botName = StringUtil::trim($_POST['botName']);
-        }
-        if (isset($_POST['botToken'])) {
-            $this->botToken = StringUtil::trim($_POST['botToken']);
-        }
-        if (isset($_POST['guildID'])) {
-            $this->guildID = StringUtil::trim($_POST['guildID']);
-        }
-        if (isset($_POST['webhookName'])) {
-            $this->webhookName = StringUtil::trim($_POST['webhookName']);
-        }
-        if (isset($_POST['clientID'])) {
-            $this->clientID = StringUtil::trim($_POST['clientID']);
-        }
-        if (isset($_POST['clientSecret'])) {
-            $this->clientSecret = StringUtil::trim($_POST['clientSecret']);
-        }
-        if (isset($_FILES['webhookIcon'])) {
-            $this->webhookIcon = $_FILES['webhookIcon'];
-        }
-    }
+        $this->form->appendChildren([
+            FormContainer::create('botSettings')
+                ->label('wcf.acp.discordBotAdd.botSettings')
+                ->appendChildren([
+                    TextFormField::create('botName')
+                        ->label('wcf.acp.discordBotList.botName')
+                        ->description('wcf.acp.discordBotAdd.botName.description')
+                        ->required()
+                        ->maximumLength(50),
+                    HaPasswordFormField::create('botToken')
+                        ->label('wcf.acp.discordBotAdd.botToken')
+                        ->required(),
+                    IntegerFormField::create('guildID')
+                        ->label('wcf.acp.discordBotAdd.guildID')
+                        ->description('wcf.acp.discordBotAdd.guildID.description')
+                        ->required()
+                        ->addValidator(new FormFieldValidator('guildIDCheck', function(IntegerFormField $formField) {
+                            $requestData = $this->form->getRequestData();
+                            $discord = new DiscordApi($formField->getValue(), $requestData['botToken']);
+                            $guild = $discord->getGuild();
+                            if ($guild['status'] == 0) {
+                                $formField->addValidationError(new FormFieldValidationError(
+                                    'noConnection',
+                                    'wcf.acp.discordBotAdd.guildID.error.noConnection'
+                                ));
+                            } elseif ($guild['status'] != 200) {
+                                $formField->addValidationError(new FormFieldValidationError(
+                                    'permissionDenied',
+                                    'wcf.acp.discordBotAdd.guildID.error.permissionDenied'
+                                ));
+                            }
 
-    /**
-     * @inheritDoc
-     */
-    public function validate()
-    {
-        parent::validate();
-
-        if (empty($this->botName)) {
-            throw new UserInputException('botName');
-        }
-        if (strlen($this->botName) > 50) {
-            throw new UserInputException('botName', 'tooLong');
-        }
-
-        if (empty($this->botToken)) {
-            throw new UserInputException('botToken');
-        }
-
-        if (empty($this->guildID)) {
-            throw new UserInputException('guildID');
-        }
-        if (!is_numeric($this->guildID)) {
-            throw new UserInputException('guildID', 'invalid');
-        }
-
-        if (empty($this->webhookName)) {
-            throw new UserInputException('webhookName');
-        }
-        if (strlen($this->webhookName) > 50) {
-            throw new UserInputException('webhookName', 'tooLong');
-        }
-
-        if (!empty($this->webhookIcon['size'])) {
-            if ($this->webhookIcon['size'] > 8000000) {
-                throw new UserInputException('webhookIcon', 'tooBig');
-            }
-            if (!in_array($this->webhookIcon['type'], ['image/jpeg', 'image/png', 'image/gif'])) {
-                throw new UserInputException('webhookIcon', 'unknownFormat');
-            }
-        }
-
-        if (empty($this->clientID)) {
-            throw new UserInputException('clientID');
-        }
-        if (!is_numeric($this->clientID)) {
-            throw new UserInputException('clientID', 'invalid');
-        }
-
-        if (empty($this->clientSecret)) {
-            throw new UserInputException('clientSecret');
-        }
-
-        $discord = new DiscordApi($this->guildID, $this->botToken);
-        $guild = $discord->getGuild();
-        if ($guild['status'] == 0) {
-            throw new UserInputException('guildID', 'noConnection');
-        } elseif ($guild['status'] != 200) {
-            throw new UserInputException('guildID', 'permission_denied');
-        }
-
-        if (!empty($guild['body']['name'])) {
-            $this->guildName = $guild['body']['name'];
-        }
-        if (!empty($guild['body']['icon'])) {
-            $this->guildIcon = $guild['body']['icon'];
-        }
+                            if (!empty($guild['body']['name'])) {
+                                $this->guildName = $guild['body']['name'];
+                            }
+                            if (!empty($guild['body']['icon'])) {
+                                $this->guildIcon = $guild['body']['icon'];
+                            }
+                        }))
+                ]),
+            FormContainer::create('webhookSettings')
+                ->label('wcf.acp.discordBotAdd.webhookSettings')
+                ->appendChildren([
+                    TextFormField::create('webhookName')
+                        ->label('wcf.acp.discordBotAdd.webhookName')
+                        ->description('wcf.acp.discordBotAdd.webhookName.description')
+                        ->required()
+                        ->maximumLength(50)
+                        ->value(PAGE_TITLE),
+                    UploadFormField::create('webhookIcon')
+                        ->label('wcf.acp.discordBotAdd.webhookIcon')
+                        ->description('wcf.acp.discordBotAdd.webhookIcon.description')
+                        ->maximum(1)
+                        ->imageOnly()
+                        ->maximumFilesize(8000000),
+                ]),
+            FormContainer::create('oauth2Settings')
+                ->label('wcf.acp.discordBotAdd.oauth2Settings')
+                ->appendChildren([
+                    IntegerFormField::create('clientID')
+                        ->label('wcf.acp.discordBotAdd.clientID')
+                        ->description('wcf.acp.discordBotAdd.clientID.description')
+                        ->required(),
+                    HaPasswordFormField::create('clientSecret')
+                        ->label('wcf.acp.discordBotAdd.clientSecret')
+                        ->required()
+                ]),
+        ]);
     }
 
     /**
@@ -202,57 +126,17 @@ class DiscordBotAddForm extends AbstractForm
      */
     public function save()
     {
-        parent::save();
+        $additionalFields = [
+            'guildName' => $this->guildName,
+            'guildIcon' => $this->guildIcon,
+        ];
 
-        $action = new DiscordBotAction([], 'create', [
-            'data' => [
-                'botName' => $this->botName,
-                'botToken' => $this->botToken,
-                'guildID' => $this->guildID,
-                'guildName' => $this->guildName,
-                'guildIcon' => $this->guildIcon,
-                'webhookName' => $this->webhookName,
-                'clientID' => $this->clientID,
-                'clientSecret' => $this->clientSecret,
-                'botTime' => TIME_NOW
-            ]
-        ]);
-        $discordBot = $action->executeAction()['returnValues'];
-        if (!empty($this->webhookIcon['tmp_name'])) {
-            move_uploaded_file($this->webhookIcon['tmp_name'], WCF_DIR . 'images/discord_webhook/' . $discordBot->botID . '.pic');
+        if ($this->formAction == 'create') {
+            $additionalFields['botTime'] = TIME_NOW;
         }
 
-        $this->saved();
-    }
+        $this->additionalFields = array_merge($this->additionalFields, $additionalFields);
 
-    /**
-     * @inheritDoc
-     */
-    public function saved()
-    {
-        parent::saved();
-
-        WCF::getTPL()->assign([
-            'success' => true
-        ]);
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function assignVariables()
-    {
-        parent::assignVariables();
-
-        WCF::getTPL()->assign([
-            'action' => 'add',
-            'discordBotID' => $this->discordBotID,
-            'botName' => $this->botName,
-            'botToken' => $this->botToken,
-            'guildID' => $this->guildID,
-            'webhookName' => $this->webhookName,
-            'clientID' => $this->clientID,
-            'clientSecret' => $this->clientSecret
-        ]);
+        parent::save();
     }
 }

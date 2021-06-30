@@ -45,5 +45,7 @@
 		
 		<!-- templates -->
 		<instruction type="acpTemplate" />
+
+        <!-- TODO: Beim Update alte Bilddateien umbenennen -->
 	</instructions>
 </package>

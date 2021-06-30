@@ -4,7 +4,6 @@ namespace wcf\data\discord\bot;
 
 use wcf\data\DatabaseObject;
 use wcf\system\discord\DiscordApi;
-use wcf\system\WCF;
 
 /**
  * Discord-Bot-Objekt
@@ -34,5 +33,16 @@ class DiscordBot extends DatabaseObject
             $this->discordApi = new DiscordApi($this->guildID, $this->botToken);
         }
         return $this->discordApi;
+    }
+
+    public function getWebhookIconUploadFileLocations() {
+        $files = [];
+
+        $filename = WCF_DIR . 'images/discord_webhook/' . $this->botID . '.png';
+        if (\file_exists($filename)) {
+            $files[] = $filename;
+        }
+
+        return $files;
     }
 }

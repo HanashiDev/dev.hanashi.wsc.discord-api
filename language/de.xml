@@ -22,26 +22,20 @@
 	</category>
 	<category name="wcf.acp.discordBotAdd">
 		<item name="wcf.acp.discordBotAdd.botSettings"><![CDATA[Bot-Einstellungen]]></item>
-		<item name="wcf.acp.discordBotAdd.botName.error.tooLong"><![CDATA[Der eingegebene Bot-Name ist zu lang. Die maximale Länge beträgt 50 Zeichen.]]></item>
 		<item name="wcf.acp.discordBotAdd.botName.description"><![CDATA[{if LANGUAGE_USE_INFORMAL_VARIANT}Wähle{else}Wählen Sie{/if} einen Anzeigenamen für diesen Bot aus. Dies dient lediglich dazu die Bots im ACP auseinanderhalten zu können.]]></item>
 		<item name="wcf.acp.discordBotAdd.botToken"><![CDATA[Bot-Token]]></item>
 		<item name="wcf.acp.discordBotAdd.guildID"><![CDATA[Server-ID]]></item>
-		<item name="wcf.acp.discordBotAdd.guildID.error.invalid"><![CDATA[Die eingetrage Server-ID ist ungültig.]]></item>
 		<item name="wcf.acp.discordBotAdd.guildID.error.noConnection"><![CDATA[Es konnte keine Verbindung zu discord.com aufgebaut werden. Bitte {if LANGUAGE_USE_INFORMAL_VARIANT}wende dich{else}wenden Sie sich{/if} an {if LANGUAGE_USE_INFORMAL_VARIANT}deinen{else}Ihren{/if} Serveradministrator.]]></item>
 		<item name="wcf.acp.discordBotAdd.guildID.error.permissionDenied"><![CDATA[Der Bot hat keinen Zugriff auf den angegebenen Server.]]></item>
 		<item name="wcf.acp.discordBotAdd.guildID.description"><![CDATA[{if LANGUAGE_USE_INFORMAL_VARIANT}Gib{else}Geben Sie{/if} die ID {if LANGUAGE_USE_INFORMAL_VARIANT}deines{else}Ihres{/if} Discord-Servers ein. Diese wird für einige Funktionen verschiedener Plugins benötigt.]]></item>
 		<item name="wcf.acp.discordBotAdd.webhookSettings"><![CDATA[Webhook-Einstellungen]]></item>
 		<item name="wcf.acp.discordBotAdd.webhookName"><![CDATA[Webhook-Name]]></item>
 		<item name="wcf.acp.discordBotAdd.webhookName.description"><![CDATA[Wenn durch diesen Bot ein Webhook erstellt wird, wird der Webhook automatisch den hier eingestellten Namen erhalten.]]></item>
-		<item name="wcf.acp.discordBotAdd.webhookName.error.tooLong"><![CDATA[Der eingegebene Webhook-Name ist zu lang. Die maximale Länge beträgt 50 Zeichen.]]></item>
 		<item name="wcf.acp.discordBotAdd.webhookIcon"><![CDATA[Webhook-Icon]]></item>
 		<item name="wcf.acp.discordBotAdd.webhookIcon.description"><![CDATA[Wähle ein voreingestelltes Icon für den Webhook aus (maximal 8 MB).]]></item>
-		<item name="wcf.acp.discordBotAdd.webhookIcon.error.tooBig"><![CDATA[Die hochgeladene Datei ist zu groß (maximal 8 MB).]]></item>
-		<item name="wcf.acp.discordBotAdd.webhookIcon.error.unknownFormat"><![CDATA[Die Datei hat ein ungültiges Format (erlaubt: jpg, png, gif).]]></item>
 		<item name="wcf.acp.discordBotAdd.oauth2Settings"><![CDATA[OAuth2-Einstellungen]]></item>
 		<item name="wcf.acp.discordBotAdd.clientID"><![CDATA[Client-ID]]></item>
 		<item name="wcf.acp.discordBotAdd.clientID.description"><![CDATA[{if LANGUAGE_USE_INFORMAL_VARIANT}Gib{else}Geben Sie{/if} die Client-ID {if LANGUAGE_USE_INFORMAL_VARIANT}deiner{else}Ihrer{/if} Anwendung ein um diese für OAuth2-Funktionen zu nutzen.]]></item>
-		<item name="wcf.acp.discordBotAdd.clientID.error.invalid"><![CDATA[Die eingetrage Client-ID ist ungültig.]]></item>
 		<item name="wcf.acp.discordBotAdd.clientSecret"><![CDATA[Client-Secret]]></item>
 	</category>
 	<category name="wcf.acp.discordBotList">
