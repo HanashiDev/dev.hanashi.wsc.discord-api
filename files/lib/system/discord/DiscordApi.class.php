@@ -1684,6 +1684,56 @@ class DiscordApi
         return $this->execute($url);
     }
 
+    /**
+     * Returns the Welcome Screen object for the guild.
+     *
+     * @return array
+     */
+    public function getGuildWelcomeScreen()
+    {
+        $url = $this->apiUrl . '/guilds/' . $this->guildID . '/welcome-screen';
+        return $this->execute($url, 'GET');
+    }
+
+    /**
+     * Modify the guild's Welcome Screen. Requires the MANAGE_GUILD permission. Returns the updated Welcome Screen object.
+     *
+     * All parameters to this endpoint are optional and nullable
+     *
+     * @param  array $params
+     * @return array
+     */
+    public function modifyGuildWelcomeScreen($params)
+    {
+        $url = $this->apiUrl . '/guilds/' . $this->guildID . '/welcome-screen';
+        return $this->execute($url, 'PATCH', $params, 'application/json');
+    }
+
+    /**
+     * Updates the current user's voice state.
+     *
+     * @param  array $params
+     * @return array
+     */
+    public function modifyCurrentUserVoiceState($params)
+    {
+        $url = $this->apiUrl . '/guilds/' . $this->guildID . '/voice-states/@me';
+        return $this->execute($url, 'PATCH', $params, 'application/json');
+    }
+
+    /**
+     * Updates another user's voice state.
+     *
+     * @param  integer $userID
+     * @param  array $params
+     * @return array
+     */
+    public function modifyUserVoiceState($userID, $params)
+    {
+        $url = $this->apiUrl . '/guilds/' . $this->guildID . '/voice-states/' . $userID;
+        return $this->execute($url, 'PATCH', $params, 'application/json');
+    }
+
     /////////////////////////////////////
     // Guild End
     /////////////////////////////////////
