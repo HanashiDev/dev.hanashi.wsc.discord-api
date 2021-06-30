@@ -435,7 +435,7 @@ class DiscordApi
         $signature = sodium_hex2bin($headers['X-Signature-Ed25519']);
         $timestamp = $headers['X-Signature-Timestamp'];
 
-        if (!sodium_crypto_sign_verify_detached($signature, $timestamp.$body, $publicKey)) {
+        if (!sodium_crypto_sign_verify_detached($signature, $timestamp . $body, $publicKey)) {
             return false;
         }
 
@@ -879,6 +879,169 @@ class DiscordApi
     {
         $url = $this->apiUrl . '/channels/' . $channelID . '/recipients/' . $userID;
         return $this->execute($url, 'DELETE');
+    }
+
+    /**
+     * Creates a new thread from an existing message. Returns a channel on success, and a 400 BAD REQUEST on invalid parameters. Fires a Thread Create Gateway event.
+     *
+     * When called on a GUILD_TEXT channel, creates a GUILD_PUBLIC_THREAD. When called on a GUILD_NEWS channel, creates a GUILD_NEWS_THREAD. The id of the created thread will be the same as the id of the message, and as such a message can only have a single thread created from it.
+     *
+     * @param  integer $channelID
+     * @param  integer $messageID
+     * @param  array $params
+     * @return array
+     */
+    public function startThreadWithMessage($channelID, $messageID, $params)
+    {
+        $url = $this->apiUrl . '/channels/' . $channelID . '/messages/' . $messageID . '/threads';
+        return $this->execute($url, 'POST', $params, 'application/json');
+    }
+
+    /**
+     * Creates a new thread that is not connected to an existing message. The created thread defaults to a GUILD_PRIVATE_THREAD*. Returns a channel on success, and a 400 BAD REQUEST on invalid parameters. Fires a Thread Create Gateway event.
+     *
+     * Creating a private thread requires the server to be boosted. The guild features will indicate if that is possible for the guild.
+     *
+     * The 3 day and 7 day archive durations require the server to be boosted. The guild features will indicate if that is possible for the guild.
+     *
+     * type defaults to PRIVATE_THREAD in order to match the behavior when thread documentation was first published. This is a bit of a weird default though, and thus is highly likely to change in a future API version, so we would recommend always explicitly setting the type parameter.
+     *
+     * @param  integer $channelID
+     * @param  array $params
+     * @return array
+     */
+    public function startThreadWithoutMessage($channelID, $params)
+    {
+        $url = $this->apiUrl . '/channels/' . $channelID . '/threads';
+        return $this->execute($url, 'POST', $params, 'application/json');
+    }
+
+    /**
+     * Adds the current user to a thread. Also requires the thread is not archived. Returns a 204 empty response on success. Fires a Thread Members Update Gateway event.
+     *
+     * @param  integer $channelID
+     * @return array
+     */
+    public function joinThread($channelID)
+    {
+        $url = $this->apiUrl . '/channels/' . $channelID . '/thread-members/@me';
+        return $this->execute($url, 'PUT');
+    }
+
+    /**
+     * Adds another member to a thread. Requires the ability to send messages in the thread. Also requires the thread is not archived. Returns a 204 empty response on success. Fires a Thread Members Update Gateway event.
+     *
+     * @param  integer $channelID
+     * @param  integer $userID
+     * @return array
+     */
+    public function addThreadMember($channelID, $userID)
+    {
+        $url = $this->apiUrl . '/channels/' . $channelID . '/thread-members/' . $userID;
+        return $this->execute($url, 'PUT');
+    }
+
+    /**
+     * Removes the current user from a thread. Also requires the thread is not archived. Returns a 204 empty response on success. Fires a Thread Members Update Gateway event.
+     *
+     * @param  integer $channelID
+     * @return array
+     */
+    public function leaveThread($channelID)
+    {
+        $url = $this->apiUrl . '/channels/' . $channelID . '/thread-members/@me';
+        return $this->execute($url, 'DELETE');
+    }
+
+    /**
+     * Removes another member from a thread. Requires the MANAGE_THREADS permission, or the creator of the thread if it is a GUILD_PRIVATE_THREAD. Also requires the thread is not archived. Returns a 204 empty response on success. Fires a Thread Members Update Gateway event.
+     *
+     * @param  integer $channelID
+     * @param  integer $userID
+     * @return array
+     */
+    public function removeThreadMember($channelID, $userID)
+    {
+        $url = $this->apiUrl . '/channels/' . $channelID . '/thread-members/' . $userID;
+        return $this->execute($url, 'DELETE');
+    }
+
+    /**
+     * Returns array of thread members objects that are members of the thread.
+     *
+     * This endpoint is restricted according to whether the GUILD_MEMBERS Privileged Intent is enabled for your application.
+     *
+     * @param  integer $channelID
+     * @return array
+     */
+    public function listThreadMembers($channelID)
+    {
+        $url = $this->apiUrl . '/channels/' . $channelID . '/thread-members';
+        return $this->execute($url, 'GET');
+    }
+
+    /**
+     * Returns all active threads in the channel, including public and private threads. Threads are ordered by their id, in descending order.
+     *
+     * @param  integer $channelID
+     * @param  array $params
+     * @return array
+     */
+    public function listActiveThreads($channelID, $params = [])
+    {
+        $url = $this->apiUrl . '/channels/' . $channelID . '/threads/active';
+        if (!empty($params)) {
+            $url .= '?' . http_build_query($params, '', '&');
+        }
+        return $this->execute($url, 'GET');
+    }
+
+    /**
+     * Returns archived threads in the channel that are public. When called on a GUILD_TEXT channel, returns threads of type GUILD_PUBLIC_THREAD. When called on a GUILD_NEWS channel returns threads of type GUILD_NEWS_THREAD. Threads are ordered by archive_timestamp, in descending order. Requires the READ_MESSAGE_HISTORY permission.
+     *
+     * @param  integer $channelID
+     * @param  array $params
+     * @return array
+     */
+    public function listPublicArchivedThreads($channelID, $params = [])
+    {
+        $url = $this->apiUrl . '/channels/' . $channelID . '/threads/archived/public';
+        if (!empty($params)) {
+            $url .= '?' . http_build_query($params, '', '&');
+        }
+        return $this->execute($url, 'GET');
+    }
+
+    /**
+     * Returns archived threads in the channel that are of type GUILD_PRIVATE_THREAD. Threads are ordered by archive_timestamp, in descending order. Requires both the READ_MESSAGE_HISTORY and MANAGE_THREADS permissions.
+     *
+     * @param  integer $channelID
+     * @param  array $params
+     * @return array
+     */
+    public function listPrivateArchivedThreads($channelID, $params = [])
+    {
+        $url = $this->apiUrl . '/channels/' . $channelID . '/threads/archived/private';
+        if (!empty($params)) {
+            $url .= '?' . http_build_query($params, '', '&');
+        }
+        return $this->execute($url, 'GET');
+    }
+
+    /**
+     * Returns archived threads in the channel that are of type GUILD_PRIVATE_THREAD, and the user has joined. Threads are ordered by their id, in descending order. Requires the READ_MESSAGE_HISTORY permission.
+     *
+     * @param  integer $channelID
+     * @param  array $params
+     * @return array
+     */
+    public function listJoinedPrivateArchivedThreads($channelID, $params = [])
+    {
+        $url = $this->apiUrl . '/channels/' . $channelID . '/users/@me/threads/archived/private';
+        if (!empty($params)) {
+            $url .= '?' . http_build_query($params, '', '&');
+        }
+        return $this->execute($url, 'GET');
     }
 
     /////////////////////////////////////
