@@ -1739,6 +1739,101 @@ class DiscordApi
     /////////////////////////////////////
 
     /////////////////////////////////////
+    // Guild Template Start
+    /////////////////////////////////////
+
+    /**
+     * Returns a guild template object for the given code.
+     *
+     * @param  string $templateCode
+     * @return array
+     */
+    public function getGuildTemplate($templateCode)
+    {
+        $url = $this->apiUrl . '/uilds/templates/' . $templateCode;
+        return $this->execute($url, 'GET');
+    }
+
+    /**
+     * Create a new guild based on a template. Returns a guild object on success. Fires a Guild Create Gateway event.
+     *
+     * This endpoint can be used only by bots in less than 10 guilds.
+     *
+     * @param  string $templateCode
+     * @param  array $params
+     * @return array
+     */
+    public function createGuildFromGuildTemplate($templateCode, $params)
+    {
+        $url = $this->apiUrl . '/uilds/templates/' . $templateCode;
+        return $this->execute($url, 'POST', $params, 'application/json');
+    }
+
+    /**
+     * Returns an array of guild template objects. Requires the MANAGE_GUILD permission.
+     *
+     * @array void
+     */
+    public function getGuildTemplates()
+    {
+        $url = $this->apiUrl . '/guilds/' . $this->guildID . '/templates';
+        return $this->execute($url, 'GET');
+    }
+
+    /**
+     * Creates a template for the guild. Requires the MANAGE_GUILD permission. Returns the created guild template object on success.
+     *
+     * @param  array $params
+     * @return array
+     */
+    public function createGuildTemplate($params)
+    {
+        $url = $this->apiUrl . '/guilds/' . $this->guildID . '/templates';
+        return $this->execute($url, 'POST', $params, 'application/json');
+    }
+
+    /**
+     * Syncs the template to the guild's current state. Requires the MANAGE_GUILD permission. Returns the guild template object on success.
+     *
+     * @param  string $templateCode
+     * @return array
+     */
+    public function syncGuildTemplate($templateCode)
+    {
+        $url = $this->apiUrl . '/guilds/' . $this->guildID . '/templates/' . $templateCode;
+        return $this->execute($url, 'PUT');
+    }
+
+    /**
+     * Modifies the template's metadata. Requires the MANAGE_GUILD permission. Returns the guild template object on success.
+     *
+     * @param  string $templateCode
+     * @param  array $params
+     * @return array
+     */
+    public function modifyGuildTemplate($templateCode, $params)
+    {
+        $url = $this->apiUrl . '/guilds/' . $this->guildID . '/templates/' . $templateCode;
+        return $this->execute($url, 'PATCH', $params, 'application/json');
+    }
+
+    /**
+     * Deletes the template. Requires the MANAGE_GUILD permission. Returns the deleted guild template object on success.
+     *
+     * @param  string $templateCode
+     * @return array
+     */
+    public function deleteGuildTemplate($templateCode)
+    {
+        $url = $this->apiUrl . '/guilds/' . $this->guildID . '/templates/' . $templateCode;
+        return $this->execute($url, 'DELETE');
+    }
+
+    /////////////////////////////////////
+    // Guild Template End
+    /////////////////////////////////////
+
+    /////////////////////////////////////
     // Invite Start
     /////////////////////////////////////
 
