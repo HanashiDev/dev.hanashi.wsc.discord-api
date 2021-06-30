@@ -113,12 +113,16 @@ class DiscordBotAddForm extends AbstractFormBuilderForm
                 ->appendChildren([
                     IntegerFormField::create('clientID')
                         ->label('wcf.acp.discordBotAdd.clientID')
-                        ->description('wcf.acp.discordBotAdd.clientID.description')
-                        ->required(),
+                        ->description('wcf.acp.discordBotAdd.clientID.description'),
                     HaPasswordFormField::create('clientSecret')
-                        ->label('wcf.acp.discordBotAdd.clientSecret')
-                        ->required()
+                        ->label('wcf.acp.discordBotAdd.clientSecret'),
                 ]),
+            FormContainer::create('interaction')
+                ->label('wcf.acp.discordBotAdd.interaction')
+                ->appendChildren([
+                    TextFormField::create('publicKey')
+                        ->label('wcf.acp.discordBotAdd.publicKey')
+                ])
         ]);
     }
 

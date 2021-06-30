@@ -52,6 +52,8 @@ $tables = [
                 ->length(20),
             VarcharDatabaseTableColumn::create('clientSecret')
                 ->length(100),
+            VarcharDatabaseTableColumn::create('publicKey')
+                ->length(100),
             NotNullInt10DatabaseTableColumn::create('botTime'),
         ]),
 

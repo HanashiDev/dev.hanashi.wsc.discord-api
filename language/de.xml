@@ -37,6 +37,8 @@
 		<item name="wcf.acp.discordBotAdd.clientID"><![CDATA[Client-ID]]></item>
 		<item name="wcf.acp.discordBotAdd.clientID.description"><![CDATA[{if LANGUAGE_USE_INFORMAL_VARIANT}Gib{else}Geben Sie{/if} die Client-ID {if LANGUAGE_USE_INFORMAL_VARIANT}deiner{else}Ihrer{/if} Anwendung ein um diese für OAuth2-Funktionen zu nutzen.]]></item>
 		<item name="wcf.acp.discordBotAdd.clientSecret"><![CDATA[Client-Secret]]></item>
+		<item name="wcf.acp.discordBotAdd.interaction"><![CDATA[Interaktionen]]></item>
+		<item name="wcf.acp.discordBotAdd.publicKey"><![CDATA[Public Key]]></item>
 	</category>
 	<category name="wcf.acp.discordBotList">
 		<item name="wcf.acp.discordBotList.botName"><![CDATA[Bot-Name]]></item>

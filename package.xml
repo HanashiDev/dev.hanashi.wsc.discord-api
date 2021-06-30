@@ -45,7 +45,11 @@
 		
 		<!-- templates -->
 		<instruction type="acpTemplate" />
+		
+		<!-- language -->
+        <instruction type="language"/>
 
         <!-- TODO: Beim Update alte Bilddateien umbenennen -->
+        <!-- TODO: publicKey als neue Spalte hinzufügen -->
 	</instructions>
 </package>
