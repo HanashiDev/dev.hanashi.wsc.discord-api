@@ -832,7 +832,7 @@ class DiscordApi
      * @param   integer $messageID  ID der Nachricht
      * @return  array
      */
-    public function addPinnedChannelMessage($channelID, $messageID)
+    public function pinMessage($channelID, $messageID)
     {
         $url = $this->apiUrl . '/channels/' . $channelID . '/pins/' . $messageID;
         return $this->execute($url, 'PUT');
