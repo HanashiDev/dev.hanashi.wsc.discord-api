@@ -781,6 +781,19 @@ class DiscordApi
         $url = $this->apiUrl . '/channels/' . $channelID . '/permissions/' . $overwriteID;
         return $this->execute($url, 'DELETE');
     }
+    
+    /**
+     * Follow a News Channel to send messages to a target channel. Requires the MANAGE_WEBHOOKS permission in the target channel. Returns a followed channel object.
+     *
+     * @param  integer $channelID
+     * @param  integer $webhookChannelID
+     * @return array
+     */
+    public function followNewsChannel($channelID, $webhookChannelID)
+    {
+        $url = $this->apiUrl . '/channels/' . $channelID . '/followers';
+        return $this->execute($url, 'POST', ['webhook_channel_id' => $webhookChannelID], 'application/json');
+    }
 
     /**
      * Post a typing indicator for the specified channel.
