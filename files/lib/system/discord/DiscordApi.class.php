@@ -1637,32 +1637,6 @@ class DiscordApi
     }
 
     /**
-     * Returns the guild embed object. Requires the MANAGE_GUILD permission.
-     *
-     * @return  array
-     */
-    public function getGuildEmbed()
-    {
-        $url = $this->apiUrl . '/guilds/' . $this->guildID . '/embed';
-        return $this->execute($url);
-    }
-
-    /**
-     * Modify a guild embed object for the guild.
-     * All attributes may be passed in with JSON and modified.
-     * Requires the MANAGE_GUILD permission.
-     * Returns the updated guild embed object.
-     *
-     * @param   array   $params Parameter?
-     * @return  array
-     */
-    public function modifyGuildEmbed($params = [])
-    {
-        $url = $this->apiUrl . '/guilds/' . $this->guildID . '/embed';
-        return $this->execute($url, 'PATCH', $params, 'application/json');
-    }
-
-    /**
      * Returns a partial invite object for guilds with that feature enabled.
      * Requires the MANAGE_GUILD permission.
      * code will be null if a vanity url for the guild is not set.
