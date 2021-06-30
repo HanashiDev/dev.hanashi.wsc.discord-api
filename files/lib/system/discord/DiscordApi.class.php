@@ -848,7 +848,7 @@ class DiscordApi
      * @param   integer $messageID  ID der Nachricht
      * @return  array
      */
-    public function deletePinnedChannelMessage($channelID, $messageID)
+    public function unpinMessage($channelID, $messageID)
     {
         $url = $this->apiUrl . '/channels/' . $channelID . '/pins/' . $messageID;
         return $this->execute($url, 'DELETE');
