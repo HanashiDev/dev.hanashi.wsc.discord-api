@@ -1624,19 +1624,6 @@ class DiscordApi
     }
 
     /**
-     * Sync an integration. Requires the MANAGE_GUILD permission.
-     * Returns a 204 empty response on success.
-     *
-     * @param   integer $integrationID  ID der Integration
-     * @return  array
-     */
-    public function syncGuildIntegration($integrationID)
-    {
-        $url = $this->apiUrl . '/guilds/' . $this->guildID . '/integrations/' . $integrationID . '/sync';
-        return $this->execute($url, 'POST');
-    }
-
-    /**
      * Returns a partial invite object for guilds with that feature enabled.
      * Requires the MANAGE_GUILD permission.
      * code will be null if a vanity url for the guild is not set.
