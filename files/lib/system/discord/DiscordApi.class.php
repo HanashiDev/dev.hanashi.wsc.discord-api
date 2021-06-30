@@ -1872,6 +1872,69 @@ class DiscordApi
     /////////////////////////////////////
 
     /////////////////////////////////////
+    // Stage Instance Start
+    /////////////////////////////////////
+
+    /**
+     * Creates a new Stage instance associated to a Stage channel.
+     *
+     * Requires the user to be a moderator of the Stage channel.
+     *
+     * @param  array $params
+     * @return array
+     */
+    public function createStageInstance($params)
+    {
+        $url = $this->apiUrl . '/stage-instances';
+        return $this->execute($url, 'POST', $params, 'application/json');
+    }
+
+    /**
+     * Gets the stage instance associated with the Stage channel, if it exists.
+     *
+     * @param  integer $channelID
+     * @return array
+     */
+    public function getStageInstance($channelID)
+    {
+        $url = $this->apiUrl . '/stage-instances/' . $channelID;
+        return $this->execute($url, 'GET');
+    }
+
+    /**
+     * Updates fields of an existing Stage instance.
+     *
+     * Requires the user to be a moderator of the Stage channel.
+     *
+     * @param  integer $channelID
+     * @param  array $params
+     * @return array
+     */
+    public function modifyStageInstance($channelID, $params)
+    {
+        $url = $this->apiUrl . '/stage-instances/' . $channelID;
+        return $this->execute($url, 'PATCH', $params, 'application/json');
+    }
+
+    /**
+     * Deletes the Stage instance.
+     *
+     * Requires the user to be a moderator of the Stage channel.
+     *
+     * @param  integer $channelID
+     * @return array
+     */
+    public function deleteStageInstance($channelID)
+    {
+        $url = $this->apiUrl . '/stage-instances/' . $channelID;
+        return $this->execute($url, 'DELETE');
+    }
+
+    /////////////////////////////////////
+    // Stage Instance End
+    /////////////////////////////////////
+
+    /////////////////////////////////////
     // User Start
     /////////////////////////////////////
 
