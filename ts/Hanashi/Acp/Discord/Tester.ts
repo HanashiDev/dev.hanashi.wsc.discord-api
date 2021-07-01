@@ -47,7 +47,7 @@ export class DiscordTester implements AjaxCallbackObject, DialogCallbackObject {
             "afk": false
         };
         new DiscordGateway(botToken, presence);
-        setTimeout(() => this.connectionError, 15 * 1000);
+        setTimeout(() => this.connectionError(), 15 * 1000);
     }
 
     protected dispatchData(data: any) {
