@@ -99,13 +99,13 @@
 <script data-relocate="true">
     require(['Hanashi/Acp/Discord/Tester', 'Language'], function (DiscordTester, Language) {
         Language.addObject({
-            'wcf.acp.discordBotList.connectOnce': '{lang}wcf.acp.discordBotList.connectOnce{/lang}',
-            'wcf.acp.discordBotList.gateway.connecting': '{lang}wcf.acp.discordBotList.gateway.connecting{/lang}',
-            'wcf.acp.discordBotList.gateway.connected': '{lang}wcf.acp.discordBotList.gateway.connected{/lang}',
-            'wcf.acp.discordBotList.gateway.error': '{lang}wcf.acp.discordBotList.gateway.error{/lang}'
+            'wcf.acp.discordBotList.connectOnce': '{jslang}wcf.acp.discordBotList.connectOnce{/jslang}',
+            'wcf.acp.discordBotList.gateway.connecting': '{jslang}wcf.acp.discordBotList.gateway.connecting{/jslang}',
+            'wcf.acp.discordBotList.gateway.connected': '{jslang}wcf.acp.discordBotList.gateway.connected{/jslang}',
+            'wcf.acp.discordBotList.gateway.error': '{jslang}wcf.acp.discordBotList.gateway.error{/jslang}'
         });
         
-        new DiscordTester();
+        new DiscordTester.default();
     });
 </script>
 

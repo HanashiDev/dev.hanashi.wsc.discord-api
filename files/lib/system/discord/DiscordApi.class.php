@@ -2,14 +2,11 @@
 
 namespace wcf\system\discord;
 
+use GuzzleHttp\Exception\ClientException;
+use GuzzleHttp\Psr7\Request;
 use wcf\data\discord\bot\DiscordBot;
-use wcf\system\exception\HTTPNotFoundException;
-use wcf\system\exception\HTTPServerErrorException;
-use wcf\system\exception\HTTPUnauthorizedException;
 use wcf\system\exception\SystemException;
-use wcf\system\WCF;
-use wcf\util\exception\HTTPException;
-use wcf\util\HTTPRequest;
+use wcf\system\io\HttpFactory;
 use wcf\util\JSON;
 
 /**
@@ -22,6 +19,44 @@ use wcf\util\JSON;
  */
 class DiscordApi
 {
+    // ApplicationCommandOptionType https://discord.com/developers/docs/interactions/slash-commands#application-command-object-application-command-option-type
+    const DISCORD_SUB_COMMAND = 1;
+    const DISCORD_SUB_COMMAND_GROUP = 2;
+    const DISCORD_STRING = 3;
+    const DISCORD_INTEGER = 4;
+    const DISCORD_BOOLEAN = 5;
+    const DISCORD_USER = 6;
+    const DISCORD_CHANNEL = 7;
+    const DISCORD_ROLE = 8;
+    const DISCORD_MENTIONABLE = 9;
+
+    // InteractionType https://discord.com/developers/docs/interactions/slash-commands#interaction-object-interaction-request-type
+    const DISCORD_PING = 1;
+    const DISCORD_APPLICATION_COMMAND = 2;
+    const DISCORD_MESSAGE_COMPONENT = 3;
+
+    // InteractionCallbackType https://discord.com/developers/docs/interactions/slash-commands#interaction-response-object-interaction-callback-type
+    /**
+     * ACK a Ping
+     */
+    const DISCORD_PONG = 1;
+    /**
+     * respond to an interaction with a message
+     */
+    const DISCORD_CHANNEL_MESSAGE_WITH_SOURCE = 4;
+    /**
+     * ACK an interaction and edit a response later, the user sees a loading state
+     */
+    const DISCORD_DEFERRED_CHANNEL_MESSAGE_WITH_SOURCE = 5;
+    /**
+     * for components, ACK an interaction and edit the original message later; the user does not see a loading state
+     */
+    const DISCORD_DEFERRED_UPDATE_MESSAGE = 6;
+    /**
+     * for components, edit the message the component was attached to
+     */
+    const DISCORD_UPDATE_MESSAGE = 7;
+
     /**
      * URL zur Discord-API
      *
@@ -95,6 +130,359 @@ class DiscordApi
     {
         $this->discordBot = $bot;
     }
+
+    /////////////////////////////////////
+    // Slash Commands Start
+    /////////////////////////////////////
+
+    /**
+     * Fetch all of the global commands for your application. Returns an array of ApplicationCommand objects.
+     *
+     * @param  integer   $applicationID
+     * @return array
+     */
+    public function getGlobalApplicationCommands($applicationID)
+    {
+        $url = $this->apiUrl . '/applications/' . $applicationID . '/commands';
+        return $this->execute($url);
+    }
+
+    /**
+     * Create a new global command. New global commands will be available in all guilds after 1 hour. Returns 201 and an ApplicationCommand object.
+     *
+     * @param  integer $applicationID
+     * @param  array $params
+     * @return array
+     */
+    public function createGlobalApplicationCommand($applicationID, $params)
+    {
+        $url = $this->apiUrl . '/applications/' . $applicationID . '/commands';
+        return $this->execute($url, 'POST', $params, 'application/json');
+    }
+
+    /**
+     * Fetch a global command for your application. Returns an ApplicationCommand object.
+     *
+     * @param  integer $applicationID
+     * @param  integer $commandID
+     * @return array
+     */
+    public function getGlobalApplicationCommand($applicationID, $commandID)
+    {
+        $url = $this->apiUrl . '/applications/' . $applicationID . '/commands/' . $commandID;
+        return $this->execute($url);
+    }
+
+    /**
+     * Edit a global command. Updates will be available in all guilds after 1 hour. Returns 200 and an ApplicationCommand object.
+     *
+     * @param  integer $applicationID
+     * @param  integer $commandID
+     * @param  array $params
+     * @return array
+     */
+    public function editGlobalApplicationCommand($applicationID, $commandID, $params)
+    {
+        $url = $this->apiUrl . '/applications/' . $applicationID . '/commands/' . $commandID;
+        return $this->execute($url, 'PATCH', $params, 'application/json');
+    }
+
+    /**
+     * Deletes a global command. Returns 204.
+     *
+     * @param  integer $applicationID
+     * @param  integer $commandID
+     * @return array
+     */
+    public function deleteGlobalApplicationCommand($applicationID, $commandID)
+    {
+        $url = $this->apiUrl . '/applications/' . $applicationID . '/commands/' . $commandID;
+        return $this->execute($url, 'DELETE');
+    }
+
+    /**
+     * Fetch all of the guild commands for your application for a specific guild. Returns an array of ApplicationCommand objects.
+     *
+     * @param  integer $applicationID
+     * @param  integer $commandID
+     * @return array
+     */
+    public function getGuildApplicationCommands($applicationID, $commandID)
+    {
+        $url = $this->apiUrl . '/applications/' . $applicationID . '/commands/' . $commandID;
+        return $this->execute($url, 'GET');
+    }
+
+    /**
+     * Takes a list of application commands, overwriting existing commands that are registered globally for this application. Updates will be available in all guilds after 1 hour. Returns 200 and a list of ApplicationCommand objects. Commands that do not already exist will count toward daily application command create limits.
+     *
+     * @param  integer $applicationID
+     * @return array
+     */
+    public function bulkOverwriteGlobalApplicationCommands($applicationID)
+    {
+        $url = $this->apiUrl . '/applications/' . $applicationID . '/commands';
+        return $this->execute($url, 'PUT');
+    }
+
+    /**
+     * Create a new guild command. New guild commands will be available in the guild immediately. Returns 201 and an ApplicationCommand object. If the command did not already exist, it will count toward daily application command create limits.
+     *
+     * @param  integer $applicationID
+     * @param  integer $guildID
+     * @param  array $params
+     * @return array
+     */
+    public function createGuildApplicationCommand($applicationID, $guildID, $params)
+    {
+        $url = $this->apiUrl . '/applications/' . $applicationID . '/guilds/' . $guildID . '/commands';
+        return $this->execute($url, 'POST', $params, 'application/json');
+    }
+
+    /**
+     * Fetch a guild command for your application. Returns an ApplicationCommand object.
+     *
+     * @param  integer $applicationID
+     * @param  integer $guildID
+     * @param  integer $commandID
+     * @return array
+     */
+    public function getGuildApplicationCommand($applicationID, $guildID, $commandID)
+    {
+        $url = $this->apiUrl . '/applications/' . $applicationID . '/guilds/' . $guildID . '/commands/' . $commandID;
+        return $this->execute($url, 'GET');
+    }
+
+    /**
+     * Edit a guild command. Updates for guild commands will be available immediately. Returns 200 and an ApplicationCommand object.
+     *
+     * @param  integer $applicationID
+     * @param  integer $guildID
+     * @param  integer $commandID
+     * @param  array $params
+     * @return array
+     */
+    public function editGuildApplicationCommand($applicationID, $guildID, $commandID, $params)
+    {
+        $url = $this->apiUrl . '/applications/' . $applicationID . '/guilds/' . $guildID . '/commands/' . $commandID;
+        return $this->execute($url, 'PATCH', $params, 'application/json');
+    }
+
+    /**
+     * Delete a guild command. Returns 204 on success.
+     *
+     * @param  integer $applicationID
+     * @param  integer $guildID
+     * @param  integer $commandID
+     * @return array
+     */
+    public function deleteGuildApplicationCommand($applicationID, $guildID, $commandID)
+    {
+        $url = $this->apiUrl . '/applications/' . $applicationID . '/guilds/' . $guildID . '/commands/' . $commandID;
+        return $this->execute($url, 'DELETE');
+    }
+
+    /**
+     * Takes a list of application commands, overwriting existing commands for the guild. Returns 200 and a list of ApplicationCommand objects.
+     *
+     * @param  integer $applicationID
+     * @param  integer $guildID
+     * @return array
+     */
+    public function bulkOverwriteGuildApplicationCommands($applicationID, $guildID)
+    {
+        $url = $this->apiUrl . '/applications/' . $applicationID . '/guilds/' . $guildID . '/commands';
+        return $this->execute($url, 'PUT');
+    }
+
+    /**
+     * Create a response to an Interaction from the gateway. Takes an Interaction response.
+     *
+     * @param  integer $interactionID
+     * @param  string $interactionToken
+     * @param  array $params
+     * @return array
+     */
+    public function createInteractionResponse($interactionID, $interactionToken, $params)
+    {
+        $url = $this->apiUrl . '/interactions/' . $interactionID . '/' . $interactionToken . '/callback';
+        return $this->execute($url, 'POST', $params, 'application/json');
+    }
+
+    /**
+     * Returns the initial Interaction response. Functions the same as Get Webhook Message.
+     *
+     * @param  integer $applicationID
+     * @param  string $interactionToken
+     * @return array
+     */
+    public function getOriginalInteractionResponse($applicationID, $interactionToken)
+    {
+        $url = $this->apiUrl . '/webhooks/' . $applicationID . '/' . $interactionToken . '/messages/@original';
+        return $this->execute($url, 'GET');
+    }
+
+    /**
+     * Edits the initial Interaction response. Functions the same as Edit Webhook Message.
+     *
+     * @param  integer $applicationID
+     * @param  string $interactionToken
+     * @param  array $params
+     * @return array
+     */
+    public function editOriginalInteractionResponse($applicationID, $interactionToken, $params)
+    {
+        $url = $this->apiUrl . '/webhooks/' . $applicationID . '/' . $interactionToken . '/messages/@original';
+        return $this->execute($url, 'PATCH', $params, 'application/json');
+    }
+
+    /**
+     * Deletes the initial Interaction response. Returns 204 on success.
+     *
+     * @param  integer $applicationID
+     * @param  string $interactionToken
+     * @return array
+     */
+    public function deleteOriginalInteractionResponse($applicationID, $interactionToken)
+    {
+        $url = $this->apiUrl . '/webhooks/' . $applicationID . '/' . $interactionToken . '/messages/@original';
+        return $this->execute($url, 'DELETE');
+    }
+
+    /**
+     * Create a followup message for an Interaction. Functions the same as Execute Webhook, but wait is always true, and flags can be set to 64 in the body to send an ephemeral message. The thread_id query parameter is not required (and is furthermore ignored) when using this endpoint for interaction followups.
+     *
+     * @param  integer $applicationID
+     * @param  string $interactionToken
+     * @param  array $params
+     * @return array
+     */
+    public function createFollowupMessage($applicationID, $interactionToken, $params)
+    {
+        $url = $this->apiUrl . '/webhooks/' . $applicationID . '/' . $interactionToken;
+        return $this->execute($url, 'POST', $params, 'application/json');
+    }
+
+    /**
+     * Edits a followup message for an Interaction. Functions the same as Edit Webhook Message.
+     *
+     * @param  integer $applicationID
+     * @param  string $interactionToken
+     * @param  integer $messageID
+     * @param  array $params
+     * @return array
+     */
+    public function editFollowupMessage($applicationID, $interactionToken, $messageID, $params)
+    {
+        $url = $this->apiUrl . '/webhooks/' . $applicationID . '/' . $interactionToken . '/messages/' . $messageID;
+        return $this->execute($url, 'PATCH', $params, 'application/json');
+    }
+
+    /**
+     * Deletes a followup message for an Interaction. Returns 204 on success.
+     *
+     * @param  integer $applicationID
+     * @param  string $interactionToken
+     * @param  integer $messageID
+     * @return array
+     */
+    public function deleteFollowupMessage($applicationID, $interactionToken, $messageID)
+    {
+        $url = $this->apiUrl . '/webhooks/' . $applicationID . '/' . $interactionToken . '/messages/' . $messageID;
+        return $this->execute($url, 'DELETE');
+    }
+
+    /**
+     * Fetches command permissions for all commands for your application in a guild. Returns an array of GuildApplicationCommandPermissions objects.
+     *
+     * @param  integer $applicationID
+     * @param  integer $guildID
+     * @return array
+     */
+    public function getGuildApplicationCommandPermissions($applicationID, $guildID)
+    {
+        $url = $this->apiUrl . '/applications/' . $applicationID . '/guilds/' . $guildID . '/commands/permissions';
+        return $this->execute($url, 'GET');
+    }
+
+    /**
+     * Fetches command permissions for a specific command for your application in a guild. Returns a GuildApplicationCommandPermissions object.
+     *
+     * @param  integer $applicationID
+     * @param  integer $guildID
+     * @param  integer $commandID
+     * @return array
+     */
+    public function getApplicationCommandPermissions($applicationID, $guildID, $commandID)
+    {
+        $url = $this->apiUrl . '/applications/' . $applicationID . '/guilds/' . $guildID . '/commands/' . $commandID . '/permissions';
+        return $this->execute($url, 'GET');
+    }
+
+    /**
+     * Edits command permissions for a specific command for your application in a guild. You can only add up to 10 permission overwrites for a command. Returns a GuildApplicationCommandPermissions object.
+     *
+     * This endpoint will overwrite existing permissions for the command in that guild
+     *
+     * Deleting or renaming a command will permanently delete all permissions for that command
+     *
+     * @param  integer $applicationID
+     * @param  integer $guildID
+     * @param  integer $commandID
+     * @param  array $permissions
+     * @return array
+     */
+    public function editApplicationCommandPermissions($applicationID, $guildID, $commandID, $permissions)
+    {
+        $url = $this->apiUrl . '/applications/' . $applicationID . '/guilds/' . $guildID . '/commands/' . $commandID . '/permissions';
+        return $this->execute($url, 'PUT', ['permissions' => $permissions], 'application/json');
+    }
+
+    /**
+     * batchEditApplicationCommandPermissions
+     *
+     * @param  integer $applicationID
+     * @param  integer $guildID
+     * @param  array $params
+     * @return array
+     */
+    public function batchEditApplicationCommandPermissions($applicationID, $guildID, $params)
+    {
+        $url = $this->apiUrl . '/applications/' . $applicationID . '/guilds/' . $guildID . '/commands/permissions';
+        return $this->execute($url, 'PUT', $params, 'application/json');
+    }
+
+    /**
+     * verify a request from discord webhook
+     *
+     * @param  string $publicKey
+     * @param  string $body
+     * @return boolean
+     */
+    public static function verifyRequest($publicKey, $body)
+    {
+        $headers = \getallheaders();
+        if (empty($headers['X-Signature-Ed25519'])) {
+            return false;
+        }
+        if (empty($headers['X-Signature-Timestamp'])) {
+            return false;
+        }
+
+        $publicKey = sodium_hex2bin($publicKey);
+        $signature = sodium_hex2bin($headers['X-Signature-Ed25519']);
+        $timestamp = $headers['X-Signature-Timestamp'];
+
+        if (!sodium_crypto_sign_verify_detached($signature, $timestamp . $body, $publicKey)) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /////////////////////////////////////
+    // Slash Commands End
+    /////////////////////////////////////
 
     /////////////////////////////////////
     // Audit Log Start
@@ -434,6 +822,19 @@ class DiscordApi
     }
 
     /**
+     * Follow a News Channel to send messages to a target channel. Requires the MANAGE_WEBHOOKS permission in the target channel. Returns a followed channel object.
+     *
+     * @param  integer $channelID
+     * @param  integer $webhookChannelID
+     * @return array
+     */
+    public function followNewsChannel($channelID, $webhookChannelID)
+    {
+        $url = $this->apiUrl . '/channels/' . $channelID . '/followers';
+        return $this->execute($url, 'POST', ['webhook_channel_id' => $webhookChannelID], 'application/json');
+    }
+
+    /**
      * Post a typing indicator for the specified channel.
      * Generally bots should not implement this route.
      * However, if a bot is responding to a command and expects the computation to take a few seconds, this endpoint may be called to let the user know that the bot is processing their message.
@@ -470,7 +871,7 @@ class DiscordApi
      * @param   integer $messageID  ID der Nachricht
      * @return  array
      */
-    public function addPinnedChannelMessage($channelID, $messageID)
+    public function pinMessage($channelID, $messageID)
     {
         $url = $this->apiUrl . '/channels/' . $channelID . '/pins/' . $messageID;
         return $this->execute($url, 'PUT');
@@ -485,7 +886,7 @@ class DiscordApi
      * @param   integer $messageID  ID der Nachricht
      * @return  array
      */
-    public function deletePinnedChannelMessage($channelID, $messageID)
+    public function unpinMessage($channelID, $messageID)
     {
         $url = $this->apiUrl . '/channels/' . $channelID . '/pins/' . $messageID;
         return $this->execute($url, 'DELETE');
@@ -516,6 +917,169 @@ class DiscordApi
     {
         $url = $this->apiUrl . '/channels/' . $channelID . '/recipients/' . $userID;
         return $this->execute($url, 'DELETE');
+    }
+
+    /**
+     * Creates a new thread from an existing message. Returns a channel on success, and a 400 BAD REQUEST on invalid parameters. Fires a Thread Create Gateway event.
+     *
+     * When called on a GUILD_TEXT channel, creates a GUILD_PUBLIC_THREAD. When called on a GUILD_NEWS channel, creates a GUILD_NEWS_THREAD. The id of the created thread will be the same as the id of the message, and as such a message can only have a single thread created from it.
+     *
+     * @param  integer $channelID
+     * @param  integer $messageID
+     * @param  array $params
+     * @return array
+     */
+    public function startThreadWithMessage($channelID, $messageID, $params)
+    {
+        $url = $this->apiUrl . '/channels/' . $channelID . '/messages/' . $messageID . '/threads';
+        return $this->execute($url, 'POST', $params, 'application/json');
+    }
+
+    /**
+     * Creates a new thread that is not connected to an existing message. The created thread defaults to a GUILD_PRIVATE_THREAD*. Returns a channel on success, and a 400 BAD REQUEST on invalid parameters. Fires a Thread Create Gateway event.
+     *
+     * Creating a private thread requires the server to be boosted. The guild features will indicate if that is possible for the guild.
+     *
+     * The 3 day and 7 day archive durations require the server to be boosted. The guild features will indicate if that is possible for the guild.
+     *
+     * type defaults to PRIVATE_THREAD in order to match the behavior when thread documentation was first published. This is a bit of a weird default though, and thus is highly likely to change in a future API version, so we would recommend always explicitly setting the type parameter.
+     *
+     * @param  integer $channelID
+     * @param  array $params
+     * @return array
+     */
+    public function startThreadWithoutMessage($channelID, $params)
+    {
+        $url = $this->apiUrl . '/channels/' . $channelID . '/threads';
+        return $this->execute($url, 'POST', $params, 'application/json');
+    }
+
+    /**
+     * Adds the current user to a thread. Also requires the thread is not archived. Returns a 204 empty response on success. Fires a Thread Members Update Gateway event.
+     *
+     * @param  integer $channelID
+     * @return array
+     */
+    public function joinThread($channelID)
+    {
+        $url = $this->apiUrl . '/channels/' . $channelID . '/thread-members/@me';
+        return $this->execute($url, 'PUT');
+    }
+
+    /**
+     * Adds another member to a thread. Requires the ability to send messages in the thread. Also requires the thread is not archived. Returns a 204 empty response on success. Fires a Thread Members Update Gateway event.
+     *
+     * @param  integer $channelID
+     * @param  integer $userID
+     * @return array
+     */
+    public function addThreadMember($channelID, $userID)
+    {
+        $url = $this->apiUrl . '/channels/' . $channelID . '/thread-members/' . $userID;
+        return $this->execute($url, 'PUT');
+    }
+
+    /**
+     * Removes the current user from a thread. Also requires the thread is not archived. Returns a 204 empty response on success. Fires a Thread Members Update Gateway event.
+     *
+     * @param  integer $channelID
+     * @return array
+     */
+    public function leaveThread($channelID)
+    {
+        $url = $this->apiUrl . '/channels/' . $channelID . '/thread-members/@me';
+        return $this->execute($url, 'DELETE');
+    }
+
+    /**
+     * Removes another member from a thread. Requires the MANAGE_THREADS permission, or the creator of the thread if it is a GUILD_PRIVATE_THREAD. Also requires the thread is not archived. Returns a 204 empty response on success. Fires a Thread Members Update Gateway event.
+     *
+     * @param  integer $channelID
+     * @param  integer $userID
+     * @return array
+     */
+    public function removeThreadMember($channelID, $userID)
+    {
+        $url = $this->apiUrl . '/channels/' . $channelID . '/thread-members/' . $userID;
+        return $this->execute($url, 'DELETE');
+    }
+
+    /**
+     * Returns array of thread members objects that are members of the thread.
+     *
+     * This endpoint is restricted according to whether the GUILD_MEMBERS Privileged Intent is enabled for your application.
+     *
+     * @param  integer $channelID
+     * @return array
+     */
+    public function listThreadMembers($channelID)
+    {
+        $url = $this->apiUrl . '/channels/' . $channelID . '/thread-members';
+        return $this->execute($url, 'GET');
+    }
+
+    /**
+     * Returns all active threads in the channel, including public and private threads. Threads are ordered by their id, in descending order.
+     *
+     * @param  integer $channelID
+     * @param  array $params
+     * @return array
+     */
+    public function listActiveThreads($channelID, $params = [])
+    {
+        $url = $this->apiUrl . '/channels/' . $channelID . '/threads/active';
+        if (!empty($params)) {
+            $url .= '?' . http_build_query($params, '', '&');
+        }
+        return $this->execute($url, 'GET');
+    }
+
+    /**
+     * Returns archived threads in the channel that are public. When called on a GUILD_TEXT channel, returns threads of type GUILD_PUBLIC_THREAD. When called on a GUILD_NEWS channel returns threads of type GUILD_NEWS_THREAD. Threads are ordered by archive_timestamp, in descending order. Requires the READ_MESSAGE_HISTORY permission.
+     *
+     * @param  integer $channelID
+     * @param  array $params
+     * @return array
+     */
+    public function listPublicArchivedThreads($channelID, $params = [])
+    {
+        $url = $this->apiUrl . '/channels/' . $channelID . '/threads/archived/public';
+        if (!empty($params)) {
+            $url .= '?' . http_build_query($params, '', '&');
+        }
+        return $this->execute($url, 'GET');
+    }
+
+    /**
+     * Returns archived threads in the channel that are of type GUILD_PRIVATE_THREAD. Threads are ordered by archive_timestamp, in descending order. Requires both the READ_MESSAGE_HISTORY and MANAGE_THREADS permissions.
+     *
+     * @param  integer $channelID
+     * @param  array $params
+     * @return array
+     */
+    public function listPrivateArchivedThreads($channelID, $params = [])
+    {
+        $url = $this->apiUrl . '/channels/' . $channelID . '/threads/archived/private';
+        if (!empty($params)) {
+            $url .= '?' . http_build_query($params, '', '&');
+        }
+        return $this->execute($url, 'GET');
+    }
+
+    /**
+     * Returns archived threads in the channel that are of type GUILD_PRIVATE_THREAD, and the user has joined. Threads are ordered by their id, in descending order. Requires the READ_MESSAGE_HISTORY permission.
+     *
+     * @param  integer $channelID
+     * @param  array $params
+     * @return array
+     */
+    public function listJoinedPrivateArchivedThreads($channelID, $params = [])
+    {
+        $url = $this->apiUrl . '/channels/' . $channelID . '/users/@me/threads/archived/private';
+        if (!empty($params)) {
+            $url .= '?' . http_build_query($params, '', '&');
+        }
+        return $this->execute($url, 'GET');
     }
 
     /////////////////////////////////////
@@ -1091,49 +1655,44 @@ class DiscordApi
      * @param   integer $integrationID  ID der Integration
      * @return  array
      */
-    public function deleteIntegration($integrationID)
+    public function deleteGuildIntegration($integrationID)
     {
         $url = $this->apiUrl . '/guilds/' . $this->guildID . '/integrations/' . $integrationID;
         return $this->execute($url, 'DELETE');
     }
 
     /**
-     * Sync an integration. Requires the MANAGE_GUILD permission.
-     * Returns a 204 empty response on success.
+     * Returns a guild widget object. Requires the MANAGE_GUILD permission.
      *
-     * @param   integer $integrationID  ID der Integration
-     * @return  array
+     * @return array
      */
-    public function syncGuildIntegration($integrationID)
+    public function getGuildWidgetSettings()
     {
-        $url = $this->apiUrl . '/guilds/' . $this->guildID . '/integrations/' . $integrationID . '/sync';
-        return $this->execute($url, 'POST');
+        $url = $this->apiUrl . '/guilds/' . $this->guildID . '/widget';
+        return $this->execute($url, 'GET');
     }
 
     /**
-     * Returns the guild embed object. Requires the MANAGE_GUILD permission.
+     * Modify a guild widget object for the guild. All attributes may be passed in with JSON and modified. Requires the MANAGE_GUILD permission. Returns the updated guild widget object.
      *
-     * @return  array
+     * @param  array $params
+     * @return array
      */
-    public function getGuildEmbed()
+    public function modifyGuildWidget($params)
     {
-        $url = $this->apiUrl . '/guilds/' . $this->guildID . '/embed';
-        return $this->execute($url);
-    }
-
-    /**
-     * Modify a guild embed object for the guild.
-     * All attributes may be passed in with JSON and modified.
-     * Requires the MANAGE_GUILD permission.
-     * Returns the updated guild embed object.
-     *
-     * @param   array   $params Parameter?
-     * @return  array
-     */
-    public function modifyGuildEmbed($params = [])
-    {
-        $url = $this->apiUrl . '/guilds/' . $this->guildID . '/embed';
+        $url = $this->apiUrl . '/guilds/' . $this->guildID . '/widget';
         return $this->execute($url, 'PATCH', $params, 'application/json');
+    }
+
+    /**
+     * Returns the widget for the guild.
+     *
+     * @return array
+     */
+    public function getGuildWidget()
+    {
+        $url = $this->apiUrl . '/guilds/' . $this->guildID . '/widget.json';
+        return $this->execute($url, 'GET');
     }
 
     /**
@@ -1163,8 +1722,153 @@ class DiscordApi
         return $this->execute($url);
     }
 
+    /**
+     * Returns the Welcome Screen object for the guild.
+     *
+     * @return array
+     */
+    public function getGuildWelcomeScreen()
+    {
+        $url = $this->apiUrl . '/guilds/' . $this->guildID . '/welcome-screen';
+        return $this->execute($url, 'GET');
+    }
+
+    /**
+     * Modify the guild's Welcome Screen. Requires the MANAGE_GUILD permission. Returns the updated Welcome Screen object.
+     *
+     * All parameters to this endpoint are optional and nullable
+     *
+     * @param  array $params
+     * @return array
+     */
+    public function modifyGuildWelcomeScreen($params)
+    {
+        $url = $this->apiUrl . '/guilds/' . $this->guildID . '/welcome-screen';
+        return $this->execute($url, 'PATCH', $params, 'application/json');
+    }
+
+    /**
+     * Updates the current user's voice state.
+     *
+     * @param  array $params
+     * @return array
+     */
+    public function modifyCurrentUserVoiceState($params)
+    {
+        $url = $this->apiUrl . '/guilds/' . $this->guildID . '/voice-states/@me';
+        return $this->execute($url, 'PATCH', $params, 'application/json');
+    }
+
+    /**
+     * Updates another user's voice state.
+     *
+     * @param  integer $userID
+     * @param  array $params
+     * @return array
+     */
+    public function modifyUserVoiceState($userID, $params)
+    {
+        $url = $this->apiUrl . '/guilds/' . $this->guildID . '/voice-states/' . $userID;
+        return $this->execute($url, 'PATCH', $params, 'application/json');
+    }
+
     /////////////////////////////////////
     // Guild End
+    /////////////////////////////////////
+
+    /////////////////////////////////////
+    // Guild Template Start
+    /////////////////////////////////////
+
+    /**
+     * Returns a guild template object for the given code.
+     *
+     * @param  string $templateCode
+     * @return array
+     */
+    public function getGuildTemplate($templateCode)
+    {
+        $url = $this->apiUrl . '/uilds/templates/' . $templateCode;
+        return $this->execute($url, 'GET');
+    }
+
+    /**
+     * Create a new guild based on a template. Returns a guild object on success. Fires a Guild Create Gateway event.
+     *
+     * This endpoint can be used only by bots in less than 10 guilds.
+     *
+     * @param  string $templateCode
+     * @param  array $params
+     * @return array
+     */
+    public function createGuildFromGuildTemplate($templateCode, $params)
+    {
+        $url = $this->apiUrl . '/uilds/templates/' . $templateCode;
+        return $this->execute($url, 'POST', $params, 'application/json');
+    }
+
+    /**
+     * Returns an array of guild template objects. Requires the MANAGE_GUILD permission.
+     *
+     * @array void
+     */
+    public function getGuildTemplates()
+    {
+        $url = $this->apiUrl . '/guilds/' . $this->guildID . '/templates';
+        return $this->execute($url, 'GET');
+    }
+
+    /**
+     * Creates a template for the guild. Requires the MANAGE_GUILD permission. Returns the created guild template object on success.
+     *
+     * @param  array $params
+     * @return array
+     */
+    public function createGuildTemplate($params)
+    {
+        $url = $this->apiUrl . '/guilds/' . $this->guildID . '/templates';
+        return $this->execute($url, 'POST', $params, 'application/json');
+    }
+
+    /**
+     * Syncs the template to the guild's current state. Requires the MANAGE_GUILD permission. Returns the guild template object on success.
+     *
+     * @param  string $templateCode
+     * @return array
+     */
+    public function syncGuildTemplate($templateCode)
+    {
+        $url = $this->apiUrl . '/guilds/' . $this->guildID . '/templates/' . $templateCode;
+        return $this->execute($url, 'PUT');
+    }
+
+    /**
+     * Modifies the template's metadata. Requires the MANAGE_GUILD permission. Returns the guild template object on success.
+     *
+     * @param  string $templateCode
+     * @param  array $params
+     * @return array
+     */
+    public function modifyGuildTemplate($templateCode, $params)
+    {
+        $url = $this->apiUrl . '/guilds/' . $this->guildID . '/templates/' . $templateCode;
+        return $this->execute($url, 'PATCH', $params, 'application/json');
+    }
+
+    /**
+     * Deletes the template. Requires the MANAGE_GUILD permission. Returns the deleted guild template object on success.
+     *
+     * @param  string $templateCode
+     * @return array
+     */
+    public function deleteGuildTemplate($templateCode)
+    {
+        $url = $this->apiUrl . '/guilds/' . $this->guildID . '/templates/' . $templateCode;
+        return $this->execute($url, 'DELETE');
+    }
+
+    /////////////////////////////////////
+    // Guild Template End
     /////////////////////////////////////
 
     /////////////////////////////////////
@@ -1203,6 +1907,69 @@ class DiscordApi
 
     /////////////////////////////////////
     // Invite End
+    /////////////////////////////////////
+
+    /////////////////////////////////////
+    // Stage Instance Start
+    /////////////////////////////////////
+
+    /**
+     * Creates a new Stage instance associated to a Stage channel.
+     *
+     * Requires the user to be a moderator of the Stage channel.
+     *
+     * @param  array $params
+     * @return array
+     */
+    public function createStageInstance($params)
+    {
+        $url = $this->apiUrl . '/stage-instances';
+        return $this->execute($url, 'POST', $params, 'application/json');
+    }
+
+    /**
+     * Gets the stage instance associated with the Stage channel, if it exists.
+     *
+     * @param  integer $channelID
+     * @return array
+     */
+    public function getStageInstance($channelID)
+    {
+        $url = $this->apiUrl . '/stage-instances/' . $channelID;
+        return $this->execute($url, 'GET');
+    }
+
+    /**
+     * Updates fields of an existing Stage instance.
+     *
+     * Requires the user to be a moderator of the Stage channel.
+     *
+     * @param  integer $channelID
+     * @param  array $params
+     * @return array
+     */
+    public function modifyStageInstance($channelID, $params)
+    {
+        $url = $this->apiUrl . '/stage-instances/' . $channelID;
+        return $this->execute($url, 'PATCH', $params, 'application/json');
+    }
+
+    /**
+     * Deletes the Stage instance.
+     *
+     * Requires the user to be a moderator of the Stage channel.
+     *
+     * @param  integer $channelID
+     * @return array
+     */
+    public function deleteStageInstance($channelID)
+    {
+        $url = $this->apiUrl . '/stage-instances/' . $channelID;
+        return $this->execute($url, 'DELETE');
+    }
+
+    /////////////////////////////////////
+    // Stage Instance End
     /////////////////////////////////////
 
     /////////////////////////////////////
@@ -1756,29 +2523,32 @@ class DiscordApi
      */
     protected function execute($url, $method = 'GET', $parameters = [], $contentType = 'application/x-www-form-urlencoded')
     {
-        $options = [
-            'method' => $method,
-            'timeout' => 2
-        ];
-        if ($contentType == 'application/json') {
-            $parameters = JSON::encode($parameters);
-        }
-        $request = new HTTPRequest($url, $options, $parameters);
-        $request->addHeader('authorization', $this->botType . ' ' . $this->botToken);
+        $reply = [];
 
+        $headers = [
+            'Authorization' => $this->botType . ' ' . $this->botToken,
+            'Content-Type' => $contentType
+        ];
         if ($method !== 'GET') {
             if (empty($parameters)) {
-                $request->addHeader('content-length', '0');
+                $headers['Content-Length'] = 0;
             }
-            $request->addHeader('content-type', $contentType);
         }
 
-        $reply = [];
+        if ($contentType == 'application/x-www-form-urlencoded') {
+            $parameters = \http_build_query($parameters, "", '&');
+        } else if ($contentType == 'application/json') {
+            $parameters = JSON::encode($parameters);
+        }
+
+        $client = HttpFactory::getDefaultClient();
+        $request = new Request($method, $url, $headers, $parameters);
+
         try {
-            $request->execute();
-            $reply = $this->parseReply($request->getReply());
-        } catch (HTTPNotFoundException $e) {
-            $reply = $this->parseReply($request->getReply());
+            $response = $client->send($request, ['timeout' => 2]);
+            $reply = $this->parseReply($response);
+        } catch (ClientException $e) {
+            $reply = $this->parseReply($e->getResponse());
             $reply['error'] = [
                 'message' => $e->getMessage(),
                 'status' => $e->getCode(),
@@ -1790,57 +2560,22 @@ class DiscordApi
                 'botToken' => $this->botToken,
                 'botType' => $this->botType
             ];
-        } catch (HTTPServerErrorException $e) {
-            $reply = $this->parseReply($request->getReply());
-            $reply['error'] = [
-                'message' => $e->getMessage(),
-                'status' => $e->getCode(),
-                'url' => $url,
-                'method' => $method,
-                'parameters' => $parameters,
-                'contentType' => $contentType,
-                'guildID' => $this->guildID,
-                'botToken' => $this->botToken,
-                'botType' => $this->botType
-            ];
-        } catch (HTTPUnauthorizedException $e) {
-            $reply = $this->parseReply($request->getReply());
-            $reply['error'] = [
-                'message' => $e->getMessage(),
-                'status' => $e->getCode(),
-                'url' => $url,
-                'method' => $method,
-                'parameters' => $parameters,
-                'contentType' => $contentType,
-                'guildID' => $this->guildID,
-                'botToken' => $this->botToken,
-                'botType' => $this->botType
-            ];
-        } catch (SystemException $e) {
-            $reply = $this->parseReply($request->getReply());
-            $reply['error'] = [
-                'message' => $e->getMessage(),
-                'status' => $e->getCode(),
-                'url' => $url,
-                'method' => $method,
-                'parameters' => $parameters,
-                'contentType' => $contentType,
-                'guildID' => $this->guildID,
-                'botToken' => $this->botToken,
-                'botType' => $this->botType
-            ];
-        } catch (HTTPException $e) {
-            $reply = $this->parseReply($request->getReply());
-            $reply['error'] = [
-                'message' => $e->getMessage(),
-                'status' => $e->getCode(),
-                'url' => $url,
-                'method' => $method,
-                'parameters' => $parameters,
-                'contentType' => $contentType,
-                'guildID' => $this->guildID,
-                'botToken' => $this->botToken,
-                'botType' => $this->botType
+        } catch (\Exception $e) {
+            $reply = [
+                'error' => [
+                    'message' => $e->getMessage(),
+                    'status' => $e->getCode(),
+                    'url' => $url,
+                    'method' => $method,
+                    'parameters' => $parameters,
+                    'contentType' => $contentType,
+                    'guildID' => $this->guildID,
+                    'botToken' => $this->botToken,
+                    'botType' => $this->botType
+                ],
+                'status' => 0,
+                'body' => $e->getMessage(),
+                'rateLimit' => 'false'
             ];
         }
 
@@ -1853,27 +2588,27 @@ class DiscordApi
      * @param   array   $replyTmp   die Antwort von der API
      * @return  array
      */
-    protected function parseReply($replyTmp)
+    protected function parseReply($response)
     {
-        $body = $replyTmp['body'];
+        $body = (string)$response->getBody();
         try {
             $body = JSON::decode($body, true);
         } catch (SystemException $e) {
         }
         $reply = [
             'error' => false,
-            'status' => $replyTmp['statusCode'],
+            'status' => $response->getStatusCode(),
             'body' => $body,
             'rateLimit' => false
         ];
-        if (isset($replyTmp['httpHeaders']['x-ratelimit-limit'][0])) {
-            $reply['rateLimit']['limit'] = $replyTmp['httpHeaders']['x-ratelimit-limit'][0];
+        if ($response->hasHeader('x-ratelimit-limit')) {
+            $reply['rateLimit']['limit'] = $response->getHeader('x-ratelimit-limit');
         }
-        if (isset($replyTmp['httpHeaders']['x-ratelimit-remaining'][0])) {
-            $reply['rateLimit']['remaining'] = $replyTmp['httpHeaders']['x-ratelimit-remaining'][0];
+        if ($response->hasHeader('x-ratelimit-remaining')) {
+            $reply['rateLimit']['remaining'] = $response->getHeader('x-ratelimit-remaining');
         }
-        if (isset($replyTmp['httpHeaders']['x-ratelimit-reset'][0])) {
-            $reply['rateLimit']['reset'] = $replyTmp['httpHeaders']['x-ratelimit-reset'][0];
+        if ($response->hasHeader('x-ratelimit-reset')) {
+            $reply['rateLimit']['reset'] = $response->getHeader('x-ratelimit-reset');
         }
         return $reply;
     }
