@@ -67,7 +67,12 @@ abstract class AbstractDiscordInteractionAction extends AbstractAction implement
 
         $this->executed();
     }
-
+    
+    /**
+     * sendet pong zurück an Discord
+     *
+     * @return void
+     */
     private function sendPong()
     {
         echo JSON::encode([
