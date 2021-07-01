@@ -49,7 +49,9 @@
 		<!-- language -->
         <instruction type="language"/>
 
+        <!-- config -->
+        <instruction type="script">acp/update_dev.hanashi.wsc.discord-api_2.0.0.php</instruction>
+
         <!-- TODO: Beim Update alte Bilddateien umbenennen -->
-        <!-- TODO: publicKey als neue Spalte hinzufügen -->
 	</instructions>
 </package>
