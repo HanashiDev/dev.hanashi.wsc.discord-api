@@ -2558,11 +2558,10 @@ class DiscordApi
             $parameters = JSON::encode($parameters);
         }
 
-        $client = $this->getHttpClient();
         $request = new Request($method, $url, $headers, $parameters);
 
         try {
-            $response = $client->send($request);
+            $response = $this->getHttpClient()->send($request);
             $reply = $this->parseReply($response);
         } catch (ClientException $e) {
             $reply = $this->parseReply($e->getResponse());
