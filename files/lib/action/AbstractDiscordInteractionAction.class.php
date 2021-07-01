@@ -41,21 +41,18 @@ abstract class AbstractDiscordInteractionAction extends AbstractAction implement
             }
 
             switch ($data['type']) {
-                case DiscordApi::DISCORD_PING: {
+                case DiscordApi::DISCORD_PING:
                     $this->sendPong();
                     break;
-                }
-                case DiscordApi::DISCORD_APPLICATION_COMMAND: {
+                case DiscordApi::DISCORD_APPLICATION_COMMAND:
                     $this->handleApplicationCommand($data);
                     break;
-                }
-                case DiscordApi::DISCORD_MESSAGE_COMPONENT: {
+                case DiscordApi::DISCORD_MESSAGE_COMPONENT:
                     $this->handleMessageCommand($data);
                     break;
-                }
-                default: {
+                default:
                     throw new \BadMethodCallException('unknown component');
-                }
+                    break;
             }
         } catch (\BadMethodCallException $e) {
             @header('HTTP/1.1 400 Bad Request');
@@ -71,7 +68,8 @@ abstract class AbstractDiscordInteractionAction extends AbstractAction implement
         $this->executed();
     }
 
-    private function sendPong() {
+    private function sendPong()
+    {
         echo JSON::encode([
             'type' => DiscordApi::DISCORD_PONG
         ]);

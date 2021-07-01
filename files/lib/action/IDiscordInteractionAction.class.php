@@ -10,7 +10,7 @@ interface IDiscordInteractionAction
      * @return string
      */
     public function getPublicKey();
-    
+
     /**
      * verarbeitet die von Discord gesendeten Daten für Slash Commands
      *
@@ -18,7 +18,7 @@ interface IDiscordInteractionAction
      * @return void
      */
     public function handleApplicationCommand(array $data);
-    
+
     /**
      * verarbeitet die von Discord gesendeten Daten für Components
      *
