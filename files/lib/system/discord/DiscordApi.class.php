@@ -19,6 +19,44 @@ use wcf\util\JSON;
  */
 class DiscordApi
 {
+    // ApplicationCommandOptionType https://discord.com/developers/docs/interactions/slash-commands#application-command-object-application-command-option-type
+    const DISCORD_SUB_COMMAND = 1;
+    const DISCORD_SUB_COMMAND_GROUP = 2;
+    const DISCORD_STRING = 3;
+    const DISCORD_INTEGER = 4;
+    const DISCORD_BOOLEAN = 5;
+    const DISCORD_USER = 6;
+    const DISCORD_CHANNEL = 7;
+    const DISCORD_ROLE = 8;
+    const DISCORD_MENTIONABLE = 9;
+
+    // InteractionType https://discord.com/developers/docs/interactions/slash-commands#interaction-object-interaction-request-type
+    const DISCORD_PING = 1;
+    const DISCORD_APPLICATION_COMMAND = 2;
+    const DISCORD_MESSAGE_COMPONENT = 3;
+
+    // InteractionCallbackType https://discord.com/developers/docs/interactions/slash-commands#interaction-response-object-interaction-callback-type
+    /**
+     * ACK a Ping
+     */
+    const DISCORD_PONG = 1;
+    /**
+     * respond to an interaction with a message
+     */
+    const DISCORD_CHANNEL_MESSAGE_WITH_SOURCE = 4;
+    /**
+     * ACK an interaction and edit a response later, the user sees a loading state
+     */
+    const DISCORD_DEFERRED_CHANNEL_MESSAGE_WITH_SOURCE = 5;
+    /**
+     * for components, ACK an interaction and edit the original message later; the user does not see a loading state
+     */
+    const DISCORD_DEFERRED_UPDATE_MESSAGE = 6;
+    /**
+     * for components, edit the message the component was attached to
+     */
+    const DISCORD_UPDATE_MESSAGE = 7;
+
     /**
      * URL zur Discord-API
      *
@@ -421,7 +459,7 @@ class DiscordApi
      * @param  string $body
      * @return boolean
      */
-    public function verifyRequest($publicKey, $body)
+    public static function verifyRequest($publicKey, $body)
     {
         $headers = \getallheaders();
         if (empty($headers['X-Signature-Ed25519'])) {
