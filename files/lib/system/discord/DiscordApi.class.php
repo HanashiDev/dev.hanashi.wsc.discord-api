@@ -3,7 +3,8 @@
 namespace wcf\system\discord;
 
 use GuzzleHttp\ClientInterface;
-use GuzzleHttp\Exception\ClientException;
+use GuzzleHttp\Exception\GuzzleException;
+use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\RequestOptions;
 use wcf\data\discord\bot\DiscordBot;
@@ -2563,7 +2564,10 @@ class DiscordApi
         try {
             $response = $this->getHttpClient()->send($request);
             $reply = $this->parseReply($response);
-        } catch (ClientException $e) {
+        } catch (RequestException $e) {
+            if (\ENABLE_DEBUG_MODE) {
+                \wcf\functions\exception\logThrowable($e);
+            }
             $reply = $this->parseReply($e->getResponse());
             $reply['error'] = [
                 'message' => $e->getMessage(),
@@ -2576,7 +2580,10 @@ class DiscordApi
                 'botToken' => $this->botToken,
                 'botType' => $this->botType
             ];
-        } catch (\Exception $e) {
+        } catch (GuzzleException $e) {
+            if (\ENABLE_DEBUG_MODE) {
+                \wcf\functions\exception\logThrowable($e);
+            }
             $reply = [
                 'error' => [
                     'message' => $e->getMessage(),
