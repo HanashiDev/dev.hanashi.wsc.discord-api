@@ -56,7 +56,7 @@ export class DiscordGateway {
                 break;
             }
             case 11: {
-
+                this.sendHeartbeat();
                 break;
             }
             default: {
