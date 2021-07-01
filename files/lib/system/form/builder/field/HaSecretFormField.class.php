@@ -2,12 +2,13 @@
 
 namespace wcf\system\form\builder\field;
 
+use wcf\data\IStorableObject;
 use wcf\system\form\builder\field\validation\FormFieldValidationError;
 
 /**
- * Backport für WSC 5.2 und 5.3
+ * Backport für WSC 5.3
  */
-class HaPasswordFormField extends AbstractFormField implements
+class HaSecretFormField extends AbstractFormField implements
     IAutoFocusFormField,
     IImmutableFormField,
     IMaximumLengthFormField,
@@ -29,7 +30,7 @@ class HaPasswordFormField extends AbstractFormField implements
     /**
      * @inheritDoc
      */
-    protected $templateName = '__haPasswordFormField';
+    protected $templateName = '__haSecretFormField';
 
     /**
      * @inheritDoc
@@ -70,12 +71,20 @@ class HaPasswordFormField extends AbstractFormField implements
 
         parent::validate();
     }
+    
+    /**
+     * @inheritDoc
+     */
+    public function updatedObject(array $data, IStorableObject $object, $loadValues = true) {
+        // Daten sollen nicht geladen werden, weil geheim
+		return $this;
+	}
 
     /**
      * @inheritDoc
      */
     protected static function getDefaultId()
     {
-        return 'password';
+        return 'haSecret';
     }
 }

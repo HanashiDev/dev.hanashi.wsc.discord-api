@@ -49,6 +49,13 @@ class DiscordBotAction extends AbstractDatabaseObjectAction
      */
     public function update()
     {
+        if (isset($this->parameters['data']['botToken']) && empty($this->parameters['data']['botToken'])) {
+            unset($this->parameters['data']['botToken']);
+        }
+        if (isset($this->parameters['data']['clientSecret']) && empty($this->parameters['data']['clientSecret'])) {
+            unset($this->parameters['data']['clientSecret']);
+        }
+
         parent::update();
 
         foreach ($this->getObjects() as $object) {

@@ -6,7 +6,7 @@ use wcf\data\discord\bot\DiscordBotAction;
 use wcf\form\AbstractFormBuilderForm;
 use wcf\system\discord\DiscordApi;
 use wcf\system\form\builder\container\FormContainer;
-use wcf\system\form\builder\field\HaPasswordFormField;
+use wcf\system\form\builder\field\HaSecretFormField;
 use wcf\system\form\builder\field\IntegerFormField;
 use wcf\system\form\builder\field\TextFormField;
 use wcf\system\form\builder\field\UploadFormField;
@@ -60,16 +60,23 @@ class DiscordBotAddForm extends AbstractFormBuilderForm
                         ->description('wcf.acp.discordBotAdd.botName.description')
                         ->required()
                         ->maximumLength(50),
-                    HaPasswordFormField::create('botToken')
+                    HaSecretFormField::create('botToken')
                         ->label('wcf.acp.discordBotAdd.botToken')
-                        ->required(),
+                        ->required(($this->formAction == 'create'))
+                        ->placeholder(($this->formAction == 'edit') ? 'wcf.acp.updateServer.loginPassword.noChange' : ''),
                     IntegerFormField::create('guildID')
                         ->label('wcf.acp.discordBotAdd.guildID')
                         ->description('wcf.acp.discordBotAdd.guildID.description')
                         ->required()
                         ->addValidator(new FormFieldValidator('guildIDCheck', function (IntegerFormField $formField) {
                             $requestData = $this->form->getRequestData();
-                            $discord = new DiscordApi($formField->getValue(), $requestData['botToken']);
+                            $botToken = $requestData['botToken'];
+
+                            if ($this->formAction == 'edit' && empty($botToken)) {
+                                $botToken = $this->formObject->botToken;
+                            }
+
+                            $discord = new DiscordApi($formField->getValue(), $botToken);
                             $guild = $discord->getGuild();
                             if ($guild['status'] == 0) {
                                 $formField->addValidationError(new FormFieldValidationError(
@@ -114,8 +121,9 @@ class DiscordBotAddForm extends AbstractFormBuilderForm
                     IntegerFormField::create('clientID')
                         ->label('wcf.acp.discordBotAdd.clientID')
                         ->description('wcf.acp.discordBotAdd.clientID.description'),
-                    HaPasswordFormField::create('clientSecret')
-                        ->label('wcf.acp.discordBotAdd.clientSecret'),
+                    HaSecretFormField::create('clientSecret')
+                        ->label('wcf.acp.discordBotAdd.clientSecret')
+                        ->placeholder(($this->formAction == 'edit') ? 'wcf.acp.updateServer.loginPassword.noChange' : ''),
                 ]),
             FormContainer::create('interaction')
                 ->label('wcf.acp.discordBotAdd.interaction')
