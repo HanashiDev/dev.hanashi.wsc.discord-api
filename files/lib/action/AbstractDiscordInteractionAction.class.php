@@ -67,7 +67,7 @@ abstract class AbstractDiscordInteractionAction extends AbstractAction implement
 
         $this->executed();
     }
-    
+
     /**
      * sendet pong zurück an Discord
      *
