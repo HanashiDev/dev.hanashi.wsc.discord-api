@@ -71,14 +71,15 @@ class HaSecretFormField extends AbstractFormField implements
 
         parent::validate();
     }
-    
+
     /**
      * @inheritDoc
      */
-    public function updatedObject(array $data, IStorableObject $object, $loadValues = true) {
+    public function updatedObject(array $data, IStorableObject $object, $loadValues = true)
+    {
         // Daten sollen nicht geladen werden, weil geheim
-		return $this;
-	}
+        return $this;
+    }
 
     /**
      * @inheritDoc
