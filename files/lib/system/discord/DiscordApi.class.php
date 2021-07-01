@@ -468,16 +468,16 @@ class DiscordApi
      */
     public static function verifyRequest($publicKey, $body)
     {
-        if (empty($_SERVER['X-SIGNATURE-ED25519'])) {
+        if (empty($_SERVER['HTTP_X_SIGNATURE_ED25519'])) {
             return false;
         }
-        if (empty($_SERVER['X-SIGNATURE-TIMESTAMP'])) {
+        if (empty($_SERVER['HTTP_X_SIGNATURE_TIMESTAMP'])) {
             return false;
         }
 
         $publicKey = sodium_hex2bin($publicKey);
-        $signature = sodium_hex2bin($_SERVER['X-SIGNATURE-ED25519']);
-        $timestamp = $_SERVER['X-SIGNATURE-TIMESTAMP'];
+        $signature = sodium_hex2bin($_SERVER['HTTP_X_SIGNATURE_ED25519']);
+        $timestamp = $_SERVER['HTTP_X_SIGNATURE_TIMESTAMP'];
 
         if (!sodium_crypto_sign_verify_detached($signature, $timestamp . $body, $publicKey)) {
             return false;
