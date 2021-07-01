@@ -1,6 +1,6 @@
 import * as EventHandler from "WoltLabSuite/Core/Event/Handler";
 
-export default class DiscordGateway {
+export class DiscordGateway {
     private readonly token: string;
     private readonly presence: object = {};
 
@@ -14,9 +14,9 @@ export default class DiscordGateway {
         this.presence = presence;
 
         this.socket = new WebSocket('wss://gateway.discord.gg/?v=6&encoding=json');
-        this.socket.onopen = this.onopen.bind(this);
-        this.socket.onerror = this.onerror.bind(this);
-        this.socket.onmessage = this.onmessage.bind(this);
+        this.socket.addEventListener('open', () => this.onopen());
+        this.socket.addEventListener('error', (ev: Event) => this.onerror(ev));
+        this.socket.addEventListener('message', (ev: MessageEvent<any>) => this.onmessage(ev));
 
         const data = {
             token: this.token,
@@ -66,7 +66,7 @@ export default class DiscordGateway {
     }
 
     private sendHeartbeat() {
-        setTimeout(this.heartbeat.bind(this), this.heartbeatInterval);
+        setTimeout(() => this.heartbeat(), this.heartbeatInterval);
     }
 
     private heartbeat() {
@@ -89,3 +89,5 @@ export default class DiscordGateway {
         this.socket.send(JSON.stringify(sendData));
     }
 }
+
+export default DiscordGateway;

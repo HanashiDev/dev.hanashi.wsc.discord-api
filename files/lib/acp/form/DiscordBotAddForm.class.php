@@ -5,8 +5,8 @@ namespace wcf\acp\form;
 use wcf\data\discord\bot\DiscordBotAction;
 use wcf\form\AbstractFormBuilderForm;
 use wcf\system\discord\DiscordApi;
+use wcf\system\discord\SecretFormField;
 use wcf\system\form\builder\container\FormContainer;
-use wcf\system\form\builder\field\HaSecretFormField;
 use wcf\system\form\builder\field\IntegerFormField;
 use wcf\system\form\builder\field\TextFormField;
 use wcf\system\form\builder\field\UploadFormField;
@@ -60,7 +60,7 @@ class DiscordBotAddForm extends AbstractFormBuilderForm
                         ->description('wcf.acp.discordBotAdd.botName.description')
                         ->required()
                         ->maximumLength(50),
-                    HaSecretFormField::create('botToken')
+                    SecretFormField::create('botToken')
                         ->label('wcf.acp.discordBotAdd.botToken')
                         ->required(($this->formAction == 'create'))
                         ->placeholder(($this->formAction == 'edit') ? 'wcf.acp.updateServer.loginPassword.noChange' : ''),
@@ -121,7 +121,7 @@ class DiscordBotAddForm extends AbstractFormBuilderForm
                     IntegerFormField::create('clientID')
                         ->label('wcf.acp.discordBotAdd.clientID')
                         ->description('wcf.acp.discordBotAdd.clientID.description'),
-                    HaSecretFormField::create('clientSecret')
+                    SecretFormField::create('clientSecret')
                         ->label('wcf.acp.discordBotAdd.clientSecret')
                         ->placeholder(($this->formAction == 'edit') ? 'wcf.acp.updateServer.loginPassword.noChange' : ''),
                 ]),

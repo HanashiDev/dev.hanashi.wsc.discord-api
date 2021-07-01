@@ -56,13 +56,13 @@ class WebhookChannelMultiSelectDiscordType extends ChannelMultiSelectDiscordType
             $channelIDsTmp = array_column($channels, 'id');
             foreach ($channelIDs as $channelID) {
                 if (!in_array($channelID, $channelIDsTmp)) {
-                    throw new UserInputException($option->optionName);
+                    throw new UserInputException($this->optionName);
                 }
 
                 if (!in_array($channelID, $webhookChannelIDs)) {
                     $discordApi = $discordBots[$botID]->getDiscordApi();
                     $avatar = null;
-                    $avatarFile = WCF_DIR . 'images/discord_webhook/' . $botID . '.png';
+                    $avatarFile = sprintf('%simages/discord_webhook/%s.png', WCF_DIR, $botID);
                     if (file_exists($avatarFile)) {
                         $mimeType = FileUtil::getMimeType($avatarFile);
                         $avatar = 'data:' . $mimeType . ';base64,' . base64_encode(file_get_contents($avatarFile));

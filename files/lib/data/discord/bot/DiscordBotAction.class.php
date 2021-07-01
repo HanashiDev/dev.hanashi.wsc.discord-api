@@ -61,7 +61,7 @@ class DiscordBotAction extends AbstractDatabaseObjectAction
         foreach ($this->getObjects() as $object) {
             if (isset($this->parameters['webhookIcon']) && \is_array($this->parameters['webhookIcon'])) {
                 if (empty($this->parameters['webhookIcon'])) {
-                    $filename = WCF_DIR . 'images/discord_webhook/' . $object->botID . '.png';
+                    $filename = sprintf('%simages/discord_webhook/%s.png', WCF_DIR, $object->botID);
                     if (\file_exists($filename)) {
                         \unlink($filename);
                     }
@@ -80,7 +80,7 @@ class DiscordBotAction extends AbstractDatabaseObjectAction
         $returnValues = parent::delete();
 
         foreach ($this->getObjects() as $object) {
-            $filename = WCF_DIR . 'images/discord_webhook/' . $object->botID . '.png';
+            $filename = sprintf('%simages/discord_webhook/%s.png', WCF_DIR, $object->botID);
             if (\file_exists($filename)) {
                 \unlink($filename);
             }
@@ -99,7 +99,7 @@ class DiscordBotAction extends AbstractDatabaseObjectAction
     {
         $iconFile = \reset($this->parameters['webhookIcon']);
         if ($iconFile instanceof UploadFile && !$iconFile->isProcessed()) {
-            $filename = WCF_DIR . 'images/discord_webhook/' . $botID . '.png';
+            $filename = sprintf('%simages/discord_webhook/%s.png', WCF_DIR, $botID);
 
             rename($iconFile->getLocation(), $filename);
             $iconFile->setProcessed($filename);

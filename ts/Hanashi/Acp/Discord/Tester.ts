@@ -7,7 +7,7 @@ import * as Language from "WoltLabSuite/Core/Language";
 import * as UiDialog from "WoltLabSuite/Core/Ui/Dialog";
 import { DialogCallbackObject, DialogCallbackSetup } from "@woltlab/wcf/ts/WoltLabSuite/Core/Ui/Dialog/Data";
 
-export default class DiscordTester implements AjaxCallbackObject, DialogCallbackObject {
+export class DiscordTester implements AjaxCallbackObject, DialogCallbackObject {
     private connected: boolean = false;
     private template: string = '';
 
@@ -15,7 +15,7 @@ export default class DiscordTester implements AjaxCallbackObject, DialogCallback
         const jsConnectBots: HTMLCollectionOf<Element> = document.getElementsByClassName('jsConnectBot');
         
         for (const key of Object.keys(jsConnectBots)) {
-            jsConnectBots[key].onclick = this.connectBotClicked.bind(this);
+            jsConnectBots[key].addEventListener('click', (ev) => this.connectBotClicked(ev));
         }
     }
 
@@ -37,7 +37,7 @@ export default class DiscordTester implements AjaxCallbackObject, DialogCallback
         UiDialog.destroy(this);
         UiDialog.open(this);
         
-        EventHandler.add('dev.hanashi.wsc.discord.gateway', 'dispatch', this.dispatchData.bind(this));
+        EventHandler.add('dev.hanashi.wsc.discord.gateway', 'dispatch', (data) => this.dispatchData(data));
         const presence = {
             "game": {
                 "name": "Bot Test",
@@ -47,7 +47,7 @@ export default class DiscordTester implements AjaxCallbackObject, DialogCallback
             "afk": false
         };
         new DiscordGateway(botToken, presence);
-        setTimeout(this.connectionError.bind(this), 15 * 1000);
+        setTimeout(() => this.connectionError, 15 * 1000);
     }
 
     protected dispatchData(data: any) {
@@ -94,3 +94,5 @@ export default class DiscordTester implements AjaxCallbackObject, DialogCallback
         };
     }
 }
+
+export default DiscordTester;

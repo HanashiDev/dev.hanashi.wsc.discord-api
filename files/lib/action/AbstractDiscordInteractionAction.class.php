@@ -3,7 +3,6 @@
 namespace wcf\action;
 
 use wcf\system\discord\DiscordApi;
-use wcf\system\exception\SystemException;
 use wcf\util\JSON;
 
 abstract class AbstractDiscordInteractionAction extends AbstractAction implements IDiscordInteractionAction
@@ -23,7 +22,7 @@ abstract class AbstractDiscordInteractionAction extends AbstractAction implement
             $data = [];
             try {
                 $data = JSON::decode($body, true);
-            } catch (SystemException $e) {
+            } catch (\Exception $e) {
                 throw new \BadMethodCallException('body is not valid json');
             }
 

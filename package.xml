@@ -50,6 +50,7 @@
         <instruction type="language"/>
 
         <!-- config -->
-        <instruction type="script">acp/update_dev.hanashi.wsc.discord-api_2.0.0.php</instruction>
+        <instruction type="script">acp/update_dev.hanashi.wsc.discord-api_2.0.0_database.php</instruction>
+        <instruction type="script">acp/update_dev.hanashi.wsc.discord-api_2.0.0_rename.php</instruction>
 	</instructions>
 </package>

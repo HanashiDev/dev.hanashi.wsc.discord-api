@@ -39,7 +39,7 @@ class DiscordBot extends DatabaseObject
     {
         $files = [];
 
-        $filename = WCF_DIR . 'images/discord_webhook/' . $this->botID . '.png';
+        $filename = sprintf('%simages/discord_webhook/%s.png', WCF_DIR, $this->botID);
         if (\file_exists($filename)) {
             $files[] = $filename;
         }

@@ -2,8 +2,10 @@
 
 namespace wcf\system\discord;
 
+use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Psr7\Request;
+use GuzzleHttp\RequestOptions;
 use wcf\data\discord\bot\DiscordBot;
 use wcf\system\exception\SystemException;
 use wcf\system\io\HttpFactory;
@@ -95,6 +97,11 @@ class DiscordApi
     protected $discordBot;
 
     /**
+     * @var ClientInterface
+     */
+    private $httpClient;
+
+    /**
      * Konstruktor
      *
      * @param   integer $guildID        Server-ID des Discord-Servers
@@ -143,7 +150,7 @@ class DiscordApi
      */
     public function getGlobalApplicationCommands($applicationID)
     {
-        $url = $this->apiUrl . '/applications/' . $applicationID . '/commands';
+        $url = sprintf('%s/applications/%s/commands', $this->apiUrl, $applicationID);
         return $this->execute($url);
     }
 
@@ -156,7 +163,7 @@ class DiscordApi
      */
     public function createGlobalApplicationCommand($applicationID, $params)
     {
-        $url = $this->apiUrl . '/applications/' . $applicationID . '/commands';
+        $url = sprintf('%s/applications/%s/commands', $this->apiUrl, $applicationID);
         return $this->execute($url, 'POST', $params, 'application/json');
     }
 
@@ -169,7 +176,7 @@ class DiscordApi
      */
     public function getGlobalApplicationCommand($applicationID, $commandID)
     {
-        $url = $this->apiUrl . '/applications/' . $applicationID . '/commands/' . $commandID;
+        $url = sprintf('%s/applications/%s/commands/%s', $this->apiUrl, $applicationID, $commandID);
         return $this->execute($url);
     }
 
@@ -183,7 +190,7 @@ class DiscordApi
      */
     public function editGlobalApplicationCommand($applicationID, $commandID, $params)
     {
-        $url = $this->apiUrl . '/applications/' . $applicationID . '/commands/' . $commandID;
+        $url = sprintf('%s/applications/%s/commands/%s', $this->apiUrl, $applicationID, $commandID);
         return $this->execute($url, 'PATCH', $params, 'application/json');
     }
 
@@ -196,7 +203,7 @@ class DiscordApi
      */
     public function deleteGlobalApplicationCommand($applicationID, $commandID)
     {
-        $url = $this->apiUrl . '/applications/' . $applicationID . '/commands/' . $commandID;
+        $url = sprintf('%s/applications/%s/commands/%s', $this->apiUrl, $applicationID, $commandID);
         return $this->execute($url, 'DELETE');
     }
 
@@ -209,7 +216,7 @@ class DiscordApi
      */
     public function getGuildApplicationCommands($applicationID, $commandID)
     {
-        $url = $this->apiUrl . '/applications/' . $applicationID . '/commands/' . $commandID;
+        $url = sprintf('%s/applications/%s/commands/%s', $this->apiUrl, $applicationID, $commandID);
         return $this->execute($url, 'GET');
     }
 
@@ -221,7 +228,7 @@ class DiscordApi
      */
     public function bulkOverwriteGlobalApplicationCommands($applicationID)
     {
-        $url = $this->apiUrl . '/applications/' . $applicationID . '/commands';
+        $url = sprintf('%s/applications/%s/commands', $this->apiUrl, $applicationID);
         return $this->execute($url, 'PUT');
     }
 
@@ -235,7 +242,7 @@ class DiscordApi
      */
     public function createGuildApplicationCommand($applicationID, $guildID, $params)
     {
-        $url = $this->apiUrl . '/applications/' . $applicationID . '/guilds/' . $guildID . '/commands';
+        $url = sprintf('%s/applications/%s/guilds/%s/commands', $this->apiUrl, $applicationID, $guildID);
         return $this->execute($url, 'POST', $params, 'application/json');
     }
 
@@ -249,7 +256,7 @@ class DiscordApi
      */
     public function getGuildApplicationCommand($applicationID, $guildID, $commandID)
     {
-        $url = $this->apiUrl . '/applications/' . $applicationID . '/guilds/' . $guildID . '/commands/' . $commandID;
+        $url = sprintf('%s/applications/%s/guilds/%s/commands/%s', $this->apiUrl, $applicationID, $guildID, $commandID);
         return $this->execute($url, 'GET');
     }
 
@@ -264,7 +271,7 @@ class DiscordApi
      */
     public function editGuildApplicationCommand($applicationID, $guildID, $commandID, $params)
     {
-        $url = $this->apiUrl . '/applications/' . $applicationID . '/guilds/' . $guildID . '/commands/' . $commandID;
+        $url = sprintf('%s/applications/%s/guilds/%s/commands/%s', $this->apiUrl, $applicationID, $guildID, $commandID);
         return $this->execute($url, 'PATCH', $params, 'application/json');
     }
 
@@ -278,7 +285,7 @@ class DiscordApi
      */
     public function deleteGuildApplicationCommand($applicationID, $guildID, $commandID)
     {
-        $url = $this->apiUrl . '/applications/' . $applicationID . '/guilds/' . $guildID . '/commands/' . $commandID;
+        $url = sprintf('%s/applications/%s/guilds/%s/commands/%s', $this->apiUrl, $applicationID, $guildID, $commandID);
         return $this->execute($url, 'DELETE');
     }
 
@@ -291,7 +298,7 @@ class DiscordApi
      */
     public function bulkOverwriteGuildApplicationCommands($applicationID, $guildID)
     {
-        $url = $this->apiUrl . '/applications/' . $applicationID . '/guilds/' . $guildID . '/commands';
+        $url = sprintf('%s/applications/%s/guilds/%s/commands', $this->apiUrl, $applicationID, $guildID);
         return $this->execute($url, 'PUT');
     }
 
@@ -305,7 +312,7 @@ class DiscordApi
      */
     public function createInteractionResponse($interactionID, $interactionToken, $params)
     {
-        $url = $this->apiUrl . '/interactions/' . $interactionID . '/' . $interactionToken . '/callback';
+        $url = sprintf('%s/interactions/%s/%s/callback', $this->apiUrl, $interactionID, $interactionToken);
         return $this->execute($url, 'POST', $params, 'application/json');
     }
 
@@ -318,7 +325,7 @@ class DiscordApi
      */
     public function getOriginalInteractionResponse($applicationID, $interactionToken)
     {
-        $url = $this->apiUrl . '/webhooks/' . $applicationID . '/' . $interactionToken . '/messages/@original';
+        $url = sprintf('%s/webhooks/%s/%s/messages/@original', $this->apiUrl, $applicationID, $interactionToken);
         return $this->execute($url, 'GET');
     }
 
@@ -332,7 +339,7 @@ class DiscordApi
      */
     public function editOriginalInteractionResponse($applicationID, $interactionToken, $params)
     {
-        $url = $this->apiUrl . '/webhooks/' . $applicationID . '/' . $interactionToken . '/messages/@original';
+        $url = sprintf('%s/webhooks/%s/%s/messages/@original', $this->apiUrl, $applicationID, $interactionToken);
         return $this->execute($url, 'PATCH', $params, 'application/json');
     }
 
@@ -345,7 +352,7 @@ class DiscordApi
      */
     public function deleteOriginalInteractionResponse($applicationID, $interactionToken)
     {
-        $url = $this->apiUrl . '/webhooks/' . $applicationID . '/' . $interactionToken . '/messages/@original';
+        $url = sprintf('%s/webhooks/%s/%s/messages/@original', $this->apiUrl, $applicationID, $interactionToken);
         return $this->execute($url, 'DELETE');
     }
 
@@ -359,7 +366,7 @@ class DiscordApi
      */
     public function createFollowupMessage($applicationID, $interactionToken, $params)
     {
-        $url = $this->apiUrl . '/webhooks/' . $applicationID . '/' . $interactionToken;
+        $url = sprintf('%s/webhooks/%s/%s', $this->apiUrl, $applicationID, $interactionToken);
         return $this->execute($url, 'POST', $params, 'application/json');
     }
 
@@ -374,7 +381,7 @@ class DiscordApi
      */
     public function editFollowupMessage($applicationID, $interactionToken, $messageID, $params)
     {
-        $url = $this->apiUrl . '/webhooks/' . $applicationID . '/' . $interactionToken . '/messages/' . $messageID;
+        $url = sprintf('%s/webhooks/%s/%s/messages/%s', $this->apiUrl, $applicationID, $interactionToken, $messageID);
         return $this->execute($url, 'PATCH', $params, 'application/json');
     }
 
@@ -388,7 +395,7 @@ class DiscordApi
      */
     public function deleteFollowupMessage($applicationID, $interactionToken, $messageID)
     {
-        $url = $this->apiUrl . '/webhooks/' . $applicationID . '/' . $interactionToken . '/messages/' . $messageID;
+        $url = sprintf('%s/webhooks/%s/%s/messages/%s', $this->apiUrl, $applicationID, $interactionToken, $messageID);
         return $this->execute($url, 'DELETE');
     }
 
@@ -401,7 +408,7 @@ class DiscordApi
      */
     public function getGuildApplicationCommandPermissions($applicationID, $guildID)
     {
-        $url = $this->apiUrl . '/applications/' . $applicationID . '/guilds/' . $guildID . '/commands/permissions';
+        $url = sprintf('%s/applications/%s/guilds/%s/commands/permissions', $this->apiUrl, $applicationID, $guildID);
         return $this->execute($url, 'GET');
     }
 
@@ -415,7 +422,7 @@ class DiscordApi
      */
     public function getApplicationCommandPermissions($applicationID, $guildID, $commandID)
     {
-        $url = $this->apiUrl . '/applications/' . $applicationID . '/guilds/' . $guildID . '/commands/' . $commandID . '/permissions';
+        $url = sprintf('%s/applications/%s/guilds/%s/commands/%s/permissions', $this->apiUrl, $applicationID, $guildID, $commandID);
         return $this->execute($url, 'GET');
     }
 
@@ -434,7 +441,7 @@ class DiscordApi
      */
     public function editApplicationCommandPermissions($applicationID, $guildID, $commandID, $permissions)
     {
-        $url = $this->apiUrl . '/applications/' . $applicationID . '/guilds/' . $guildID . '/commands/' . $commandID . '/permissions';
+        $url = sprintf('%s/applications/%s/guilds/%s/commands/%s/permissions', $this->apiUrl, $applicationID, $guildID, $commandID);
         return $this->execute($url, 'PUT', ['permissions' => $permissions], 'application/json');
     }
 
@@ -448,7 +455,7 @@ class DiscordApi
      */
     public function batchEditApplicationCommandPermissions($applicationID, $guildID, $params)
     {
-        $url = $this->apiUrl . '/applications/' . $applicationID . '/guilds/' . $guildID . '/commands/permissions';
+        $url = sprintf('%s/applications/%s/guilds/%s/commands/permissions', $this->apiUrl, $applicationID, $guildID);
         return $this->execute($url, 'PUT', $params, 'application/json');
     }
 
@@ -461,17 +468,16 @@ class DiscordApi
      */
     public static function verifyRequest($publicKey, $body)
     {
-        $headers = \getallheaders();
-        if (empty($headers['X-Signature-Ed25519'])) {
+        if (empty($_SERVER['X-SIGNATURE-ED25519'])) {
             return false;
         }
-        if (empty($headers['X-Signature-Timestamp'])) {
+        if (empty($_SERVER['X-SIGNATURE-TIMESTAMP'])) {
             return false;
         }
 
         $publicKey = sodium_hex2bin($publicKey);
-        $signature = sodium_hex2bin($headers['X-Signature-Ed25519']);
-        $timestamp = $headers['X-Signature-Timestamp'];
+        $signature = sodium_hex2bin($_SERVER['X-SIGNATURE-ED25519']);
+        $timestamp = $_SERVER['X-SIGNATURE-TIMESTAMP'];
 
         if (!sodium_crypto_sign_verify_detached($signature, $timestamp . $body, $publicKey)) {
             return false;
@@ -496,7 +502,7 @@ class DiscordApi
      */
     public function getGuildAuditLog($params = [])
     {
-        $url = $this->apiUrl . '/guilds/' . $this->guildID . '/audit-logs';
+        $url = sprintf('%s/guilds/%s/audit-logs', $this->apiUrl, $this->guildID);
         if (!empty($params)) {
             $url .= '?' . http_build_query($params, '', '&');
         }
@@ -519,7 +525,7 @@ class DiscordApi
      */
     public function getChannel($channelID)
     {
-        $url = $this->apiUrl . '/channels/' . $channelID;
+        $url = sprintf('%s/channels/%s', $this->apiUrl, $channelID);
         return $this->execute($url);
     }
 
@@ -537,7 +543,7 @@ class DiscordApi
      */
     public function modifyChannel($channelID, $params)
     {
-        $url = $this->apiUrl . '/channels/' . $channelID;
+        $url = sprintf('%s/channels/%s', $this->apiUrl, $channelID);
         return $this->execute($url, 'PATCH', $params, 'application/json');
     }
 
@@ -553,7 +559,7 @@ class DiscordApi
      */
     public function deleteChannel($channelID)
     {
-        $url = $this->apiUrl . '/channels/' . $channelID;
+        $url = sprintf('%s/channels/%s', $this->apiUrl, $channelID);
         return $this->execute($url, 'DELETE');
     }
 
@@ -578,7 +584,7 @@ class DiscordApi
      */
     public function getChannelMessages($channelID, $params = [])
     {
-        $url = $this->apiUrl . '/channels/' . $channelID . '/messages';
+        $url = sprintf('%s/channels/%s/messages', $this->apiUrl, $channelID);
         if (!empty($params)) {
             $url .= '?' . http_build_query($params, '', '&');
         }
@@ -596,7 +602,7 @@ class DiscordApi
      */
     public function getChannelMessage($channelID, $messageID)
     {
-        $url = $this->apiUrl . '/channels/' . $channelID . '/messages/' . $messageID;
+        $url = sprintf('%s/channels/%s/messages/%s', $this->apiUrl, $channelID, $messageID);
         return $this->execute($url);
     }
 
@@ -615,7 +621,7 @@ class DiscordApi
      */
     public function createMessage($channelID, $params)
     {
-        $url = $this->apiUrl . '/channels/' . $channelID . '/messages';
+        $url = sprintf('%s/channels/%s/messages', $this->apiUrl, $channelID);
         return $this->execute($url, 'POST', $params, 'application/json');
     }
 
@@ -633,7 +639,7 @@ class DiscordApi
      */
     public function createReaction($channelID, $messageID, $emoji)
     {
-        $url = $this->apiUrl . '/channels/' . $channelID . '/messages/' . $messageID . '/reactions/' . $emoji . '/@me';
+        $url = sprintf('%s/channels/%s/messages/%s/reactions/%s/@me', $this->apiUrl, $channelID, $messageID, $emoji);
         return $this->execute($url, 'PUT');
     }
 
@@ -648,7 +654,7 @@ class DiscordApi
      */
     public function deleteOwnReaction($channelID, $messageID, $emoji)
     {
-        $url = $this->apiUrl . '/channels/' . $channelID . '/messages/' . $messageID . '/reactions/' . $emoji . '/@me';
+        $url = sprintf('%s/channels/%s/messages/%s/reactions/%s/@me', $this->apiUrl, $channelID, $messageID, $emoji);
         return $this->execute($url, 'DELETE');
     }
 
@@ -665,7 +671,7 @@ class DiscordApi
      */
     public function deleteUserReaction($channelID, $messageID, $emoji, $userID)
     {
-        $url = $this->apiUrl . '/channels/' . $channelID . '/messages/' . $messageID . '/reactions/' . $emoji . '/' . $userID;
+        $url = sprintf('%s/channels/%s/messages/%s/reactions/%s/%s', $this->apiUrl, $channelID, $messageID, $emoji, $userID);
         return $this->execute($url, 'DELETE');
     }
 
@@ -681,7 +687,7 @@ class DiscordApi
      */
     public function getReactions($channelID, $messageID, $emoji, $params = [])
     {
-        $url = $this->apiUrl . '/channels/' . $channelID . '/messages/' . $messageID . '/reactions/' . $emoji;
+        $url = sprintf('%s/channels/%s/messages/%s/reactions/%s', $this->apiUrl, $channelID, $messageID, $emoji);
         if (!empty($params)) {
             $url .= '?' . http_build_query($params, '', '&');
         }
@@ -698,7 +704,7 @@ class DiscordApi
      */
     public function deleteAllReactions($channelID, $messageID)
     {
-        $url = $this->apiUrl . '/channels/' . $channelID . '/messages/' . $messageID . '/reactions';
+        $url = sprintf('%s/channels/%s/messages/%s/reactions', $this->apiUrl, $channelID, $messageID);
         return $this->execute($url, 'DELETE');
     }
 
@@ -715,7 +721,7 @@ class DiscordApi
      */
     public function editMessage($channelID, $messageID, $params)
     {
-        $url = $this->apiUrl . '/channels/' . $channelID . '/messages/' . $messageID;
+        $url = sprintf('%s/channels/%s/messages/%s', $this->apiUrl, $channelID, $messageID);
         return $this->execute($url, 'PATCH', $params, 'application/json');
     }
 
@@ -731,7 +737,7 @@ class DiscordApi
      */
     public function deleteMessage($channelID, $messageID)
     {
-        $url = $this->apiUrl . '/channels/' . $channelID . '/messages/' . $messageID;
+        $url = sprintf('%s/channels/%s/messages/%s', $this->apiUrl, $channelID, $messageID);
         return $this->execute($url, 'DELETE');
     }
 
@@ -750,7 +756,7 @@ class DiscordApi
      */
     public function bulkDeleteMessage($channelID, $messageIDs)
     {
-        $url = $this->apiUrl . '/channels/' . $channelID . '/messages/bulk-delete';
+        $url = sprintf('%s/channels/%s/messages/bulk-delete', $this->apiUrl, $channelID);
         return $this->execute($url, 'POST', ['messages' => $messageIDs], 'application/json');
     }
 
@@ -768,7 +774,7 @@ class DiscordApi
      */
     public function editChannelPermissions($channelID, $overwriteID, $params)
     {
-        $url = $this->apiURL . '/channels/' . $channelID . '/permissions/' . $overwriteID;
+        $url = sprintf('%s/channels/%s/permissions/%s', $this->apiURL, $channelID, $overwriteID);
         return $this->execute($url, 'PUT', $params, 'application/json');
     }
 
@@ -782,7 +788,7 @@ class DiscordApi
      */
     public function getChannelInvites($channelID)
     {
-        $url = $this->apiUrl . '/channels/' . $channelID . '/invites';
+        $url = sprintf('%s/channels/%s/invites', $this->apiUrl, $channelID);
         return $this->execute($url);
     }
 
@@ -800,7 +806,7 @@ class DiscordApi
      */
     public function createChannelInvite($channelID, $params = [])
     {
-        $url = $this->apiUrl . '/channels/' . $channelID . '/invites';
+        $url = sprintf('%s/channels/%s/invites', $this->apiUrl, $channelID);
         return $this->execute($url, 'POST', $params, 'application/json');
     }
 
@@ -817,7 +823,7 @@ class DiscordApi
      */
     public function deleteChannelPermission($channelID, $overwriteID)
     {
-        $url = $this->apiUrl . '/channels/' . $channelID . '/permissions/' . $overwriteID;
+        $url = sprintf('%s/channels/%s/permissions/%s', $this->apiUrl, $channelID, $overwriteID);
         return $this->execute($url, 'DELETE');
     }
 
@@ -830,7 +836,7 @@ class DiscordApi
      */
     public function followNewsChannel($channelID, $webhookChannelID)
     {
-        $url = $this->apiUrl . '/channels/' . $channelID . '/followers';
+        $url = sprintf('%s/channels/%s/followers', $this->apiUrl, $channelID);
         return $this->execute($url, 'POST', ['webhook_channel_id' => $webhookChannelID], 'application/json');
     }
 
@@ -846,7 +852,7 @@ class DiscordApi
      */
     public function triggerTypingIndicator($channelID)
     {
-        $url = $this->apiUrl . '/channels/' . $channelID . '/typing';
+        $url = sprintf('%s/channels/%s/typing', $this->apiUrl, $channelID);
         return $this->execute($url, 'POST');
     }
 
@@ -858,7 +864,7 @@ class DiscordApi
      */
     public function getPinnedMessages($channelID)
     {
-        $url = $this->apiUrl . '/channels/' . $channelID . '/pins';
+        $url = sprintf('%s/channels/%s/pins', $this->apiUrl, $channelID);
         return $this->execute($url);
     }
 
@@ -873,7 +879,7 @@ class DiscordApi
      */
     public function pinMessage($channelID, $messageID)
     {
-        $url = $this->apiUrl . '/channels/' . $channelID . '/pins/' . $messageID;
+        $url = sprintf('%s/channels/%s/pins/%s', $this->apiUrl, $channelID, $messageID);
         return $this->execute($url, 'PUT');
     }
 
@@ -888,7 +894,7 @@ class DiscordApi
      */
     public function unpinMessage($channelID, $messageID)
     {
-        $url = $this->apiUrl . '/channels/' . $channelID . '/pins/' . $messageID;
+        $url = sprintf('%s/channels/%s/pins/%s', $this->apiUrl, $channelID, $messageID);
         return $this->execute($url, 'DELETE');
     }
 
@@ -902,7 +908,7 @@ class DiscordApi
      */
     public function groupDMAddRecipient($channelID, $userID, $params = [])
     {
-        $url = $this->apiUrl . '/channels/' . $channelID . '/recipients/' . $userID;
+        $url = sprintf('%s/channels/%s/recipients/%s', $this->apiUrl, $channelID, $userID);
         return $this->execute($url, 'PUT', $params, 'application/json');
     }
 
@@ -915,7 +921,7 @@ class DiscordApi
      */
     public function groupDMRemoveRecipient($channelID, $userID)
     {
-        $url = $this->apiUrl . '/channels/' . $channelID . '/recipients/' . $userID;
+        $url = sprintf('%s/channels/%s/recipients/%s', $this->apiUrl, $channelID, $userID);
         return $this->execute($url, 'DELETE');
     }
 
@@ -931,7 +937,7 @@ class DiscordApi
      */
     public function startThreadWithMessage($channelID, $messageID, $params)
     {
-        $url = $this->apiUrl . '/channels/' . $channelID . '/messages/' . $messageID . '/threads';
+        $url = sprintf('%s/channels/%s/messages/%s/threads', $this->apiUrl, $channelID, $messageID);
         return $this->execute($url, 'POST', $params, 'application/json');
     }
 
@@ -950,7 +956,7 @@ class DiscordApi
      */
     public function startThreadWithoutMessage($channelID, $params)
     {
-        $url = $this->apiUrl . '/channels/' . $channelID . '/threads';
+        $url = sprintf('%s/channels/%s/threads', $this->apiUrl, $channelID);
         return $this->execute($url, 'POST', $params, 'application/json');
     }
 
@@ -962,7 +968,7 @@ class DiscordApi
      */
     public function joinThread($channelID)
     {
-        $url = $this->apiUrl . '/channels/' . $channelID . '/thread-members/@me';
+        $url = sprintf('%s/channels/%s/thread-members/@me', $this->apiUrl, $channelID);
         return $this->execute($url, 'PUT');
     }
 
@@ -975,7 +981,7 @@ class DiscordApi
      */
     public function addThreadMember($channelID, $userID)
     {
-        $url = $this->apiUrl . '/channels/' . $channelID . '/thread-members/' . $userID;
+        $url = sprintf('%s/channels/%s/thread-members/%s', $this->apiUrl, $channelID, $userID);
         return $this->execute($url, 'PUT');
     }
 
@@ -987,7 +993,7 @@ class DiscordApi
      */
     public function leaveThread($channelID)
     {
-        $url = $this->apiUrl . '/channels/' . $channelID . '/thread-members/@me';
+        $url = sprintf('%s/channels/%s/thread-members/@me', $this->apiUrl, $channelID);
         return $this->execute($url, 'DELETE');
     }
 
@@ -1000,7 +1006,7 @@ class DiscordApi
      */
     public function removeThreadMember($channelID, $userID)
     {
-        $url = $this->apiUrl . '/channels/' . $channelID . '/thread-members/' . $userID;
+        $url = sprintf('%s/channels/%s/thread-members/%s', $this->apiUrl, $channelID, $userID);
         return $this->execute($url, 'DELETE');
     }
 
@@ -1014,7 +1020,7 @@ class DiscordApi
      */
     public function listThreadMembers($channelID)
     {
-        $url = $this->apiUrl . '/channels/' . $channelID . '/thread-members';
+        $url = sprintf('%s/channels/%s/thread-members', $this->apiUrl, $channelID);
         return $this->execute($url, 'GET');
     }
 
@@ -1027,7 +1033,7 @@ class DiscordApi
      */
     public function listActiveThreads($channelID, $params = [])
     {
-        $url = $this->apiUrl . '/channels/' . $channelID . '/threads/active';
+        $url = sprintf('%s/channels/%s/threads/active', $this->apiUrl, $channelID);
         if (!empty($params)) {
             $url .= '?' . http_build_query($params, '', '&');
         }
@@ -1043,7 +1049,7 @@ class DiscordApi
      */
     public function listPublicArchivedThreads($channelID, $params = [])
     {
-        $url = $this->apiUrl . '/channels/' . $channelID . '/threads/archived/public';
+        $url = sprintf('%s/channels/%s/threads/archived/public', $this->apiUrl, $channelID);
         if (!empty($params)) {
             $url .= '?' . http_build_query($params, '', '&');
         }
@@ -1059,7 +1065,7 @@ class DiscordApi
      */
     public function listPrivateArchivedThreads($channelID, $params = [])
     {
-        $url = $this->apiUrl . '/channels/' . $channelID . '/threads/archived/private';
+        $url = sprintf('%s/channels/%s/threads/archived/private', $this->apiUrl, $channelID);
         if (!empty($params)) {
             $url .= '?' . http_build_query($params, '', '&');
         }
@@ -1075,7 +1081,7 @@ class DiscordApi
      */
     public function listJoinedPrivateArchivedThreads($channelID, $params = [])
     {
-        $url = $this->apiUrl . '/channels/' . $channelID . '/users/@me/threads/archived/private';
+        $url = sprintf('%s/channels/%s/users/@me/threads/archived/private', $this->apiUrl, $channelID);
         if (!empty($params)) {
             $url .= '?' . http_build_query($params, '', '&');
         }
@@ -1097,7 +1103,7 @@ class DiscordApi
      */
     public function listGuildEmojis()
     {
-        $url = $this->apiUrl . '/guilds/' . $this->guildID . '/emojis';
+        $url = sprintf('%s/guilds/%s/emojis', $this->apiUrl, $this->guildID);
         return $this->execute($url);
     }
 
@@ -1109,7 +1115,7 @@ class DiscordApi
      */
     public function getGuildEmoji($emojiID)
     {
-        $url = $this->apiUrl . '/guilds/' . $this->guildID . '/emojis/' . $emojiID;
+        $url = sprintf('%s/guilds/%s/emojis/%s', $this->apiUrl, $this->guildID, $emojiID);
         return $this->execute($url);
     }
 
@@ -1128,7 +1134,7 @@ class DiscordApi
      */
     public function createGuildEmoji($name, $image, $roles = [])
     {
-        $url = $this->apiUrl . '/guilds/' . $this->guildID . '/emojis';
+        $url = sprintf('%s/guilds/%s/emojis', $this->apiUrl, $this->guildID);
         $params = [
             'name' => $name,
             'image' => $image
@@ -1151,7 +1157,7 @@ class DiscordApi
      */
     public function modifyGuildEmoji($emojiID, array $params)
     {
-        $url = $this->apiUrl . '/guilds/' . $this->guildID . '/emojis/' . $emojiID;
+        $url = sprintf('%s/guilds/%s/emojis/%s', $this->apiUrl, $this->guildID, $emojiID);
         return $this->execute($url, 'PATCH', $params, 'application/json');
     }
 
@@ -1166,7 +1172,7 @@ class DiscordApi
      */
     public function deleteGuildEmoji($emojiID)
     {
-        $url = $this->apiUrl . '/guilds/' . $this->guildID . '/emojis/' . $emojiID;
+        $url = sprintf('%s/guilds/%s/emojis/%s', $this->apiUrl, $this->guildID, $emojiID);
         return $this->execute($url, 'DELETE');
     }
 
@@ -1186,7 +1192,7 @@ class DiscordApi
      */
     public function createGuild($params)
     {
-        $url = $this->apiUrl . '/guilds';
+        $url = sprintf('%s/guilds', $this->apiUrl);
         return $this->execute($url, 'POST', $params, 'application/json');
     }
 
@@ -1197,7 +1203,7 @@ class DiscordApi
      */
     public function getGuild()
     {
-        $url = $this->apiUrl . '/guilds/' . $this->guildID;
+        $url = sprintf('%s/guilds/%s', $this->apiUrl, $this->guildID);
         return $this->execute($url);
     }
 
@@ -1212,7 +1218,7 @@ class DiscordApi
      */
     public function modifyGuild($params)
     {
-        $url = $this->apiUrl . '/guilds/' . $this->guildID;
+        $url = sprintf('%s/guilds/%s', $this->apiUrl, $this->guildID);
         return $this->execute($url, 'PATCH', $params, 'application/json');
     }
 
@@ -1226,7 +1232,7 @@ class DiscordApi
      */
     public function deleteGuild()
     {
-        $url = $this->apiUrl . '/guilds/' . $this->guildID;
+        $url = sprintf('%s/guilds/%s', $this->apiUrl, $this->guildID);
         return $this->execute($url, 'DELETE');
     }
 
@@ -1237,7 +1243,7 @@ class DiscordApi
      */
     public function getGuildChannels()
     {
-        $url = $this->apiUrl . '/guilds/' . $this->guildID . '/channels';
+        $url = sprintf('%s/guilds/%s/channels', $this->apiUrl, $this->guildID);
         return $this->execute($url);
     }
 
@@ -1252,7 +1258,7 @@ class DiscordApi
      */
     public function createGuildChannel($params)
     {
-        $url = $this->apiUrl . '/guilds/' . $this->guildID . '/channels';
+        $url = sprintf('%s/guilds/%s/channels', $this->apiUrl, $this->guildID);
         return $this->execute($url, 'POST', $params, 'application/json');
     }
 
@@ -1269,7 +1275,7 @@ class DiscordApi
      */
     public function modifyGuildChannelPositions($channelID, $position)
     {
-        $url = $this->apiUrl . '/guilds/' . $this->guildID . '/channels';
+        $url = sprintf('%s/guilds/%s/channels', $this->apiUrl, $this->guildID);
         $params = [
             'id' => $channelID,
             'position' => $position
@@ -1285,7 +1291,7 @@ class DiscordApi
      */
     public function getGuildMember($userID)
     {
-        $url = $this->apiUrl . '/guilds/' . $this->guildID . '/members/' . $userID;
+        $url = sprintf('%s/guilds/%s/members/%s', $this->apiUrl, $this->guildID, $userID);
         return $this->execute($url);
     }
 
@@ -1297,7 +1303,7 @@ class DiscordApi
      */
     public function listGuildMembers($params = [])
     {
-        $url = $this->apiUrl . '/guilds/' . $this->guildID . '/members';
+        $url = sprintf('%s/guilds/%s/members', $this->apiUrl, $this->guildID);
         if (!empty($params)) {
             $url .= '?' . http_build_query($params, '', '&');
         }
@@ -1318,7 +1324,7 @@ class DiscordApi
      */
     public function addGuildMember($userID, $accessToken, $params = [])
     {
-        $url = $this->apiUrl . '/guilds/' . $this->guildID . '/members/' . $userID;
+        $url = sprintf('%s/guilds/%s/members/%s', $this->apiUrl, $this->guildID, $userID);
         $params = array_merge([
             'access_token' => $accessToken
         ], $params);
@@ -1338,7 +1344,7 @@ class DiscordApi
      */
     public function modifyGuildMember($userID, $params)
     {
-        $url = $this->apiUrl . '/guilds/' . $this->guildID . '/members/' . $userID;
+        $url = sprintf('%s/guilds/%s/members/%s', $this->apiUrl, $this->guildID, $userID);
         return $this->execute($url, 'PATCH', $params, 'application/json');
     }
 
@@ -1352,7 +1358,7 @@ class DiscordApi
      */
     public function modifyCurrentUserNick($nick)
     {
-        $url = $this->apiUrl . '/guilds/' . $this->guildID . '/members/@me/nick';
+        $url = sprintf('%s/guilds/%s/members/@me/nick', $this->apiUrl, $this->guildID);
         $params = [
             'nick' => $nick
         ];
@@ -1371,7 +1377,7 @@ class DiscordApi
      */
     public function addGuildMemberRole($userID, $roleID)
     {
-        $url = $this->apiUrl . '/guilds/' . $this->guildID . '/members/' . $userID . '/roles/' . $roleID;
+        $url = sprintf('%s/guilds/%s/members/%s/roles/%s', $this->apiUrl, $this->guildID, $userID, $roleID);
         return $this->execute($url, 'PUT');
     }
 
@@ -1387,7 +1393,7 @@ class DiscordApi
      */
     public function removeGuildMemberRole($userID, $roleID)
     {
-        $url = $this->apiUrl . '/guilds/' . $this->guildID . '/members/' . $userID . '/roles/' . $roleID;
+        $url = sprintf('%s/guilds/%s/members/%s/roles/%s', $this->apiUrl, $this->guildID, $userID, $roleID);
         return $this->execute($url, 'DELETE');
     }
 
@@ -1402,7 +1408,7 @@ class DiscordApi
      */
     public function removeGuildMember($userID)
     {
-        $url = $this->apiUrl . '/guilds/' . $this->guildID . '/members/' . $userID;
+        $url = sprintf('%s/guilds/%s/members/%s', $this->apiUrl, $this->guildID, $userID);
         return $this->execute($url, 'DELETE');
     }
 
@@ -1414,7 +1420,7 @@ class DiscordApi
      */
     public function getGuildBans()
     {
-        $url = $this->apiUrl . '/guilds/' . $this->guildID . '/bans';
+        $url = sprintf('%s/guilds/%s/bans', $this->apiUrl, $this->guildID);
         return $this->execute($url);
     }
 
@@ -1427,7 +1433,7 @@ class DiscordApi
      */
     public function getGuildBan($userID)
     {
-        $url = $this->apiUrl . '/guilds/' . $this->guildID . '/bans/' . $userID;
+        $url = sprintf('%s/guilds/%s/bans/%s', $this->apiUrl, $this->guildID, $userID);
         return $this->execute($url);
     }
 
@@ -1443,7 +1449,7 @@ class DiscordApi
      */
     public function createGuildBan($userID, $params = [])
     {
-        $url = $this->apiUrl . '/guilds/' . $this->guildID . '/bans/' . $userID;
+        $url = sprintf('%s/guilds/%s/bans/%s', $this->apiUrl, $this->guildID, $userID);
         return $this->execute($url, 'PUT', $params, 'application/json');
     }
 
@@ -1455,7 +1461,7 @@ class DiscordApi
      */
     public function removeGuildBan($userID)
     {
-        $url = $this->apiUrl . '/guilds/' . $this->guildID . '/bans/' . $userID;
+        $url = sprintf('%s/guilds/%s/bans/%s', $this->apiUrl, $this->guildID, $userID);
         return $this->execute($url, 'DELETE');
     }
 
@@ -1466,7 +1472,7 @@ class DiscordApi
      */
     public function getGuildRoles()
     {
-        $url = $this->apiUrl . '/guilds/' . $this->guildID . '/roles';
+        $url = sprintf('%s/guilds/%s/roles', $this->apiUrl, $this->guildID);
         return $this->execute($url);
     }
 
@@ -1482,7 +1488,7 @@ class DiscordApi
      */
     public function createGuildRole($params = [])
     {
-        $url = $this->apiUrl . '/guilds/' . $this->guildID . '/roles';
+        $url = sprintf('%s/guilds/%s/roles', $this->apiUrl, $this->guildID);
         return $this->execute($url, 'POST', $params, 'application/json');
     }
 
@@ -1498,7 +1504,7 @@ class DiscordApi
      */
     public function modifyGuildRolePosition($roleID, $position)
     {
-        $url = $this->apiUrl . '/guilds/' . $this->guildID . '/roles';
+        $url = sprintf('%s/guilds/%s/roles', $this->apiUrl, $this->guildID);
         $params = [
             'id' => $roleID,
             'position' => $position
@@ -1518,7 +1524,7 @@ class DiscordApi
      */
     public function modifyGuildRole($roleID, $params = [])
     {
-        $url = $this->apiUrl . '/guilds/' . $this->guildID . '/roles/' . $roleID;
+        $url = sprintf('%s/guilds/%s/roles/%s', $this->apiUrl, $this->guildID, $roleID);
         return $this->execute($url, 'PATCH', $params, 'application/json');
     }
 
@@ -1533,7 +1539,7 @@ class DiscordApi
      */
     public function deleteGuildRole($roleID)
     {
-        $url = $this->apiUrl . '/guilds/' . $this->guildID . '/roles/' . $roleID;
+        $url = sprintf('%s/guilds/%s/roles/%s', $this->apiUrl, $this->guildID, $roleID);
         return $this->execute($url, 'DELETE');
     }
 
@@ -1546,7 +1552,7 @@ class DiscordApi
      */
     public function getGuildPruneCount($days = 1)
     {
-        $url = $this->apiUrl . '/guilds/' . $this->guildID . '/prune';
+        $url = sprintf('%s/guilds/%s/prune', $this->apiUrl, $this->guildID);
         $url .= '?' . http_build_query([
             'days' => $days
         ], '', '&');
@@ -1566,7 +1572,7 @@ class DiscordApi
      */
     public function beginGuildPrune($days, $computePruneCount = false)
     {
-        $url = $this->apiUrl . '/guilds/' . $this->guildID . '/prune';
+        $url = sprintf('%s/guilds/%s/prune', $this->apiUrl, $this->guildID);
         $params = [
             'days' => $days,
             'compute_prune_count' => $computePruneCount
@@ -1582,7 +1588,7 @@ class DiscordApi
      */
     public function getGuildVoiceRegions()
     {
-        $url = $this->apiUrl . '/guilds/' . $this->guildID . '/regions';
+        $url = sprintf('%s/guilds/%s/regions', $this->apiUrl, $this->guildID);
         return $this->execute($url);
     }
 
@@ -1594,7 +1600,7 @@ class DiscordApi
      */
     public function getGuildInvites()
     {
-        $url = $this->apiUrl . '/guilds/' . $this->guildID . '/invites';
+        $url = sprintf('%s/guilds/%s/invites', $this->apiUrl, $this->guildID);
         return $this->execute($url);
     }
 
@@ -1606,7 +1612,7 @@ class DiscordApi
      */
     public function getGuildIntegrations()
     {
-        $url = $this->apiUrl . '/guilds/' . $this->guildID . '/integrations';
+        $url = sprintf('%s/guilds/%s/integrations', $this->apiUrl, $this->guildID);
         return $this->execute($url);
     }
 
@@ -1622,7 +1628,7 @@ class DiscordApi
      */
     public function createGuildIntegration($type, $id)
     {
-        $url = $this->apiUrl . '/guilds/' . $this->guildID . '/integrations';
+        $url = sprintf('%s/guilds/%s/integrations', $this->apiUrl, $this->guildID);
         $params = [
             'type' => $type,
             'id' => $id
@@ -1642,7 +1648,7 @@ class DiscordApi
      */
     public function modifyGuildIntegration($integrationID, $params)
     {
-        $url = $this->apiUrl . '/guilds/' . $this->guildID . '/integrations/' . $integrationID;
+        $url = sprintf('%s/guilds/%s/integrations/%s', $this->apiUrl, $this->guildID, $integrationID);
         return $this->execute($url, 'PATCH', $params, 'application/json');
     }
 
@@ -1657,7 +1663,7 @@ class DiscordApi
      */
     public function deleteGuildIntegration($integrationID)
     {
-        $url = $this->apiUrl . '/guilds/' . $this->guildID . '/integrations/' . $integrationID;
+        $url = sprintf('%s/guilds/%s/integrations/%s', $this->apiUrl, $this->guildID, $integrationID);
         return $this->execute($url, 'DELETE');
     }
 
@@ -1668,7 +1674,7 @@ class DiscordApi
      */
     public function getGuildWidgetSettings()
     {
-        $url = $this->apiUrl . '/guilds/' . $this->guildID . '/widget';
+        $url = sprintf('%s/guilds/%s/widget', $this->apiUrl, $this->guildID);
         return $this->execute($url, 'GET');
     }
 
@@ -1680,7 +1686,7 @@ class DiscordApi
      */
     public function modifyGuildWidget($params)
     {
-        $url = $this->apiUrl . '/guilds/' . $this->guildID . '/widget';
+        $url = sprintf('%s/guilds/%s/widget', $this->apiUrl, $this->guildID);
         return $this->execute($url, 'PATCH', $params, 'application/json');
     }
 
@@ -1691,7 +1697,7 @@ class DiscordApi
      */
     public function getGuildWidget()
     {
-        $url = $this->apiUrl . '/guilds/' . $this->guildID . '/widget.json';
+        $url = sprintf('%s/guilds/%s/widget.json', $this->apiUrl, $this->guildID);
         return $this->execute($url, 'GET');
     }
 
@@ -1704,7 +1710,7 @@ class DiscordApi
      */
     public function getGuildVanityUrl()
     {
-        $url = $this->apiUrl . '/guilds/' . $this->guildID . '/vanity-url';
+        $url = sprintf('%s/guilds/%s/vanity-url', $this->apiUrl, $this->guildID);
         return $this->execute($url);
     }
 
@@ -1718,7 +1724,7 @@ class DiscordApi
      */
     public function getGuildWidgetImage($style = 'shield')
     {
-        $url = $this->apiUrl . '/guilds/' . $this->guildID . '/widget.png?style=' . $style;
+        $url = sprintf('%s/guilds/%s/widget.png?style=%s', $this->apiUrl, $this->guildID, $style);
         return $this->execute($url);
     }
 
@@ -1729,7 +1735,7 @@ class DiscordApi
      */
     public function getGuildWelcomeScreen()
     {
-        $url = $this->apiUrl . '/guilds/' . $this->guildID . '/welcome-screen';
+        $url = sprintf('%s/guilds/%s/welcome-screen', $this->apiUrl, $this->guildID);
         return $this->execute($url, 'GET');
     }
 
@@ -1743,7 +1749,7 @@ class DiscordApi
      */
     public function modifyGuildWelcomeScreen($params)
     {
-        $url = $this->apiUrl . '/guilds/' . $this->guildID . '/welcome-screen';
+        $url = sprintf('%s/guilds/%s/welcome-screen', $this->apiUrl, $this->guildID);
         return $this->execute($url, 'PATCH', $params, 'application/json');
     }
 
@@ -1755,7 +1761,7 @@ class DiscordApi
      */
     public function modifyCurrentUserVoiceState($params)
     {
-        $url = $this->apiUrl . '/guilds/' . $this->guildID . '/voice-states/@me';
+        $url = sprintf('%s/guilds/%s/voice-states/@me', $this->apiUrl, $this->guildID);
         return $this->execute($url, 'PATCH', $params, 'application/json');
     }
 
@@ -1768,7 +1774,7 @@ class DiscordApi
      */
     public function modifyUserVoiceState($userID, $params)
     {
-        $url = $this->apiUrl . '/guilds/' . $this->guildID . '/voice-states/' . $userID;
+        $url = sprintf('%s/guilds/%s/voice-states/%s', $this->apiUrl, $this->guildID, $userID);
         return $this->execute($url, 'PATCH', $params, 'application/json');
     }
 
@@ -1788,7 +1794,7 @@ class DiscordApi
      */
     public function getGuildTemplate($templateCode)
     {
-        $url = $this->apiUrl . '/uilds/templates/' . $templateCode;
+        $url = sprintf('%s/guilds/templates/%s', $this->apiUrl, $templateCode);
         return $this->execute($url, 'GET');
     }
 
@@ -1803,7 +1809,7 @@ class DiscordApi
      */
     public function createGuildFromGuildTemplate($templateCode, $params)
     {
-        $url = $this->apiUrl . '/uilds/templates/' . $templateCode;
+        $url = sprintf('%s/guilds/templates/%s', $this->apiUrl, $templateCode);
         return $this->execute($url, 'POST', $params, 'application/json');
     }
 
@@ -1814,7 +1820,7 @@ class DiscordApi
      */
     public function getGuildTemplates()
     {
-        $url = $this->apiUrl . '/guilds/' . $this->guildID . '/templates';
+        $url = sprintf('%s/guilds/%s/templates', $this->apiUrl, $this->guildID);
         return $this->execute($url, 'GET');
     }
 
@@ -1826,7 +1832,7 @@ class DiscordApi
      */
     public function createGuildTemplate($params)
     {
-        $url = $this->apiUrl . '/guilds/' . $this->guildID . '/templates';
+        $url = sprintf('%s/guilds/%s/templates', $this->apiUrl, $this->guildID);
         return $this->execute($url, 'POST', $params, 'application/json');
     }
 
@@ -1838,7 +1844,7 @@ class DiscordApi
      */
     public function syncGuildTemplate($templateCode)
     {
-        $url = $this->apiUrl . '/guilds/' . $this->guildID . '/templates/' . $templateCode;
+        $url = sprintf('%s/guilds/templates/%s', $this->apiUrl, $templateCode);
         return $this->execute($url, 'PUT');
     }
 
@@ -1851,7 +1857,7 @@ class DiscordApi
      */
     public function modifyGuildTemplate($templateCode, $params)
     {
-        $url = $this->apiUrl . '/guilds/' . $this->guildID . '/templates/' . $templateCode;
+        $url = sprintf('%s/guilds/templates/%s', $this->apiUrl, $templateCode);
         return $this->execute($url, 'PATCH', $params, 'application/json');
     }
 
@@ -1863,7 +1869,7 @@ class DiscordApi
      */
     public function deleteGuildTemplate($templateCode)
     {
-        $url = $this->apiUrl . '/guilds/' . $this->guildID . '/templates/' . $templateCode;
+        $url = sprintf('%s/guilds/templates/%s', $this->apiUrl, $templateCode);
         return $this->execute($url, 'DELETE');
     }
 
@@ -1884,7 +1890,7 @@ class DiscordApi
      */
     public function getInvite($inviteCode, $withCounts = false)
     {
-        $url = $this->apiUrl . '/invites/' . $inviteCode;
+        $url = sprintf('%s/invites/%s', $this->apiUrl, $inviteCode);
         if ($withCounts) {
             $url .= '?with_counts=1';
         }
@@ -1901,7 +1907,7 @@ class DiscordApi
      */
     public function deleteInvite($inviteCode)
     {
-        $url = $this->apiUrl . '/invites/' . $inviteCode;
+        $url = sprintf('%s/invites/%s', $this->apiUrl, $inviteCode);
         return $this->execute($url, 'DELETE');
     }
 
@@ -1923,7 +1929,7 @@ class DiscordApi
      */
     public function createStageInstance($params)
     {
-        $url = $this->apiUrl . '/stage-instances';
+        $url = sprintf('%s/stage-instances', $this->apiUrl);
         return $this->execute($url, 'POST', $params, 'application/json');
     }
 
@@ -1935,7 +1941,7 @@ class DiscordApi
      */
     public function getStageInstance($channelID)
     {
-        $url = $this->apiUrl . '/stage-instances/' . $channelID;
+        $url = sprintf('%s/stage-instances/%s', $this->apiUrl, $channelID);
         return $this->execute($url, 'GET');
     }
 
@@ -1950,7 +1956,7 @@ class DiscordApi
      */
     public function modifyStageInstance($channelID, $params)
     {
-        $url = $this->apiUrl . '/stage-instances/' . $channelID;
+        $url = sprintf('%s/stage-instances/%s', $this->apiUrl, $channelID);
         return $this->execute($url, 'PATCH', $params, 'application/json');
     }
 
@@ -1964,7 +1970,7 @@ class DiscordApi
      */
     public function deleteStageInstance($channelID)
     {
-        $url = $this->apiUrl . '/stage-instances/' . $channelID;
+        $url = sprintf('%s/stage-instances/%s', $this->apiUrl, $channelID);
         return $this->execute($url, 'DELETE');
     }
 
@@ -1984,7 +1990,7 @@ class DiscordApi
      */
     public function getCurrentUser()
     {
-        $url = $this->apiUrl . '/users/@me';
+        $url = sprintf('%s/users/@me', $this->apiUrl);
         return $this->execute($url);
     }
 
@@ -1996,7 +2002,7 @@ class DiscordApi
      */
     public function getUser($userID)
     {
-        $url = $this->apiUrl . '/users/' . $userID;
+        $url = sprintf('%s/users/%s', $this->apiUrl, $userID);
         return $this->execute($url);
     }
 
@@ -2008,7 +2014,7 @@ class DiscordApi
      */
     public function modifyCurrentUser($params)
     {
-        $url = $this->apiUrl . '/users/@me';
+        $url = sprintf('%s/users/@me', $this->apiUrl);
         return $this->execute($url, 'PATCH', $params, 'application/json');
     }
 
@@ -2020,7 +2026,7 @@ class DiscordApi
      */
     public function getCurrentUserGuilds($params = [])
     {
-        $url = $this->apiUrl . '/users/@me/guilds';
+        $url = sprintf('%s/users/@me/guilds', $this->apiUrl);
         if (!empty($params)) {
             $url .= '?' . http_build_query($params, '', '&');
         }
@@ -2035,7 +2041,7 @@ class DiscordApi
      */
     public function leaveGuild()
     {
-        $url = $this->apiUrl . '/users/@me/guilds/' . $this->guildID;
+        $url = sprintf('%s/users/@me/guilds/%s', $this->apiUrl, $this->guildID);
         return $this->execute($url, 'DELETE');
     }
 
@@ -2047,7 +2053,7 @@ class DiscordApi
      */
     public function getUserDMs()
     {
-        $url = $this->apiUrl . '/users/@me/channels';
+        $url = sprintf('%s/users/@me/channels', $this->apiUrl);
         return $this->execute($url);
     }
 
@@ -2060,7 +2066,7 @@ class DiscordApi
      */
     public function createDM($recipientID)
     {
-        $url = $this->apiUrl . '/users/@me/channels';
+        $url = sprintf('%s/users/@me/channels', $this->apiUrl);
         $params = [
             'recipient_id' => $recipientID
         ];
@@ -2078,7 +2084,7 @@ class DiscordApi
      */
     public function createGroupDM($params)
     {
-        $url = $this->apiUrl . '/users/@me/channels';
+        $url = sprintf('%s/users/@me/channels', $this->apiUrl);
         return $this->execute($url, 'POST', $params, 'application/json');
     }
 
@@ -2090,7 +2096,7 @@ class DiscordApi
      */
     public function getUserConnections()
     {
-        $url = $this->apiUrl . '/users/@me/connections';
+        $url = sprintf('%s/users/@me/connections', $this->apiUrl);
         return $this->execute($url);
     }
 
@@ -2109,7 +2115,7 @@ class DiscordApi
      */
     public function listVoiceRegions()
     {
-        $url = $this->apiUrl . '/voice/regions';
+        $url = sprintf('%s/voice/regions', $this->apiUrl);
         return $this->execute($url);
     }
 
@@ -2133,7 +2139,7 @@ class DiscordApi
      */
     public function createWebhook($channelID, $name, $avatar = null)
     {
-        $url = $this->apiUrl . '/channels/' . $channelID . '/webhooks';
+        $url = sprintf('%s/channels/%s/webhooks', $this->apiUrl, $channelID);
         $params = [
             'name' => $name
         ];
@@ -2152,7 +2158,7 @@ class DiscordApi
      */
     public function getChannelWebhooks($channelID)
     {
-        $url = $this->apiUrl . '/channels/' . $channelID . '/webhooks';
+        $url = sprintf('%s/channels/%s/webhooks', $this->apiUrl, $channelID);
         return $this->execute($url);
     }
 
@@ -2164,7 +2170,7 @@ class DiscordApi
      */
     public function getGuildWebhooks()
     {
-        $url = $this->apiUrl . '/guilds/' . $this->guildID . '/webhooks';
+        $url = sprintf('%s/guilds/%s/webhooks', $this->apiUrl, $this->guildID);
         return $this->execute($url);
     }
 
@@ -2176,7 +2182,7 @@ class DiscordApi
      */
     public function getWebhook($webhookID)
     {
-        $url = $this->apiUrl . '/webhooks/' . $webhookID;
+        $url = sprintf('%s/webhooks/%s', $this->apiUrl, $webhookID);
         return $this->execute($url);
     }
 
@@ -2189,7 +2195,7 @@ class DiscordApi
      */
     public function getWebhookWithToken($webhookID, $webhookToken)
     {
-        $url = $this->apiUrl . '/webhooks/' . $webhookID . '/' . $webhookToken;
+        $url = sprintf('%s/webhooks/%s/%s', $this->apiUrl, $webhookID, $webhookToken);
         return $this->execute($url);
     }
 
@@ -2204,7 +2210,7 @@ class DiscordApi
      */
     public function modifyWebhook($webhookID, $params)
     {
-        $url = $this->apiUrl . '/webhooks/' . $webhookID;
+        $url = sprintf('%s/webhooks/%s', $this->apiUrl, $webhookID);
         return $this->execute($url, 'PATCH', $params, 'application/json');
     }
 
@@ -2218,7 +2224,7 @@ class DiscordApi
      */
     public function modifyWebhookWithToken($webhookID, $webhookToken, $params)
     {
-        $url = $this->apiUrl . '/webhooks/' . $webhookID . '/' . $webhookToken;
+        $url = sprintf('%s/webhooks/%s/%s', $this->apiUrl, $webhookID, $webhookToken);
         return $this->execute($url, 'PATCH', $params, 'application/json');
     }
 
@@ -2232,7 +2238,7 @@ class DiscordApi
      */
     public function deleteWebhook($webhookID)
     {
-        $url = $this->apiUrl . '/webhooks/' . $webhookID;
+        $url = sprintf('%s/webhooks/%s', $this->apiUrl, $webhookID);
         return $this->execute($url, 'DELETE');
     }
 
@@ -2245,7 +2251,7 @@ class DiscordApi
      */
     public function deleteWebhookWithToken($webhookID, $webhookToken)
     {
-        $url = $this->apiUrl . '/webhooks/' . $webhookID . '/' . $webhookToken;
+        $url = sprintf('%s/webhooks/%s/%s', $this->apiUrl, $webhookID, $webhookToken);
         return $this->execute($url, 'DELETE');
     }
 
@@ -2260,7 +2266,7 @@ class DiscordApi
      */
     public function executeWebhook($webhookID, $webhookToken, $params, $wait = false)
     {
-        $url = $this->apiUrl . '/webhooks/' . $webhookID . '/' . $webhookToken;
+        $url = sprintf('%s/webhooks/%s/%s', $this->apiUrl, $webhookID, $webhookToken);
         if ($wait) {
             $url .= '?wait=true';
         }
@@ -2282,7 +2288,7 @@ class DiscordApi
      */
     public function executeSlackCompatibleWebhook($webhookID, $webhookToken, $params, $wait = false)
     {
-        $url = $this->apiUrl . '/webhooks/' . $webhookID . '/' . $webhookToken . '/slack';
+        $url = sprintf('%s/webhooks/%s/%s/slack', $this->apiUrl, $webhookID, $webhookToken);
         return $this->execute($url, 'POST', $params, 'application/json');
     }
 
@@ -2297,7 +2303,7 @@ class DiscordApi
      */
     public function executeGithubCompatibleWebhook($webhookID, $webhookToken, $params, $wait = false)
     {
-        $url = $this->apiUrl . '/webhooks/' . $webhookID . '/' . $webhookToken . '/github';
+        $url = sprintf('%s/webhooks/%s/%s/github', $this->apiUrl, $webhookID, $webhookToken);
         return $this->execute($url, 'POST', $params, 'application/json');
     }
 
@@ -2319,7 +2325,7 @@ class DiscordApi
      */
     public function oauth2Authorize($clientID, $scope, $redirectUri, $state = null)
     {
-        $url = $this->apiUrl . '/oauth2/authorize?response_type=code&client_id=' . $clientID . '&';
+        $url = sprintf('%s/oauth2/authorize?response_type=code&client_id=%s&', $this->apiUrl, $clientID);
         $params = [
             'scope' => implode(' ', $scope),
             'redirect_uri' => $redirectUri
@@ -2343,7 +2349,7 @@ class DiscordApi
      */
     public function oauth2Token($clientID, $clientSecret, $code, $redirectUri, $grantType = 'authorization_code')
     {
-        $url = $this->apiUrl . '/oauth2/token';
+        $url = sprintf('%s/oauth2/token', $this->apiUrl);
         $params = [
             'client_id' => $clientID,
             'client_secret' => $clientSecret,
@@ -2366,7 +2372,7 @@ class DiscordApi
      */
     public function getCurrentApplicationInformation()
     {
-        $url = $this->apiUrl . '/oauth2/applications/@me';
+        $url = sprintf('%s/oauth2/applications/@me', $this->apiUrl);
         return $this->execute($url);
     }
 
@@ -2385,7 +2391,7 @@ class DiscordApi
      */
     public function getGateway()
     {
-        $url = $this->apiUrl . '/gateway';
+        $url = sprintf('%s/gateway', $this->apiUrl);
         return $this->execute($url);
     }
 
@@ -2396,7 +2402,7 @@ class DiscordApi
      */
     public function getGatewayBot()
     {
-        $url = $this->apiUrl . '/gateway/bot';
+        $url = sprintf('%s/gateway/bot', $this->apiUrl);
         return $this->execute($url);
     }
 
@@ -2512,6 +2518,17 @@ class DiscordApi
     // Decoder End
     /////////////////////////////////////
 
+    final protected function getHttpClient(): ClientInterface
+    {
+        if (!$this->httpClient) {
+            $this->httpClient = HttpFactory::makeClient([
+                RequestOptions::TIMEOUT => 2
+            ]);
+        }
+
+        return $this->httpClient;
+    }
+
     /**
      * führt eine API-Anfrage aus
      *
@@ -2526,12 +2543,12 @@ class DiscordApi
         $reply = [];
 
         $headers = [
-            'Authorization' => $this->botType . ' ' . $this->botToken,
-            'Content-Type' => $contentType
+            'authorization' => $this->botType . ' ' . $this->botToken,
+            'content-type' => $contentType
         ];
         if ($method !== 'GET') {
             if (empty($parameters)) {
-                $headers['Content-Length'] = 0;
+                $headers['content-length'] = 0;
             }
         }
 
@@ -2541,11 +2558,11 @@ class DiscordApi
             $parameters = JSON::encode($parameters);
         }
 
-        $client = HttpFactory::getDefaultClient();
+        $client = $this->getHttpClient();
         $request = new Request($method, $url, $headers, $parameters);
 
         try {
-            $response = $client->send($request, ['timeout' => 2]);
+            $response = $client->send($request);
             $reply = $this->parseReply($response);
         } catch (ClientException $e) {
             $reply = $this->parseReply($e->getResponse());

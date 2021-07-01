@@ -97,7 +97,7 @@
 {/if}
 
 <script data-relocate="true">
-    require(['Hanashi/Acp/Discord/Tester', 'Language'], function (DiscordTester, Language) {
+    require(['Hanashi/Acp/Discord/Tester', 'Language'], function ({ DiscordTester }, Language) {
         Language.addObject({
             'wcf.acp.discordBotList.connectOnce': '{jslang}wcf.acp.discordBotList.connectOnce{/jslang}',
             'wcf.acp.discordBotList.gateway.connecting': '{jslang}wcf.acp.discordBotList.gateway.connecting{/jslang}',
@@ -105,7 +105,7 @@
             'wcf.acp.discordBotList.gateway.error': '{jslang}wcf.acp.discordBotList.gateway.error{/jslang}'
         });
         
-        new DiscordTester.default();
+        new DiscordTester();
     });
 </script>
 
