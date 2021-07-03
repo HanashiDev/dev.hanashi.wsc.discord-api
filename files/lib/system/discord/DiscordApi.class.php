@@ -3,12 +3,11 @@
 namespace wcf\system\discord;
 
 use GuzzleHttp\ClientInterface;
+use GuzzleHttp\Exception\BadResponseException;
 use GuzzleHttp\Exception\GuzzleException;
-use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\RequestOptions;
 use wcf\data\discord\bot\DiscordBot;
-use wcf\system\exception\SystemException;
 use wcf\system\io\HttpFactory;
 use wcf\util\JSON;
 
@@ -2564,7 +2563,7 @@ class DiscordApi
         try {
             $response = $this->getHttpClient()->send($request);
             $reply = $this->parseReply($response);
-        } catch (RequestException $e) {
+        } catch (BadResponseException $e) {
             if (\ENABLE_DEBUG_MODE) {
                 \wcf\functions\exception\logThrowable($e);
             }
@@ -2616,7 +2615,7 @@ class DiscordApi
         $body = (string)$response->getBody();
         try {
             $body = JSON::decode($body, true);
-        } catch (SystemException $e) {
+        } catch (\Exception $e) {
         }
         $reply = [
             'error' => false,
