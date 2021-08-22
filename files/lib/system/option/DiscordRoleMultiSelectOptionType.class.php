@@ -20,17 +20,17 @@ use wcf\system\WCF;
  */
 class DiscordRoleMultiSelectOptionType extends AbstractOptionType
 {
-    protected $roleMultiSelectType;
+    protected $roleMultiSelectType = [];
 
     /**
      * @inheritDoc
      */
     public function getFormElement(Option $option, $value)
     {
-        if ($this->roleMultiSelectType === null) {
-            $this->roleMultiSelectType = new RoleMultiSelectDiscordType($option->optionName);
+        if (!isset($this->roleMultiSelectType[$option->optionName])) {
+            $this->roleMultiSelectType[$option->optionName] = new RoleMultiSelectDiscordType($option->optionName);
         }
-        return $this->roleMultiSelectType->getFormElement($value);
+        return $this->roleMultiSelectType[$option->optionName]->getFormElement($value);
     }
 
     /**
@@ -38,10 +38,10 @@ class DiscordRoleMultiSelectOptionType extends AbstractOptionType
      */
     public function validate(Option $option, $newValue)
     {
-        if ($this->roleMultiSelectType === null) {
-            $this->roleMultiSelectType = new RoleMultiSelectDiscordType($option->optionName);
+        if (!isset($this->roleMultiSelectType[$option->optionName])) {
+            $this->roleMultiSelectType[$option->optionName] = new RoleMultiSelectDiscordType($option->optionName);
         }
-        $this->roleMultiSelectType->validate($newValue);
+        $this->roleMultiSelectType[$option->optionName]->validate($newValue);
     }
 
     /**
@@ -49,9 +49,9 @@ class DiscordRoleMultiSelectOptionType extends AbstractOptionType
      */
     public function getData(Option $option, $newValue)
     {
-        if ($this->roleMultiSelectType === null) {
-            $this->roleMultiSelectType = new RoleMultiSelectDiscordType($option->optionName);
+        if (!isset($this->roleMultiSelectType[$option->optionName])) {
+            $this->roleMultiSelectType[$option->optionName] = new RoleMultiSelectDiscordType($option->optionName);
         }
-        return $this->roleMultiSelectType->getData($newValue);
+        return $this->roleMultiSelectType[$option->optionName]->getData($newValue);
     }
 }

@@ -3,11 +3,7 @@
 namespace wcf\system\option;
 
 use wcf\data\option\Option;
-use wcf\data\discord\bot\DiscordBot;
-use wcf\data\discord\bot\DiscordBotList;
 use wcf\system\discord\type\ChannelMultiSelectDiscordType;
-use wcf\system\discord\DiscordApi;
-use wcf\system\exception\UserInputException;
 use wcf\system\WCF;
 
 /**
@@ -20,17 +16,22 @@ use wcf\system\WCF;
  */
 class DiscordChannelMultiSelectOptionType extends AbstractOptionType
 {
-    protected $channelMultiSelectType;
+    protected $channelMultiSelectType = [];
 
     /**
      * @inheritDoc
      */
     public function getFormElement(Option $option, $value)
     {
-        if ($this->channelMultiSelectType === null) {
-            $this->channelMultiSelectType = new ChannelMultiSelectDiscordType($option->optionName);
+        if (!isset($this->channelMultiSelectType[$option->optionName])) {
+            $this->channelMultiSelectType[$option->optionName] = new ChannelMultiSelectDiscordType($option->optionName);
         }
-        return $this->channelMultiSelectType->getFormElement($value);
+
+        WCF::getTPL()->assign([
+            'optionName' => $option->optionName
+        ]);
+        
+        return $this->channelMultiSelectType[$option->optionName]->getFormElement($value);
     }
 
     /**
@@ -38,10 +39,10 @@ class DiscordChannelMultiSelectOptionType extends AbstractOptionType
      */
     public function validate(Option $option, $newValue)
     {
-        if ($this->channelMultiSelectType === null) {
-            $this->channelMultiSelectType = new ChannelMultiSelectDiscordType($option->optionName);
+        if (!isset($this->channelMultiSelectType[$option->optionName])) {
+            $this->channelMultiSelectType[$option->optionName] = new ChannelMultiSelectDiscordType($option->optionName);
         }
-        $this->channelMultiSelectType->validate($newValue);
+        $this->channelMultiSelectType[$option->optionName]->validate($newValue);
     }
 
     /**
@@ -49,9 +50,9 @@ class DiscordChannelMultiSelectOptionType extends AbstractOptionType
      */
     public function getData(Option $option, $newValue)
     {
-        if ($this->channelMultiSelectType === null) {
-            $this->channelMultiSelectType = new ChannelMultiSelectDiscordType($option->optionName);
+        if (!isset($this->channelMultiSelectType[$option->optionName])) {
+            $this->channelMultiSelectType[$option->optionName] = new ChannelMultiSelectDiscordType($option->optionName);
         }
-        return $this->channelMultiSelectType->getData($newValue);
+        return $this->channelMultiSelectType[$option->optionName]->getData($newValue);
     }
 }
