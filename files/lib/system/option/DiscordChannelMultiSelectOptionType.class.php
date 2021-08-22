@@ -27,10 +27,6 @@ class DiscordChannelMultiSelectOptionType extends AbstractOptionType
             $this->channelMultiSelectType[$option->optionName] = new ChannelMultiSelectDiscordType($option->optionName);
         }
 
-        WCF::getTPL()->assign([
-            'optionName' => $option->optionName
-        ]);
-        
         return $this->channelMultiSelectType[$option->optionName]->getFormElement($value);
     }
 
