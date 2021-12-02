@@ -16,7 +16,7 @@ $tables = [
         ->columns([
             TextDatabaseTableColumn::create('discordChannelIDs'),
             VarcharDatabaseTableColumn::create('discordPostPrefix')
-                ->length(30),
+                ->length(100),
             TinyintDatabaseTableColumn::create('discordPostTitleInContext')
                 ->length(1)
                 ->notNull()
