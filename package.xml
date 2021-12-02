@@ -5,8 +5,8 @@
         <packagename language="de"><![CDATA[Discord-API]]></packagename>
         <packagedescription><![CDATA[API to cummincate with Discord.]]></packagedescription>
         <packagedescription language="de"><![CDATA[API um mit Discord zu kommunizieren.]]></packagedescription>
-        <version>2.0.2</version>
-        <date>2021-08-23</date>
+        <version>2.0.3</version>
+        <date>2021-12-02</date>
     </packageinformation>
 
     <authorinformation>
@@ -39,8 +39,11 @@
         <instruction type="option" />
         <instruction type="script">acp/install_dev.hanashi.wsc.discord-api.php</instruction>
     </instructions>
-	<instructions type="update" fromversion="2.0.1">
+	<instructions type="update" fromversion="2.0.2">
 		<!-- files -->
         <instruction type="file" />
+		
+		<!-- config -->
+        <instruction type="script">acp/update_dev.hanashi.wsc.discord-api_2.0.3.php</instruction>
 	</instructions>
 </package>
