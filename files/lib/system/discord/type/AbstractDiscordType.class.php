@@ -2,8 +2,6 @@
 
 namespace wcf\system\discord\type;
 
-use wcf\system\WCF;
-
 abstract class AbstractDiscordType
 {
     protected $optionName;

@@ -5,7 +5,6 @@ namespace wcf\data\discord\webhook;
 use wcf\data\discord\bot\DiscordBot;
 use wcf\data\DatabaseObject;
 use wcf\system\discord\DiscordApi;
-use wcf\system\WCF;
 
 /**
  * Discord-Webhook-Objekt

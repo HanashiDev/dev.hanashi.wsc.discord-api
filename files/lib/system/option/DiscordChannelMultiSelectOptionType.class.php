@@ -4,7 +4,6 @@ namespace wcf\system\option;
 
 use wcf\data\option\Option;
 use wcf\system\discord\type\ChannelMultiSelectDiscordType;
-use wcf\system\WCF;
 
 /**
  * Option-Type für die Auswahl mehrerer Discord-Channel

@@ -8,7 +8,6 @@ use wcf\data\discord\webhook\DiscordWebhookAction;
 use wcf\data\discord\webhook\DiscordWebhookList;
 use wcf\data\cronjob\Cronjob;
 use wcf\system\discord\DiscordApi;
-use wcf\system\WCF;
 
 /**
  * Cronjob zum Aktualisieren der Discord Server-Informationen

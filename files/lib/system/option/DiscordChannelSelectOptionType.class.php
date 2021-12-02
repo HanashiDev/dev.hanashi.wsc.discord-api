@@ -3,9 +3,7 @@
 namespace wcf\system\option;
 
 use wcf\data\option\Option;
-use wcf\data\discord\bot\DiscordBot;
 use wcf\data\discord\bot\DiscordBotList;
-use wcf\system\discord\DiscordApi;
 use wcf\system\exception\UserInputException;
 use wcf\system\WCF;
 

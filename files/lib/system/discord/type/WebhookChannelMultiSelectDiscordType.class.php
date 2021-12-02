@@ -4,9 +4,7 @@ namespace wcf\system\discord\type;
 
 use wcf\data\discord\webhook\DiscordWebhookAction;
 use wcf\data\discord\webhook\DiscordWebhookList;
-use wcf\system\discord\DiscordApi;
 use wcf\system\exception\UserInputException;
-use wcf\system\WCF;
 use wcf\util\FileUtil;
 
 class WebhookChannelMultiSelectDiscordType extends ChannelMultiSelectDiscordType

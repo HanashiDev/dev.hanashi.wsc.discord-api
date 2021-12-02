@@ -3,7 +3,6 @@
 namespace wcf\data\discord\webhook;
 
 use wcf\data\AbstractDatabaseObjectAction;
-use wcf\system\discord\DiscordApi;
 
 /**
  * Discord-Webhook-Objekt-Action

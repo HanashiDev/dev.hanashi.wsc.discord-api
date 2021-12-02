@@ -2,13 +2,8 @@
 
 namespace wcf\system\option;
 
-use wcf\data\discord\webhook\DiscordWebhookAction;
-use wcf\data\discord\webhook\DiscordWebhookList;
 use wcf\data\option\Option;
 use wcf\system\discord\type\WebhookChannelMultiSelectDiscordType;
-use wcf\system\discord\DiscordApi;
-use wcf\system\exception\UserInputException;
-use wcf\system\WCF;
 
 /**
  * Option-Type für die Auswahl mehrerer Discord-Channel mit Webhook-Bezug
