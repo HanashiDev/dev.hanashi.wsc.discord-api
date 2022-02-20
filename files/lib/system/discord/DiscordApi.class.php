@@ -22,42 +22,42 @@ use wcf\util\JSON;
 class DiscordApi
 {
     // ApplicationCommandOptionType https://discord.com/developers/docs/interactions/slash-commands#application-command-object-application-command-option-type
-    const DISCORD_SUB_COMMAND = 1;
-    const DISCORD_SUB_COMMAND_GROUP = 2;
-    const DISCORD_STRING = 3;
-    const DISCORD_INTEGER = 4;
-    const DISCORD_BOOLEAN = 5;
-    const DISCORD_USER = 6;
-    const DISCORD_CHANNEL = 7;
-    const DISCORD_ROLE = 8;
-    const DISCORD_MENTIONABLE = 9;
+    public const DISCORD_SUB_COMMAND = 1;
+    public const DISCORD_SUB_COMMAND_GROUP = 2;
+    public const DISCORD_STRING = 3;
+    public const DISCORD_INTEGER = 4;
+    public const DISCORD_BOOLEAN = 5;
+    public const DISCORD_USER = 6;
+    public const DISCORD_CHANNEL = 7;
+    public const DISCORD_ROLE = 8;
+    public const DISCORD_MENTIONABLE = 9;
 
     // InteractionType https://discord.com/developers/docs/interactions/slash-commands#interaction-object-interaction-request-type
-    const DISCORD_PING = 1;
-    const DISCORD_APPLICATION_COMMAND = 2;
-    const DISCORD_MESSAGE_COMPONENT = 3;
+    public const DISCORD_PING = 1;
+    public const DISCORD_APPLICATION_COMMAND = 2;
+    public const DISCORD_MESSAGE_COMPONENT = 3;
 
     // InteractionCallbackType https://discord.com/developers/docs/interactions/slash-commands#interaction-response-object-interaction-callback-type
     /**
      * ACK a Ping
      */
-    const DISCORD_PONG = 1;
+    public const DISCORD_PONG = 1;
     /**
      * respond to an interaction with a message
      */
-    const DISCORD_CHANNEL_MESSAGE_WITH_SOURCE = 4;
+    public const DISCORD_CHANNEL_MESSAGE_WITH_SOURCE = 4;
     /**
      * ACK an interaction and edit a response later, the user sees a loading state
      */
-    const DISCORD_DEFERRED_CHANNEL_MESSAGE_WITH_SOURCE = 5;
+    public const DISCORD_DEFERRED_CHANNEL_MESSAGE_WITH_SOURCE = 5;
     /**
      * for components, ACK an interaction and edit the original message later; the user does not see a loading state
      */
-    const DISCORD_DEFERRED_UPDATE_MESSAGE = 6;
+    public const DISCORD_DEFERRED_UPDATE_MESSAGE = 6;
     /**
      * for components, edit the message the component was attached to
      */
-    const DISCORD_UPDATE_MESSAGE = 7;
+    public const DISCORD_UPDATE_MESSAGE = 7;
 
     /**
      * URL zur Discord-API
@@ -139,7 +139,7 @@ class DiscordApi
     }
 
     /////////////////////////////////////
-    // Slash Commands Start
+    // Application Commands Start
     /////////////////////////////////////
 
     /**
@@ -487,7 +487,7 @@ class DiscordApi
     }
 
     /////////////////////////////////////
-    // Slash Commands End
+    // Application Commands End
     /////////////////////////////////////
 
     /////////////////////////////////////
@@ -623,6 +623,23 @@ class DiscordApi
     {
         $url = sprintf('%s/channels/%s/messages', $this->apiUrl, $channelID);
         return $this->execute($url, 'POST', $params, 'application/json');
+    }
+
+    /**
+     * Crosspost a message in a News Channel to following channels. This endpoint requires the 'SEND_MESSAGES'
+     * permission, if the current user sent the message, or additionally the 'MANAGE_MESSAGES' permission, for all
+     * other messages, to be present for the current user.
+     *
+     * Returns a message object.
+     *
+     * @param  integer $channelID
+     * @param  integer $messageID
+     * @return array
+     */
+    public function crosspostMessage($channelID, $messageID)
+    {
+        $url = sprintf('%s/channels/%s/messages/%s/crosspost', $this->apiUrl, $channelID, $messageID);
+        return $this->execute($url, 'POST');
     }
 
     /**
@@ -1783,6 +1800,108 @@ class DiscordApi
     /////////////////////////////////////
 
     /////////////////////////////////////
+    // Guild Scheduled Event Start
+    /////////////////////////////////////
+
+    /**
+     * Returns a list of guild scheduled event objects for the given guild.
+     *
+     * @param  integer $guildID
+     * @return array
+     */
+    public function listScheduledEventsForGuild($guildID, $withUserCount = false)
+    {
+        $url = sprintf('%s/guilds/%s/scheduled-events', $this->apiUrl, $guildID);
+        if ($withUserCount) {
+            $url .= '?with_user_count=true';
+        }
+        return $this->execute($url);
+    }
+
+    /**
+     * Create a guild scheduled event in the guild. Returns a guild scheduled event object on success.
+     *
+     * A guild can have a maximum of 100 events with SCHEDULED or ACTIVE status at any time.
+     *
+     * @param  integer $guildID
+     * @param  array $params
+     * @return array
+     */
+    public function createGuildScheduledEvent($guildID, $params)
+    {
+        $url = sprintf('%s/guilds/%s/scheduled-events', $this->apiUrl, $guildID);
+        return $this->execute($url, 'POST', $params, 'application/json');
+    }
+
+    /**
+     * Get a guild scheduled event. Returns a guild scheduled event object on success.
+     *
+     * @param  integer $guildID
+     * @param  integer $scheduledEventID
+     * @return array
+     */
+    public function getGuildScheduledEvent($guildID, $scheduledEventID, $withUserCount = false)
+    {
+        $url = sprintf('%s/guilds/%s/scheduled-events/%s', $this->apiUrl, $guildID, $scheduledEventID);
+        if ($withUserCount) {
+            $url .= '?with_user_count=true';
+        }
+        return $this->execute($url, 'POST');
+    }
+
+    /**
+     * Modify a guild scheduled event. Returns the modified guild scheduled event object on success.
+     *
+     * To start or end an event, use this endpoint to modify the event's status field.
+     *
+     * @param  integer $guildID
+     * @param  integer $scheduledEventID
+     * @param  array $params
+     * @return array
+     */
+    public function modifyGuildScheduledEvent($guildID, $scheduledEventID, $params)
+    {
+        $url = sprintf('%s/guilds/%s/scheduled-events/%s', $this->apiUrl, $guildID, $scheduledEventID);
+        return $this->execute($url, 'PATCH', $params, 'application/json');
+    }
+
+    /**
+     * Delete a guild scheduled event. Returns a 204 on success.
+     *
+     * @param  integer $guildID
+     * @param  integer $scheduledEventID
+     * @return array
+     */
+    public function deleteGuildScheduledEvent($guildID, $scheduledEventID)
+    {
+        $url = sprintf('%s/guilds/%s/scheduled-events/%s', $this->apiUrl, $guildID, $scheduledEventID);
+        return $this->execute($url, 'DELETE');
+    }
+
+    /**
+     * Get a list of guild scheduled event users subscribed to a guild scheduled event. Returns a list of guild
+     * scheduled event user objects on success. Guild member data, if it exists, is included if the with_member query
+     * parameter is set.
+     *
+     * @param  integer $guildID
+     * @param  integer $scheduledEventID
+     * @param  array $queryParams
+     * @return array
+     */
+    public function getGuildScheduledEventUsers($guildID, $scheduledEventID, array $queryParams = [])
+    {
+        $url = sprintf('%s/guilds/%s/scheduled-events/%s/users', $this->apiUrl, $guildID, $scheduledEventID);
+        if (!empty($queryParams)) {
+            $url .= '?' . \http_build_query($queryParams, '', '&');
+        }
+        return $this->execute($url);
+    }
+
+    /////////////////////////////////////
+    // Guild Scheduled Event End
+    /////////////////////////////////////
+
+    /////////////////////////////////////
     // Guild Template Start
     /////////////////////////////////////
 
@@ -1976,6 +2095,92 @@ class DiscordApi
 
     /////////////////////////////////////
     // Stage Instance End
+    /////////////////////////////////////
+
+    /////////////////////////////////////
+    // Sticker Start
+    /////////////////////////////////////
+
+    /**
+     * Returns a sticker object for the given sticker ID.
+     *
+     * @param  integer $stickerID
+     * @return array
+     */
+    public function getSticker($stickerID)
+    {
+        $url = sprintf('%s/stickers/%s', $this->apiUrl, $stickerID);
+        return $this->execute($url);
+    }
+
+    /**
+     * Returns the list of sticker packs available to Nitro subscribers.
+     *
+     * @return array
+     */
+    public function listNitroStickerPacks()
+    {
+        $url = sprintf('%s/sticker-packs', $this->apiUrl);
+        return $this->execute($url);
+    }
+
+    /**
+     * Returns an array of sticker objects for the given guild. Includes user fields if the bot has the
+     * MANAGE_EMOJIS_AND_STICKERS permission.
+     *
+     * @param  integer $guildID
+     * @return array
+     */
+    public function listGuildStickers($guildID)
+    {
+        $url = sprintf('%s/guilds/%s/stickers', $this->apiUrl, $guildID);
+        return $this->execute($url);
+    }
+
+    /**
+     * Returns a sticker object for the given guild and sticker IDs. Includes the user field if the bot has the
+     * MANAGE_EMOJIS_AND_STICKERS permission.
+     *
+     * @param  integer $guildID
+     * @param  integer $stickerID
+     * @return array
+     */
+    public function getGuildSticker($guildID, $stickerID)
+    {
+        $url = sprintf('%s/guilds/%s/stickers/%s', $this->apiUrl, $guildID, $stickerID);
+        return $this->execute($url);
+    }
+
+    /**
+     * Modify the given sticker. Requires the MANAGE_EMOJIS_AND_STICKERS permission. Returns the updated sticker object
+     * on success.
+     *
+     * @param  integer $guildID
+     * @param  integer $stickerID
+     * @param  array $params
+     * @return array
+     */
+    public function modifyGuildSticker($guildID, $stickerID, $params)
+    {
+        $url = sprintf('%s/guilds/%s/stickers/%s', $this->apiUrl, $guildID, $stickerID);
+        return $this->execute($url, 'PATCH', $params, 'application/json');
+    }
+
+    /**
+     * Delete the given sticker. Requires the MANAGE_EMOJIS_AND_STICKERS permission. Returns 204 No Content on success.
+     *
+     * @param  integer $guildID
+     * @param  integer $stickerID
+     * @return array
+     */
+    public function deleteGuildSticker($guildID, $stickerID)
+    {
+        $url = sprintf('%s/guilds/%s/stickers/%s', $this->apiUrl, $guildID, $stickerID);
+        return $this->execute($url, 'DELETE');
+    }
+
+    /////////////////////////////////////
+    // Sticker End
     /////////////////////////////////////
 
     /////////////////////////////////////
@@ -2554,7 +2759,7 @@ class DiscordApi
 
         if ($contentType == 'application/x-www-form-urlencoded') {
             $parameters = \http_build_query($parameters, "", '&');
-        } else if ($contentType == 'application/json') {
+        } elseif ($contentType == 'application/json') {
             $parameters = JSON::encode($parameters);
         }
 
