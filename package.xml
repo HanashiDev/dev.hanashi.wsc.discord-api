@@ -42,5 +42,8 @@
 	<instructions type="update" fromversion="2.0.4">
 		<!-- files -->
         <instruction type="file" />
+		
+		<!-- templates -->
+		<instruction type="acpTemplate" />
 	</instructions>
 </package>

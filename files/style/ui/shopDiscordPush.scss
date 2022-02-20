@@ -1,0 +1,17 @@
+.discordColorOption {
+    align-items: center;
+    display: flex;
+
+    .discordColorWrapper {
+        background-color: #fff;
+        border: 1px solid #ccc;
+        padding: 1px;
+    }
+
+    .discordColorPicker {
+        display: block;
+        height: 24px;
+        width: 24px;
+        cursor: pointer;
+    }
+}
