@@ -5,8 +5,6 @@
     </div>
 </div>
 
-{js application='wcf' file='WCF.ColorPicker' bundle='WCF.Combined'}
-
 <script data-relocate="true">
     require(['WoltLabSuite/Core/Ui/Color/Picker', 'Language'], function(UiColorPicker, Language) {
         Language.addObject({
