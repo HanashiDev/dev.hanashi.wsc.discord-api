@@ -1,4 +1,4 @@
-name: PHPCS check
+name: Code Style
 
 on:
   push:
