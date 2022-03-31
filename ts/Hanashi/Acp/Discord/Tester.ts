@@ -6,21 +6,28 @@ import * as EventHandler from "WoltLabSuite/Core/Event/Handler";
 import * as Language from "WoltLabSuite/Core/Language";
 import * as UiDialog from "WoltLabSuite/Core/Ui/Dialog";
 import { DialogCallbackObject, DialogCallbackSetup } from "@woltlab/wcf/ts/WoltLabSuite/Core/Ui/Dialog/Data";
+import IPayload from "../../Discord/IPayload";
 
 export class DiscordTester implements AjaxCallbackObject, DialogCallbackObject {
-    private connected: boolean = false;
-    private template: string = '';
+    private connected = false;
+    private template = '';
 
     constructor() {
         const jsConnectBots: HTMLCollectionOf<Element> = document.getElementsByClassName('jsConnectBot');
         
         for (const key of Object.keys(jsConnectBots)) {
-            jsConnectBots[key].addEventListener('click', (ev) => this.connectBotClicked(ev));
+            jsConnectBots[key].addEventListener('click', (ev: MouseEvent) => this.connectBotClicked(ev));
         }
     }
 
-    protected connectBotClicked(ev: any): void {
+    protected connectBotClicked(ev: MouseEvent): void {
+        if (ev.target == null || !(ev.target instanceof HTMLElement)) {
+            return;
+        }
         const target = ev.target.parentNode;
+        if (target == null || !(target instanceof HTMLElement)) {
+            return;
+        }
         const objectID = target.getAttribute('data-object-id');
 
         Ajax.api(this, {
@@ -37,7 +44,7 @@ export class DiscordTester implements AjaxCallbackObject, DialogCallbackObject {
         UiDialog.destroy(this);
         UiDialog.open(this);
         
-        EventHandler.add('dev.hanashi.wsc.discord.gateway', 'dispatch', (data) => this.dispatchData(data));
+        EventHandler.add('dev.hanashi.wsc.discord.gateway', 'dispatch', (data: IPayload) => this.dispatchData(data));
         const presence = {
             "game": {
                 "name": "Bot Test",
@@ -50,7 +57,7 @@ export class DiscordTester implements AjaxCallbackObject, DialogCallbackObject {
         setTimeout(() => this.connectionError(), 15 * 1000);
     }
 
-    protected dispatchData(data: any) {
+    protected dispatchData(data: IPayload): void {
         if (data.t == 'READY') {
             this.connected = true;
             const botTestText = document.getElementById('BotTestText');
@@ -60,7 +67,7 @@ export class DiscordTester implements AjaxCallbackObject, DialogCallbackObject {
         }
     }
 
-    protected connectionError() {
+    protected connectionError(): void {
         if (!this.connected) {
             const botTestText = document.getElementById('BotTestText');
             if (botTestText != null) {

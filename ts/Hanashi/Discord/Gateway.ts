@@ -6,7 +6,7 @@ export class DiscordGateway {
 
     protected socket: WebSocket;
 
-    private heartbeatInterval: number = 0;
+    private heartbeatInterval = 0;
     private seq: number | null = null;
 
     constructor(token: string, presence: object = {}) {
@@ -25,15 +25,15 @@ export class DiscordGateway {
         EventHandler.fire('dev.hanashi.wsc.discord.gateway', 'init', data);
     }
 
-    protected onopen() {
+    protected onopen(): void {
         EventHandler.fire('dev.hanashi.wsc.discord.gateway', 'onopen');
     }
 
-    protected onerror(ev: Event) {
+    protected onerror(ev: Event): void {
         EventHandler.fire('dev.hanashi.wsc.discord.gateway', 'onerror', ev);
     }
 
-    protected onmessage(ev: MessageEvent<any>) {
+    protected onmessage(ev: MessageEvent<any>): void {
         const data = JSON.parse(ev.data);
 
         switch (data.op) {
@@ -78,7 +78,7 @@ export class DiscordGateway {
     }
 
     private verify() {
-        var sendData = {
+        const sendData = {
             op: 2,
             d: {
                 token: this.token,
