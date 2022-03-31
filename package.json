@@ -13,6 +13,8 @@
     },
     "scripts": {
         "test": "npx eslint \"ts/**\"",
-        "build": "tsc --build"
+        "build": "tsc --build",
+        "fixpretty": "npx prettier --write ts",
+        "checkpretty": "npx prettier --check ts"
     }
 }
