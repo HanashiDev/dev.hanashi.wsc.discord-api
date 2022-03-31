@@ -12,6 +12,7 @@
         "@woltlab/wcf": "https://github.com/WoltLab/WCF.git#master"
     },
     "scripts": {
-        "test": "npx eslint \"ts/**\""
+        "test": "npx eslint \"ts/**\"",
+        "build": "tsc --build"
     }
 }
