@@ -1218,9 +1218,13 @@ class DiscordApi
      *
      * @return  array
      */
-    public function getGuild()
+    public function getGuild(bool $counts = false)
     {
-        $url = sprintf('%s/guilds/%s', $this->apiUrl, $this->guildID);
+        if ($counts) {
+            $url = sprintf('%s/guilds/%s?with_counts=true', $this->apiUrl, $this->guildID);
+        } else {
+            $url = sprintf('%s/guilds/%s', $this->apiUrl, $this->guildID);
+        }
         return $this->execute($url);
     }
 
