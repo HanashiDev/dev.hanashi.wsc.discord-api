@@ -1224,7 +1224,6 @@ class DiscordApi
         if ($withCounts) {
             $url .= '?with_counts=1';
         }
-        
         return $this->execute($url);
     }
 
