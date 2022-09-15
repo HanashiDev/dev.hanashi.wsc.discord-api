@@ -14,5 +14,4 @@ use wcf\data\DatabaseObjectList;
  */
 class DiscordWebhookList extends DatabaseObjectList
 {
-
 }

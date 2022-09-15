@@ -21,6 +21,11 @@ use wcf\util\JSON;
  */
 class DiscordApi
 {
+    // ApplicationCommandType https://discord.com/developers/docs/interactions/application-commands#application-command-object-application-command-types
+    public const DISCORD_COMMAND_CHAT_INPUT = 1;
+    public const DISCORD_COMMAND_USER = 2;
+    public const DISCORD_COMMAND_MESSAGE = 3;
+
     // ApplicationCommandOptionType https://discord.com/developers/docs/interactions/slash-commands#application-command-object-application-command-option-type
     public const DISCORD_SUB_COMMAND = 1;
     public const DISCORD_SUB_COMMAND_GROUP = 2;
@@ -31,33 +36,8 @@ class DiscordApi
     public const DISCORD_CHANNEL = 7;
     public const DISCORD_ROLE = 8;
     public const DISCORD_MENTIONABLE = 9;
-
-    // InteractionType https://discord.com/developers/docs/interactions/slash-commands#interaction-object-interaction-request-type
-    public const DISCORD_PING = 1;
-    public const DISCORD_APPLICATION_COMMAND = 2;
-    public const DISCORD_MESSAGE_COMPONENT = 3;
-
-    // InteractionCallbackType https://discord.com/developers/docs/interactions/slash-commands#interaction-response-object-interaction-callback-type
-    /**
-     * ACK a Ping
-     */
-    public const DISCORD_PONG = 1;
-    /**
-     * respond to an interaction with a message
-     */
-    public const DISCORD_CHANNEL_MESSAGE_WITH_SOURCE = 4;
-    /**
-     * ACK an interaction and edit a response later, the user sees a loading state
-     */
-    public const DISCORD_DEFERRED_CHANNEL_MESSAGE_WITH_SOURCE = 5;
-    /**
-     * for components, ACK an interaction and edit the original message later; the user does not see a loading state
-     */
-    public const DISCORD_DEFERRED_UPDATE_MESSAGE = 6;
-    /**
-     * for components, edit the message the component was attached to
-     */
-    public const DISCORD_UPDATE_MESSAGE = 7;
+    public const DISCORD_NUMBER = 10;
+    public const DISCORD_ATTACHMENT = 11;
 
     /**
      * URL zur Discord-API
@@ -148,9 +128,12 @@ class DiscordApi
      * @param  integer   $applicationID
      * @return array
      */
-    public function getGlobalApplicationCommands($applicationID)
+    public function getGlobalApplicationCommands($applicationID, bool $withLocalizations = false)
     {
         $url = sprintf('%s/applications/%s/commands', $this->apiUrl, $applicationID);
+        if ($withLocalizations) {
+            $url .= '?with_localizations=1';
+        }
         return $this->execute($url);
     }
 
@@ -214,9 +197,12 @@ class DiscordApi
      * @param  integer $commandID
      * @return array
      */
-    public function getGuildApplicationCommands($applicationID, $commandID)
+    public function getGuildApplicationCommands($applicationID, $commandID, bool $withLocalizations = false)
     {
         $url = sprintf('%s/applications/%s/commands/%s', $this->apiUrl, $applicationID, $commandID);
+        if ($withLocalizations) {
+            $url .= '?with_localizations=1';
+        }
         return $this->execute($url, 'GET');
     }
 
@@ -511,6 +497,93 @@ class DiscordApi
 
     /////////////////////////////////////
     // Audit Log End
+    /////////////////////////////////////
+
+    /////////////////////////////////////
+    // Auto Moderation Start
+    /////////////////////////////////////
+
+    /**
+     * Get a list of all rules currently configured for the guild. Returns a list of auto moderation rule objects for
+     * the given guild.
+     *
+     * This endpoint requires the MANAGE_GUILD permission.
+     *
+     * @return array
+     */
+    public function listAutoModerationRulesForGuild()
+    {
+        $url = sprintf('%s/guilds/%s/auto-moderation/rules', $this->apiUrl, $this->guildID);
+        return $this->execute($url);
+    }
+
+    /**
+     * Get a single rule. Returns an auto moderation rule object.
+     *
+     * This endpoint requires the MANAGE_GUILD permission.
+     *
+     * @param  int $ruleID
+     * @return array
+     */
+    public function getAutoModerationRule($ruleID)
+    {
+        $url = sprintf('%s/guilds/%s/auto-moderation/rules/%s', $this->apiUrl, $this->guildID, $ruleID);
+        return $this->execute($url);
+    }
+
+    /**
+     * Create a new rule. Returns an auto moderation rule on success. Fires an Auto Moderation Rule Create Gateway event.
+     *
+     * This endpoint requires the MANAGE_GUILD permission.
+     *
+     * This endpoint supports the X-Audit-Log-Reason header.
+     *
+     * @param  array $params
+     * @return array
+     */
+    public function createAutoModerationRule(array $params)
+    {
+        $url = sprintf('%s/guilds/%s/auto-moderation/rules', $this->apiUrl, $this->guildID);
+        return $this->execute($url, 'POST', $params, 'application/json');
+    }
+
+    /**
+     * Modify an existing rule. Returns an auto moderation rule on success. Fires an Auto Moderation Rule Update Gateway event.
+     *
+     * Requires MANAGE_GUILD permissions.
+     *
+     * All parameters for this endpoint are optional.
+     *
+     * This endpoint supports the X-Audit-Log-Reason header.
+     *
+     * @param  int $ruleID
+     * @param  array $params
+     * @return array
+     */
+    public function modifyAutoModerationRule($ruleID, array $params)
+    {
+        $url = sprintf('%s/guilds/%s/auto-moderation/rules/%s', $this->apiUrl, $this->guildID, $ruleID);
+        return $this->execute($url, 'PATCH', $params, 'application/json');
+    }
+
+    /**
+     * Delete a rule. Returns a 204 on success. Fires an Auto Moderation Rule Delete Gateway event.
+     *
+     * This endpoint requires the MANAGE_GUILD permission.
+     *
+     * This endpoint supports the X-Audit-Log-Reason header.
+     *
+     * @param  int $ruleID
+     * @return array
+     */
+    public function deleteAutoModerationRule($ruleID)
+    {
+        $url = sprintf('%s/guilds/%s/auto-moderation/rules/%s', $this->apiUrl, $this->guildID, $ruleID);
+        return $this->execute($url, 'DELETE');
+    }
+
+    /////////////////////////////////////
+    // Auto Moderation End
     /////////////////////////////////////
 
     /////////////////////////////////////
@@ -945,14 +1018,14 @@ class DiscordApi
     /**
      * Creates a new thread from an existing message. Returns a channel on success, and a 400 BAD REQUEST on invalid parameters. Fires a Thread Create Gateway event.
      *
-     * When called on a GUILD_TEXT channel, creates a GUILD_PUBLIC_THREAD. When called on a GUILD_NEWS channel, creates a GUILD_NEWS_THREAD. The id of the created thread will be the same as the id of the message, and as such a message can only have a single thread created from it.
+     * When called on a GUILD_TEXT channel, creates a PUBLIC_THREAD. When called on a GUILD_ANNOUNCEMENT channel, creates a ANNOUNCEMENT_THREAD. Does not work on a GUILD_FORUM channel. The id of the created thread will be the same as the id of the source message, and as such a message can only have a single thread created from it.
      *
      * @param  integer $channelID
      * @param  integer $messageID
      * @param  array $params
      * @return array
      */
-    public function startThreadWithMessage($channelID, $messageID, $params)
+    public function startThreadFromMessage($channelID, $messageID, $params)
     {
         $url = sprintf('%s/channels/%s/messages/%s/threads', $this->apiUrl, $channelID, $messageID);
         return $this->execute($url, 'POST', $params, 'application/json');
@@ -972,6 +1045,32 @@ class DiscordApi
      * @return array
      */
     public function startThreadWithoutMessage($channelID, $params)
+    {
+        $url = sprintf('%s/channels/%s/threads', $this->apiUrl, $channelID);
+        return $this->execute($url, 'POST', $params, 'application/json');
+    }
+
+    /**
+     * Creates a new thread in a forum channel, and sends a message within the created thread. Returns a channel, with a nested message object, on success, and a 400 BAD REQUEST on invalid parameters. Fires a Thread Create and Message Create Gateway event.
+     *
+     * - The type of the created thread is PUBLIC_THREAD.
+     * - See message formatting for more information on how to properly format messages.
+     * - The current user must have the SEND_MESSAGES permission (CREATE_PUBLIC_THREADS is ignored).
+     * - The maximum request size when sending a message is 8MiB.
+     * - For the embed object, you can set every field except type (it will be rich regardless of if you try to set it), provider, video, and any height, width, or proxy_url values for images.
+     * - Examples for file uploads are available in Uploading Files.
+     * - Files must be attached using a multipart/form-data body as described in Uploading Files.
+     * - Note that when sending a message, you must provide a value for at least one of content, embeds, or files[n].
+     *
+     * Discord may strip certain characters from message content, like invalid unicode characters or characters which cause unexpected message formatting. If you are passing user-generated strings into message content, consider sanitizing the data to prevent unexpected behavior and utilizing allowed_mentions to prevent unexpected mentions.
+     *
+     * This endpoint supports the X-Audit-Log-Reason header.
+     *
+     * @param  mixed $channelID
+     * @param  mixed $params
+     * @return void
+     */
+    public function startThreadInForumChannel($channelID, $params)
     {
         $url = sprintf('%s/channels/%s/threads', $this->apiUrl, $channelID);
         return $this->execute($url, 'POST', $params, 'application/json');
@@ -1028,6 +1127,19 @@ class DiscordApi
     }
 
     /**
+     * Returns a thread member object for the specified user if they are a member of the thread, returns a 404 response otherwise.
+     *
+     * @param  int $channelID
+     * @param  int $userID
+     * @return array
+     */
+    public function getThreadMember($channelID, $userID)
+    {
+        $url = sprintf('%s/channels/%s/thread-members/%s', $this->apiUrl, $channelID, $userID);
+        return $this->execute($url, 'GET');
+    }
+
+    /**
      * Returns array of thread members objects that are members of the thread.
      *
      * This endpoint is restricted according to whether the GUILD_MEMBERS Privileged Intent is enabled for your application.
@@ -1038,22 +1150,6 @@ class DiscordApi
     public function listThreadMembers($channelID)
     {
         $url = sprintf('%s/channels/%s/thread-members', $this->apiUrl, $channelID);
-        return $this->execute($url, 'GET');
-    }
-
-    /**
-     * Returns all active threads in the channel, including public and private threads. Threads are ordered by their id, in descending order.
-     *
-     * @param  integer $channelID
-     * @param  array $params
-     * @return array
-     */
-    public function listActiveThreads($channelID, $params = [])
-    {
-        $url = sprintf('%s/channels/%s/threads/active', $this->apiUrl, $channelID);
-        if (!empty($params)) {
-            $url .= '?' . http_build_query($params, '', '&');
-        }
         return $this->execute($url, 'GET');
     }
 
@@ -1545,6 +1641,20 @@ class DiscordApi
     public function modifyGuildRole($roleID, $params = [])
     {
         $url = sprintf('%s/guilds/%s/roles/%s', $this->apiUrl, $this->guildID, $roleID);
+        return $this->execute($url, 'PATCH', $params, 'application/json');
+    }
+
+    /**
+     * Modify a guild's MFA level. Requires guild ownership. Returns the updated level on success. Fires a Guild Update Gateway event.
+     *
+     * This endpoint supports the X-Audit-Log-Reason header.
+     *
+     * @param  array $params
+     * @return array
+     */
+    public function modifyGuildMfaLevel($params)
+    {
+        $url = sprintf('%s/guilds/%s/mfa', $this->apiUrl, $this->guildID);
         return $this->execute($url, 'PATCH', $params, 'application/json');
     }
 

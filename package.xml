@@ -1,46 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<package name="dev.hanashi.wsc.discord-api" xmlns="http://www.woltlab.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.woltlab.com http://www.woltlab.com/XSD/2019/package.xsd">
-    <packageinformation>
-        <packagename><![CDATA[Discord API]]></packagename>
-        <packagename language="de"><![CDATA[Discord-API]]></packagename>
-        <packagedescription><![CDATA[API to cummincate with Discord.]]></packagedescription>
-        <packagedescription language="de"><![CDATA[API um mit Discord zu kommunizieren.]]></packagedescription>
-        <version>2.1.1</version>
-        <date>2021-02-22</date>
-    </packageinformation>
-
-    <authorinformation>
-        <author><![CDATA[Hanashi Development]]></author>
-        <authorurl><![CDATA[https://hanashi.dev/]]></authorurl>
-    </authorinformation>
-
-    <requiredpackages>
-        <requiredpackage minversion="5.3.0">com.woltlab.wcf</requiredpackage>
-    </requiredpackages>
-
-    <excludedpackages>
-        <excludedpackage version="6.0.0 Alpha 1">com.woltlab.wcf</excludedpackage>
-    </excludedpackages>
-
-    <instructions type="install">
-		<!-- files -->
-        <instruction type="file" />
-		
-		<!-- templates -->
-		<instruction type="acpTemplate" />
-		
-		<!-- language -->
-        <instruction type="language"/>
-		
-		<!-- config -->
-        <instruction type="acpMenu" />
-        <instruction type="cronjob" />
-        <instruction type="userGroupOption" />
-        <instruction type="option" />
-        <instruction type="script">acp/install_dev.hanashi.wsc.discord-api.php</instruction>
-    </instructions>
-	<instructions type="update" fromversion="2.1.0">
-		<!-- templates -->
-		<instruction type="acpTemplate" />
+<package xmlns="http://www.woltlab.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.woltlab.com http://www.woltlab.com/XSD/5.4/package.xsd" name="dev.hanashi.wsc.discord-api">
+	<packageinformation>
+		<!-- dev.hanashi.wsc.discord-api -->
+		<packagename>Discord API</packagename>
+		<packagename language="de">Discord-API</packagename>
+		<packagedescription>API to cummincate with Discord.</packagedescription>
+		<packagedescription language="de">API um mit Discord zu kommunizieren.</packagedescription>
+		<version>2.2.0</version>
+		<date>2022-09-15</date>
+	</packageinformation>
+	<authorinformation>
+		<author>Hanashi Development</author>
+		<authorurl>https://hanashi.dev/</authorurl>
+	</authorinformation>
+	<requiredpackages>
+		<requiredpackage minversion="5.3.0">com.woltlab.wcf</requiredpackage>
+	</requiredpackages>
+	<excludedpackages>
+		<excludedpackage version="6.0.0 Alpha 1">com.woltlab.wcf</excludedpackage>
+	</excludedpackages>
+	<instructions type="install">
+		<instruction type="file"/>
+		<instruction type="acpTemplate"/>
+		<instruction type="language"/>
+		<instruction type="acpMenu"/>
+		<instruction type="cronjob"/>
+		<instruction type="userGroupOption"/>
+		<instruction type="option"/>
+		<instruction type="script">acp/install_dev.hanashi.wsc.discord-api.php</instruction>
+	</instructions>
+	<instructions type="update" fromversion="2.1.1">
+		<instruction type="file"/>
 	</instructions>
 </package>
