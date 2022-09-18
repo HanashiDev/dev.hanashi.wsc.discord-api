@@ -25,6 +25,7 @@ class DiscordRoleMultiSelectOptionType extends AbstractOptionType
         if (!isset($this->roleMultiSelectType[$option->optionName])) {
             $this->roleMultiSelectType[$option->optionName] = new RoleMultiSelectDiscordType($option->optionName);
         }
+
         return $this->roleMultiSelectType[$option->optionName]->getFormElement($value);
     }
 
@@ -47,6 +48,7 @@ class DiscordRoleMultiSelectOptionType extends AbstractOptionType
         if (!isset($this->roleMultiSelectType[$option->optionName])) {
             $this->roleMultiSelectType[$option->optionName] = new RoleMultiSelectDiscordType($option->optionName);
         }
+
         return $this->roleMultiSelectType[$option->optionName]->getData($newValue);
     }
 }

@@ -15,17 +15,17 @@ class WebhookChannelMultiSelectDiscordType extends ChannelMultiSelectDiscordType
             return;
         }
 
-        $botIDs = array_keys($newValue);
+        $botIDs = \array_keys($newValue);
         $discordBots = [];
         foreach ($this->getDiscordBotList() as $discordBot) {
-            if (in_array($discordBot->botID, $botIDs)) {
+            if (\in_array($discordBot->botID, $botIDs)) {
                 $discordBots[$discordBot->botID] = $discordBot;
             }
         }
 
         $channelIDsMerged = [];
         foreach ($newValue as $channelIDs) {
-            $channelIDsMerged = array_merge($channelIDsMerged, $channelIDs);
+            $channelIDsMerged = \array_merge($channelIDsMerged, $channelIDs);
         }
 
         $discordWebhookList = new DiscordWebhookList();
@@ -33,7 +33,7 @@ class WebhookChannelMultiSelectDiscordType extends ChannelMultiSelectDiscordType
         $discordWebhookList->readObjects();
         $webhookChannelIDs = [];
         foreach ($discordWebhookList as $discordWebhook) {
-            if (!in_array($discordWebhook->channelID, $webhookChannelIDs)) {
+            if (!\in_array($discordWebhook->channelID, $webhookChannelIDs)) {
                 $webhookChannelIDs[] = $discordWebhook->channelID;
             }
         }
@@ -51,19 +51,19 @@ class WebhookChannelMultiSelectDiscordType extends ChannelMultiSelectDiscordType
                 throw new UserInputException($this->optionName);
             }
             $channels = $guildChannels[$botID]['body'];
-            $channelIDsTmp = array_column($channels, 'id');
+            $channelIDsTmp = \array_column($channels, 'id');
             foreach ($channelIDs as $channelID) {
-                if (!in_array($channelID, $channelIDsTmp)) {
+                if (!\in_array($channelID, $channelIDsTmp)) {
                     throw new UserInputException($this->optionName);
                 }
 
-                if (!in_array($channelID, $webhookChannelIDs)) {
+                if (!\in_array($channelID, $webhookChannelIDs)) {
                     $discordApi = $discordBots[$botID]->getDiscordApi();
                     $avatar = null;
-                    $avatarFile = sprintf('%simages/discord_webhook/%s.png', WCF_DIR, $botID);
-                    if (file_exists($avatarFile)) {
+                    $avatarFile = \sprintf('%simages/discord_webhook/%s.png', WCF_DIR, $botID);
+                    if (\file_exists($avatarFile)) {
                         $mimeType = FileUtil::getMimeType($avatarFile);
-                        $avatar = 'data:' . $mimeType . ';base64,' . base64_encode(file_get_contents($avatarFile));
+                        $avatar = 'data:' . $mimeType . ';base64,' . \base64_encode(\file_get_contents($avatarFile));
                     }
                     $response = $discordApi->createWebhook($channelID, $discordBots[$botID]->webhookName, $avatar);
                     if (!$response['error']) {
@@ -76,8 +76,8 @@ class WebhookChannelMultiSelectDiscordType extends ChannelMultiSelectDiscordType
                                 'webhookName' => $response['body']['name'],
                                 'webhookTitle' => $this->optionName,
                                 'usageBy' => $this->optionName,
-                                'webhookTime' => TIME_NOW
-                            ]
+                                'webhookTime' => TIME_NOW,
+                            ],
                         ]);
                         $action->executeAction();
                     } else {

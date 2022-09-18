@@ -31,7 +31,7 @@ class ChannelMultiSelectDiscordType extends AbstractDiscordType
             if (isset($guildChannels[$discordBot->botID]['body'])) {
                 $channelsTmp = $guildChannels[$discordBot->botID]['body'];
             }
-            array_multisort(array_column($channelsTmp, 'position'), SORT_ASC, $channelsTmp);
+            \array_multisort(\array_column($channelsTmp, 'position'), \SORT_ASC, $channelsTmp);
 
             $channelsGroupedTmp = [];
             foreach ($channelsTmp as $channel) {
@@ -50,14 +50,14 @@ class ChannelMultiSelectDiscordType extends AbstractDiscordType
             $channels[] = [
                 'botID' => $discordBot->botID,
                 'botName' => $discordBot->botName,
-                'channels' => $channelsGroupedTmp
+                'channels' => $channelsGroupedTmp,
             ];
         }
 
         WCF::getTPL()->assign([
             'bots' => $channels,
             'optionName' => $this->optionName,
-            'value' => unserialize($value)
+            'value' => \unserialize($value),
         ]);
 
         return WCF::getTPL()->fetch('discordChannelMultiSelect');
@@ -78,9 +78,9 @@ class ChannelMultiSelectDiscordType extends AbstractDiscordType
             if (isset($guildChannels[$botID]['body'])) {
                 $channels = $guildChannels[$botID]['body'];
             }
-            $channelIDsTmp = array_column($channels, 'id');
+            $channelIDsTmp = \array_column($channels, 'id');
             foreach ($channelIDs as $channelID) {
-                if (!in_array($channelID, $channelIDsTmp)) {
+                if (!\in_array($channelID, $channelIDsTmp)) {
                     throw new UserInputException($this->optionName);
                 }
             }
@@ -89,10 +89,11 @@ class ChannelMultiSelectDiscordType extends AbstractDiscordType
 
     public function getData($newValue)
     {
-        if (!is_array($newValue)) {
+        if (!\is_array($newValue)) {
             $newValue = [];
         }
-        return serialize($newValue);
+
+        return \serialize($newValue);
     }
 
     /**
@@ -107,6 +108,7 @@ class ChannelMultiSelectDiscordType extends AbstractDiscordType
             $this->discordBotList->sqlOrderBy = 'botName ASC';
             $this->discordBotList->readObjects();
         }
+
         return $this->discordBotList;
     }
 
@@ -127,6 +129,7 @@ class ChannelMultiSelectDiscordType extends AbstractDiscordType
                 $this->guildChannels[$discordBot->botID] = $guildChannelsTmp;
             }
         }
+
         return $this->guildChannels;
     }
 }

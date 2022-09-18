@@ -2,8 +2,8 @@
 
 namespace wcf\data\discord\webhook;
 
-use wcf\data\discord\bot\DiscordBot;
 use wcf\data\DatabaseObject;
+use wcf\data\discord\bot\DiscordBot;
 use wcf\system\discord\DiscordApi;
 
 /**
@@ -50,6 +50,7 @@ class DiscordWebhook extends DatabaseObject
         if ($this->discordBot === null) {
             $this->discordBot = new DiscordBot($this->botID);
         }
+
         return $this->discordBot;
     }
 
@@ -63,6 +64,7 @@ class DiscordWebhook extends DatabaseObject
         if ($this->discordApi === null) {
             $this->discordApi = new DiscordApi($this->guildID, $this->botToken);
         }
+
         return $this->discordApi;
     }
 }

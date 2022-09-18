@@ -2,11 +2,11 @@
 
 namespace wcf\system\cronjob;
 
+use wcf\data\cronjob\Cronjob;
 use wcf\data\discord\bot\DiscordBotAction;
 use wcf\data\discord\bot\DiscordBotList;
 use wcf\data\discord\webhook\DiscordWebhookAction;
 use wcf\data\discord\webhook\DiscordWebhookList;
-use wcf\data\cronjob\Cronjob;
 use wcf\system\discord\DiscordApi;
 
 /**
@@ -51,7 +51,7 @@ class DiscordApiRefresherCronjob extends AbstractCronjob
                 $webhookName = $webhook['body']['name'];
             }
             $action = new DiscordWebhookAction([$discordWebhook], 'update', [
-                'webhookName' => $webhookName
+                'webhookName' => $webhookName,
             ]);
             $action->executeAction();
         }
@@ -83,7 +83,7 @@ class DiscordApiRefresherCronjob extends AbstractCronjob
 
             $action = new DiscordBotAction([$discordBot], 'update', [
                 'guildName' => $guildName,
-                'guildIcon' => $guildIcon
+                'guildIcon' => $guildIcon,
             ]);
             $action->executeAction();
         }

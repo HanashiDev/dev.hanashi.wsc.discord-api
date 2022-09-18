@@ -2,8 +2,8 @@
 
 namespace wcf\system\option;
 
-use wcf\data\option\Option;
 use wcf\data\discord\bot\DiscordBotList;
+use wcf\data\option\Option;
 use wcf\system\exception\UserInputException;
 use wcf\system\WCF;
 
@@ -44,7 +44,7 @@ class DiscordChannelSelectOptionType extends AbstractOptionType
                 $channelsTmp = $guildChannels[$discordBot->botID];
             }
             $channelsTmp = $channelsTmp['body'];
-            array_multisort(array_column($channelsTmp, 'position'), SORT_ASC, $channelsTmp);
+            \array_multisort(\array_column($channelsTmp, 'position'), \SORT_ASC, $channelsTmp);
 
             $channelsGroupedTmp = [];
             foreach ($channelsTmp as $channel) {
@@ -63,15 +63,16 @@ class DiscordChannelSelectOptionType extends AbstractOptionType
             $channels[] = [
                 'botID' => $discordBot->botID,
                 'botName' => $discordBot->botName,
-                'channels' => $channelsGroupedTmp
+                'channels' => $channelsGroupedTmp,
             ];
         }
 
         WCF::getTPL()->assign([
             'bots' => $channels,
             'option' => $option,
-            'value' => unserialize($value)
+            'value' => \unserialize($value),
         ]);
+
         return WCF::getTPL()->fetch('discordChannelSelectOptionType');
     }
 
@@ -90,8 +91,8 @@ class DiscordChannelSelectOptionType extends AbstractOptionType
                 throw new UserInputException($option->optionName);
             }
             $channels = $guildChannels[$botID]['body'];
-            $channelIDs = array_column($channels, 'id');
-            if (!in_array($channelID, $channelIDs)) {
+            $channelIDs = \array_column($channels, 'id');
+            if (!\in_array($channelID, $channelIDs)) {
                 throw new UserInputException($option->optionName);
             }
         }
@@ -102,10 +103,11 @@ class DiscordChannelSelectOptionType extends AbstractOptionType
      */
     public function getData(Option $option, $newValue)
     {
-        if (!is_array($newValue)) {
+        if (!\is_array($newValue)) {
             $newValue = [];
         }
-        return serialize($newValue);
+
+        return \serialize($newValue);
     }
 
     /**
@@ -120,6 +122,7 @@ class DiscordChannelSelectOptionType extends AbstractOptionType
             $this->discordBotList->sqlOrderBy = 'botName ASC';
             $this->discordBotList->readObjects();
         }
+
         return $this->discordBotList;
     }
 
@@ -136,6 +139,7 @@ class DiscordChannelSelectOptionType extends AbstractOptionType
                 $this->guildChannels[$discordBot->botID] = $discordApi->getGuildChannels();
             }
         }
+
         return $this->guildChannels;
     }
 }

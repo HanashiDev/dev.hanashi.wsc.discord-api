@@ -32,6 +32,7 @@ class DiscordBot extends DatabaseObject
         if ($this->discordApi === null) {
             $this->discordApi = new DiscordApi($this->guildID, $this->botToken);
         }
+
         return $this->discordApi;
     }
 
@@ -39,7 +40,7 @@ class DiscordBot extends DatabaseObject
     {
         $files = [];
 
-        $filename = sprintf('%simages/discord_webhook/%s.png', WCF_DIR, $this->botID);
+        $filename = \sprintf('%simages/discord_webhook/%s.png', WCF_DIR, $this->botID);
         if (\file_exists($filename)) {
             $files[] = $filename;
         }

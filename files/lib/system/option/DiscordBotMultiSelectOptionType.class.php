@@ -2,8 +2,8 @@
 
 namespace wcf\system\option;
 
-use wcf\data\option\Option;
 use wcf\data\discord\bot\DiscordBotList;
+use wcf\data\option\Option;
 use wcf\system\exception\UserInputException;
 use wcf\system\WCF;
 use wcf\util\ArrayUtil;
@@ -31,8 +31,9 @@ class DiscordBotMultiSelectOptionType extends AbstractOptionType
         WCF::getTPL()->assign([
             'discordBotList' => $discordBotList,
             'option' => $option,
-            'value' => !is_array($value) ? explode("\n", $value) : $value
+            'value' => !\is_array($value) ? \explode("\n", $value) : $value,
         ]);
+
         return WCF::getTPL()->fetch('discordBotMultiSelectOptionType');
     }
 
@@ -41,7 +42,7 @@ class DiscordBotMultiSelectOptionType extends AbstractOptionType
      */
     public function validate(Option $option, $newValue)
     {
-        if (!is_array($newValue)) {
+        if (!\is_array($newValue)) {
             $newValue = [];
         }
         $newValue = ArrayUtil::toIntegerArray($newValue);
@@ -51,7 +52,7 @@ class DiscordBotMultiSelectOptionType extends AbstractOptionType
         $discordBotList->readObjectIDs();
 
         foreach ($newValue as $value) {
-            if (!in_array($value, $discordBotList->objectIDs)) {
+            if (!\in_array($value, $discordBotList->objectIDs)) {
                 throw new UserInputException($option->optionName);
             }
         }
@@ -62,9 +63,10 @@ class DiscordBotMultiSelectOptionType extends AbstractOptionType
      */
     public function getData(Option $option, $newValue)
     {
-        if (!is_array($newValue)) {
+        if (!\is_array($newValue)) {
             $newValue = [];
         }
-        return implode("\n", ArrayUtil::toIntegerArray(StringUtil::unifyNewlines($newValue)));
+
+        return \implode("\n", ArrayUtil::toIntegerArray(StringUtil::unifyNewlines($newValue)));
     }
 }

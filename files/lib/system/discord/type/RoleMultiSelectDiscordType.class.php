@@ -32,22 +32,22 @@ class RoleMultiSelectDiscordType extends AbstractDiscordType
                 $rolesTmp = $guildRoles[$discordBot->botID];
             }
             $rolesTmp = $rolesTmp['body'];
-            if (!is_array($rolesTmp)) {
+            if (!\is_array($rolesTmp)) {
                 $rolesTmp = [];
             }
-            array_multisort(array_column($rolesTmp, 'position'), SORT_DESC, $rolesTmp);
+            \array_multisort(\array_column($rolesTmp, 'position'), \SORT_DESC, $rolesTmp);
 
             $roles[] = [
                 'botID' => $discordBot->botID,
                 'botName' => $discordBot->botName,
-                'roles' => $rolesTmp
+                'roles' => $rolesTmp,
             ];
         }
 
         WCF::getTPL()->assign([
             'bots' => $roles,
             'optionName' => $this->optionName,
-            'value' => unserialize($value)
+            'value' => \unserialize($value),
         ]);
 
         return WCF::getTPL()->fetch('discordRoleMultiSelect');
@@ -65,9 +65,9 @@ class RoleMultiSelectDiscordType extends AbstractDiscordType
                 throw new UserInputException($this->optionName);
             }
             $roles = $guildRoles[$botID]['body'];
-            $roleIDsTmp = array_column($roles, 'id');
+            $roleIDsTmp = \array_column($roles, 'id');
             foreach ($roleIDs as $roleID) {
-                if (!in_array($roleID, $roleIDsTmp)) {
+                if (!\in_array($roleID, $roleIDsTmp)) {
                     throw new UserInputException($this->optionName);
                 }
             }
@@ -76,10 +76,11 @@ class RoleMultiSelectDiscordType extends AbstractDiscordType
 
     public function getData($newValue)
     {
-        if (!is_array($newValue)) {
+        if (!\is_array($newValue)) {
             $newValue = [];
         }
-        return serialize($newValue);
+
+        return \serialize($newValue);
     }
 
     /**
@@ -94,6 +95,7 @@ class RoleMultiSelectDiscordType extends AbstractDiscordType
             $this->discordBotList->sqlOrderBy = 'botName ASC';
             $this->discordBotList->readObjects();
         }
+
         return $this->discordBotList;
     }
 
@@ -110,6 +112,7 @@ class RoleMultiSelectDiscordType extends AbstractDiscordType
                 $this->guildRoles[$discordBot->botID] = $discordApi->getGuildRoles();
             }
         }
+
         return $this->guildRoles;
     }
 }

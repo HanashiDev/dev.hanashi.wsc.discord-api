@@ -4,7 +4,6 @@ namespace wcf\system\option;
 
 use wcf\data\option\Option;
 use wcf\system\exception\UserInputException;
-use wcf\system\option\AbstractOptionType;
 use wcf\system\Regex;
 use wcf\system\WCF;
 
@@ -27,6 +26,7 @@ class DiscordEmbedColorOptionType extends AbstractOptionType
                 \hexdec($colorParts[2])
             );
         }
+
         return WCF::getTPL()->fetch('discordEmbedColorOptionType', 'wcf', [
             'option' => $option,
             'value' => $value,
@@ -56,6 +56,7 @@ class DiscordEmbedColorOptionType extends AbstractOptionType
             \str_pad(\dechex($matches[2]), 2, '0', \STR_PAD_LEFT),
             \str_pad(\dechex($matches[3]), 2, '0', \STR_PAD_LEFT),
         );
+
         return \hexdec($hex);
     }
 }

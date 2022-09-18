@@ -96,7 +96,7 @@ class DiscordBotAddForm extends AbstractFormBuilderForm
                             if (!empty($guild['body']['icon'])) {
                                 $this->guildIcon = $guild['body']['icon'];
                             }
-                        }))
+                        })),
                 ]),
             FormContainer::create('webhookSettings')
                 ->label('wcf.acp.discordBotAdd.webhookSettings')
@@ -129,8 +129,8 @@ class DiscordBotAddForm extends AbstractFormBuilderForm
                 ->label('wcf.acp.discordBotAdd.interaction')
                 ->appendChildren([
                     TextFormField::create('publicKey')
-                        ->label('wcf.acp.discordBotAdd.publicKey')
-                ])
+                        ->label('wcf.acp.discordBotAdd.publicKey'),
+                ]),
         ]);
     }
 
@@ -148,7 +148,7 @@ class DiscordBotAddForm extends AbstractFormBuilderForm
             $additionalFields['botTime'] = TIME_NOW;
         }
 
-        $this->additionalFields = array_merge($this->additionalFields, $additionalFields);
+        $this->additionalFields = \array_merge($this->additionalFields, $additionalFields);
 
         parent::save();
     }

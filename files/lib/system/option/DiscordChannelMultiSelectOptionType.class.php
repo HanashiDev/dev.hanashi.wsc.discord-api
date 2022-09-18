@@ -48,6 +48,7 @@ class DiscordChannelMultiSelectOptionType extends AbstractOptionType
         if (!isset($this->channelMultiSelectType[$option->optionName])) {
             $this->channelMultiSelectType[$option->optionName] = new ChannelMultiSelectDiscordType($option->optionName);
         }
+
         return $this->channelMultiSelectType[$option->optionName]->getData($newValue);
     }
 }

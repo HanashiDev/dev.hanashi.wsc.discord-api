@@ -29,6 +29,7 @@ class DiscordWebhookAction extends AbstractDatabaseObjectAction
             $discordApi = $discordWebhook->getDiscordApi();
             $discordApi->deleteWebhookWithToken($discordWebhook->webhookID, $discordWebhook->webhookToken);
         }
+
         return parent::delete();
     }
 }

@@ -2,9 +2,9 @@
 
 namespace wcf\system\option;
 
-use wcf\data\option\Option;
 use wcf\data\discord\bot\DiscordBot;
 use wcf\data\discord\bot\DiscordBotList;
+use wcf\data\option\Option;
 use wcf\system\exception\UserInputException;
 use wcf\system\WCF;
 
@@ -30,8 +30,9 @@ class DiscordBotSelectOptionType extends AbstractOptionType
         WCF::getTPL()->assign([
             'discordBotList' => $discordBotList,
             'option' => $option,
-            'value' => $value
+            'value' => $value,
         ]);
+
         return WCF::getTPL()->fetch('discordBotSelectOptionType');
     }
 
