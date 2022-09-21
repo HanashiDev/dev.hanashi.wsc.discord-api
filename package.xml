@@ -8,6 +8,7 @@
 		<packagedescription language="de">API um mit Discord zu kommunizieren.</packagedescription>
 		<version>2.3.0</version>
 		<date>2022-09-15</date>
+		<license>https://creativecommons.org/publicdomain/zero/1.0/deed.en</license>
 	</packageinformation>
 	<authorinformation>
 		<author>Hanashi Development</author>
