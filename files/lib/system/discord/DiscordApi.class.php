@@ -52,6 +52,32 @@ class DiscordApi
 
     public const DISCORD_ATTACHMENT = 11;
 
+    // Interaction Types https://discord.com/developers/docs/interactions/receiving-and-responding#interaction-object-interaction-type
+    public const DISCORD_PING = 1;
+
+    public const DISCORD_APPLICATION_COMMAND = 2;
+
+    public const DISCORD_MESSAGE_COMPONENT = 3;
+
+    public const DISCORD_APPLICATION_COMMAND_AUTOCOMPLETE = 4;
+
+    public const DISCORD_MODAL_SUBMIT = 5;
+
+    // Interaction Callback Type https://discord.com/developers/docs/interactions/receiving-and-responding#interaction-response-object-interaction-callback-type
+    public const DISCORD_PONG = 1;
+
+    public const DISCORD_CHANNEL_MESSAGE_WITH_SOURCE = 4;
+
+    public const DISCORD_DEFERRED_CHANNEL_MESSAGE_WITH_SOURCE = 5;
+
+    public const DISCORD_DEFERRED_UPDATE_MESSAGE = 6;
+
+    public const DISCORD_UPDATE_MESSAGE = 7;
+
+    public const DISCORD_APPLICATION_COMMAND_AUTOCOMPLETE_RESULT = 8;
+
+    public const DISCORD_MODAL = 9;
+
     /**
      * URL zur Discord-API
      *
