@@ -13,7 +13,7 @@
 			<permissions>admin.discord.canManageConnection</permissions>
 		</acpmenuitem>
 		<acpmenuitem name="wcf.acp.menu.link.configuration.discord.discordBotList.add">
-			<controller>wcf\acp\form\DiscordBotAddForm</controller>
+			<controller>wcf\acp\form\DiscordBotAddManagerForm</controller>
 			<parent>wcf.acp.menu.link.configuration.discord.discordBotList</parent>
 			<permissions>admin.discord.canManageConnection</permissions>
 			<icon>fa-plus</icon>
