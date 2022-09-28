@@ -29,7 +29,7 @@
 
 		{lang}wcf.acp.discordBotAddManager.step2Intro{/lang}<br><br>
 
-		<a href="https://discord.com/api/oauth2/authorize?client_id={$botData['clientID']}&permissions=8&scope=bot%20applications.commands" class="button" target="_blank">
+		<a href="https://discord.com/api/oauth2/authorize?client_id={$botData['clientID']}&amp;permissions=8&amp;scope=bot%20applications.commands" class="button" target="_blank">
 			<span class="icon icon16 fa-external-link"></span>
 			{lang}wcf.acp.discordBotAddManager.step2Invite{/lang}
 		</a><br><br>
