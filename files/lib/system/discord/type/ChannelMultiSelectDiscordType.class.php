@@ -22,7 +22,7 @@ class ChannelMultiSelectDiscordType extends AbstractDiscordType
      */
     protected $guildChannels;
 
-    public function getFormElement($value)
+    public function getFormElement($value, $channelTypes = [])
     {
         $channels = [];
         $guildChannels = $this->getGuildChannels();
@@ -58,6 +58,7 @@ class ChannelMultiSelectDiscordType extends AbstractDiscordType
             'bots' => $channels,
             'optionName' => $this->optionName,
             'value' => \unserialize($value),
+            'channelTypes' => $channelTypes,
         ]);
 
         return WCF::getTPL()->fetch('discordChannelMultiSelect');

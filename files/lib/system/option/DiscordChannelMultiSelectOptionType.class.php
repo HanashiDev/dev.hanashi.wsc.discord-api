@@ -25,8 +25,9 @@ class DiscordChannelMultiSelectOptionType extends AbstractOptionType
         if (!isset($this->channelMultiSelectType[$option->optionName])) {
             $this->channelMultiSelectType[$option->optionName] = new ChannelMultiSelectDiscordType($option->optionName);
         }
+        $channelTypes = $this->getChannelTypes($option);
 
-        return $this->channelMultiSelectType[$option->optionName]->getFormElement($value);
+        return $this->channelMultiSelectType[$option->optionName]->getFormElement($value, $channelTypes);
     }
 
     /**
@@ -50,5 +51,15 @@ class DiscordChannelMultiSelectOptionType extends AbstractOptionType
         }
 
         return $this->channelMultiSelectType[$option->optionName]->getData($newValue);
+    }
+
+    private function getChannelTypes(Option $option): array
+    {
+        $channelTypes = $option->channeltypes;
+        if (empty($channelTypes)) {
+            return [];
+        }
+
+        return \explode(',', $channelTypes);
     }
 }
