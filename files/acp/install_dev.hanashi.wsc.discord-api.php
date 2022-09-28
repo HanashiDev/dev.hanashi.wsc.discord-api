@@ -8,11 +8,12 @@ use wcf\system\database\table\column\VarcharDatabaseTableColumn;
 use wcf\system\database\table\DatabaseTable;
 use wcf\system\database\table\DatabaseTableChangeProcessor;
 use wcf\system\database\table\index\DatabaseTablePrimaryIndex;
+use wcf\system\database\table\PartialDatabaseTable;
 use wcf\system\WCF;
 
 $tables = [
     // wcf1_category
-    DatabaseTable::create('wcf1_category')
+    PartialDatabaseTable::create('wcf1_category')
         ->columns([
             TextDatabaseTableColumn::create('discordChannelIDs'),
             VarcharDatabaseTableColumn::create('discordPostPrefix')
