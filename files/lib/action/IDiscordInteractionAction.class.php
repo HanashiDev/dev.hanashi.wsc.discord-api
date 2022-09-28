@@ -12,7 +12,7 @@ interface IDiscordInteractionAction
     public function getPublicKey();
 
     /**
-     * verarbeitet die von Discord gesendeten Daten für Slash Commands
+     * verarbeitet die von Discord gesendeten Daten für Application Commands
      *
      * @param  array $data
      * @return void
@@ -26,4 +26,20 @@ interface IDiscordInteractionAction
      * @return void
      */
     public function handleMessageCommand(array $data);
+
+    /**
+     * verarbeitet die von Discord gesendeten Daten für Application Command Autocomplete
+     *
+     * @param  array $data
+     * @return void
+     */
+    public function handleApplicationCommandAutocomplete(array $data);
+
+    /**
+     * verarbeitet die von Discord gesendeten Daten für Modal
+     *
+     * @param  array $data
+     * @return void
+     */
+    public function handleModalCommand(array $data);
 }

@@ -81,6 +81,9 @@ class DiscordChannelSelectOptionType extends AbstractOptionType
      */
     public function validate(Option $option, $newValue)
     {
+        if (!\is_array($newValue)) {
+            throw new UserInputException($option->optionName);
+        }
         $guildChannels = $this->getGuildChannels();
         foreach ($newValue as $botID => $channelID) {
             if (empty($channelID)) {

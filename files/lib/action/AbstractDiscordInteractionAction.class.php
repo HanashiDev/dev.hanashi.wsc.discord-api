@@ -53,6 +53,12 @@ abstract class AbstractDiscordInteractionAction extends AbstractAction implement
                 case DiscordApi::DISCORD_MESSAGE_COMPONENT:
                     $this->handleMessageCommand($data);
                     break;
+                case DiscordApi::DISCORD_APPLICATION_COMMAND_AUTOCOMPLETE:
+                    $this->handleApplicationCommandAutocomplete($data);
+                    break;
+                case DiscordApi::DISCORD_MODAL_SUBMIT:
+                    $this->handleModalCommand($data);
+                    break;
                 default:
                     throw new BadMethodCallException('unknown component');
                     break;

@@ -26,6 +26,9 @@ class DiscordWebhookChannelSelectOptionType extends DiscordChannelSelectOptionTy
         if (empty($newValue)) {
             return;
         }
+        if (!\is_array($newValue)) {
+            throw new UserInputException($option->optionName);
+        }
 
         $botIDs = \array_keys($newValue);
         $discordBots = [];

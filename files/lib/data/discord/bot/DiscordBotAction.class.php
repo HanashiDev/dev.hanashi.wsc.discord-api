@@ -35,6 +35,10 @@ class DiscordBotAction extends AbstractDatabaseObjectAction
      */
     public function create()
     {
+        if (isset($this->parameters['data']['useApplicationCommands'])) {
+            unset($this->parameters['data']['useApplicationCommands']);
+        }
+
         $discordBot = parent::create();
 
         if (isset($this->parameters['webhookIcon']) && \is_array($this->parameters['webhookIcon'])) {
