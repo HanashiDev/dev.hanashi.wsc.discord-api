@@ -22,6 +22,8 @@ use wcf\util\HeaderUtil;
 
 class DiscordBotAddManagerForm extends AbstractFormBuilderForm
 {
+    private const SESSION_VAR = self::class . "\0botData";
+
     /**
      * @inheritDoc
      */
@@ -84,14 +86,14 @@ class DiscordBotAddManagerForm extends AbstractFormBuilderForm
         }
 
         if ($this->step <= 1 || $this->step == 6) {
-            if (!empty(WCF::getSession()->getVar('botData'))) {
-                WCF::getSession()->unregister('botData');
+            if (!empty(WCF::getSession()->getVar(self::SESSION_VAR))) {
+                WCF::getSession()->unregister(self::SESSION_VAR);
             }
 
             return;
         }
 
-        $this->additionalFields = WCF::getSession()->getVar('botData');
+        $this->additionalFields = WCF::getSession()->getVar(self::SESSION_VAR);
         if (
             $this->step > 1
             && (
@@ -313,14 +315,14 @@ class DiscordBotAddManagerForm extends AbstractFormBuilderForm
         $this->additionalFields['botToken'] = $botToken;
         $this->additionalFields['clientID'] = $this->botInfo['id'];
         $this->additionalFields['botName'] = $this->botInfo['username'] . '#' . $this->botInfo['discriminator'];
-        WCF::getSession()->register('botData', $this->additionalFields);
+        WCF::getSession()->register(self::SESSION_VAR, $this->additionalFields);
     }
 
     protected function saveStep3()
     {
         $formData = $this->form->getData();
         $this->additionalFields['guildID'] = $formData['data']['guildID'];
-        WCF::getSession()->register('botData', $this->additionalFields);
+        WCF::getSession()->register(self::SESSION_VAR, $this->additionalFields);
     }
 
     protected function saveStep4()
@@ -329,14 +331,14 @@ class DiscordBotAddManagerForm extends AbstractFormBuilderForm
         if (!empty($formData['data']['clientSecret'])) {
             $this->additionalFields['clientSecret'] = $formData['data']['clientSecret'];
         }
-        WCF::getSession()->register('botData', $this->additionalFields);
+        WCF::getSession()->register(self::SESSION_VAR, $this->additionalFields);
     }
 
     protected function saveStep5()
     {
         $this->additionalFields['botTime'] = \TIME_NOW;
         $this->additionalFields['webhookName'] = \PAGE_TITLE;
-        WCF::getSession()->unregister('botData');
+        WCF::getSession()->unregister(self::SESSION_VAR);
     }
 
     protected function redirectToNextStep()
