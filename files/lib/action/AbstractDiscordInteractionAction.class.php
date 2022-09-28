@@ -4,6 +4,7 @@ namespace wcf\action;
 
 use BadMethodCallException;
 use Exception;
+use GuzzleHttp\Psr7\ServerRequest;
 use OutOfBoundsException;
 use UnexpectedValueException;
 use wcf\system\discord\DiscordApi;
@@ -19,7 +20,8 @@ abstract class AbstractDiscordInteractionAction extends AbstractAction implement
         parent::execute();
 
         try {
-            $body = \file_get_contents('php://input');
+            $serverRequest = ServerRequest::fromGlobals();
+            $body = (string)$serverRequest->getBody();
             if (empty($body)) {
                 throw new BadMethodCallException('body is empty');
             }
