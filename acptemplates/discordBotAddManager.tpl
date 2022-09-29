@@ -29,7 +29,7 @@
 
 		{lang}wcf.acp.discordBotAddManager.step2Intro{/lang}<br><br>
 
-		<a href="https://discord.com/api/oauth2/authorize?client_id={$botData['clientID']}&amp;permissions=8&amp;scope=bot%20applications.commands" class="button" target="_blank">
+		<a href="https://discord.com/api/oauth2/authorize?client_id={$tempInfo['id']}&amp;permissions=8&amp;scope=bot%20applications.commands" class="button" target="_blank">
 			<span class="icon icon16 fa-external-link"></span>
 			{lang}wcf.acp.discordBotAddManager.step2Invite{/lang}
 		</a><br><br>
@@ -59,17 +59,13 @@
 		{lang}wcf.acp.discordBotAddManager.step6Outro{/lang}
 	{/if}
 </div>
-{if $step == 1 || $step == 3 || $step == 4 || $step == 5}
+{if $step != 6 && $step != 0}
 	{@$form->getHtml()}
 {/if}
 {if $step == 0}
 	<div class="formSubmit">
 		<a href="{link controller='DiscordBotAddManager'}step=1{/link}" class="button buttonPrimary">{lang}wcf.acp.discordBotAddManager.configurationAssistant{/lang}</a>
 		<a href="{link controller='DiscordBotAdd'}{/link}" class="button">{lang}wcf.acp.discordBotAddManager.manualConfiguration{/lang}</a>
-	</div>
-{else if $step == 2}
-	<div class="formSubmit">
-		<a href="{link controller='DiscordBotAddManager'}step=3{/link}" class="button buttonPrimary">{lang}wcf.acp.discordBotAddManager.next{/lang}</a>
 	</div>
 {else if $step == 6}
 	<div class="formSubmit">
