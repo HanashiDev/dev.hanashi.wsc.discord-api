@@ -1,5 +1,4 @@
 *.tar
 node_modules/
-files/js/*
 .phpcs-cache
 *.cache
