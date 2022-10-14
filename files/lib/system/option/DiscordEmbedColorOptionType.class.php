@@ -4,9 +4,6 @@ namespace wcf\system\option;
 
 use wcf\data\option\Option;
 use wcf\system\discord\type\EmbedColorType;
-use wcf\system\exception\UserInputException;
-use wcf\system\Regex;
-use wcf\system\WCF;
 
 class DiscordEmbedColorOptionType extends AbstractOptionType
 {
