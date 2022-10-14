@@ -13,18 +13,7 @@ class EmbedColorType extends AbstractDiscordType
      */
     public function getFormElement($value)
     {
-        $hex = \str_pad(\dechex($value), 6, '0', \STR_PAD_LEFT);
-        $colorParts = \explode(' ', \chunk_split($hex, 2, ' '));
-        if (\count($colorParts) < 3) {
-            $value = 'rgba(0, 0, 0, 1)';
-        } else {
-            $value = \sprintf(
-                'rgba(%s, %s, %s, 1)',
-                \hexdec($colorParts[0]),
-                \hexdec($colorParts[1]),
-                \hexdec($colorParts[2])
-            );
-        }
+        $value = $this->generateRgbaByDec($value);
 
         return WCF::getTPL()->fetch('discordEmbedColorOptionType', 'wcf', [
             'optionName' => $this->optionName,
@@ -57,5 +46,21 @@ class EmbedColorType extends AbstractDiscordType
         );
 
         return \hexdec($hex);
+    }
+
+    public function generateRgbaByDec($value) {
+        $hex = \str_pad(\dechex($value), 6, '0', \STR_PAD_LEFT);
+        $colorParts = \explode(' ', \chunk_split($hex, 2, ' '));
+        if (\count($colorParts) < 3) {
+            $value = 'rgba(0, 0, 0, 1)';
+        } else {
+            $value = \sprintf(
+                'rgba(%s, %s, %s, 1)',
+                \hexdec($colorParts[0]),
+                \hexdec($colorParts[1]),
+                \hexdec($colorParts[2])
+            );
+        }
+        return $value;
     }
 }
