@@ -48,7 +48,8 @@ class EmbedColorType extends AbstractDiscordType
         return \hexdec($hex);
     }
 
-    public function generateRgbaByDec($value) {
+    public function generateRgbaByDec($value)
+    {
         $hex = \str_pad(\dechex($value), 6, '0', \STR_PAD_LEFT);
         $colorParts = \explode(' ', \chunk_split($hex, 2, ' '));
         if (\count($colorParts) < 3) {
@@ -61,6 +62,7 @@ class EmbedColorType extends AbstractDiscordType
                 \hexdec($colorParts[2])
             );
         }
+
         return $value;
     }
 }
