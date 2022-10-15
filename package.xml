@@ -34,5 +34,6 @@
 		<instruction type="file"/>
 		<instruction type="acpTemplate"/>
 		<instruction type="language"/>
+		<instruction type="fileDelete"/>
 	</instructions>
 </package>

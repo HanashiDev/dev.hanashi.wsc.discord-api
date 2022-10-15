@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<data xmlns="http://www.woltlab.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.woltlab.com http://www.woltlab.com/XSD/5.4/fileDelete.xsd">
+	<delete>
+		<file>acp/update_dev.hanashi.wsc.discord-api_2.0.0.php</file>
+		<file>acp/update_dev.hanashi.wsc.discord-api_2.0.0_database.php</file>
+		<file>acp/update_dev.hanashi.wsc.discord-api_2.0.0_rename.php</file>
+		<file>acp/update_dev.hanashi.wsc.discord-api_2.0.3.php</file>
+		<file>lib/acp/page/TestPeterPage.class.php</file>
+		<file>lib/action/DiscordTest2Action.class.php</file>
+		<file>lib/action/DiscordTestAction.class.php</file>
+		<file>lib/system/exception/DiscordException.class.php</file>
+		<file>lib/system/form/builder/field/HaPasswordFormField.class.php</file>
+		<file>lib/system/form/builder/field/HaSecretFormField.class.php</file>
+		<file>lib/system/option/DiscordRoleMultiSelectDiscordType.class.php</file>
+	</delete>
+</data>
