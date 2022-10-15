@@ -25,6 +25,9 @@ class DiscordBot extends DatabaseObject
      */
     protected static $databaseTableIndexName = 'botID';
 
+    /**
+     * @var DiscordApi
+     */
     protected $discordApi;
 
     public function getDiscordApi()
