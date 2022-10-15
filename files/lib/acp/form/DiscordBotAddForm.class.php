@@ -129,7 +129,8 @@ class DiscordBotAddForm extends AbstractFormBuilderForm
                 ->label('wcf.acp.discordBotAdd.interaction')
                 ->appendChildren([
                     TextFormField::create('publicKey')
-                        ->label('wcf.acp.discordBotAdd.publicKey'),
+                        ->label('wcf.acp.discordBotAdd.publicKey')
+                        ->description('wcf.acp.discordBotAdd.publicKey.description'),
                 ]),
         ]);
     }

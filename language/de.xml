@@ -1,121 +1,123 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<language xmlns="https://www.woltlab.com" xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="https://www.woltlab.com https://www.woltlab.com/XSD/vortex/language.xsd" languagecode="de">
-	<category name="wcf.acp.option">
-		<item name="wcf.acp.option.category.discord"><![CDATA[Discord]]></item>
-		<item name="wcf.acp.option.error.webhooksMaximumReached"><![CDATA[Das Maximum der Webhooks in einem Channel wurde übertroffen.]]></item>
-		<item name="wcf.acp.option.error.webhooksUnknown"><![CDATA[Unbekannter Fehler beim Erstellen eines Webhooks]]></item>
-	</category>
-	<category name="wcf.acp.group">
-		<item name="wcf.acp.group.option.category.user.discord"><![CDATA[Discord]]></item>
-		<item name="wcf.acp.group.option.category.mod.discord"><![CDATA[Discord]]></item>
-		<item name="wcf.acp.group.option.category.admin.discord"><![CDATA[Discord]]></item>
-		<item name="wcf.acp.group.option.admin.discord.canManageConnection"><![CDATA[Kann Discord-Server verwalten]]></item>
-		<item name="wcf.acp.group.option.admin.discord.canManageWebhooks"><![CDATA[Kann Discord-Webhooks verwalten]]></item>
-	</category>
-	<category name="wcf.acp.menu">
-		<item name="wcf.acp.menu.link.configuration.discord"><![CDATA[Discord]]></item>
-		<item name="wcf.acp.menu.link.management.discord"><![CDATA[Discord]]></item>
-		<item name="wcf.acp.menu.link.configuration.discord.discordBotList"><![CDATA[Discord-Bots]]></item>
-		<item name="wcf.acp.menu.link.configuration.discord.discordBotList.add"><![CDATA[Discord-Bot hinzufügen]]></item>
-		<item name="wcf.acp.menu.link.configuration.discord.discordBotList.edit"><![CDATA[Discord-Bot bearbeiten]]></item>
-		<item name="wcf.acp.menu.link.configuration.discord.discordWebhookList"><![CDATA[Discord-Webhooks]]></item>
-	</category>
-	<category name="wcf.acp.discordBotAdd">
-		<item name="wcf.acp.discordBotAdd.botSettings"><![CDATA[Bot-Einstellungen]]></item>
-		<item name="wcf.acp.discordBotAdd.botName.description"><![CDATA[{if LANGUAGE_USE_INFORMAL_VARIANT}Wähle{else}Wählen Sie{/if} einen Anzeigenamen für diesen Bot aus. Dies dient lediglich dazu die Bots im ACP auseinanderhalten zu können.]]></item>
-		<item name="wcf.acp.discordBotAdd.botToken"><![CDATA[Bot-Token]]></item>
-		<item name="wcf.acp.discordBotAdd.guildID"><![CDATA[Server-ID]]></item>
-		<item name="wcf.acp.discordBotAdd.guildID.error.noConnection"><![CDATA[Es konnte keine Verbindung zu discord.com aufgebaut werden. Bitte {if LANGUAGE_USE_INFORMAL_VARIANT}wende dich{else}wenden Sie sich{/if} an {if LANGUAGE_USE_INFORMAL_VARIANT}deinen{else}Ihren{/if} Serveradministrator.]]></item>
-		<item name="wcf.acp.discordBotAdd.guildID.error.permissionDenied"><![CDATA[Der Bot hat keinen Zugriff auf den angegebenen Server.]]></item>
-		<item name="wcf.acp.discordBotAdd.guildID.description"><![CDATA[{if LANGUAGE_USE_INFORMAL_VARIANT}Gib{else}Geben Sie{/if} die ID {if LANGUAGE_USE_INFORMAL_VARIANT}deines{else}Ihres{/if} Discord-Servers ein. Diese wird für einige Funktionen verschiedener Plugins benötigt.]]></item>
-		<item name="wcf.acp.discordBotAdd.webhookSettings"><![CDATA[Webhook-Einstellungen]]></item>
-		<item name="wcf.acp.discordBotAdd.webhookName"><![CDATA[Webhook-Name]]></item>
-		<item name="wcf.acp.discordBotAdd.webhookName.description"><![CDATA[Wenn durch diesen Bot ein Webhook erstellt wird, wird der Webhook automatisch den hier eingestellten Namen erhalten.]]></item>
-		<item name="wcf.acp.discordBotAdd.webhookIcon"><![CDATA[Webhook-Icon]]></item>
-		<item name="wcf.acp.discordBotAdd.webhookIcon.description"><![CDATA[Wähle ein voreingestelltes Icon für den Webhook aus (maximal 8 MB).]]></item>
-		<item name="wcf.acp.discordBotAdd.oauth2Settings"><![CDATA[OAuth2-Einstellungen]]></item>
-		<item name="wcf.acp.discordBotAdd.clientID"><![CDATA[Client-ID]]></item>
-		<item name="wcf.acp.discordBotAdd.clientID.description"><![CDATA[{if LANGUAGE_USE_INFORMAL_VARIANT}Gib{else}Geben Sie{/if} die Client-ID {if LANGUAGE_USE_INFORMAL_VARIANT}deiner{else}Ihrer{/if} Anwendung ein um diese für OAuth2-Funktionen zu nutzen.]]></item>
-		<item name="wcf.acp.discordBotAdd.clientSecret"><![CDATA[Client-Secret]]></item>
-		<item name="wcf.acp.discordBotAdd.interaction"><![CDATA[Interaktionen]]></item>
-		<item name="wcf.acp.discordBotAdd.publicKey"><![CDATA[Public Key]]></item>
-	</category>
-	<category name="wcf.acp.discordBotAddManager">
-		<item name="wcf.acp.discordBotAddManager.configurationAssistant"><![CDATA[Konfigurationsassistent]]></item>
-		<item name="wcf.acp.discordBotAddManager.manualConfiguration"><![CDATA[Selbstständige Konfiguration]]></item>
-		<item name="wcf.acp.discordBotAddManager.next"><![CDATA[Weiter »]]></item>
-		<item name="wcf.acp.discordBotAddManager.done"><![CDATA[Fertig]]></item>
-		<item name="wcf.acp.discordBotAddManager.botToken.description"><![CDATA[{if LANGUAGE_USE_INFORMAL_VARIANT}Füge{else}Fügen Sie{/if} den aus Punkt 4 kopierten Bot-Token in dieses Feld ein.]]></item>
-		<item name="wcf.acp.discordBotAddManager.botToken.invalid"><![CDATA[Der Bot-Token ist nicht gültig.]]></item>
-		<item name="wcf.acp.discordBotAddManager.guildID"><![CDATA[Server]]></item>
-		<item name="wcf.acp.discordBotAddManager.guildID.invalid"><![CDATA[Der ausgewählte Server existiert nicht.]]></item>
-		<item name="wcf.acp.discordBotAddManager.useOAuth2"><![CDATA[Wird OAuth2 benötigt?]]></item>
-		<item name="wcf.acp.discordBotAddManager.useOAuth2.description"><![CDATA[Wenn {if LANGUAGE_USE_INFORMAL_VARIANT}du{else}Sie{/if} das Plugin Discord-Sync installiert {if LANGUAGE_USE_INFORMAL_VARIANT}hast, musst du{else}haben, müssen Sie{/if} diese Frage mit Ja beantworten.]]></item>
-		<item name="wcf.acp.discordBotAddManager.clientSecret"><![CDATA[Client Secret]]></item>
-		<item name="wcf.acp.discordBotAddManager.useApplicationCommands"><![CDATA[Werden Application Commands genutzt?]]></item>
-		<item name="wcf.acp.discordBotAddManager.publicKey"><![CDATA[Public Key]]></item>
-		<item name="wcf.acp.discordBotAddManager.success"><![CDATA[Der Discord Bot wurde erfolgreich angelegt.]]></item>
-		<item name="wcf.acp.discordBotAddManager.title"><![CDATA[Konfigurationsassistent (Schritt {$step}/6)]]></item>
-		<item name="wcf.acp.discordBotAddManager.step0"><![CDATA[Zur Konfiguration eines Discord Bots gibt es 2 Möglichkeiten:<br><br>
+<language xmlns="http://www.woltlab.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.woltlab.com http://www.woltlab.com/XSD/5.4/language.xsd" languagecode="de">
+	<import>
+		<category name="wcf.acp.option">
+			<item name="wcf.acp.option.category.discord"><![CDATA[Discord]]></item>
+			<item name="wcf.acp.option.error.webhooksMaximumReached"><![CDATA[Das Maximum der Webhooks in einem Channel wurde übertroffen.]]></item>
+			<item name="wcf.acp.option.error.webhooksUnknown"><![CDATA[Unbekannter Fehler beim Erstellen eines Webhooks]]></item>
+		</category>
+		<category name="wcf.acp.group">
+			<item name="wcf.acp.group.option.category.user.discord"><![CDATA[Discord]]></item>
+			<item name="wcf.acp.group.option.category.mod.discord"><![CDATA[Discord]]></item>
+			<item name="wcf.acp.group.option.category.admin.discord"><![CDATA[Discord]]></item>
+			<item name="wcf.acp.group.option.admin.discord.canManageConnection"><![CDATA[Kann Discord-Server verwalten]]></item>
+			<item name="wcf.acp.group.option.admin.discord.canManageWebhooks"><![CDATA[Kann Discord-Webhooks verwalten]]></item>
+		</category>
+		<category name="wcf.acp.menu">
+			<item name="wcf.acp.menu.link.configuration.discord"><![CDATA[Discord]]></item>
+			<item name="wcf.acp.menu.link.management.discord"><![CDATA[Discord]]></item>
+			<item name="wcf.acp.menu.link.configuration.discord.discordBotList"><![CDATA[Discord-Bots]]></item>
+			<item name="wcf.acp.menu.link.configuration.discord.discordBotList.add"><![CDATA[Discord-Bot hinzufügen]]></item>
+			<item name="wcf.acp.menu.link.configuration.discord.discordBotList.edit"><![CDATA[Discord-Bot bearbeiten]]></item>
+			<item name="wcf.acp.menu.link.configuration.discord.discordWebhookList"><![CDATA[Discord-Webhooks]]></item>
+		</category>
+		<category name="wcf.acp.discordBotAdd">
+			<item name="wcf.acp.discordBotAdd.botSettings"><![CDATA[Bot-Einstellungen]]></item>
+			<item name="wcf.acp.discordBotAdd.botName.description"><![CDATA[{if LANGUAGE_USE_INFORMAL_VARIANT}Wähle{else}Wählen Sie{/if} einen Anzeigenamen für diesen Bot aus. Dies dient lediglich dazu die Bots im ACP auseinanderhalten zu können.]]></item>
+			<item name="wcf.acp.discordBotAdd.botToken"><![CDATA[Bot-Token]]></item>
+			<item name="wcf.acp.discordBotAdd.guildID"><![CDATA[Server-ID]]></item>
+			<item name="wcf.acp.discordBotAdd.guildID.error.noConnection"><![CDATA[Es konnte keine Verbindung zu discord.com aufgebaut werden. Bitte {if LANGUAGE_USE_INFORMAL_VARIANT}wende dich{else}wenden Sie sich{/if} an {if LANGUAGE_USE_INFORMAL_VARIANT}deinen{else}Ihren{/if} Serveradministrator.]]></item>
+			<item name="wcf.acp.discordBotAdd.guildID.error.permissionDenied"><![CDATA[Der Bot hat keinen Zugriff auf den angegebenen Server.]]></item>
+			<item name="wcf.acp.discordBotAdd.guildID.description"><![CDATA[{if LANGUAGE_USE_INFORMAL_VARIANT}Gib{else}Geben Sie{/if} die ID {if LANGUAGE_USE_INFORMAL_VARIANT}deines{else}Ihres{/if} Discord-Servers ein. Diese wird für einige Funktionen verschiedener Plugins benötigt.]]></item>
+			<item name="wcf.acp.discordBotAdd.webhookSettings"><![CDATA[Webhook-Einstellungen]]></item>
+			<item name="wcf.acp.discordBotAdd.webhookName"><![CDATA[Webhook-Name]]></item>
+			<item name="wcf.acp.discordBotAdd.webhookName.description"><![CDATA[Wenn durch diesen Bot ein Webhook erstellt wird, wird der Webhook automatisch den hier eingestellten Namen erhalten.]]></item>
+			<item name="wcf.acp.discordBotAdd.webhookIcon"><![CDATA[Webhook-Icon]]></item>
+			<item name="wcf.acp.discordBotAdd.webhookIcon.description"><![CDATA[Wähle ein voreingestelltes Icon für den Webhook aus (maximal 8 MB).]]></item>
+			<item name="wcf.acp.discordBotAdd.oauth2Settings"><![CDATA[OAuth2-Einstellungen]]></item>
+			<item name="wcf.acp.discordBotAdd.clientID"><![CDATA[Client-ID]]></item>
+			<item name="wcf.acp.discordBotAdd.clientID.description"><![CDATA[{if LANGUAGE_USE_INFORMAL_VARIANT}Gib{else}Geben Sie{/if} die Client-ID {if LANGUAGE_USE_INFORMAL_VARIANT}deiner{else}Ihrer{/if} Anwendung ein um diese für OAuth2-Funktionen zu nutzen.]]></item>
+			<item name="wcf.acp.discordBotAdd.clientSecret"><![CDATA[Client-Secret]]></item>
+			<item name="wcf.acp.discordBotAdd.interaction"><![CDATA[Interaktionen]]></item>
+			<item name="wcf.acp.discordBotAdd.publicKey"><![CDATA[Public Key]]></item>
+			<item name="wcf.acp.discordBotAdd.publicKey.description"><![CDATA[Interactions Endpoint Url: <kbd>{link controller='DiscordAuth' forceFrontend=true application='wcf'}{/link}</kbd>]]></item>
+		</category>
+		<category name="wcf.acp.discordBotAddManager">
+			<item name="wcf.acp.discordBotAddManager.configurationAssistant"><![CDATA[Konfigurationsassistent]]></item>
+			<item name="wcf.acp.discordBotAddManager.manualConfiguration"><![CDATA[Selbstständige Konfiguration]]></item>
+			<item name="wcf.acp.discordBotAddManager.next"><![CDATA[Weiter »]]></item>
+			<item name="wcf.acp.discordBotAddManager.done"><![CDATA[Fertig]]></item>
+			<item name="wcf.acp.discordBotAddManager.botToken.description"><![CDATA[{if LANGUAGE_USE_INFORMAL_VARIANT}Füge{else}Fügen Sie{/if} den aus Punkt 4 kopierten Bot-Token in dieses Feld ein.]]></item>
+			<item name="wcf.acp.discordBotAddManager.botToken.invalid"><![CDATA[Der Bot-Token ist nicht gültig.]]></item>
+			<item name="wcf.acp.discordBotAddManager.guildID"><![CDATA[Server]]></item>
+			<item name="wcf.acp.discordBotAddManager.guildID.invalid"><![CDATA[Der ausgewählte Server existiert nicht.]]></item>
+			<item name="wcf.acp.discordBotAddManager.useOAuth2"><![CDATA[Wird OAuth2 benötigt?]]></item>
+			<item name="wcf.acp.discordBotAddManager.useOAuth2.description"><![CDATA[Wenn {if LANGUAGE_USE_INFORMAL_VARIANT}du{else}Sie{/if} das Plugin Discord-Sync installiert {if LANGUAGE_USE_INFORMAL_VARIANT}hast, musst du{else}haben, müssen Sie{/if} diese Frage mit Ja beantworten.]]></item>
+			<item name="wcf.acp.discordBotAddManager.clientSecret"><![CDATA[Client Secret]]></item>
+			<item name="wcf.acp.discordBotAddManager.useApplicationCommands"><![CDATA[Werden Application Commands genutzt?]]></item>
+			<item name="wcf.acp.discordBotAddManager.publicKey"><![CDATA[Public Key]]></item>
+			<item name="wcf.acp.discordBotAddManager.success"><![CDATA[Der Discord Bot wurde erfolgreich angelegt.]]></item>
+			<item name="wcf.acp.discordBotAddManager.title"><![CDATA[Konfigurationsassistent (Schritt {$step}/6)]]></item>
+			<item name="wcf.acp.discordBotAddManager.step0"><![CDATA[Zur Konfiguration eines Discord Bots gibt es 2 Möglichkeiten:<br><br>
 
-<b>1. Konfigurationsassistent</b><br>
-Der Konfigurationsassistent führt {if LANGUAGE_USE_INFORMAL_VARIANT}dich{else}Sie{/if} komfortabel durch die Konfiguration. Dieser richtet sich vor allem an unerfahrene Admins, welche nicht genau wissen wo sie welche Informationen zum Einrichten des Discord Bots finden.<br><br>
+	<b>1. Konfigurationsassistent</b><br>
+	Der Konfigurationsassistent führt {if LANGUAGE_USE_INFORMAL_VARIANT}dich{else}Sie{/if} komfortabel durch die Konfiguration. Dieser richtet sich vor allem an unerfahrene Admins, welche nicht genau wissen wo sie welche Informationen zum Einrichten des Discord Bots finden.<br><br>
 
-<b>2. Selbstständige Konfiguration</b><br>
-Die selbstständige Konfiguration wendet sich vor allem an erfahrene Admins, die genau wissen wo sie welche Informationen zur Einrichtung des Discord Bots finden.<br><br>
+	<b>2. Selbstständige Konfiguration</b><br>
+	Die selbstständige Konfiguration wendet sich vor allem an erfahrene Admins, die genau wissen wo sie welche Informationen zur Einrichtung des Discord Bots finden.<br><br>
 
-<b>Es wird empfohlen den Konfigurationsassistenten zu verwenden.</b>]]></item>
-	<item name="wcf.acp.discordBotAddManager.step1"><![CDATA[In diesem Schritt wird {if LANGUAGE_USE_INFORMAL_VARIANT}dir{else}Ihnen{/if} erklärt wie {if LANGUAGE_USE_INFORMAL_VARIANT}du{else}Sie{/if} einen Bot {if LANGUAGE_USE_INFORMAL_VARIANT}erstellst{else}erstellen{/if} und wo {if LANGUAGE_USE_INFORMAL_VARIANT}du{else}Sie{/if} den Bot Token {if LANGUAGE_USE_INFORMAL_VARIANT}findest{else}finden{/if}, welchen {if LANGUAGE_USE_INFORMAL_VARIANT}du{else}Sie{/if} in das Formular unten eintragen {if LANGUAGE_USE_INFORMAL_VARIANT}musst{else}müssen{/if}. Wenn {if LANGUAGE_USE_INFORMAL_VARIANT}du{else}Sie{/if} bereits einen Bot erstellt {if LANGUAGE_USE_INFORMAL_VARIANT}hast{else}haben{/if}, {if LANGUAGE_USE_INFORMAL_VARIANT}kannst du{else}können Sie{/if} direkt zu Punkt 3 springen.<br><br>
+	<b>Es wird empfohlen den Konfigurationsassistenten zu verwenden.</b>]]></item>
+			<item name="wcf.acp.discordBotAddManager.step1"><![CDATA[In diesem Schritt wird {if LANGUAGE_USE_INFORMAL_VARIANT}dir{else}Ihnen{/if} erklärt wie {if LANGUAGE_USE_INFORMAL_VARIANT}du{else}Sie{/if} einen Bot {if LANGUAGE_USE_INFORMAL_VARIANT}erstellst{else}erstellen{/if} und wo {if LANGUAGE_USE_INFORMAL_VARIANT}du{else}Sie{/if} den Bot Token {if LANGUAGE_USE_INFORMAL_VARIANT}findest{else}finden{/if}, welchen {if LANGUAGE_USE_INFORMAL_VARIANT}du{else}Sie{/if} in das Formular unten eintragen {if LANGUAGE_USE_INFORMAL_VARIANT}musst{else}müssen{/if}. Wenn {if LANGUAGE_USE_INFORMAL_VARIANT}du{else}Sie{/if} bereits einen Bot erstellt {if LANGUAGE_USE_INFORMAL_VARIANT}hast{else}haben{/if}, {if LANGUAGE_USE_INFORMAL_VARIANT}kannst du{else}können Sie{/if} direkt zu Punkt 3 springen.<br><br>
 
-<b>1. Anwendung erstellen</b><br>
-{if LANGUAGE_USE_INFORMAL_VARIANT}Gehe{else}Gehen Sie{/if} in das <a href="https://discord.com/developers/applications" class="externalURL" rel="noopener noreferrer">Entwickler-Portal</a> von Discord. {if LANGUAGE_USE_INFORMAL_VARIANT}Klicke{else}Klicken Sie{/if} oben rechts auf den Button „<b>New Application</b>“. {if LANGUAGE_USE_INFORMAL_VARIANT}Vergib{else}Vergeben Sie{/if} hier einen Namen für {if LANGUAGE_USE_INFORMAL_VARIANT}deine{else}Ihre{/if} Anwendung, {if LANGUAGE_USE_INFORMAL_VARIANT}akzeptiere{else}akzeptieren Sie{/if} die Entwickler-Nutzungsbedingungen und {if LANGUAGE_USE_INFORMAL_VARIANT}klicke{else}klicken Sie{/if} auf den Button „<b>Create</b>“. {if LANGUAGE_USE_INFORMAL_VARIANT}Deine{else}Ihre{/if} Anwendung wurde nun erstellt. Als nächstes {if LANGUAGE_USE_INFORMAL_VARIANT}musst du{else}müssen Sie{/if} einen Bot erstellen.<br><br>
+	<b>1. Anwendung erstellen</b><br>
+	{if LANGUAGE_USE_INFORMAL_VARIANT}Gehe{else}Gehen Sie{/if} in das <a href="https://discord.com/developers/applications" class="externalURL" rel="noopener noreferrer">Entwickler-Portal</a> von Discord. {if LANGUAGE_USE_INFORMAL_VARIANT}Klicke{else}Klicken Sie{/if} oben rechts auf den Button „<b>New Application</b>“. {if LANGUAGE_USE_INFORMAL_VARIANT}Vergib{else}Vergeben Sie{/if} hier einen Namen für {if LANGUAGE_USE_INFORMAL_VARIANT}deine{else}Ihre{/if} Anwendung, {if LANGUAGE_USE_INFORMAL_VARIANT}akzeptiere{else}akzeptieren Sie{/if} die Entwickler-Nutzungsbedingungen und {if LANGUAGE_USE_INFORMAL_VARIANT}klicke{else}klicken Sie{/if} auf den Button „<b>Create</b>“. {if LANGUAGE_USE_INFORMAL_VARIANT}Deine{else}Ihre{/if} Anwendung wurde nun erstellt. Als nächstes {if LANGUAGE_USE_INFORMAL_VARIANT}musst du{else}müssen Sie{/if} einen Bot erstellen.<br><br>
 
-<b>2. Bot erstellen</b><br>
-{if LANGUAGE_USE_INFORMAL_VARIANT}Gehe{else}Gehen Sie{/if} in das <a href="https://discord.com/developers/applications" class="externalURL" rel="noopener noreferrer">Entwickler-Portal</a> von Discord. {if LANGUAGE_USE_INFORMAL_VARIANT}Wähle deine{else}Wählen Sie Ihre{/if} zuvor erstellte Anwendung aus. {if LANGUAGE_USE_INFORMAL_VARIANT}Klicke{else}Klicken Sie{/if} links im Menü auf den Menüpunkt „<b>Bot</b>“. Hier dürfte nun noch kein Bot zu sehen sein. {if LANGUAGE_USE_INFORMAL_VARIANT}Klicke{else}Klicken Sie{/if} dafür auf den Button „<b>Add Bot</b>“. Nun öffnet sich eine Nachfrage ob {if LANGUAGE_USE_INFORMAL_VARIANT}du{else}Sie{/if} das wirklich {if LANGUAGE_USE_INFORMAL_VARIANT}möchtest{else}möchten{/if}, diese {if LANGUAGE_USE_INFORMAL_VARIANT}bestätigst du{else}bestätigen Sie{/if} mit „<b>Yes, do it!</b>“. {if LANGUAGE_USE_INFORMAL_VARIANT}Dein{else}Ihr{/if} Bot wurde erfolgreich erstellt.<br><br>
+	<b>2. Bot erstellen</b><br>
+	{if LANGUAGE_USE_INFORMAL_VARIANT}Gehe{else}Gehen Sie{/if} in das <a href="https://discord.com/developers/applications" class="externalURL" rel="noopener noreferrer">Entwickler-Portal</a> von Discord. {if LANGUAGE_USE_INFORMAL_VARIANT}Wähle deine{else}Wählen Sie Ihre{/if} zuvor erstellte Anwendung aus. {if LANGUAGE_USE_INFORMAL_VARIANT}Klicke{else}Klicken Sie{/if} links im Menü auf den Menüpunkt „<b>Bot</b>“. Hier dürfte nun noch kein Bot zu sehen sein. {if LANGUAGE_USE_INFORMAL_VARIANT}Klicke{else}Klicken Sie{/if} dafür auf den Button „<b>Add Bot</b>“. Nun öffnet sich eine Nachfrage ob {if LANGUAGE_USE_INFORMAL_VARIANT}du{else}Sie{/if} das wirklich {if LANGUAGE_USE_INFORMAL_VARIANT}möchtest{else}möchten{/if}, diese {if LANGUAGE_USE_INFORMAL_VARIANT}bestätigst du{else}bestätigen Sie{/if} mit „<b>Yes, do it!</b>“. {if LANGUAGE_USE_INFORMAL_VARIANT}Dein{else}Ihr{/if} Bot wurde erfolgreich erstellt.<br><br>
 
-<b>3. Privileged Gateway Intents aktivieren</b><br>
-{if LANGUAGE_USE_INFORMAL_VARIANT}Gehe{else}Gehen Sie{/if} in das <a href="https://discord.com/developers/applications" class="externalURL" rel="noopener noreferrer">Entwickler-Portal</a> von Discord. {if LANGUAGE_USE_INFORMAL_VARIANT}Wähle deine{else}Wählen Sie Ihre{/if} zuvor erstellte Anwendung aus. {if LANGUAGE_USE_INFORMAL_VARIANT}Klicke{else}Klicken Sie{/if} links im Menü auf den Menüpunkt „<b>Bot</b>“. {if LANGUAGE_USE_INFORMAL_VARIANT}Scrolle{else}Scrollen Sie{/if} zu der Zwischenüberschrift „<b>Privileged Gateway Intents</b>“ runter und {if LANGUAGE_USE_INFORMAL_VARIANT}aktiviere{else}aktivieren Sie{/if} die Slider bei „<b>Server Member Intents</b>“ und „<b>Message Content Intents</b>“. {if LANGUAGE_USE_INFORMAL_VARIANT}Klicke{else}Klicken Sie{/if} danach auf „<b>Save Changes</b>“.<br>
-<i>(Server Member Intents wird für das Plugin Discord-Sync benötigt um die Benutzer aus dem Server auslesen und deren Rechte verwalten zu können. Message Content Intents wird für das Plugin Discord-Shoutbox benötigt, um Nachrichten aus den Kanälen auslesen und in der Shoutbox anzeigen zu können.)</i><br><br>
+	<b>3. Privileged Gateway Intents aktivieren</b><br>
+	{if LANGUAGE_USE_INFORMAL_VARIANT}Gehe{else}Gehen Sie{/if} in das <a href="https://discord.com/developers/applications" class="externalURL" rel="noopener noreferrer">Entwickler-Portal</a> von Discord. {if LANGUAGE_USE_INFORMAL_VARIANT}Wähle deine{else}Wählen Sie Ihre{/if} zuvor erstellte Anwendung aus. {if LANGUAGE_USE_INFORMAL_VARIANT}Klicke{else}Klicken Sie{/if} links im Menü auf den Menüpunkt „<b>Bot</b>“. {if LANGUAGE_USE_INFORMAL_VARIANT}Scrolle{else}Scrollen Sie{/if} zu der Zwischenüberschrift „<b>Privileged Gateway Intents</b>“ runter und {if LANGUAGE_USE_INFORMAL_VARIANT}aktiviere{else}aktivieren Sie{/if} die Slider bei „<b>Server Member Intents</b>“ und „<b>Message Content Intents</b>“. {if LANGUAGE_USE_INFORMAL_VARIANT}Klicke{else}Klicken Sie{/if} danach auf „<b>Save Changes</b>“.<br>
+	<i>(Server Member Intents wird für das Plugin Discord-Sync benötigt um die Benutzer aus dem Server auslesen und deren Rechte verwalten zu können. Message Content Intents wird für das Plugin Discord-Shoutbox benötigt, um Nachrichten aus den Kanälen auslesen und in der Shoutbox anzeigen zu können.)</i><br><br>
 
-<b>4. Bot Token finden</b><br>
-{if LANGUAGE_USE_INFORMAL_VARIANT}Gehe{else}Gehen Sie{/if} in das <a href="https://discord.com/developers/applications" class="externalURL" rel="noopener noreferrer">Entwickler-Portal</a> von Discord. {if LANGUAGE_USE_INFORMAL_VARIANT}Wähle deine{else}Wählen Sie Ihre{/if} zuvor erstellte Anwendung aus. {if LANGUAGE_USE_INFORMAL_VARIANT}Klicke{else}Klicken Sie{/if} links im Menü auf den Menüpunkt „<b>Bot</b>“. {if LANGUAGE_USE_INFORMAL_VARIANT}Klicke{else}Klicken Sie{/if} auf den Button „<b>Reset Token</b>“. Nun öffnet sich eine Nachfrage ob {if LANGUAGE_USE_INFORMAL_VARIANT}du{else}Sie{/if} das wirklich {if LANGUAGE_USE_INFORMAL_VARIANT}möchtest{else}möchten{/if}, diese {if LANGUAGE_USE_INFORMAL_VARIANT}bestätigst du{else}bestätigen Sie{/if} mit „<b>Yes, do it!</b>“. Falls {if LANGUAGE_USE_INFORMAL_VARIANT}du{else}Sie{/if} die Zwei-Faktor-Authentifizierung bei Discord aktiviert {if LANGUAGE_USE_INFORMAL_VARIANT}hast, musst du jetzt deinen{else}haben, müssen Sie jetzt Ihren{/if} Code eingeben und „<b>Submit</b>“ drücken. {if LANGUAGE_USE_INFORMAL_VARIANT}Du siehst nun deinen{else}Sie sehen nun Ihren{/if} Token. Mit einem Klick auf den Button „<b>Copy</b>“, {if LANGUAGE_USE_INFORMAL_VARIANT}kannst du{else}können Sie{/if} den Token direkt in die Zwischenablage einfügen.]]></item>
-		<item name="wcf.acp.discordBotAddManager.step2Intro"><![CDATA[Als nächstes {if LANGUAGE_USE_INFORMAL_VARIANT}musst du deinen{else}müssen Sie Ihren{/if} erstellen Discord Bot auf {if LANGUAGE_USE_INFORMAL_VARIANT}deinen{else}Ihren{/if} Server einladen. {if LANGUAGE_USE_INFORMAL_VARIANT}Klicke{else}Klicken Sie{/if} dafür auf den nachfolgenden Button. Es öffnet sich nun ein neuer Tab in {if LANGUAGE_USE_INFORMAL_VARIANT}deinem{else}Ihrem{/if} Browser. {if LANGUAGE_USE_INFORMAL_VARIANT}Wähle{else}Wählen Sie{/if} in dem geöffneten Fenster {if LANGUAGE_USE_INFORMAL_VARIANT}deinen{else}Ihren{/if} Server aus und {if LANGUAGE_USE_INFORMAL_VARIANT}klicke{else}klicken Sie{/if} in dem geöffneten Fenster auf den Button „<b>Weiter</b>“ und dann auf den Button „<b>Autorisieren</b>“. Am Ende {if LANGUAGE_USE_INFORMAL_VARIANT}musst du{else}müssen Sie{/if} nur noch einen Captcha lösen und schon schon ist der Bot auf {if LANGUAGE_USE_INFORMAL_VARIANT}deinem{else}Ihrem{/if} Server.]]></item>
-		<item name="wcf.acp.discordBotAddManager.step2Invite"><![CDATA[Discord Bot auf Server einladen]]></item>
-		<item name="wcf.acp.discordBotAddManager.step2Outro"><![CDATA[Damit der Discord Bot ohne Probleme funktionieren kann, muss nun aber noch etwas händische Nacharbeit betrieben werden. {if LANGUAGE_USE_INFORMAL_VARIANT}Gehe zu deinem{else}Gehen Sie zu Ihrem{/if} Discord Server in die „<b>Servereinstellungen</b>“ und dann zu dem Punkt „<b>Rollen</b>“. Am Ende der Rollen sollte nun eine Rolle existieren, die genauso heißt wie der Discord Bot. {if LANGUAGE_USE_INFORMAL_VARIANT}Ziehe{else}Ziehen Sie{/if} diese Rolle wenn möglich ganz nach oben. Dadurch erhält der Discord Bot das Recht auch wirklich alle Rollen zu vergeben.]]></item>
-		<item name="wcf.acp.discordBotAddManager.step3"><![CDATA[{if LANGUAGE_USE_INFORMAL_VARIANT}Dein{else}Ihr{/if} Bot sollte nun auf {if LANGUAGE_USE_INFORMAL_VARIANT}deinem{else}Ihrem{/if} Server sein und alle notwendigen Rechte besitzen. {if LANGUAGE_USE_INFORMAL_VARIANT}Wähle{else}Wählen Sie{/if} in der nachfolgenden Liste bitte aus, welchen Server {if LANGUAGE_USE_INFORMAL_VARIANT}du{else}Sie{/if} mit diesen Bot verwenden {if LANGUAGE_USE_INFORMAL_VARIANT}möchtest{else}möchten{/if}.<br><br>
+	<b>4. Bot Token finden</b><br>
+	{if LANGUAGE_USE_INFORMAL_VARIANT}Gehe{else}Gehen Sie{/if} in das <a href="https://discord.com/developers/applications" class="externalURL" rel="noopener noreferrer">Entwickler-Portal</a> von Discord. {if LANGUAGE_USE_INFORMAL_VARIANT}Wähle deine{else}Wählen Sie Ihre{/if} zuvor erstellte Anwendung aus. {if LANGUAGE_USE_INFORMAL_VARIANT}Klicke{else}Klicken Sie{/if} links im Menü auf den Menüpunkt „<b>Bot</b>“. {if LANGUAGE_USE_INFORMAL_VARIANT}Klicke{else}Klicken Sie{/if} auf den Button „<b>Reset Token</b>“. Nun öffnet sich eine Nachfrage ob {if LANGUAGE_USE_INFORMAL_VARIANT}du{else}Sie{/if} das wirklich {if LANGUAGE_USE_INFORMAL_VARIANT}möchtest{else}möchten{/if}, diese {if LANGUAGE_USE_INFORMAL_VARIANT}bestätigst du{else}bestätigen Sie{/if} mit „<b>Yes, do it!</b>“. Falls {if LANGUAGE_USE_INFORMAL_VARIANT}du{else}Sie{/if} die Zwei-Faktor-Authentifizierung bei Discord aktiviert {if LANGUAGE_USE_INFORMAL_VARIANT}hast, musst du jetzt deinen{else}haben, müssen Sie jetzt Ihren{/if} Code eingeben und „<b>Submit</b>“ drücken. {if LANGUAGE_USE_INFORMAL_VARIANT}Du siehst nun deinen{else}Sie sehen nun Ihren{/if} Token. Mit einem Klick auf den Button „<b>Copy</b>“, {if LANGUAGE_USE_INFORMAL_VARIANT}kannst du{else}können Sie{/if} den Token direkt in die Zwischenablage einfügen.]]></item>
+			<item name="wcf.acp.discordBotAddManager.step2Intro"><![CDATA[Als nächstes {if LANGUAGE_USE_INFORMAL_VARIANT}musst du deinen{else}müssen Sie Ihren{/if} erstellen Discord Bot auf {if LANGUAGE_USE_INFORMAL_VARIANT}deinen{else}Ihren{/if} Server einladen. {if LANGUAGE_USE_INFORMAL_VARIANT}Klicke{else}Klicken Sie{/if} dafür auf den nachfolgenden Button. Es öffnet sich nun ein neuer Tab in {if LANGUAGE_USE_INFORMAL_VARIANT}deinem{else}Ihrem{/if} Browser. {if LANGUAGE_USE_INFORMAL_VARIANT}Wähle{else}Wählen Sie{/if} in dem geöffneten Fenster {if LANGUAGE_USE_INFORMAL_VARIANT}deinen{else}Ihren{/if} Server aus und {if LANGUAGE_USE_INFORMAL_VARIANT}klicke{else}klicken Sie{/if} in dem geöffneten Fenster auf den Button „<b>Weiter</b>“ und dann auf den Button „<b>Autorisieren</b>“. Am Ende {if LANGUAGE_USE_INFORMAL_VARIANT}musst du{else}müssen Sie{/if} nur noch einen Captcha lösen und schon schon ist der Bot auf {if LANGUAGE_USE_INFORMAL_VARIANT}deinem{else}Ihrem{/if} Server.]]></item>
+			<item name="wcf.acp.discordBotAddManager.step2Invite"><![CDATA[Discord Bot auf Server einladen]]></item>
+			<item name="wcf.acp.discordBotAddManager.step2Outro"><![CDATA[Damit der Discord Bot ohne Probleme funktionieren kann, muss nun aber noch etwas händische Nacharbeit betrieben werden. {if LANGUAGE_USE_INFORMAL_VARIANT}Gehe zu deinem{else}Gehen Sie zu Ihrem{/if} Discord Server in die „<b>Servereinstellungen</b>“ und dann zu dem Punkt „<b>Rollen</b>“. Am Ende der Rollen sollte nun eine Rolle existieren, die genauso heißt wie der Discord Bot. {if LANGUAGE_USE_INFORMAL_VARIANT}Ziehe{else}Ziehen Sie{/if} diese Rolle wenn möglich ganz nach oben. Dadurch erhält der Discord Bot das Recht auch wirklich alle Rollen zu vergeben.]]></item>
+			<item name="wcf.acp.discordBotAddManager.step3"><![CDATA[{if LANGUAGE_USE_INFORMAL_VARIANT}Dein{else}Ihr{/if} Bot sollte nun auf {if LANGUAGE_USE_INFORMAL_VARIANT}deinem{else}Ihrem{/if} Server sein und alle notwendigen Rechte besitzen. {if LANGUAGE_USE_INFORMAL_VARIANT}Wähle{else}Wählen Sie{/if} in der nachfolgenden Liste bitte aus, welchen Server {if LANGUAGE_USE_INFORMAL_VARIANT}du{else}Sie{/if} mit diesen Bot verwenden {if LANGUAGE_USE_INFORMAL_VARIANT}möchtest{else}möchten{/if}.<br><br>
 
-In dieser Liste werden maximal 200 Server angezeigt. Sollte {if LANGUAGE_USE_INFORMAL_VARIANT}dein{else}Ihr{/if} Bot auf mehr als 200 Servern sein, {if LANGUAGE_USE_INFORMAL_VARIANT}führe{else}führen Sie{/if} bitte die <a href="{link controller='DiscordBotAdd'}{/link}">selbstständige Konfiguration</a> des Bots durch.]]></item>
-		<item name="wcf.acp.discordBotAddManager.step4"><![CDATA[In diesem Schritt {if LANGUAGE_USE_INFORMAL_VARIANT}konfigurierst du{else}konfigurieren Sie{/if} die Informationen für OAuth2. Diese Informationen werden benötigt um zum Beispiel ein Benutzer Konto in der WoltLab Suite mit einem Discord-Konto zu verknüpfen. {if $discordSyncInstalled}{if LANGUAGE_USE_INFORMAL_VARIANT}Du hast{else}Sie haben{/if} das Plugin Discord-Sync installiert und {if LANGUAGE_USE_INFORMAL_VARIANT}musst{else}müssen{/if} diesen Schritt zwingend durchführen.{else}{if LANGUAGE_USE_INFORMAL_VARIANT}Du hast{else}Sie haben{/if} das Plugin Discord-Sync nicht installiert. Falls {if LANGUAGE_USE_INFORMAL_VARIANT}du{else}Sie{/if} auch zukünfig nicht {if LANGUAGE_USE_INFORMAL_VARIANT}planst{else}planen{/if} das Plugin Discord-Sync zu verwenden, kannst {if LANGUAGE_USE_INFORMAL_VARIANT}du{else}Sie{/if} diesen Punkt überspringen.{/if}<br><br>
+	In dieser Liste werden maximal 200 Server angezeigt. Sollte {if LANGUAGE_USE_INFORMAL_VARIANT}dein{else}Ihr{/if} Bot auf mehr als 200 Servern sein, {if LANGUAGE_USE_INFORMAL_VARIANT}führe{else}führen Sie{/if} bitte die <a href="{link controller='DiscordBotAdd'}{/link}">selbstständige Konfiguration</a> des Bots durch.]]></item>
+			<item name="wcf.acp.discordBotAddManager.step4"><![CDATA[In diesem Schritt {if LANGUAGE_USE_INFORMAL_VARIANT}konfigurierst du{else}konfigurieren Sie{/if} die Informationen für OAuth2. Diese Informationen werden benötigt um zum Beispiel ein Benutzer Konto in der WoltLab Suite mit einem Discord-Konto zu verknüpfen. {if $discordSyncInstalled}{if LANGUAGE_USE_INFORMAL_VARIANT}Du hast{else}Sie haben{/if} das Plugin Discord-Sync installiert und {if LANGUAGE_USE_INFORMAL_VARIANT}musst{else}müssen{/if} diesen Schritt zwingend durchführen.{else}{if LANGUAGE_USE_INFORMAL_VARIANT}Du hast{else}Sie haben{/if} das Plugin Discord-Sync nicht installiert. Falls {if LANGUAGE_USE_INFORMAL_VARIANT}du{else}Sie{/if} auch zukünfig nicht {if LANGUAGE_USE_INFORMAL_VARIANT}planst{else}planen{/if} das Plugin Discord-Sync zu verwenden, kannst {if LANGUAGE_USE_INFORMAL_VARIANT}du{else}Sie{/if} diesen Punkt überspringen.{/if}<br><br>
 
-<b>Wo finde ich den Client Secret?</b><br>
-{if LANGUAGE_USE_INFORMAL_VARIANT}Gehe{else}Gehen Sie{/if} in das <a href="https://discord.com/developers/applications" class="externalURL" rel="noopener noreferrer">Entwickler-Portal</a> von Discord. {if LANGUAGE_USE_INFORMAL_VARIANT}Wähle deine{else}Wählen Sie Ihre{/if} zuvor erstellte Anwendung aus. {if LANGUAGE_USE_INFORMAL_VARIANT}Klicke{else}Klicken Sie{/if} links im Menü auf den Menüpunkt „<b>OAuth2</b>“. {if LANGUAGE_USE_INFORMAL_VARIANT}Klicke{else}Klicken Sie{/if} auf den Button „<b>Reset Secret</b>“. Nun öffnet sich eine Nachfrage ob {if LANGUAGE_USE_INFORMAL_VARIANT}du{else}Sie{/if} das wirklich {if LANGUAGE_USE_INFORMAL_VARIANT}möchtest{else}möchten{/if}, diese {if LANGUAGE_USE_INFORMAL_VARIANT}bestätigst du{else}bestätigen Sie{/if} mit „<b>Yes, do it!</b>“. Falls {if LANGUAGE_USE_INFORMAL_VARIANT}du{else}Sie{/if} die Zwei-Faktor-Authentifizierung bei Discord aktiviert {if LANGUAGE_USE_INFORMAL_VARIANT}hast, musst du jetzt deinen{else}haben, müssen Sie jetzt Ihren{/if} Code eingeben und „<b>Submit</b>“ drücken. {if LANGUAGE_USE_INFORMAL_VARIANT}Du siehst nun deinen{else}Sie sehen nun Ihren{/if} Client Secret. Mit einem Klick auf den Button „<b>Copy</b>“, {if LANGUAGE_USE_INFORMAL_VARIANT}kannst du{else}können Sie{/if} den Client Secret direkt in die Zwischenablage einfügen.]]></item>
-		<item name="wcf.acp.discordBotAddManager.step5"><![CDATA[In diesem Schritt {if LANGUAGE_USE_INFORMAL_VARIANT}konfigurierst du{else}konfigurieren Sie{/if} die Informationen für Application Commands. Wenn {if LANGUAGE_USE_INFORMAL_VARIANT}du{else}Sie{/if} kein Plugin {if LANGUAGE_USE_INFORMAL_VARIANT}einsetzt{else}einsetzen{/if}, welches Application Commands von Discord nutzt, {if LANGUAGE_USE_INFORMAL_VARIANT}kannst du{else}können Sie{/if} diesen Schritt überspringen.<br><br>
+	<b>Wo finde ich den Client Secret?</b><br>
+	{if LANGUAGE_USE_INFORMAL_VARIANT}Gehe{else}Gehen Sie{/if} in das <a href="https://discord.com/developers/applications" class="externalURL" rel="noopener noreferrer">Entwickler-Portal</a> von Discord. {if LANGUAGE_USE_INFORMAL_VARIANT}Wähle deine{else}Wählen Sie Ihre{/if} zuvor erstellte Anwendung aus. {if LANGUAGE_USE_INFORMAL_VARIANT}Klicke{else}Klicken Sie{/if} links im Menü auf den Menüpunkt „<b>OAuth2</b>“. {if LANGUAGE_USE_INFORMAL_VARIANT}Klicke{else}Klicken Sie{/if} auf den Button „<b>Reset Secret</b>“. Nun öffnet sich eine Nachfrage ob {if LANGUAGE_USE_INFORMAL_VARIANT}du{else}Sie{/if} das wirklich {if LANGUAGE_USE_INFORMAL_VARIANT}möchtest{else}möchten{/if}, diese {if LANGUAGE_USE_INFORMAL_VARIANT}bestätigst du{else}bestätigen Sie{/if} mit „<b>Yes, do it!</b>“. Falls {if LANGUAGE_USE_INFORMAL_VARIANT}du{else}Sie{/if} die Zwei-Faktor-Authentifizierung bei Discord aktiviert {if LANGUAGE_USE_INFORMAL_VARIANT}hast, musst du jetzt deinen{else}haben, müssen Sie jetzt Ihren{/if} Code eingeben und „<b>Submit</b>“ drücken. {if LANGUAGE_USE_INFORMAL_VARIANT}Du siehst nun deinen{else}Sie sehen nun Ihren{/if} Client Secret. Mit einem Klick auf den Button „<b>Copy</b>“, {if LANGUAGE_USE_INFORMAL_VARIANT}kannst du{else}können Sie{/if} den Client Secret direkt in die Zwischenablage einfügen.]]></item>
+			<item name="wcf.acp.discordBotAddManager.step5"><![CDATA[In diesem Schritt {if LANGUAGE_USE_INFORMAL_VARIANT}konfigurierst du{else}konfigurieren Sie{/if} die Informationen für Application Commands. Wenn {if LANGUAGE_USE_INFORMAL_VARIANT}du{else}Sie{/if} kein Plugin {if LANGUAGE_USE_INFORMAL_VARIANT}einsetzt{else}einsetzen{/if}, welches Application Commands von Discord nutzt, {if LANGUAGE_USE_INFORMAL_VARIANT}kannst du{else}können Sie{/if} diesen Schritt überspringen.<br><br>
 
 <b>Wo finde ich den Public Key?</b><br>
-{if LANGUAGE_USE_INFORMAL_VARIANT}Gehe{else}Gehen Sie{/if} in das <a href="https://discord.com/developers/applications" class="externalURL" rel="noopener noreferrer">Entwickler-Portal</a> von Discord. {if LANGUAGE_USE_INFORMAL_VARIANT}Wähle deine{else}Wählen Sie Ihre{/if} zuvor erstellte Anwendung aus. {if LANGUAGE_USE_INFORMAL_VARIANT}Klicke{else}Klicken Sie{/if} links im Menü auf den Menüpunkt „<b>General Information</b>“. Hier {if LANGUAGE_USE_INFORMAL_VARIANT}findest du{else}finden Sie{/if} auch schon den Public Key. Mit einem Klick auf den Button „<b>Copy</b>“, {if LANGUAGE_USE_INFORMAL_VARIANT}kannst du{else}können Sie{/if} den Public Key direkt in die Zwischenablage einfügen.]]></item>
-		<item name="wcf.acp.discordBotAddManager.step6Intro"><![CDATA[{if LANGUAGE_USE_INFORMAL_VARIANT}Dein{else}Ihr{/if} Discord Bot wurde erfolgreich angelegt und konfiguriert.]]></item>
-		<item name="wcf.acp.discordBotAddManager.step6DiscordSync"><![CDATA[Da {if LANGUAGE_USE_INFORMAL_VARIANT}du{else}Sie{/if} das Plugin Discord-Sync installiert {if LANGUAGE_USE_INFORMAL_VARIANT}hast, musst du nun noch deine{else}haben, müssen Sie nun noch Ihre{/if} Redirect URL konfigurieren. {if LANGUAGE_USE_INFORMAL_VARIANT}Gehe{else}Gehen Sie{/if} in das <a href="https://discord.com/developers/applications" class="externalURL" rel="noopener noreferrer">Entwickler-Portal</a> von Discord. {if LANGUAGE_USE_INFORMAL_VARIANT}Wähle deine{else}Wählen Sie Ihre{/if} zuvor erstellte Anwendung aus. {if LANGUAGE_USE_INFORMAL_VARIANT}Klicke{else}Klicken Sie{/if} links im Menü auf den Menüpunkt „<b>OAuth2</b>“. {if LANGUAGE_USE_INFORMAL_VARIANT}Klicke{else}Klicken Sie{/if} auf den Button „<b>Add Redirect</b>“. {if LANGUAGE_USE_INFORMAL_VARIANT}Füge{else}Fügen Sie{/if} nun die folgende URL in das Eingabefeld für Redirects ein:<br><br>
-<b>Redirect URL:</b> <kbd>{link controller='DiscordAuth' forceFrontend=true application='wcf'}{/link}</kbd><br><br>
-{if LANGUAGE_USE_INFORMAL_VARIANT}Klicke{else}Klicken Sie{/if} zum Speichern auf „<b>Save Changes</b>“.]]></item>
-		<item name="wcf.acp.discordBotAddManager.step6Outro"><![CDATA[Herzlichen Glückwunsch, {if LANGUAGE_USE_INFORMAL_VARIANT}du bist{else}Sie sind{/if} nun fertig mit dem Konfigurationsassistenten und {if LANGUAGE_USE_INFORMAL_VARIANT}kannst deinen{else}können Ihren{/if} Discord Bot nutzen.]]></item>
-	</category>
-	<category name="wcf.acp.discordBotList">
-		<item name="wcf.acp.discordBotList.botName"><![CDATA[Bot-Name]]></item>
-		<item name="wcf.acp.discordBotList.server"><![CDATA[Server]]></item>
-		<item name="wcf.acp.discordBotList.deleteRequest"><![CDATA[Discord-Bot wirklich löschen?]]></item>
-		<item name="wcf.acp.discordBotList.connectOnce"><![CDATA[Bot einmalig verbinden]]></item>
-
-		<item name="wcf.acp.discordBotList.gateway.connecting"><![CDATA[Verbindet mit Gateway...]]></item>
-		<item name="wcf.acp.discordBotList.gateway.connected"><![CDATA[Erfolgreich verbunden.]]></item>
-		<item name="wcf.acp.discordBotList.gateway.error"><![CDATA[Konnte keine Verbindung zum Gateway herstellen (Timeout).]]></item>
-	</category>
-	<category name="wcf.acp.discordWebhookList">
-		<item name="wcf.acp.discordWebhookList.channelID"><![CDATA[Channel-ID]]></item>
-		<item name="wcf.acp.discordWebhookList.webhookTitle"><![CDATA[Webhook-Titel]]></item>
-		<item name="wcf.acp.discordWebhookList.webhookName"><![CDATA[Webhook-Name]]></item>
-		<item name="wcf.acp.discordWebhookList.deleteRequest"><![CDATA[Webhook wirklich löschen?]]></item>
-	</category>
-	<category name="wcf.acp.discordBotSelectOptionType">
-		<item name="wcf.acp.discordBotSelectOptionType.noBot"><![CDATA[{if LANGUAGE_USE_INFORMAL_VARIANT}Du hast{else}Sie haben{/if} noch keinen Discord-Bot angelegt. Dies {if LANGUAGE_USE_INFORMAL_VARIANT}kannst du{else}können Sie{/if} unter <a href="{link controller="DiscordBotAdd"}{/link}">Discord-Bot</a> erledigen.]]></item>
-	</category>
+{if LANGUAGE_USE_INFORMAL_VARIANT}Gehe{else}Gehen Sie{/if} in das <a href="https://discord.com/developers/applications" class="externalURL" rel="noopener noreferrer">Entwickler-Portal</a> von Discord. {if LANGUAGE_USE_INFORMAL_VARIANT}Wähle deine{else}Wählen Sie Ihre{/if} zuvor erstellte Anwendung aus. {if LANGUAGE_USE_INFORMAL_VARIANT}Klicke{else}Klicken Sie{/if} links im Menü auf den Menüpunkt „<b>General Information</b>“. Hier {if LANGUAGE_USE_INFORMAL_VARIANT}findest du{else}finden Sie{/if} auch schon den Public Key. Mit einem Klick auf den Button „<b>Copy</b>“, {if LANGUAGE_USE_INFORMAL_VARIANT}kannst du{else}können Sie{/if} den Public Key direkt in die Zwischenablage einfügen. {if LANGUAGE_USE_INFORMAL_VARIANT}Füge{else}Fügen Sie{/if} außerdem bei „Interactions Endpoint Url“ die URL <kbd>{link controller='DiscordInteraction' forceFrontend=true application='wcf'}{/link}</kbd> ein.]]></item>
+			<item name="wcf.acp.discordBotAddManager.step6Intro"><![CDATA[{if LANGUAGE_USE_INFORMAL_VARIANT}Dein{else}Ihr{/if} Discord Bot wurde erfolgreich angelegt und konfiguriert.]]></item>
+			<item name="wcf.acp.discordBotAddManager.step6DiscordSync"><![CDATA[Da {if LANGUAGE_USE_INFORMAL_VARIANT}du{else}Sie{/if} das Plugin Discord-Sync installiert {if LANGUAGE_USE_INFORMAL_VARIANT}hast, musst du nun noch deine{else}haben, müssen Sie nun noch Ihre{/if} Redirect URL konfigurieren. {if LANGUAGE_USE_INFORMAL_VARIANT}Gehe{else}Gehen Sie{/if} in das <a href="https://discord.com/developers/applications" class="externalURL" rel="noopener noreferrer">Entwickler-Portal</a> von Discord. {if LANGUAGE_USE_INFORMAL_VARIANT}Wähle deine{else}Wählen Sie Ihre{/if} zuvor erstellte Anwendung aus. {if LANGUAGE_USE_INFORMAL_VARIANT}Klicke{else}Klicken Sie{/if} links im Menü auf den Menüpunkt „<b>OAuth2</b>“. {if LANGUAGE_USE_INFORMAL_VARIANT}Klicke{else}Klicken Sie{/if} auf den Button „<b>Add Redirect</b>“. {if LANGUAGE_USE_INFORMAL_VARIANT}Füge{else}Fügen Sie{/if} nun die folgende URL in das Eingabefeld für Redirects ein:<br><br>
+	<b>Redirect URL:</b> <kbd>{link controller='DiscordAuth' forceFrontend=true application='wcf'}{/link}</kbd><br><br>
+	{if LANGUAGE_USE_INFORMAL_VARIANT}Klicke{else}Klicken Sie{/if} zum Speichern auf „<b>Save Changes</b>“.]]></item>
+			<item name="wcf.acp.discordBotAddManager.step6Outro"><![CDATA[Herzlichen Glückwunsch, {if LANGUAGE_USE_INFORMAL_VARIANT}du bist{else}Sie sind{/if} nun fertig mit dem Konfigurationsassistenten und {if LANGUAGE_USE_INFORMAL_VARIANT}kannst deinen{else}können Ihren{/if} Discord Bot nutzen.]]></item>
+		</category>
+		<category name="wcf.acp.discordBotList">
+			<item name="wcf.acp.discordBotList.botName"><![CDATA[Bot-Name]]></item>
+			<item name="wcf.acp.discordBotList.server"><![CDATA[Server]]></item>
+			<item name="wcf.acp.discordBotList.deleteRequest"><![CDATA[Discord-Bot wirklich löschen?]]></item>
+			<item name="wcf.acp.discordBotList.connectOnce"><![CDATA[Bot einmalig verbinden]]></item>
+			<item name="wcf.acp.discordBotList.gateway.connecting"><![CDATA[Verbindet mit Gateway...]]></item>
+			<item name="wcf.acp.discordBotList.gateway.connected"><![CDATA[Erfolgreich verbunden.]]></item>
+			<item name="wcf.acp.discordBotList.gateway.error"><![CDATA[Konnte keine Verbindung zum Gateway herstellen (Timeout).]]></item>
+		</category>
+		<category name="wcf.acp.discordWebhookList">
+			<item name="wcf.acp.discordWebhookList.channelID"><![CDATA[Channel-ID]]></item>
+			<item name="wcf.acp.discordWebhookList.webhookTitle"><![CDATA[Webhook-Titel]]></item>
+			<item name="wcf.acp.discordWebhookList.webhookName"><![CDATA[Webhook-Name]]></item>
+			<item name="wcf.acp.discordWebhookList.deleteRequest"><![CDATA[Webhook wirklich löschen?]]></item>
+		</category>
+		<category name="wcf.acp.discordBotSelectOptionType">
+			<item name="wcf.acp.discordBotSelectOptionType.noBot"><![CDATA[{if LANGUAGE_USE_INFORMAL_VARIANT}Du hast{else}Sie haben{/if} noch keinen Discord-Bot angelegt. Dies {if LANGUAGE_USE_INFORMAL_VARIANT}kannst du{else}können Sie{/if} unter <a href="{link controller="DiscordBotAdd"}{/link}">Discord-Bot</a> erledigen.]]></item>
+		</category>
+	</import>
 </language>
