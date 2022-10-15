@@ -7,9 +7,9 @@ interface IDiscordInteractionAction
     /**
      * public key vom Discord Bot zurückgeben
      *
-     * @return string
+     * @return array
      */
-    public function getPublicKey();
+    public function getPublicKeys(): array;
 
     /**
      * verarbeitet die von Discord gesendeten Daten für Application Commands

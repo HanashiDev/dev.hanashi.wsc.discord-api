@@ -2,12 +2,8 @@
 
 namespace wcf\system\option;
 
-use wcf\data\discord\bot\DiscordBotList;
 use wcf\data\option\Option;
-use wcf\system\exception\UserInputException;
-use wcf\system\WCF;
-use wcf\util\ArrayUtil;
-use wcf\util\StringUtil;
+use wcf\system\discord\type\BotMultiSelectType;
 
 /**
  * Option-Type für die Auswahl mehrere Discord-Bots
@@ -19,22 +15,18 @@ use wcf\util\StringUtil;
  */
 class DiscordBotMultiSelectOptionType extends AbstractOptionType
 {
+    protected $botMultiSelectType = [];
+
     /**
      * @inheritDoc
      */
     public function getFormElement(Option $option, $value)
     {
-        $discordBotList = new DiscordBotList();
-        $discordBotList->sqlOrderBy = 'botName ASC';
-        $discordBotList->readObjects();
+        if (!isset($this->botMultiSelectType[$option->optionName])) {
+            $this->botMultiSelectType[$option->optionName] = new BotMultiSelectType($option->optionName);
+        }
 
-        WCF::getTPL()->assign([
-            'discordBotList' => $discordBotList,
-            'option' => $option,
-            'value' => !\is_array($value) ? \explode("\n", $value) : $value,
-        ]);
-
-        return WCF::getTPL()->fetch('discordBotMultiSelectOptionType');
+        return $this->botMultiSelectType[$option->optionName]->getFormElement($value);
     }
 
     /**
@@ -42,20 +34,10 @@ class DiscordBotMultiSelectOptionType extends AbstractOptionType
      */
     public function validate(Option $option, $newValue)
     {
-        if (!\is_array($newValue)) {
-            $newValue = [];
+        if (!isset($this->botMultiSelectType[$option->optionName])) {
+            $this->botMultiSelectType[$option->optionName] = new BotMultiSelectType($option->optionName);
         }
-        $newValue = ArrayUtil::toIntegerArray($newValue);
-
-        $discordBotList = new DiscordBotList();
-        $discordBotList->setObjectIDs($newValue);
-        $discordBotList->readObjectIDs();
-
-        foreach ($newValue as $value) {
-            if (!\in_array($value, $discordBotList->objectIDs)) {
-                throw new UserInputException($option->optionName);
-            }
-        }
+        $this->botMultiSelectType[$option->optionName]->validate($newValue);
     }
 
     /**
@@ -63,10 +45,10 @@ class DiscordBotMultiSelectOptionType extends AbstractOptionType
      */
     public function getData(Option $option, $newValue)
     {
-        if (!\is_array($newValue)) {
-            $newValue = [];
+        if (!isset($this->botMultiSelectType[$option->optionName])) {
+            $this->botMultiSelectType[$option->optionName] = new BotMultiSelectType($option->optionName);
         }
 
-        return \implode("\n", ArrayUtil::toIntegerArray(StringUtil::unifyNewlines($newValue)));
+        return $this->botMultiSelectType[$option->optionName]->getData($newValue);
     }
 }

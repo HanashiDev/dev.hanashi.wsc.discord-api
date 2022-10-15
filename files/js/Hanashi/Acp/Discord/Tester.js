@@ -1,39 +1,13 @@
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    var desc = Object.getOwnPropertyDescriptor(m, k);
-    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
-      desc = { enumerable: true, get: function() { return m[k]; } };
-    }
-    Object.defineProperty(o, k2, desc);
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
-    Object.defineProperty(o, "default", { enumerable: true, value: v });
-}) : function(o, v) {
-    o["default"] = v;
-});
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
-    __setModuleDefault(result, mod);
-    return result;
-};
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-define(["require", "exports", "../../Discord/Gateway", "WoltLabSuite/Core/Ajax", "WoltLabSuite/Core/Dom/Util", "WoltLabSuite/Core/Event/Handler", "WoltLabSuite/Core/Language", "WoltLabSuite/Core/Ui/Dialog"], function (require, exports, Gateway_1, Ajax, DomUtil, EventHandler, Language, UiDialog) {
+define(["require", "exports", "tslib", "../../Discord/Gateway", "WoltLabSuite/Core/Ajax", "WoltLabSuite/Core/Dom/Util", "WoltLabSuite/Core/Event/Handler", "WoltLabSuite/Core/Language", "WoltLabSuite/Core/Ui/Dialog"], function (require, exports, tslib_1, Gateway_1, Ajax, DomUtil, EventHandler, Language, UiDialog) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.DiscordTester = void 0;
-    Gateway_1 = __importDefault(Gateway_1);
-    Ajax = __importStar(Ajax);
-    DomUtil = __importStar(DomUtil);
-    EventHandler = __importStar(EventHandler);
-    Language = __importStar(Language);
-    UiDialog = __importStar(UiDialog);
+    Gateway_1 = tslib_1.__importDefault(Gateway_1);
+    Ajax = tslib_1.__importStar(Ajax);
+    DomUtil = tslib_1.__importStar(DomUtil);
+    EventHandler = tslib_1.__importStar(EventHandler);
+    Language = tslib_1.__importStar(Language);
+    UiDialog = tslib_1.__importStar(UiDialog);
     class DiscordTester {
         constructor() {
             this.connected = false;

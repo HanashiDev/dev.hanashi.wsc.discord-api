@@ -3,34 +3,22 @@
 namespace wcf\system\option;
 
 use wcf\data\option\Option;
-use wcf\system\exception\UserInputException;
-use wcf\system\Regex;
-use wcf\system\WCF;
+use wcf\system\discord\type\EmbedColorType;
 
 class DiscordEmbedColorOptionType extends AbstractOptionType
 {
+    protected $embedColorType = [];
+
     /**
      * @inheritDoc
      */
     public function getFormElement(Option $option, $value)
     {
-        $hex = \str_pad(\dechex($value), 6, '0', \STR_PAD_LEFT);
-        $colorParts = \explode(' ', \chunk_split($hex, 2, ' '));
-        if (\count($colorParts) < 3) {
-            $value = 'rgba(0, 0, 0, 1)';
-        } else {
-            $value = \sprintf(
-                'rgba(%s, %s, %s, 1)',
-                \hexdec($colorParts[0]),
-                \hexdec($colorParts[1]),
-                \hexdec($colorParts[2])
-            );
+        if (!isset($this->embedColorType[$option->optionName])) {
+            $this->embedColorType[$option->optionName] = new EmbedColorType($option->optionName);
         }
 
-        return WCF::getTPL()->fetch('discordEmbedColorOptionType', 'wcf', [
-            'option' => $option,
-            'value' => $value,
-        ]);
+        return $this->embedColorType[$option->optionName]->getFormElement($value);
     }
 
     /**
@@ -38,25 +26,18 @@ class DiscordEmbedColorOptionType extends AbstractOptionType
      */
     public function validate(Option $option, $newValue)
     {
-        if (!empty($newValue)) {
-            $regex = new Regex('rgba\(\d{1,3}, \d{1,3}, \d{1,3}, (1|1\.00?|0|0?\.[0-9]{1,2})\)');
-
-            if (!$regex->match($newValue)) {
-                throw new UserInputException($option->optionName);
-            }
+        if (!isset($this->embedColorType[$option->optionName])) {
+            $this->embedColorType[$option->optionName] = new EmbedColorType($option->optionName);
         }
+        $this->embedColorType[$option->optionName]->validate($newValue);
     }
 
     public function getData(Option $option, $newValue)
     {
-        \preg_match('/rgba\((\d{1,3}), (\d{1,3}), (\d{1,3}), (1|1\.00?|0|0?\.[0-9]{1,2})\)/', $newValue, $matches);
-        $hex = \sprintf(
-            '%s%s%s',
-            \str_pad(\dechex($matches[1]), 2, '0', \STR_PAD_LEFT),
-            \str_pad(\dechex($matches[2]), 2, '0', \STR_PAD_LEFT),
-            \str_pad(\dechex($matches[3]), 2, '0', \STR_PAD_LEFT),
-        );
+        if (!isset($this->embedColorType[$option->optionName])) {
+            $this->embedColorType[$option->optionName] = new EmbedColorType($option->optionName);
+        }
 
-        return \hexdec($hex);
+        return $this->embedColorType[$option->optionName]->getData($newValue);
     }
 }

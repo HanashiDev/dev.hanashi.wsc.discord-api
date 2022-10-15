@@ -7,6 +7,7 @@ use Exception;
 use GuzzleHttp\Psr7\ServerRequest;
 use OutOfBoundsException;
 use UnexpectedValueException;
+use wcf\data\discord\bot\DiscordBotList;
 use wcf\system\discord\DiscordApi;
 use wcf\util\JSON;
 
@@ -32,12 +33,19 @@ abstract class AbstractDiscordInteractionAction extends AbstractAction implement
                 throw new BadMethodCallException('body is not valid json');
             }
 
-            $publicKey = $this->getPublicKey();
-            if (empty($publicKey)) {
+            $publicKeys = $this->getPublicKeys();
+            if (empty($publicKeys)) {
                 throw new UnexpectedValueException('public key is empty');
             }
 
-            if (!DiscordApi::verifyRequest($publicKey, $body)) {
+            $validRequest = false;
+            foreach ($publicKeys as $publicKey) {
+                if (DiscordApi::verifyRequest($publicKey, $body)) {
+                    $validRequest = true;
+                    break;
+                }
+            }
+            if (!$validRequest) {
                 throw new OutOfBoundsException('invalid request signature');
             }
 
@@ -89,5 +97,27 @@ abstract class AbstractDiscordInteractionAction extends AbstractAction implement
         echo JSON::encode([
             'type' => DiscordApi::DISCORD_PONG,
         ]);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getPublicKeys(): array
+    {
+        $publicKeys = [];
+
+        $botList = new DiscordBotList();
+        $botList->getConditionBuilder()->add('publicKey IS NOT NULL');
+        $botList->getConditionBuilder()->add('publicKey != ?', ['']);
+        $botList->readObjects();
+
+        foreach ($botList as $bot) {
+            if (\in_array($bot->publicKey, $publicKeys)) {
+                continue;
+            }
+            $publicKeys[] = $bot->publicKey;
+        }
+
+        return $publicKeys;
     }
 }

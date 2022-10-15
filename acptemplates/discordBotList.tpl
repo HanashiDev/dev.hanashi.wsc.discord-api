@@ -48,7 +48,6 @@
 						<td class="columnIcon">
 							<a href="{link controller='DiscordBotEdit' id=$discordBot->botID}{/link}" title="{lang}wcf.global.button.edit{/lang}" class="jsTooltip"><span class="icon icon24 fa-pencil"></span></a>
 							<a href="#" class="jsDeleteButton jsTooltip" title="{lang}wcf.global.button.delete{/lang}" data-confirm-message-html="{lang}wcf.acp.discordBotList.deleteRequest{/lang}" data-object-id="{@$discordBot->botID}"><span class="icon icon24 fa-times"></span></a>
-							<a href="#" class="jsConnectBot jsTooltip" title="{lang}wcf.acp.discordBotList.connectOnce{/lang}" data-object-id="{@$discordBot->botID}"><span class="icon icon24 fa-power-off"></span></a>
 
 							{event name='icons'}
 						</td>
