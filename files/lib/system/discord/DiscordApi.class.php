@@ -23,10 +23,19 @@ use wcf\util\JSON;
 class DiscordApi
 {
     // ApplicationCommandType https://discord.com/developers/docs/interactions/application-commands#application-command-object-application-command-types
+    /**
+     * Slash commands; a text-based command that shows up when a user types /
+     */
     public const DISCORD_COMMAND_CHAT_INPUT = 1;
 
+    /**
+     * A UI-based command that shows up when you right click or tap on a user
+     */
     public const DISCORD_COMMAND_USER = 2;
 
+    /**
+     * A UI-based command that shows up when you right click or tap on a message
+     */
     public const DISCORD_COMMAND_MESSAGE = 3;
 
     // ApplicationCommandOptionType https://discord.com/developers/docs/interactions/slash-commands#application-command-object-application-command-option-type
@@ -77,6 +86,52 @@ class DiscordApi
     public const DISCORD_APPLICATION_COMMAND_AUTOCOMPLETE_RESULT = 8;
 
     public const DISCORD_MODAL = 9;
+
+    // Message Flags https://discord.com/developers/docs/resources/channel#message-object-message-flags
+    /**
+     * this message has been published to subscribed channels (via Channel Following)
+     */
+    public const DISCORD_CROSSPOSTED = 1 << 0;
+
+    /**
+     * this message originated from a message in another channel (via Channel Following)
+     */
+    public const DISCORD_IS_CROSSPOST = 1 << 1;
+
+    /**
+     * do not include any embeds when serializing this message
+     */
+    public const DISCORD_SUPPRESS_EMBED = 1 << 2;
+
+    /**
+     * the source message for this crosspost has been deleted (via Channel Following)
+     */
+    public const DISCORD_SOURCE_MESSAGE_DELETED = 1 << 3;
+
+    /**
+     * this message came from the urgent message system
+     */
+    public const DISCORD_URGENT = 1 << 4;
+
+    /**
+     * this message has an associated thread, with the same id as the message
+     */
+    public const DISCORD_HAS_THREAD = 1 << 5;
+
+    /**
+     * this message is only visible to the user who invoked the Interaction
+     */
+    public const DISCORD_EPHEMERAL = 1 << 6;
+
+    /**
+     * this message is an Interaction Response and the bot is "thinking"
+     */
+    public const DISCORD_LOADING = 1 << 7;
+
+    /**
+     * this message failed to mention some roles and add their members to the thread
+     */
+    public const DISCORD_FAILED_TO_MENTION_SOME_ROLES_IN_THREAD = 1 << 8;
 
     /**
      * URL zur Discord-API
