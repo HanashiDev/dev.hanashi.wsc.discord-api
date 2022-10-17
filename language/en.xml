@@ -40,7 +40,7 @@
 			<item name="wcf.acp.discordBotAdd.clientSecret"><![CDATA[Client Secret]]></item>
 			<item name="wcf.acp.discordBotAdd.interaction"><![CDATA[Interaction]]></item>
 			<item name="wcf.acp.discordBotAdd.publicKey"><![CDATA[Public Key]]></item>
-			<item name="wcf.acp.discordBotAdd.publicKey.description"><![CDATA[Interactions Endpoint Url: <kbd>{link controller='DiscordAuth' forceFrontend=true application='wcf'}{/link}</kbd>]]></item>
+			<item name="wcf.acp.discordBotAdd.publicKey.description"><![CDATA[Interactions Endpoint Url: <kbd>{link controller='DiscordInteraction' forceFrontend=true application='wcf'}{/link}</kbd>]]></item>
 		</category>
 		<category name="wcf.acp.discordBotAddManager">
 			<item name="wcf.acp.discordBotAddManager.configurationAssistant"><![CDATA[Configuration Wizard]]></item>
