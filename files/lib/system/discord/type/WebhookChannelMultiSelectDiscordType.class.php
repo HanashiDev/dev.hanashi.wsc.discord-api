@@ -29,12 +29,17 @@ class WebhookChannelMultiSelectDiscordType extends ChannelMultiSelectDiscordType
         }
 
         $discordWebhookList = new DiscordWebhookList();
-        $discordWebhookList->getConditionBuilder()->add('channelID IN (?) AND usageBy = ?', [$channelIDsMerged, $this->optionName]);
+        $discordWebhookList->getConditionBuilder()->add('channelID IN (?)', [$channelIDsMerged]);
+        $discordWebhookList->getConditionBuilder()->add('usageBy = ?', [$this->optionName]);
+        $discordWebhookList->getConditionBuilder()->add('botID IN (?)', [$botIDs]);
         $discordWebhookList->readObjects();
         $webhookChannelIDs = [];
         foreach ($discordWebhookList as $discordWebhook) {
-            if (!\in_array($discordWebhook->channelID, $webhookChannelIDs)) {
-                $webhookChannelIDs[] = $discordWebhook->channelID;
+            if (
+                empty($webhookChannelIDs[$discordWebhook->botID])
+                || !\in_array($discordWebhook->channelID, $webhookChannelIDs[$discordWebhook->botID])
+            ) {
+                $webhookChannelIDs[$discordWebhook->botID][] = $discordWebhook->channelID;
             }
         }
 
@@ -57,7 +62,7 @@ class WebhookChannelMultiSelectDiscordType extends ChannelMultiSelectDiscordType
                     throw new UserInputException($this->optionName);
                 }
 
-                if (!\in_array($channelID, $webhookChannelIDs)) {
+                if (!isset($webhookChannelIDs[$botID]) || !\in_array($channelID, $webhookChannelIDs[$botID])) {
                     $discordApi = $discordBots[$botID]->getDiscordApi();
                     $avatar = null;
                     $avatarFile = \sprintf('%simages/discord_webhook/%s.png', WCF_DIR, $botID);
