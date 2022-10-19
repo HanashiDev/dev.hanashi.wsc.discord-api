@@ -15,6 +15,9 @@ use wcf\system\WCF;
  * @copyright   Hanashi
  * @license Freie Lizenz (https://hanashi.dev/freie-lizenz/)
  * @package WoltLabSuite\Core\Data\Discord\Bot
+ *
+ * @method  DiscordBotEditor[] getObjects()
+ * @method  DiscordBotEditor   getSingleObject()
  */
 class DiscordBotAction extends AbstractDatabaseObjectAction
 {

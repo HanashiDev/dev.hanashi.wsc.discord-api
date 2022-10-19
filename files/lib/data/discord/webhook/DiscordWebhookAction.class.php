@@ -11,6 +11,9 @@ use wcf\data\AbstractDatabaseObjectAction;
  * @copyright   Hanashi
  * @license Freie Lizenz (https://hanashi.dev/freie-lizenz/)
  * @package WoltLabSuite\Core\Data\Discord\Webhook
+ *
+ * @method  DiscordWebhookEditor[] getObjects()
+ * @method  DiscordWebhookEditor   getSingleObject()
  */
 class DiscordWebhookAction extends AbstractDatabaseObjectAction
 {

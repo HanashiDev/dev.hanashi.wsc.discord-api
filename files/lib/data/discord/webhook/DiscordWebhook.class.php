@@ -13,6 +13,15 @@ use wcf\system\discord\DiscordApi;
  * @copyright   Hanashi
  * @license Freie Lizenz (https://hanashi.dev/freie-lizenz/)
  * @package WoltLabSuite\Core\Data\Discord\Webhook
+ *
+ * @property-read int $webhookID
+ * @property-read int $channelID
+ * @property-read int $botID
+ * @property-read string $webhookToken
+ * @property-read string $webhookName
+ * @property-read string $webhookTitle
+ * @property-read string $usageBy
+ * @property-read int $webhookTime
  */
 class DiscordWebhook extends DatabaseObject
 {
@@ -28,24 +37,20 @@ class DiscordWebhook extends DatabaseObject
 
     /**
      * Objekt eines Discord-Bots
-     *
-     * @var DiscordBot
      */
-    protected $discordBot;
+    protected ?DiscordBot $discordBot = null;
 
     /**
      * Objekt der Discord-API
-     *
-     * @var DiscordApi
      */
-    protected $discordApi;
+    protected ?DiscordApi $discordApi = null;
 
     /**
      * gibt den zugehörigen Discord-Bot zurück
      *
      * @return DiscordBot
      */
-    public function getDiscordBot()
+    public function getDiscordBot(): DiscordBot
     {
         if ($this->discordBot === null) {
             $this->discordBot = new DiscordBot($this->botID);
@@ -59,7 +64,7 @@ class DiscordWebhook extends DatabaseObject
      *
      * @return DiscordApi
      */
-    public function getDiscordApi()
+    public function getDiscordApi(): DiscordApi
     {
         if ($this->discordApi === null) {
             $this->discordApi = new DiscordApi($this->guildID, $this->botToken);
