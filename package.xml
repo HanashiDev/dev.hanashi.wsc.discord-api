@@ -30,7 +30,7 @@
 		<instruction type="option"/>
 		<instruction type="script">acp/install_dev.hanashi.wsc.discord-api.php</instruction>
 	</instructions>
-	<instructions type="update" fromversion="2.3.0">
+	<instructions type="update" fromversion="2.4.0">
 		<instruction type="file"/>
 		<instruction type="acpTemplate"/>
 		<instruction type="language"/>
