@@ -8,6 +8,7 @@ use GuzzleHttp\Exception\BadResponseException;
 use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\RequestOptions;
+use Laminas\Diactoros\Uri;
 use wcf\data\discord\bot\DiscordBot;
 use wcf\system\io\HttpFactory;
 use wcf\util\JSON;
@@ -2835,18 +2836,30 @@ class DiscordApi
      * @param   boolean $wait           waits for server confirmation of message send before response, and returns the created message body (defaults to false; when false a message that is not saved does not return an error)
      * @return  array
      */
-    public function executeWebhook($webhookID, $webhookToken, $params, $wait = false)
+    public function executeWebhook($webhookID, $webhookToken, $params, $wait = false, $threadID = null)
     {
-        $url = \sprintf('%s/webhooks/%s/%s', $this->apiUrl, $webhookID, $webhookToken);
+        $url = new Uri(
+            \sprintf('%s/webhooks/%s/%s', $this->apiUrl, $webhookID, $webhookToken)
+        );
+        $queryParams = [];
         if ($wait) {
-            $url .= '?wait=true';
+            $queryParams['wait'] = 'true';
         }
+        if (!empty($threadID)) {
+            $queryParams['thread_id'] = $threadID;
+        }
+
+        if (!empty($queryParams)) {
+            $encodedParameters = \http_build_query($queryParams, '', '&');
+            $url = $url->withQuery($encodedParameters);
+        }
+
         $contentType = 'application/json';
         if (isset($params['file'])) {
             $contentType = 'multipart/form-data';
         }
 
-        return $this->execute($url, 'POST', $params, $contentType);
+        return $this->execute((string)$url, 'POST', $params, $contentType);
     }
 
     /**
