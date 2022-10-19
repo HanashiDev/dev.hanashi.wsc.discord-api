@@ -29,6 +29,7 @@ class DiscordGuildChannelCacheBuilder extends AbstractCacheBuilder
         }
 
         $discordApi = new DiscordApi($parameters['guildID'], $parameters['botToken']);
+
         return $discordApi->getGuildChannels();
     }
 }
