@@ -1,56 +1,80 @@
 {if $bots|count > 1}
-	<div class="section tabMenuContainer" data-active="{$option->optionName}" data-store="activeTabMenuItem">
-		<div id="{$option->optionName}" class="tabMenuContainer tabMenuContent">
+	<div class="section tabMenuContainer" data-active="{$optionName}" data-store="activeTabMenuItem">
+		<div id="{$optionName}" class="tabMenuContainer tabMenuContent">
 			<nav class="menu">
 				<ul>
 					{foreach from=$bots item=$bot}
 						<li>
-							<a href="#{$option->optionName}-{$bot['botID']}">{$bot['botName']}</a>
+							<a href="#{$optionName}-{$bot['botID']}">{$bot['botName']}</a>
 						</li>
 					{/foreach}
 				</ul>
 			</nav>
 			{foreach from=$bots item=$bot}
-				<div id="{$option->optionName}-{$bot['botID']}" class="tabMenuContent hidden" data-name="{$option->optionName}-{$bot['botID']}">
+				<div id="{$optionName}-{$bot['botID']}" class="tabMenuContent hidden" data-name="{$optionName}-{$bot['botID']}">
 					<div class="section">
-						<select id="{$option->optionName}" name="values[{$option->optionName}][{$bot['botID']}]">
-							<option></option>
+						<ul class="scrollableCheckboxList" id="{$optionName}_{$bot['botID']}" style="height: 200px;">
+							{include file="__discordChannelSelectSub" botChannels=$bot['channels'] botID=$bot['botID']}
 							{foreach from=$bot['channels'] item=channel}
 								{if $channel['type'] == 4}
-									<optgroup label="{$channel['name']}">
-										{foreach from=$channel['childs'] item=$childChannel}
-											{if $childChannel['type'] == 0 || $childChannel['type'] == 5}
-												<option value="{$childChannel['id']}"{if !$value[$bot['botID']]|empty && $childChannel['id'] == $value[$bot['botID']]} selected{/if}>{$childChannel['name']}</option>
-											{/if}
-										{/foreach}
-									</optgroup>
-								{else if $channel['type'] == 0 || $channel['type'] == 5}
-									<option value="{$channel['id']}"{if !$value[$bot['botID']]|empty && $channel['id'] == $value[$bot['botID']]} selected{/if}>{$channel['name']}</option>
+									<li>
+										<label><input type="radio" name="values[{$optionName}][{$bot['botID']}][]" value="{$channel['id']}" style="display: none;"> <b>{$channel['name']}</b></label>
+									</li>
+									{include file="__discordChannelSelectSub" botChannels=$channel['childs'] botID=$bot['botID']}
 								{/if}
 							{/foreach}
-						</select>
+						</ul>
 					</div>
 				</div>
+				<script data-relocate="true">
+					require(['WoltLabSuite/Core/Ui/ItemList/Filter'], function(UiItemListFilter) {
+						new UiItemListFilter('{$optionName|encodeJS}_{$bot['botID']|encodeJS}');
+					});
+				</script>
 			{/foreach}
 		</div>
 	</div>
+	<script data-relocate="true">
+		require(['Language'], function(Language) {
+			Language.addObject({
+				'wcf.global.filter.button.visibility': '{jslang}wcf.global.filter.button.visibility{/jslang}',
+				'wcf.global.filter.button.clear': '{jslang}wcf.global.filter.button.clear{/jslang}',
+				'wcf.global.filter.error.noMatches': '{jslang}wcf.global.filter.error.noMatches{/jslang}',
+				'wcf.global.filter.placeholder': '{jslang}wcf.global.filter.placeholder{/jslang}',
+				'wcf.global.filter.visibility.activeOnly': '{jslang}wcf.global.filter.visibility.activeOnly{/jslang}',
+				'wcf.global.filter.visibility.highlightActive': '{jslang}wcf.global.filter.visibility.highlightActive{/jslang}',
+				'wcf.global.filter.visibility.showAll': '{jslang}wcf.global.filter.visibility.showAll{/jslang}'
+			});
+		});
+	</script>
 {else if $bots|count == 1}
-	<select id="{$option->optionName}" name="values[{$option->optionName}][{$bots[0]['botID']}]">
-		<option></option>
+	<ul class="scrollableCheckboxList" id="{$optionName}" style="height: 200px;">
+		{include file="__discordChannelSelectSub" botChannels=$bots[0]['channels'] botID=$bots[0]['botID']}
 		{foreach from=$bots[0]['channels'] item=channel}
 			{if $channel['type'] == 4}
-				<optgroup label="{$channel['name']}">
-					{foreach from=$channel['childs'] item=$childChannel}
-						{if $childChannel['type'] == 0 || $childChannel['type'] == 5}
-							<option value="{$childChannel['id']}"{if !$value[$bots[0]['botID']]|empty && $childChannel['id'] == $value[$bots[0]['botID']]} selected{/if}>{$childChannel['name']}</option>
-						{/if}
-					{/foreach}
-				</optgroup>
-			{else if $channel['type'] == 0 || $channel['type'] == 5}
-				<option value="{$channel['id']}"{if !$value[$bots[0]['botID']]|empty && $channel['id'] == $value[$bots[0]['botID']]} selected{/if}>{$channel['name']}</option>
+				<li>
+					<label><input type="radio" name="values[{$optionName}][{$bots[0]['botID']}]" value="{$channel['id']}" style="display: none;"> <b>{$channel['name']}</b></label>
+				</li>
+				{include file="__discordChannelSelectSub" botChannels=$channel['childs'] botID=$bots[0]['botID']}
 			{/if}
 		{/foreach}
-	</select>
+	</ul>
+
+	<script data-relocate="true">
+		require(['Language', 'WoltLabSuite/Core/Ui/ItemList/Filter'], function(Language, UiItemListFilter) {
+			Language.addObject({
+				'wcf.global.filter.button.visibility': '{jslang}wcf.global.filter.button.visibility{/jslang}',
+				'wcf.global.filter.button.clear': '{jslang}wcf.global.filter.button.clear{/jslang}',
+				'wcf.global.filter.error.noMatches': '{jslang}wcf.global.filter.error.noMatches{/jslang}',
+				'wcf.global.filter.placeholder': '{jslang}wcf.global.filter.placeholder{/jslang}',
+				'wcf.global.filter.visibility.activeOnly': '{jslang}wcf.global.filter.visibility.activeOnly{/jslang}',
+				'wcf.global.filter.visibility.highlightActive': '{jslang}wcf.global.filter.visibility.highlightActive{/jslang}',
+				'wcf.global.filter.visibility.showAll': '{jslang}wcf.global.filter.visibility.showAll{/jslang}'
+			});
+			
+			new UiItemListFilter('{$optionName|encodeJS}');
+		});
+	</script>
 {else}
 	<p class="info">{lang}wcf.acp.discordBotSelectOptionType.noBot{/lang}</p>
 {/if}
