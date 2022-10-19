@@ -65,7 +65,7 @@ class ChannelSelectDiscordType extends AbstractDiscordType
         return WCF::getTPL()->fetch('discordChannelSelectOptionType');
     }
 
-    public function validate($newValue)
+    public function validate($newValue, $maxChannels = null)
     {
         if (!\is_array($newValue)) {
             throw new UserInputException($this->optionName);
@@ -84,6 +84,9 @@ class ChannelSelectDiscordType extends AbstractDiscordType
             if (!\in_array($channelID, $channelIDs)) {
                 throw new UserInputException($this->optionName);
             }
+        }
+        if (!empty($maxChannels) && \count($newValue) > $maxChannels) {
+            throw new UserInputException($this->optionName, 'discordMaxChannels');
         }
     }
 

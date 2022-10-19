@@ -38,7 +38,7 @@ class DiscordChannelSelectOptionType extends AbstractOptionType
         if (!isset($this->channelSelectType[$option->optionName])) {
             $this->channelSelectType[$option->optionName] = new ChannelSelectDiscordType($option->optionName);
         }
-        $this->channelSelectType[$option->optionName]->validate($newValue);
+        $this->channelSelectType[$option->optionName]->validate($newValue, $option->maxChannels);
     }
 
     /**

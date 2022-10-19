@@ -5,6 +5,7 @@
 			<item name="wcf.acp.option.category.discord"><![CDATA[Discord]]></item>
 			<item name="wcf.acp.option.error.webhooksMaximumReached"><![CDATA[The maximum of webhooks in a channel was exceeded.]]></item>
 			<item name="wcf.acp.option.error.webhooksUnknown"><![CDATA[Unknown error when creating a webhook]]></item>
+			<item name="wcf.acp.option.error.discordMaxChannels"><![CDATA[The maximum of allowed selected channels has been exceeded.]]></item>
 		</category>
 		<category name="wcf.acp.group">
 			<item name="wcf.acp.group.option.category.user.discord"><![CDATA[Discord]]></item>
