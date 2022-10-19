@@ -3,6 +3,7 @@
 namespace wcf\data\discord\bot;
 
 use wcf\data\DatabaseObject;
+use wcf\system\cache\builder\DiscordGuildChannelCacheBuilder;
 use wcf\system\discord\DiscordApi;
 
 /**
@@ -58,5 +59,13 @@ class DiscordBot extends DatabaseObject
         }
 
         return $files;
+    }
+
+    public function getCachedDiscordChannel()
+    {
+        return DiscordGuildChannelCacheBuilder::getInstance()->getData([
+            'guildID' => $this->guildID,
+            'botToken' => $this->botToken,
+        ]);
     }
 }

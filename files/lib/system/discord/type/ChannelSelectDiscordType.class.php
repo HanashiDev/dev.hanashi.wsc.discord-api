@@ -124,8 +124,7 @@ class ChannelSelectDiscordType extends AbstractDiscordType
     {
         if ($this->guildChannels === null) {
             foreach ($this->getDiscordBotList() as $discordBot) {
-                $discordApi = $discordBot->getDiscordApi();
-                $this->guildChannels[$discordBot->botID] = $discordApi->getGuildChannels();
+                $this->guildChannels[$discordBot->botID] = $discordBot->getCachedDiscordChannel();
             }
         }
 

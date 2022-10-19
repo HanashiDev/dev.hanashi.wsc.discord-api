@@ -122,8 +122,7 @@ class ChannelMultiSelectDiscordType extends AbstractDiscordType
     {
         if ($this->guildChannels === null) {
             foreach ($this->getDiscordBotList() as $discordBot) {
-                $discordApi = $discordBot->getDiscordApi();
-                $guildChannelsTmp = $discordApi->getGuildChannels();
+                $guildChannelsTmp = $discordBot->getCachedDiscordChannel();
                 if ($guildChannelsTmp['status'] != 200) {
                     continue;
                 }
