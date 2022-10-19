@@ -70,6 +70,9 @@ class ChannelSelectDiscordType extends AbstractDiscordType
         if (!\is_array($newValue)) {
             throw new UserInputException($this->optionName);
         }
+        if (!empty($maxChannels) && \count($newValue) > $maxChannels) {
+            throw new UserInputException($this->optionName, 'discordMaxChannels');
+        }
         $guildChannels = $this->getGuildChannels();
         foreach ($newValue as $botID => $channelID) {
             if (empty($channelID)) {
@@ -84,9 +87,6 @@ class ChannelSelectDiscordType extends AbstractDiscordType
             if (!\in_array($channelID, $channelIDs)) {
                 throw new UserInputException($this->optionName);
             }
-        }
-        if (!empty($maxChannels) && \count($newValue) > $maxChannels) {
-            throw new UserInputException($this->optionName, 'discordMaxChannels');
         }
     }
 
