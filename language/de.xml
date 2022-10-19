@@ -117,7 +117,7 @@
 			<item name="wcf.acp.discordWebhookList.deleteRequest"><![CDATA[Webhook wirklich löschen?]]></item>
 		</category>
 		<category name="wcf.acp.discordBotSelectOptionType">
-			<item name="wcf.acp.discordBotSelectOptionType.noBot"><![CDATA[{if LANGUAGE_USE_INFORMAL_VARIANT}Du hast{else}Sie haben{/if} noch keinen Discord-Bot angelegt. Dies {if LANGUAGE_USE_INFORMAL_VARIANT}kannst du{else}können Sie{/if} unter <a href="{link controller="DiscordBotAdd"}{/link}">Discord-Bot</a> erledigen.]]></item>
+			<item name="wcf.acp.discordBotSelectOptionType.noBot"><![CDATA[{if LANGUAGE_USE_INFORMAL_VARIANT}Du hast{else}Sie haben{/if} noch keinen Discord-Bot angelegt. Dies {if LANGUAGE_USE_INFORMAL_VARIANT}kannst du{else}können Sie{/if} unter <a href="{link controller="DiscordBotAddManager"}{/link}">Discord-Bot</a> erledigen.]]></item>
 		</category>
 	</import>
 </language>

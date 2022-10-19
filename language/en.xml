@@ -117,7 +117,7 @@ Go the <a href="https://discord.com/developers/applications" class="externalURL"
 			<item name="wcf.acp.discordWebhookList.deleteRequest"><![CDATA[Really delete Webhook?]]></item>
 		</category>
 		<category name="wcf.acp.discordBotSelectOptionType">
-			<item name="wcf.acp.discordBotSelectOptionType.noBot"><![CDATA[You haven't created a discord bot yet. You can do this under <a href="{link controller="DiscordBotAdd"}{/link}">Discord bot</a>.]]></item>
+			<item name="wcf.acp.discordBotSelectOptionType.noBot"><![CDATA[You haven't created a discord bot yet. You can do this under <a href="{link controller="DiscordBotAddManager"}{/link}">Discord bot</a>.]]></item>
 		</category>
 	</import>
 </language>
