@@ -6,7 +6,7 @@ use wcf\data\discord\bot\DiscordBotList;
 use wcf\system\exception\UserInputException;
 use wcf\system\WCF;
 
-class ChannelMultiSelectDiscordType extends AbstractDiscordType
+class ChannelSelectDiscordType extends AbstractDiscordType
 {
     /**
      * Liste von Discord-Bots
@@ -28,9 +28,10 @@ class ChannelMultiSelectDiscordType extends AbstractDiscordType
         $guildChannels = $this->getGuildChannels();
         foreach ($this->getDiscordBotList() as $discordBot) {
             $channelsTmp = [];
-            if (isset($guildChannels[$discordBot->botID]['body'])) {
-                $channelsTmp = $guildChannels[$discordBot->botID]['body'];
+            if (isset($guildChannels[$discordBot->botID])) {
+                $channelsTmp = $guildChannels[$discordBot->botID];
             }
+            $channelsTmp = $channelsTmp['body'];
             \array_multisort(\array_column($channelsTmp, 'position'), \SORT_ASC, $channelsTmp);
 
             $channelsGroupedTmp = [];
@@ -57,33 +58,34 @@ class ChannelMultiSelectDiscordType extends AbstractDiscordType
         WCF::getTPL()->assign([
             'bots' => $channels,
             'optionName' => $this->optionName,
-            'value' => \unserialize($value),
+            'value' => @\unserialize($value),
             'channelTypes' => $channelTypes,
         ]);
 
-        return WCF::getTPL()->fetch('discordChannelMultiSelect');
+        return WCF::getTPL()->fetch('discordChannelSelectOptionType');
     }
 
-    public function validate($newValue)
+    public function validate($newValue, $maxChannels = null)
     {
+        if (!\is_array($newValue)) {
+            throw new UserInputException($this->optionName);
+        }
+        if (!empty($maxChannels) && \count($newValue) > $maxChannels) {
+            throw new UserInputException($this->optionName, 'discordMaxChannels');
+        }
         $guildChannels = $this->getGuildChannels();
-        foreach ($newValue as $botID => $channelIDs) {
-            if (empty($channelIDs)) {
+        foreach ($newValue as $botID => $channelID) {
+            if (empty($channelID)) {
                 continue;
             }
 
             if (!isset($guildChannels[$botID])) {
                 throw new UserInputException($this->optionName);
             }
-            $channels = [];
-            if (isset($guildChannels[$botID]['body'])) {
-                $channels = $guildChannels[$botID]['body'];
-            }
-            $channelIDsTmp = \array_column($channels, 'id');
-            foreach ($channelIDs as $channelID) {
-                if (!\in_array($channelID, $channelIDsTmp)) {
-                    throw new UserInputException($this->optionName);
-                }
+            $channels = $guildChannels[$botID]['body'];
+            $channelIDs = \array_column($channels, 'id');
+            if (!\in_array($channelID, $channelIDs)) {
+                throw new UserInputException($this->optionName);
             }
         }
     }
@@ -122,11 +124,7 @@ class ChannelMultiSelectDiscordType extends AbstractDiscordType
     {
         if ($this->guildChannels === null) {
             foreach ($this->getDiscordBotList() as $discordBot) {
-                $guildChannelsTmp = $discordBot->getCachedDiscordChannel();
-                if ($guildChannelsTmp['status'] != 200) {
-                    continue;
-                }
-                $this->guildChannels[$discordBot->botID] = $guildChannelsTmp;
+                $this->guildChannels[$discordBot->botID] = $discordBot->getCachedDiscordChannel();
             }
         }
 

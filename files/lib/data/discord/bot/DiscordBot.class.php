@@ -3,6 +3,7 @@
 namespace wcf\data\discord\bot;
 
 use wcf\data\DatabaseObject;
+use wcf\system\cache\builder\DiscordGuildChannelCacheBuilder;
 use wcf\system\discord\DiscordApi;
 
 /**
@@ -12,6 +13,18 @@ use wcf\system\discord\DiscordApi;
  * @copyright   Hanashi
  * @license Freie Lizenz (https://hanashi.dev/freie-lizenz/)
  * @package WoltLabSuite\Core\Data\Discord\Bot
+ *
+ * @property-read int $botID
+ * @property-read string $botName
+ * @property-read string $botToken
+ * @property-read int $guildID
+ * @property-read string|null $guildName
+ * @property-read string|null $guildIcon
+ * @property-read string $webhookName
+ * @property-read int|null $clientID
+ * @property-read string|null $clientSecret
+ * @property-read string|null $publicKey
+ * @property-read int $botTime
  */
 class DiscordBot extends DatabaseObject
 {
@@ -25,12 +38,9 @@ class DiscordBot extends DatabaseObject
      */
     protected static $databaseTableIndexName = 'botID';
 
-    /**
-     * @var DiscordApi
-     */
-    protected $discordApi;
+    protected ?DiscordApi $discordApi = null;
 
-    public function getDiscordApi()
+    public function getDiscordApi(): DiscordApi
     {
         if ($this->discordApi === null) {
             $this->discordApi = new DiscordApi($this->guildID, $this->botToken);
@@ -39,7 +49,7 @@ class DiscordBot extends DatabaseObject
         return $this->discordApi;
     }
 
-    public function getWebhookIconUploadFileLocations()
+    public function getWebhookIconUploadFileLocations(): array
     {
         $files = [];
 
@@ -49,5 +59,13 @@ class DiscordBot extends DatabaseObject
         }
 
         return $files;
+    }
+
+    public function getCachedDiscordChannel()
+    {
+        return DiscordGuildChannelCacheBuilder::getInstance()->getData([
+            'guildID' => $this->guildID,
+            'botToken' => $this->botToken,
+        ]);
     }
 }

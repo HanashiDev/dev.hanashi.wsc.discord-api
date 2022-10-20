@@ -5,6 +5,7 @@
 			<item name="wcf.acp.option.category.discord"><![CDATA[Discord]]></item>
 			<item name="wcf.acp.option.error.webhooksMaximumReached"><![CDATA[The maximum of webhooks in a channel was exceeded.]]></item>
 			<item name="wcf.acp.option.error.webhooksUnknown"><![CDATA[Unknown error when creating a webhook]]></item>
+			<item name="wcf.acp.option.error.discordMaxChannels"><![CDATA[The maximum of allowed selected channels has been exceeded.]]></item>
 		</category>
 		<category name="wcf.acp.group">
 			<item name="wcf.acp.group.option.category.user.discord"><![CDATA[Discord]]></item>
@@ -40,7 +41,7 @@
 			<item name="wcf.acp.discordBotAdd.clientSecret"><![CDATA[Client Secret]]></item>
 			<item name="wcf.acp.discordBotAdd.interaction"><![CDATA[Interaction]]></item>
 			<item name="wcf.acp.discordBotAdd.publicKey"><![CDATA[Public Key]]></item>
-			<item name="wcf.acp.discordBotAdd.publicKey.description"><![CDATA[Interactions Endpoint Url: <kbd>{link controller='DiscordAuth' forceFrontend=true application='wcf'}{/link}</kbd>]]></item>
+			<item name="wcf.acp.discordBotAdd.publicKey.description"><![CDATA[Interactions Endpoint Url: <kbd>{link controller='DiscordInteraction' forceFrontend=true application='wcf'}{/link}</kbd>]]></item>
 		</category>
 		<category name="wcf.acp.discordBotAddManager">
 			<item name="wcf.acp.discordBotAddManager.configurationAssistant"><![CDATA[Configuration Wizard]]></item>
@@ -117,7 +118,7 @@ Go the <a href="https://discord.com/developers/applications" class="externalURL"
 			<item name="wcf.acp.discordWebhookList.deleteRequest"><![CDATA[Really delete Webhook?]]></item>
 		</category>
 		<category name="wcf.acp.discordBotSelectOptionType">
-			<item name="wcf.acp.discordBotSelectOptionType.noBot"><![CDATA[You haven't created a discord bot yet. You can do this under <a href="{link controller="DiscordBotAdd"}{/link}">Discord bot</a>.]]></item>
+			<item name="wcf.acp.discordBotSelectOptionType.noBot"><![CDATA[You haven't created a discord bot yet. You can do this under <a href="{link controller="DiscordBotAddManager"}{/link}">Discord bot</a>.]]></item>
 		</category>
 	</import>
 </language>

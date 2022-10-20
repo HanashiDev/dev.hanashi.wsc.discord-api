@@ -108,7 +108,7 @@ abstract class AbstractDiscordInteractionAction extends AbstractAction implement
 
         $botList = new DiscordBotList();
         $botList->getConditionBuilder()->add('publicKey IS NOT NULL');
-        $botList->getConditionBuilder()->add('publicKey != ?', ['']);
+        $botList->getConditionBuilder()->add('publicKey <> ?', ['']);
         $botList->readObjects();
 
         foreach ($botList as $bot) {
