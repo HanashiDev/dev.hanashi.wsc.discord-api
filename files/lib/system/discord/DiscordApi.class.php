@@ -2849,7 +2849,7 @@ class DiscordApi
             $queryParams['thread_id'] = $threadID;
         }
 
-        if (!empty($queryParams)) {
+        if ($queryParams !== []) {
             $encodedParameters = \http_build_query($queryParams, '', '&');
             $url = $url->withQuery($encodedParameters);
         }
