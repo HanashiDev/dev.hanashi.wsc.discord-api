@@ -62,7 +62,8 @@ class DiscordApi
 
     public const DISCORD_ATTACHMENT = 11;
 
-    // Interaction Types https://discord.com/developers/docs/interactions/receiving-and-responding#interaction-object-interaction-type
+    // Interaction Types
+    // https://discord.com/developers/docs/interactions/receiving-and-responding#interaction-object-interaction-type
     public const DISCORD_PING = 1;
 
     public const DISCORD_APPLICATION_COMMAND = 2;
@@ -235,7 +236,8 @@ class DiscordApi
     }
 
     /**
-     * Create a new global command. New global commands will be available in all guilds after 1 hour. Returns 201 and an ApplicationCommand object.
+     * Create a new global command. New global commands will be available in all guilds after 1 hour. Returns 201 and
+     * an ApplicationCommand object.
      *
      * @param  integer $applicationID
      * @param  array $params
@@ -263,7 +265,8 @@ class DiscordApi
     }
 
     /**
-     * Edit a global command. Updates will be available in all guilds after 1 hour. Returns 200 and an ApplicationCommand object.
+     * Edit a global command. Updates will be available in all guilds after 1 hour. Returns 200 and an
+     * ApplicationCommand object.
      *
      * @param  integer $applicationID
      * @param  integer $commandID
@@ -292,7 +295,8 @@ class DiscordApi
     }
 
     /**
-     * Fetch all of the guild commands for your application for a specific guild. Returns an array of ApplicationCommand objects.
+     * Fetch all of the guild commands for your application for a specific guild. Returns an array of
+     * ApplicationCommand objects.
      *
      * @param  integer $applicationID
      * @param  integer $commandID
@@ -309,7 +313,9 @@ class DiscordApi
     }
 
     /**
-     * Takes a list of application commands, overwriting existing commands that are registered globally for this application. Updates will be available in all guilds after 1 hour. Returns 200 and a list of ApplicationCommand objects. Commands that do not already exist will count toward daily application command create limits.
+     * Takes a list of application commands, overwriting existing commands that are registered globally for this
+     * application. Updates will be available in all guilds after 1 hour. Returns 200 and a list of ApplicationCommand
+     * objects. Commands that do not already exist will count toward daily application command create limits.
      *
      * @param  integer $applicationID
      * @return array
@@ -322,7 +328,9 @@ class DiscordApi
     }
 
     /**
-     * Create a new guild command. New guild commands will be available in the guild immediately. Returns 201 and an ApplicationCommand object. If the command did not already exist, it will count toward daily application command create limits.
+     * Create a new guild command. New guild commands will be available in the guild immediately. Returns 201 and an
+     * ApplicationCommand object. If the command did not already exist, it will count toward daily application command
+     * create limits.
      *
      * @param  integer $applicationID
      * @param  integer $guildID
@@ -346,13 +354,20 @@ class DiscordApi
      */
     public function getGuildApplicationCommand($applicationID, $guildID, $commandID)
     {
-        $url = \sprintf('%s/applications/%s/guilds/%s/commands/%s', $this->apiUrl, $applicationID, $guildID, $commandID);
+        $url = \sprintf(
+            '%s/applications/%s/guilds/%s/commands/%s',
+            $this->apiUrl,
+            $applicationID,
+            $guildID,
+            $commandID
+        );
 
         return $this->execute($url, 'GET');
     }
 
     /**
-     * Edit a guild command. Updates for guild commands will be available immediately. Returns 200 and an ApplicationCommand object.
+     * Edit a guild command. Updates for guild commands will be available immediately. Returns 200 and an
+     * ApplicationCommand object.
      *
      * @param  integer $applicationID
      * @param  integer $guildID
@@ -362,7 +377,13 @@ class DiscordApi
      */
     public function editGuildApplicationCommand($applicationID, $guildID, $commandID, $params)
     {
-        $url = \sprintf('%s/applications/%s/guilds/%s/commands/%s', $this->apiUrl, $applicationID, $guildID, $commandID);
+        $url = \sprintf(
+            '%s/applications/%s/guilds/%s/commands/%s',
+            $this->apiUrl,
+            $applicationID,
+            $guildID,
+            $commandID
+        );
 
         return $this->execute($url, 'PATCH', $params, 'application/json');
     }
@@ -377,13 +398,20 @@ class DiscordApi
      */
     public function deleteGuildApplicationCommand($applicationID, $guildID, $commandID)
     {
-        $url = \sprintf('%s/applications/%s/guilds/%s/commands/%s', $this->apiUrl, $applicationID, $guildID, $commandID);
+        $url = \sprintf(
+            '%s/applications/%s/guilds/%s/commands/%s',
+            $this->apiUrl,
+            $applicationID,
+            $guildID,
+            $commandID
+        );
 
         return $this->execute($url, 'DELETE');
     }
 
     /**
-     * Takes a list of application commands, overwriting existing commands for the guild. Returns 200 and a list of ApplicationCommand objects.
+     * Takes a list of application commands, overwriting existing commands for the guild. Returns 200 and a list of
+     * ApplicationCommand objects.
      *
      * @param  integer $applicationID
      * @param  integer $guildID
@@ -455,7 +483,9 @@ class DiscordApi
     }
 
     /**
-     * Create a followup message for an Interaction. Functions the same as Execute Webhook, but wait is always true, and flags can be set to 64 in the body to send an ephemeral message. The thread_id query parameter is not required (and is furthermore ignored) when using this endpoint for interaction followups.
+     * Create a followup message for an Interaction. Functions the same as Execute Webhook, but wait is always true,
+     * and flags can be set to 64 in the body to send an ephemeral message. The thread_id query parameter is not
+     * required (and is furthermore ignored) when using this endpoint for interaction followups.
      *
      * @param  integer $applicationID
      * @param  string $interactionToken
@@ -501,7 +531,8 @@ class DiscordApi
     }
 
     /**
-     * Fetches command permissions for all commands for your application in a guild. Returns an array of GuildApplicationCommandPermissions objects.
+     * Fetches command permissions for all commands for your application in a guild. Returns an array of
+     * GuildApplicationCommandPermissions objects.
      *
      * @param  integer $applicationID
      * @param  integer $guildID
@@ -515,7 +546,8 @@ class DiscordApi
     }
 
     /**
-     * Fetches command permissions for a specific command for your application in a guild. Returns a GuildApplicationCommandPermissions object.
+     * Fetches command permissions for a specific command for your application in a guild. Returns a
+     * GuildApplicationCommandPermissions object.
      *
      * @param  integer $applicationID
      * @param  integer $guildID
@@ -524,13 +556,20 @@ class DiscordApi
      */
     public function getApplicationCommandPermissions($applicationID, $guildID, $commandID)
     {
-        $url = \sprintf('%s/applications/%s/guilds/%s/commands/%s/permissions', $this->apiUrl, $applicationID, $guildID, $commandID);
+        $url = \sprintf(
+            '%s/applications/%s/guilds/%s/commands/%s/permissions',
+            $this->apiUrl,
+            $applicationID,
+            $guildID,
+            $commandID
+        );
 
         return $this->execute($url, 'GET');
     }
 
     /**
-     * Edits command permissions for a specific command for your application in a guild. You can only add up to 10 permission overwrites for a command. Returns a GuildApplicationCommandPermissions object.
+     * Edits command permissions for a specific command for your application in a guild. You can only add up to 10
+     * permission overwrites for a command. Returns a GuildApplicationCommandPermissions object.
      *
      * This endpoint will overwrite existing permissions for the command in that guild
      *
@@ -544,7 +583,13 @@ class DiscordApi
      */
     public function editApplicationCommandPermissions($applicationID, $guildID, $commandID, $permissions)
     {
-        $url = \sprintf('%s/applications/%s/guilds/%s/commands/%s/permissions', $this->apiUrl, $applicationID, $guildID, $commandID);
+        $url = \sprintf(
+            '%s/applications/%s/guilds/%s/commands/%s/permissions',
+            $this->apiUrl,
+            $applicationID,
+            $guildID,
+            $commandID
+        );
 
         return $this->execute($url, 'PUT', ['permissions' => $permissions], 'application/json');
     }
@@ -654,7 +699,8 @@ class DiscordApi
     }
 
     /**
-     * Create a new rule. Returns an auto moderation rule on success. Fires an Auto Moderation Rule Create Gateway event.
+     * Create a new rule. Returns an auto moderation rule on success. Fires an Auto Moderation Rule Create Gateway
+     * event.
      *
      * This endpoint requires the MANAGE_GUILD permission.
      *
@@ -671,7 +717,8 @@ class DiscordApi
     }
 
     /**
-     * Modify an existing rule. Returns an auto moderation rule on success. Fires an Auto Moderation Rule Update Gateway event.
+     * Modify an existing rule. Returns an auto moderation rule on success. Fires an Auto Moderation Rule Update
+     * Gateway event.
      *
      * Requires MANAGE_GUILD permissions.
      *
@@ -750,7 +797,8 @@ class DiscordApi
     /**
      * Delete a channel, or close a private message.
      * Requires the MANAGE_CHANNELS permission for the guild.
-     * Deleting a category does not delete its child channels; they will have their parent_id removed and a Channel Update Gateway event will fire for each of them.
+     * Deleting a category does not delete its child channels; they will have their parent_id removed and a Channel
+     * Update Gateway event will fire for each of them.
      * Returns a channel object on success.
      * Fires a Channel Delete Gateway event.
      *
@@ -775,8 +823,10 @@ class DiscordApi
 
     /**
      * Returns the messages for a channel.
-     * If operating on a guild channel, this endpoint requires the VIEW_CHANNEL permission to be present on the current user.
-     * If the current user is missing the 'READ_MESSAGE_HISTORY' permission in the channel then this will return no messages (since they cannot read the message history).
+     * If operating on a guild channel, this endpoint requires the VIEW_CHANNEL permission to be present on the current
+     * user.
+     * If the current user is missing the 'READ_MESSAGE_HISTORY' permission in the channel then this will return no
+     * messages (since they cannot read the message history).
      * Returns an array of message objects on success.
      *
      * @param   integer $channelID  Channel-ID
@@ -795,7 +845,8 @@ class DiscordApi
 
     /**
      * Returns a specific message in the channel.
-     * If operating on a guild channel, this endpoint requires the 'READ_MESSAGE_HISTORY' permission to be present on the current user. Returns a message object on success.
+     * If operating on a guild channel, this endpoint requires the 'READ_MESSAGE_HISTORY' permission to be present on
+     * the current user. Returns a message object on success.
      *
      * @param   integer $channelID  Channel-ID
      * @param   integer $messageID  ID der Nachricht
@@ -811,7 +862,8 @@ class DiscordApi
 
     /**
      * Post a message to a guild text or DM channel.
-     * If operating on a guild channel, this endpoint requires the SEND_MESSAGES permission to be present on the current user.
+     * If operating on a guild channel, this endpoint requires the SEND_MESSAGES permission to be present on the
+     * current user.
      * If the tts field is set to true, the SEND_TTS_MESSAGES permission is required for the message to be spoken.
      * Returns a message object.
      * Fires a Message Create Gateway event.
@@ -851,7 +903,8 @@ class DiscordApi
      * Create a reaction for the message.
      * emoji takes the form of name:id for custom guild emoji, or Unicode characters.
      * This endpoint requires the 'READ_MESSAGE_HISTORY' permission to be present on the current user.
-     * Additionally, if nobody else has reacted to the message using this emoji, this endpoint requires the 'ADD_REACTIONS' permission to be present on the current user.
+     * Additionally, if nobody else has reacted to the message using this emoji, this endpoint requires the
+     * 'ADD_REACTIONS' permission to be present on the current user.
      * Returns a 204 empty response on success.
      *
      * @param   integer $channelID  Channel-ID
@@ -895,7 +948,14 @@ class DiscordApi
      */
     public function deleteUserReaction($channelID, $messageID, $emoji, $userID)
     {
-        $url = \sprintf('%s/channels/%s/messages/%s/reactions/%s/%s', $this->apiUrl, $channelID, $messageID, $emoji, $userID);
+        $url = \sprintf(
+            '%s/channels/%s/messages/%s/reactions/%s/%s',
+            $this->apiUrl,
+            $channelID,
+            $messageID,
+            $emoji,
+            $userID
+        );
 
         return $this->execute($url, 'DELETE');
     }
@@ -955,7 +1015,8 @@ class DiscordApi
 
     /**
      * Delete a message.
-     * If operating on a guild channel and trying to delete a message that was not sent by the current user, this endpoint requires the MANAGE_MESSAGES permission.
+     * If operating on a guild channel and trying to delete a message that was not sent by the current user, this
+     * endpoint requires the MANAGE_MESSAGES permission.
      * Returns a 204 empty response on success.
      * Fires a Message Delete Gateway event.
      *
@@ -975,9 +1036,11 @@ class DiscordApi
      * This endpoint can only be used on guild channels and requires the MANAGE_MESSAGES permission.
      * Returns a 204 empty response on success.
      * Fires multiple Message Delete Gateway events.
-     * Any message IDs given that do not exist or are invalid will count towards the minimum and maximum message count (currently 2 and 100 respectively).
+     * Any message IDs given that do not exist or are invalid will count towards the minimum and maximum message count
+     * (currently 2 and 100 respectively).
      * Additionally, duplicated IDs will only be counted once.
-     * This endpoint will not delete messages older than 2 weeks, and will fail if any message provided is older than that.
+     * This endpoint will not delete messages older than 2 weeks, and will fail if any message provided is older than
+     * that.
      *
      * @param   integer $channelID  Channel-ID
      * @param   array   $messageIDs IDs von Nachrichten
@@ -1062,7 +1125,8 @@ class DiscordApi
     }
 
     /**
-     * Follow a News Channel to send messages to a target channel. Requires the MANAGE_WEBHOOKS permission in the target channel. Returns a followed channel object.
+     * Follow a News Channel to send messages to a target channel. Requires the MANAGE_WEBHOOKS permission in the
+     * target channel. Returns a followed channel object.
      *
      * @param  integer $channelID
      * @param  integer $webhookChannelID
@@ -1078,7 +1142,8 @@ class DiscordApi
     /**
      * Post a typing indicator for the specified channel.
      * Generally bots should not implement this route.
-     * However, if a bot is responding to a command and expects the computation to take a few seconds, this endpoint may be called to let the user know that the bot is processing their message.
+     * However, if a bot is responding to a command and expects the computation to take a few seconds, this endpoint
+     * may be called to let the user know that the bot is processing their message.
      * Returns a 204 empty response on success.
      * Fires a Typing Start Gateway event.
      *
@@ -1167,9 +1232,12 @@ class DiscordApi
     }
 
     /**
-     * Creates a new thread from an existing message. Returns a channel on success, and a 400 BAD REQUEST on invalid parameters. Fires a Thread Create Gateway event.
+     * Creates a new thread from an existing message. Returns a channel on success, and a 400 BAD REQUEST on invalid
+     * parameters. Fires a Thread Create Gateway event.
      *
-     * When called on a GUILD_TEXT channel, creates a PUBLIC_THREAD. When called on a GUILD_ANNOUNCEMENT channel, creates a ANNOUNCEMENT_THREAD. Does not work on a GUILD_FORUM channel. The id of the created thread will be the same as the id of the source message, and as such a message can only have a single thread created from it.
+     * When called on a GUILD_TEXT channel, creates a PUBLIC_THREAD. When called on a GUILD_ANNOUNCEMENT channel,
+     * creates a ANNOUNCEMENT_THREAD. Does not work on a GUILD_FORUM channel. The id of the created thread will be the
+     * same as the id of the source message, and as such a message can only have a single thread created from it.
      *
      * @param  integer $channelID
      * @param  integer $messageID
@@ -1184,13 +1252,19 @@ class DiscordApi
     }
 
     /**
-     * Creates a new thread that is not connected to an existing message. The created thread defaults to a GUILD_PRIVATE_THREAD*. Returns a channel on success, and a 400 BAD REQUEST on invalid parameters. Fires a Thread Create Gateway event.
+     * Creates a new thread that is not connected to an existing message. The created thread defaults to a
+     * GUILD_PRIVATE_THREAD*. Returns a channel on success, and a 400 BAD REQUEST on invalid parameters. Fires a Thread
+     * Create Gateway event.
      *
-     * Creating a private thread requires the server to be boosted. The guild features will indicate if that is possible for the guild.
+     * Creating a private thread requires the server to be boosted. The guild features will indicate if that is
+     * possible for the guild.
      *
-     * The 3 day and 7 day archive durations require the server to be boosted. The guild features will indicate if that is possible for the guild.
+     * The 3 day and 7 day archive durations require the server to be boosted. The guild features will indicate if that
+     * is possible for the guild.
      *
-     * type defaults to PRIVATE_THREAD in order to match the behavior when thread documentation was first published. This is a bit of a weird default though, and thus is highly likely to change in a future API version, so we would recommend always explicitly setting the type parameter.
+     * type defaults to PRIVATE_THREAD in order to match the behavior when thread documentation was first published.
+     * This is a bit of a weird default though, and thus is highly likely to change in a future API version, so we
+     * would recommend always explicitly setting the type parameter.
      *
      * @param  integer $channelID
      * @param  array $params
@@ -1204,18 +1278,24 @@ class DiscordApi
     }
 
     /**
-     * Creates a new thread in a forum channel, and sends a message within the created thread. Returns a channel, with a nested message object, on success, and a 400 BAD REQUEST on invalid parameters. Fires a Thread Create and Message Create Gateway event.
+     * Creates a new thread in a forum channel, and sends a message within the created thread. Returns a channel, with
+     * a nested message object, on success, and a 400 BAD REQUEST on invalid parameters. Fires a Thread Create and
+     * Message Create Gateway event.
      *
      * - The type of the created thread is PUBLIC_THREAD.
      * - See message formatting for more information on how to properly format messages.
      * - The current user must have the SEND_MESSAGES permission (CREATE_PUBLIC_THREADS is ignored).
      * - The maximum request size when sending a message is 8MiB.
-     * - For the embed object, you can set every field except type (it will be rich regardless of if you try to set it), provider, video, and any height, width, or proxy_url values for images.
+     * - For the embed object, you can set every field except type (it will be rich regardless of if you try to set
+     *   it), provider, video, and any height, width, or proxy_url values for images.
      * - Examples for file uploads are available in Uploading Files.
      * - Files must be attached using a multipart/form-data body as described in Uploading Files.
      * - Note that when sending a message, you must provide a value for at least one of content, embeds, or files[n].
      *
-     * Discord may strip certain characters from message content, like invalid unicode characters or characters which cause unexpected message formatting. If you are passing user-generated strings into message content, consider sanitizing the data to prevent unexpected behavior and utilizing allowed_mentions to prevent unexpected mentions.
+     * Discord may strip certain characters from message content, like invalid unicode characters or characters which
+     * cause unexpected message formatting. If you are passing user-generated strings into message content, consider
+     * sanitizing the data to prevent unexpected behavior and utilizing allowed_mentions to prevent unexpected
+     * mentions.
      *
      * This endpoint supports the X-Audit-Log-Reason header.
      *
@@ -1231,7 +1311,8 @@ class DiscordApi
     }
 
     /**
-     * Adds the current user to a thread. Also requires the thread is not archived. Returns a 204 empty response on success. Fires a Thread Members Update Gateway event.
+     * Adds the current user to a thread. Also requires the thread is not archived. Returns a 204 empty response on
+     * success. Fires a Thread Members Update Gateway event.
      *
      * @param  integer $channelID
      * @return array
@@ -1244,7 +1325,8 @@ class DiscordApi
     }
 
     /**
-     * Adds another member to a thread. Requires the ability to send messages in the thread. Also requires the thread is not archived. Returns a 204 empty response on success. Fires a Thread Members Update Gateway event.
+     * Adds another member to a thread. Requires the ability to send messages in the thread. Also requires the thread
+     * is not archived. Returns a 204 empty response on success. Fires a Thread Members Update Gateway event.
      *
      * @param  integer $channelID
      * @param  integer $userID
@@ -1258,7 +1340,8 @@ class DiscordApi
     }
 
     /**
-     * Removes the current user from a thread. Also requires the thread is not archived. Returns a 204 empty response on success. Fires a Thread Members Update Gateway event.
+     * Removes the current user from a thread. Also requires the thread is not archived. Returns a 204 empty response
+     * on success. Fires a Thread Members Update Gateway event.
      *
      * @param  integer $channelID
      * @return array
@@ -1271,7 +1354,9 @@ class DiscordApi
     }
 
     /**
-     * Removes another member from a thread. Requires the MANAGE_THREADS permission, or the creator of the thread if it is a GUILD_PRIVATE_THREAD. Also requires the thread is not archived. Returns a 204 empty response on success. Fires a Thread Members Update Gateway event.
+     * Removes another member from a thread. Requires the MANAGE_THREADS permission, or the creator of the thread if it
+     * is a GUILD_PRIVATE_THREAD. Also requires the thread is not archived. Returns a 204 empty response on success.
+     * Fires a Thread Members Update Gateway event.
      *
      * @param  integer $channelID
      * @param  integer $userID
@@ -1285,7 +1370,8 @@ class DiscordApi
     }
 
     /**
-     * Returns a thread member object for the specified user if they are a member of the thread, returns a 404 response otherwise.
+     * Returns a thread member object for the specified user if they are a member of the thread, returns a 404 response
+     * otherwise.
      *
      * @param  int $channelID
      * @param  int $userID
@@ -1301,7 +1387,8 @@ class DiscordApi
     /**
      * Returns array of thread members objects that are members of the thread.
      *
-     * This endpoint is restricted according to whether the GUILD_MEMBERS Privileged Intent is enabled for your application.
+     * This endpoint is restricted according to whether the GUILD_MEMBERS Privileged Intent is enabled for your
+     * application.
      *
      * @param  integer $channelID
      * @return array
@@ -1314,7 +1401,9 @@ class DiscordApi
     }
 
     /**
-     * Returns archived threads in the channel that are public. When called on a GUILD_TEXT channel, returns threads of type GUILD_PUBLIC_THREAD. When called on a GUILD_NEWS channel returns threads of type GUILD_NEWS_THREAD. Threads are ordered by archive_timestamp, in descending order. Requires the READ_MESSAGE_HISTORY permission.
+     * Returns archived threads in the channel that are public. When called on a GUILD_TEXT channel, returns threads of
+     * type GUILD_PUBLIC_THREAD. When called on a GUILD_NEWS channel returns threads of type GUILD_NEWS_THREAD. Threads
+     * are ordered by archive_timestamp, in descending order. Requires the READ_MESSAGE_HISTORY permission.
      *
      * @param  integer $channelID
      * @param  array $params
@@ -1331,7 +1420,8 @@ class DiscordApi
     }
 
     /**
-     * Returns archived threads in the channel that are of type GUILD_PRIVATE_THREAD. Threads are ordered by archive_timestamp, in descending order. Requires both the READ_MESSAGE_HISTORY and MANAGE_THREADS permissions.
+     * Returns archived threads in the channel that are of type GUILD_PRIVATE_THREAD. Threads are ordered by
+     * archive_timestamp, in descending order. Requires both the READ_MESSAGE_HISTORY and MANAGE_THREADS permissions.
      *
      * @param  integer $channelID
      * @param  array $params
@@ -1348,7 +1438,8 @@ class DiscordApi
     }
 
     /**
-     * Returns archived threads in the channel that are of type GUILD_PRIVATE_THREAD, and the user has joined. Threads are ordered by their id, in descending order. Requires the READ_MESSAGE_HISTORY permission.
+     * Returns archived threads in the channel that are of type GUILD_PRIVATE_THREAD, and the user has joined. Threads
+     * are ordered by their id, in descending order. Requires the READ_MESSAGE_HISTORY permission.
      *
      * @param  integer $channelID
      * @param  array $params
@@ -1403,7 +1494,8 @@ class DiscordApi
      * Returns the new emoji object on success.
      * Fires a Guild Emojis Update Gateway event.
      * Emojis and animated emojis have a maximum file size of 256kb.
-     * Attempting to upload an emoji larger than this limit will fail and return 400 Bad Request and an error message, but not a JSON status code.
+     * Attempting to upload an emoji larger than this limit will fail and return 400 Bad Request and an error message,
+     * but not a JSON status code.
      *
      * @param   string  $name   Name des Emojis
      * @param   string  $image  Bild als base64 code
@@ -1605,7 +1697,8 @@ class DiscordApi
 
     /**
      * Adds a user to the guild, provided you have a valid oauth2 access token for the user with the guilds.join scope.
-     * Returns a 201 Created with the guild member as the body, or 204 No Content if the user is already a member of the guild.
+     * Returns a 201 Created with the guild member as the body, or 204 No Content if the user is already a member of
+     * the guild.
      * Fires a Guild Member Add Gateway event.
      * Requires the bot to have the CREATE_INSTANT_INVITE permission.
      * All parameters to this endpoint except for access_token are optional.
@@ -1630,7 +1723,8 @@ class DiscordApi
      * Returns a 204 empty response on success.
      * Fires a Guild Member Update Gateway event.
      * All parameters to this endpoint are optional.
-     * When moving members to channels, the API user must have permissions to both connect to the channel and have the MOVE_MEMBERS permission.
+     * When moving members to channels, the API user must have permissions to both connect to the channel and have the
+     * MOVE_MEMBERS permission.
      *
      * @param   integer $userID     ID des Benutzers
      * @param   array   $params     JSON-Parameter
@@ -1756,7 +1850,8 @@ class DiscordApi
     }
 
     /**
-     * Remove the ban for a user. Requires the BAN_MEMBERS permissions. Returns a 204 empty response on success. Fires a Guild Ban Remove Gateway event.
+     * Remove the ban for a user. Requires the BAN_MEMBERS permissions. Returns a 204 empty response on success. Fires
+     * a Guild Ban Remove Gateway event.
      *
      * @param   integer     $userID     ID des Benutzer
      * @return  array
@@ -1836,7 +1931,8 @@ class DiscordApi
     }
 
     /**
-     * Modify a guild's MFA level. Requires guild ownership. Returns the updated level on success. Fires a Guild Update Gateway event.
+     * Modify a guild's MFA level. Requires guild ownership. Returns the updated level on success. Fires a Guild Update
+     * Gateway event.
      *
      * This endpoint supports the X-Audit-Log-Reason header.
      *
@@ -1867,7 +1963,8 @@ class DiscordApi
     }
 
     /**
-     * Returns an object with one 'pruned' key indicating the number of members that would be removed in a prune operation.
+     * Returns an object with one 'pruned' key indicating the number of members that would be removed in a prune
+     * operation.
      * Requires the KICK_MEMBERS permission.
      *
      * @param   integer     $days       number of days to count prune for (1 or more)
@@ -1886,7 +1983,8 @@ class DiscordApi
     /**
      * Begin a prune operation.
      * Requires the KICK_MEMBERS permission.
-     * Returns an object with one 'pruned' key indicating the number of members that were removed in the prune operation.
+     * Returns an object with one 'pruned' key indicating the number of members that were removed in the prune
+     * operation.
      * For large guilds it's recommended to set the compute_prune_count option to false, forcing 'pruned' to null.
      * Fires multiple Guild Member Remove Gateway events.
      *
@@ -2011,7 +2109,8 @@ class DiscordApi
     }
 
     /**
-     * Modify a guild widget object for the guild. All attributes may be passed in with JSON and modified. Requires the MANAGE_GUILD permission. Returns the updated guild widget object.
+     * Modify a guild widget object for the guild. All attributes may be passed in with JSON and modified. Requires the
+     * MANAGE_GUILD permission. Returns the updated guild widget object.
      *
      * @param  array $params
      * @return array
@@ -2077,7 +2176,8 @@ class DiscordApi
     }
 
     /**
-     * Modify the guild's Welcome Screen. Requires the MANAGE_GUILD permission. Returns the updated Welcome Screen object.
+     * Modify the guild's Welcome Screen. Requires the MANAGE_GUILD permission. Returns the updated Welcome Screen
+     * object.
      *
      * All parameters to this endpoint are optional and nullable
      *
@@ -2276,7 +2376,8 @@ class DiscordApi
     }
 
     /**
-     * Creates a template for the guild. Requires the MANAGE_GUILD permission. Returns the created guild template object on success.
+     * Creates a template for the guild. Requires the MANAGE_GUILD permission. Returns the created guild template
+     * object on success.
      *
      * @param  array $params
      * @return array
@@ -2289,7 +2390,8 @@ class DiscordApi
     }
 
     /**
-     * Syncs the template to the guild's current state. Requires the MANAGE_GUILD permission. Returns the guild template object on success.
+     * Syncs the template to the guild's current state. Requires the MANAGE_GUILD permission. Returns the guild
+     * template object on success.
      *
      * @param  string $templateCode
      * @return array
@@ -2302,7 +2404,8 @@ class DiscordApi
     }
 
     /**
-     * Modifies the template's metadata. Requires the MANAGE_GUILD permission. Returns the guild template object on success.
+     * Modifies the template's metadata. Requires the MANAGE_GUILD permission. Returns the guild template object on
+     * success.
      *
      * @param  string $templateCode
      * @param  array $params
@@ -2355,7 +2458,8 @@ class DiscordApi
 
     /**
      * Delete an invite.
-     * Requires the MANAGE_CHANNELS permission on the channel this invite belongs to, or MANAGE_GUILD to remove any invite across the guild.
+     * Requires the MANAGE_CHANNELS permission on the channel this invite belongs to, or MANAGE_GUILD to remove any
+     * invite across the guild.
      * Returns an invite object on success.
      *
      * @param   string  $inviteCode EinladungsCode
@@ -2537,7 +2641,8 @@ class DiscordApi
 
     /**
      * Returns the user object of the requester's account.
-     * For OAuth2, this requires the identify scope, which will return the object without an email, and optionally the email scope, which returns the object with an email.
+     * For OAuth2, this requires the identify scope, which will return the object without an email, and optionally the
+     * email scope, which returns the object with an email.
      *
      * @return array
      */
@@ -2784,7 +2889,8 @@ class DiscordApi
     }
 
     /**
-     * Same as above, except this call does not require authentication, does not accept a channel_id parameter in the body, and does not return a user in the webhook object.
+     * Same as above, except this call does not require authentication, does not accept a channel_id parameter in the
+     * body, and does not return a user in the webhook object.
      *
      * @param   integer $webhookID      ID des Webhooks
      * @param   string  $webhookToken   Token des Webhooks
@@ -2833,7 +2939,9 @@ class DiscordApi
      * @param   integer $webhookID      ID des Webhooks
      * @param   string  $webhookToken   Token des Webhooks
      * @param   array   $params         Parameter
-     * @param   boolean $wait           waits for server confirmation of message send before response, and returns the created message body (defaults to false; when false a message that is not saved does not return an error)
+     * @param   boolean $wait           waits for server confirmation of message send before response, and returns the
+     *                                  created message body (defaults to false; when false a message that is not saved
+     *                                  does not return an error)
      * @return  array
      */
     public function executeWebhook($webhookID, $webhookToken, $params, $wait = false, $threadID = null)
@@ -2863,12 +2971,15 @@ class DiscordApi
     }
 
     /**
-     * Refer to Slack's documentation for more information. We do not support Slack's channel, icon_emoji, mrkdwn, or mrkdwn_in properties.
+     * Refer to Slack's documentation for more information. We do not support Slack's channel, icon_emoji, mrkdwn, or
+     * mrkdwn_in properties.
      *
      * @param   integer $webhookID      ID des Webhooks
      * @param   string  $webhookToken   Token des Webhooks
      * @param   array   $params         Parameter
-     * @param   boolean $wait           waits for server confirmation of message send before response, and returns the created message body (defaults to false; when false a message that is not saved does not return an error)
+     * @param   boolean $wait           waits for server confirmation of message send before response, and returns the
+     *                                  created message body (defaults to false; when false a message that is not saved
+     *                                  does not return an error)
      * @return  array
      */
     public function executeSlackCompatibleWebhook($webhookID, $webhookToken, $params, $wait = false)
@@ -2879,12 +2990,16 @@ class DiscordApi
     }
 
     /**
-     * Add a new webhook to your GitHub repo (in the repo's settings), and use this endpoint as the "Payload URL." You can choose what events your Discord channel receives by choosing the "Let me select individual events" option and selecting individual events for the new webhook you're configuring.
+     * Add a new webhook to your GitHub repo (in the repo's settings), and use this endpoint as the "Payload URL." You
+     * can choose what events your Discord channel receives by choosing the "Let me select individual events" option
+     * and selecting individual events for the new webhook you're configuring.
      *
      * @param   integer $webhookID      ID des Webhooks
      * @param   string  $webhookToken   Token des Webhooks
      * @param   array   $params         Parameter
-     * @param   boolean $wait           waits for server confirmation of message send before response, and returns the created message body (defaults to false; when false a message that is not saved does not return an error)
+     * @param   boolean $wait           waits for server confirmation of message send before response, and returns the
+     *                                  created message body (defaults to false; when false a message that is not saved
+     *                                  does not return an error)
      * @return  array
      */
     public function executeGithubCompatibleWebhook($webhookID, $webhookToken, $params, $wait = false)
@@ -2975,7 +3090,9 @@ class DiscordApi
     /////////////////////////////////////
 
     /**
-     * Returns an object with a single valid WSS URL, which the client can use for Connecting. Clients should cache this value and only call this endpoint to retrieve a new URL if they are unable to properly establish a connection using the cached version of the URL.
+     * Returns an object with a single valid WSS URL, which the client can use for Connecting. Clients should cache
+     * this value and only call this endpoint to retrieve a new URL if they are unable to properly establish a
+     * connection using the cached version of the URL.
      *
      * @return array
      */
@@ -2987,7 +3104,9 @@ class DiscordApi
     }
 
     /**
-     * Returns an object based on the information in Get Gateway, plus additional metadata that can help during the operation of large or sharded bots. Unlike the Get Gateway, this route should not be cached for extended periods of time as the value is not guaranteed to be the same per-call, and changes as the bot joins/leaves guilds.
+     * Returns an object based on the information in Get Gateway, plus additional metadata that can help during the
+     * operation of large or sharded bots. Unlike the Get Gateway, this route should not be cached for extended periods
+     * of time as the value is not guaranteed to be the same per-call, and changes as the bot joins/leaves guilds.
      *
      * @return array
      */
@@ -3130,8 +3249,12 @@ class DiscordApi
      * @param   string  $contentType    Sendungstyp
      * @return  array
      */
-    protected function execute($url, $method = 'GET', $parameters = [], $contentType = 'application/x-www-form-urlencoded')
-    {
+    protected function execute(
+        $url,
+        $method = 'GET',
+        $parameters = [],
+        $contentType = 'application/x-www-form-urlencoded'
+    ) {
         $reply = [];
 
         $headers = [

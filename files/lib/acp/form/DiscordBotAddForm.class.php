@@ -63,7 +63,9 @@ class DiscordBotAddForm extends AbstractFormBuilderForm
                     SecretFormField::create('botToken')
                         ->label('wcf.acp.discordBotAdd.botToken')
                         ->required(($this->formAction == 'create'))
-                        ->placeholder(($this->formAction == 'edit') ? 'wcf.acp.updateServer.loginPassword.noChange' : ''),
+                        ->placeholder(
+                            ($this->formAction == 'edit') ? 'wcf.acp.updateServer.loginPassword.noChange' : ''
+                        ),
                     IntegerFormField::create('guildID')
                         ->label('wcf.acp.discordBotAdd.guildID')
                         ->description('wcf.acp.discordBotAdd.guildID.description')
@@ -123,7 +125,9 @@ class DiscordBotAddForm extends AbstractFormBuilderForm
                         ->description('wcf.acp.discordBotAdd.clientID.description'),
                     SecretFormField::create('clientSecret')
                         ->label('wcf.acp.discordBotAdd.clientSecret')
-                        ->placeholder(($this->formAction == 'edit') ? 'wcf.acp.updateServer.loginPassword.noChange' : ''),
+                        ->placeholder(
+                            ($this->formAction == 'edit') ? 'wcf.acp.updateServer.loginPassword.noChange' : ''
+                        ),
                 ]),
             FormContainer::create('interaction')
                 ->label('wcf.acp.discordBotAdd.interaction')
