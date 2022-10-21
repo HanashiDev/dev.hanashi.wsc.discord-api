@@ -38,12 +38,12 @@ class DiscordWebhook extends DatabaseObject
     /**
      * Objekt eines Discord-Bots
      */
-    protected ?DiscordBot $discordBot = null;
+    protected DiscordBot $discordBot;
 
     /**
      * Objekt der Discord-API
      */
-    protected ?DiscordApi $discordApi = null;
+    protected DiscordApi $discordApi;
 
     /**
      * gibt den zugehörigen Discord-Bot zurück
@@ -52,7 +52,7 @@ class DiscordWebhook extends DatabaseObject
      */
     public function getDiscordBot(): DiscordBot
     {
-        if ($this->discordBot === null) {
+        if (!isset($this->discordBot)) {
             $this->discordBot = new DiscordBot($this->botID);
         }
 
@@ -66,7 +66,7 @@ class DiscordWebhook extends DatabaseObject
      */
     public function getDiscordApi(): DiscordApi
     {
-        if ($this->discordApi === null) {
+        if (!isset($this->discordApi)) {
             $this->discordApi = new DiscordApi($this->guildID, $this->botToken);
         }
 
