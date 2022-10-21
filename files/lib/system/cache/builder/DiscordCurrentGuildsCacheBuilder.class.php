@@ -30,7 +30,11 @@ class DiscordCurrentGuildsCacheBuilder extends AbstractCacheBuilder
         $discord = new DiscordApi(0, $parameters['botToken']);
 
         $currentUserGuilds = $discord->getCurrentUserGuilds();
-        if (!isset($currentUserGuilds['body']) || \count($currentUserGuilds['body']) && empty($currentUserGuilds['body'][0])) {
+        if (
+            !isset($currentUserGuilds['body'])
+            || \count($currentUserGuilds['body'])
+            && empty($currentUserGuilds['body'][0])
+        ) {
             return [];
         }
         $guilds = $currentUserGuilds['body'];

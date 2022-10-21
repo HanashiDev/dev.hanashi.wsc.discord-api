@@ -184,21 +184,26 @@ class DiscordBotAddManagerForm extends AbstractFormBuilderForm
                         )
                         ->filterable()
                         ->required()
-                        ->addValidator(new FormFieldValidator('guildCheck', function (SingleSelectionFormField $formField) {
-                            $guildID = $formField->getValue();
+                        ->addValidator(
+                            new FormFieldValidator(
+                                'guildCheck',
+                                function (SingleSelectionFormField $formField) {
+                                    $guildID = $formField->getValue();
 
-                            $requestData = $this->form->getRequestData();
-                            $discord = new DiscordApi($guildID, $requestData['botToken']);
-                            $guild = $discord->getGuild();
-                            if (empty($guild['body']['id'])) {
-                                $formField->addValidationError(new FormFieldValidationError(
-                                    'invalidGuild',
-                                    'wcf.acp.discordBotAddManager.guildID.invalid'
-                                ));
-                            } else {
-                                $this->tempInfo = $guild['body'];
-                            }
-                        })),
+                                    $requestData = $this->form->getRequestData();
+                                    $discord = new DiscordApi($guildID, $requestData['botToken']);
+                                    $guild = $discord->getGuild();
+                                    if (empty($guild['body']['id'])) {
+                                        $formField->addValidationError(new FormFieldValidationError(
+                                            'invalidGuild',
+                                            'wcf.acp.discordBotAddManager.guildID.invalid'
+                                        ));
+                                    } else {
+                                        $this->tempInfo = $guild['body'];
+                                    }
+                                }
+                            )
+                        ),
                     HiddenFormField::create('botToken')
                         ->value($requestData['botToken'])
                         ->required(),
