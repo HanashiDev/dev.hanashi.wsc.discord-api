@@ -9,6 +9,7 @@ use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\RequestOptions;
 use Laminas\Diactoros\Uri;
+use Psr\Http\Message\ResponseInterface;
 use wcf\data\discord\bot\DiscordBot;
 use wcf\system\io\HttpFactory;
 use wcf\util\JSON;
@@ -3312,7 +3313,7 @@ class DiscordApi
                 ],
                 'status' => 0,
                 'body' => $e->getMessage(),
-                'rateLimit' => 'false',
+                'rateLimit' => [],
             ];
         }
 
@@ -3325,7 +3326,7 @@ class DiscordApi
      * @param   array   $replyTmp   die Antwort von der API
      * @return  array
      */
-    protected function parseReply($response)
+    protected function parseReply(ResponseInterface $response)
     {
         $body = (string)$response->getBody();
         try {
@@ -3333,19 +3334,19 @@ class DiscordApi
         } catch (Exception $e) {
         }
         $reply = [
-            'error' => false,
+            'error' => null,
             'status' => $response->getStatusCode(),
             'body' => $body,
-            'rateLimit' => false,
+            'rateLimit' => null,
         ];
         if ($response->hasHeader('x-ratelimit-limit')) {
-            $reply['rateLimit']['limit'] = $response->getHeader('x-ratelimit-limit');
+            $reply['rateLimit']['limit'] = $response->getHeaderLine('x-ratelimit-limit');
         }
         if ($response->hasHeader('x-ratelimit-remaining')) {
-            $reply['rateLimit']['remaining'] = $response->getHeader('x-ratelimit-remaining');
+            $reply['rateLimit']['remaining'] = $response->getHeaderLine('x-ratelimit-remaining');
         }
         if ($response->hasHeader('x-ratelimit-reset')) {
-            $reply['rateLimit']['reset'] = $response->getHeader('x-ratelimit-reset');
+            $reply['rateLimit']['reset'] = $response->getHeaderLine('x-ratelimit-reset');
         }
 
         return $reply;
