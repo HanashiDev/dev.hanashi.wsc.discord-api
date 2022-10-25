@@ -23,6 +23,7 @@
 	<instructions type="install">
 		<instruction type="file"/>
 		<instruction type="acpTemplate"/>
+		<instruction type="eventListener"/>
 		<instruction type="language"/>
 		<instruction type="acpMenu"/>
 		<instruction type="cronjob"/>
@@ -32,5 +33,6 @@
 	</instructions>
 	<instructions type="update" fromversion="2.5.1">
 		<instruction type="file"/>
+		<instruction type="eventListener"/>
 	</instructions>
 </package>
