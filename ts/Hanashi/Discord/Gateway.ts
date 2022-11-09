@@ -34,12 +34,12 @@ export class DiscordGateway {
   }
 
   protected onmessage(ev: MessageEvent<any>): void {
-    const data = JSON.parse(ev.data);
+    const data = JSON.parse(ev.data as string);
 
     switch (data.op) {
       case 0: {
         this.seq = data.s;
-        EventHandler.fire("dev.hanashi.wsc.discord.gateway", "dispatch", data);
+        EventHandler.fire("dev.hanashi.wsc.discord.gateway", "dispatch", data as object);
         break;
       }
       case 10: {
@@ -47,12 +47,12 @@ export class DiscordGateway {
         this.heartbeatInterval = data.d.heartbeat_interval;
         this.sendHeartbeat();
 
-        EventHandler.fire("dev.hanashi.wsc.discord.gateway", "beforeVerify", data);
+        EventHandler.fire("dev.hanashi.wsc.discord.gateway", "beforeVerify", data as object);
 
         // verify
         this.verify();
 
-        EventHandler.fire("dev.hanashi.wsc.discord.gateway", "afterVerify", data);
+        EventHandler.fire("dev.hanashi.wsc.discord.gateway", "afterVerify", data as object);
         break;
       }
       case 11: {
@@ -60,7 +60,7 @@ export class DiscordGateway {
         break;
       }
       default: {
-        EventHandler.fire("dev.hanashi.wsc.discord.gateway", "unknownReceived", data);
+        EventHandler.fire("dev.hanashi.wsc.discord.gateway", "unknownReceived", data as object);
       }
     }
   }

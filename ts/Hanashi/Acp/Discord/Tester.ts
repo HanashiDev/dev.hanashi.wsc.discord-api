@@ -97,7 +97,7 @@ export class DiscordTester implements AjaxCallbackObject, DialogCallbackObject {
 
   public _ajaxSuccess(data: ResponseData): void {
     if (data.actionName == "getBotToken") {
-      this.testBotConnection(data.returnValues.token);
+      this.testBotConnection(data.returnValues.token as string);
     }
   }
 
