@@ -13,7 +13,7 @@
 	
 	<nav class="contentHeaderNavigation">
 		<ul>
-			<li><a href="{link controller='DiscordBotAddManager'}{/link}" class="button"><span class="icon icon16 fa-plus"></span> <span>{lang}wcf.acp.menu.link.configuration.discord.discordBotList.add{/lang}</span></a></li>
+			<li><a href="{link controller='DiscordBotAddManager'}{/link}" class="button">{icon size=16 name='plus'} <span>{lang}wcf.acp.menu.link.configuration.discord.discordBotList.add{/lang}</span></a></li>
 			{event name='contentHeaderNavigation'}
 		</ul>
 	</nav>
@@ -46,8 +46,8 @@
 				{foreach from=$objects item=discordBot}
 					<tr class="jsRow">
 						<td class="columnIcon">
-							<a href="{link controller='DiscordBotEdit' id=$discordBot->botID}{/link}" title="{lang}wcf.global.button.edit{/lang}" class="jsTooltip"><span class="icon icon24 fa-pencil"></span></a>
-							<a href="#" class="jsDeleteButton jsTooltip" title="{lang}wcf.global.button.delete{/lang}" data-confirm-message-html="{lang}wcf.acp.discordBotList.deleteRequest{/lang}" data-object-id="{@$discordBot->botID}"><span class="icon icon24 fa-times"></span></a>
+							<a href="{link controller='DiscordBotEdit' id=$discordBot->botID}{/link}" title="{lang}wcf.global.button.edit{/lang}" class="jsTooltip">{icon size=16 name='pencil'}</a>
+							<a href="#" class="jsDeleteButton jsTooltip" title="{lang}wcf.global.button.delete{/lang}" data-confirm-message-html="{lang}wcf.acp.discordBotList.deleteRequest{/lang}" data-object-id="{@$discordBot->botID}">{icon size=16 name='times'}</a>
 
 							{event name='icons'}
 						</td>

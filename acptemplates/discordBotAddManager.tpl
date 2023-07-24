@@ -7,7 +7,7 @@
 
 	<nav class="contentHeaderNavigation">
 		<ul>
-			<li><a href="{link controller='DiscordBotList'}{/link}" class="button"><span class="icon icon16 fa-list"></span> <span>{lang}wcf.acp.menu.link.configuration.discord.discordBotList{/lang}</span></a></li>
+			<li><a href="{link controller='DiscordBotList'}{/link}" class="button">{icon size=16 name='list'} <span>{lang}wcf.acp.menu.link.configuration.discord.discordBotList{/lang}</span></a></li>
 			{event name='contentHeaderNavigation'}
 		</ul>
 	</nav>
@@ -30,7 +30,7 @@
 		{lang}wcf.acp.discordBotAddManager.step2Intro{/lang}<br><br>
 
 		<a href="https://discord.com/api/oauth2/authorize?client_id={$tempInfo['id']}&amp;permissions=8&amp;scope=bot%20applications.commands" class="button" target="_blank">
-			<span class="icon icon16 fa-external-link"></span>
+			{icon size=16 name='external-link'}
 			{lang}wcf.acp.discordBotAddManager.step2Invite{/lang}
 		</a><br><br>
 
