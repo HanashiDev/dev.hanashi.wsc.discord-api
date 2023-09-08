@@ -3,6 +3,7 @@
 namespace wcf\system\discord;
 
 use Exception;
+use SensitiveParameter;
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Exception\BadResponseException;
 use GuzzleHttp\Exception\GuzzleException;
@@ -187,7 +188,7 @@ class DiscordApi
      */
     public function __construct(
         $guildID,
-        #[\SensitiveParameter]
+        #[SensitiveParameter]
         $botToken,
         $botType = 'Bot'
     ) {
@@ -439,7 +440,7 @@ class DiscordApi
      */
     public function createInteractionResponse(
         $interactionID,
-        #[\SensitiveParameter]
+        #[SensitiveParameter]
         $interactionToken,
         $params
     ) {
@@ -457,7 +458,7 @@ class DiscordApi
      */
     public function getOriginalInteractionResponse(
         $applicationID,
-        #[\SensitiveParameter]
+        #[SensitiveParameter]
         $interactionToken
     ) {
         $url = \sprintf('%s/webhooks/%s/%s/messages/@original', $this->apiUrl, $applicationID, $interactionToken);
@@ -475,7 +476,7 @@ class DiscordApi
      */
     public function editOriginalInteractionResponse(
         $applicationID,
-        #[\SensitiveParameter]
+        #[SensitiveParameter]
         $interactionToken,
         $params
     ) {
@@ -493,7 +494,7 @@ class DiscordApi
      */
     public function deleteOriginalInteractionResponse(
         $applicationID,
-        #[\SensitiveParameter]
+        #[SensitiveParameter]
         $interactionToken
     ) {
         $url = \sprintf('%s/webhooks/%s/%s/messages/@original', $this->apiUrl, $applicationID, $interactionToken);
@@ -513,7 +514,7 @@ class DiscordApi
      */
     public function createFollowupMessage(
         $applicationID,
-        #[\SensitiveParameter]
+        #[SensitiveParameter]
         $interactionToken,
         $params
     ) {
@@ -533,7 +534,7 @@ class DiscordApi
      */
     public function editFollowupMessage(
         $applicationID,
-        #[\SensitiveParameter]
+        #[SensitiveParameter]
         $interactionToken,
         $messageID,
         $params
@@ -553,7 +554,7 @@ class DiscordApi
      */
     public function deleteFollowupMessage(
         $applicationID,
-        #[\SensitiveParameter]
+        #[SensitiveParameter]
         $interactionToken,
         $messageID
     ) {
@@ -1742,7 +1743,7 @@ class DiscordApi
      */
     public function addGuildMember(
         $userID,
-        #[\SensitiveParameter]
+        #[SensitiveParameter]
         $accessToken,
         $params = []
     ) {
@@ -2903,7 +2904,7 @@ class DiscordApi
      */
     public function getWebhookWithToken(
         $webhookID,
-        #[\SensitiveParameter]
+        #[SensitiveParameter]
         $webhookToken
     ) {
         $url = \sprintf('%s/webhooks/%s/%s', $this->apiUrl, $webhookID, $webhookToken);
@@ -2938,7 +2939,7 @@ class DiscordApi
      */
     public function modifyWebhookWithToken(
         $webhookID,
-        #[\SensitiveParameter]
+        #[SensitiveParameter]
         $webhookToken,
         $params
     ) {
@@ -2971,7 +2972,7 @@ class DiscordApi
      */
     public function deleteWebhookWithToken(
         $webhookID,
-        #[\SensitiveParameter]
+        #[SensitiveParameter]
         $webhookToken
     ) {
         $url = \sprintf('%s/webhooks/%s/%s', $this->apiUrl, $webhookID, $webhookToken);
@@ -2992,7 +2993,7 @@ class DiscordApi
      */
     public function executeWebhook(
         $webhookID,
-        #[\SensitiveParameter]
+        #[SensitiveParameter]
         $webhookToken,
         $params,
         $wait = false,
@@ -3036,7 +3037,7 @@ class DiscordApi
      */
     public function executeSlackCompatibleWebhook(
         $webhookID,
-        #[\SensitiveParameter]
+        #[SensitiveParameter]
         $webhookToken,
         $params,
         $wait = false
@@ -3061,7 +3062,7 @@ class DiscordApi
      */
     public function executeGithubCompatibleWebhook(
         $webhookID,
-        #[\SensitiveParameter]
+        #[SensitiveParameter]
         $webhookToken,
         $params,
         $wait = false
@@ -3114,7 +3115,7 @@ class DiscordApi
      */
     public function oauth2Token(
         $clientID,
-        #[\SensitiveParameter]
+        #[SensitiveParameter]
         $clientSecret,
         $code,
         $redirectUri,
