@@ -3,7 +3,6 @@
 namespace wcf\system\discord;
 
 use Exception;
-use SensitiveParameter;
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Exception\BadResponseException;
 use GuzzleHttp\Exception\GuzzleException;
@@ -11,6 +10,7 @@ use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\RequestOptions;
 use Laminas\Diactoros\Uri;
 use Psr\Http\Message\ResponseInterface;
+use SensitiveParameter;
 use wcf\data\discord\bot\DiscordBot;
 use wcf\system\io\HttpFactory;
 use wcf\util\JSON;
