@@ -8,12 +8,12 @@ use wcf\form\AbstractForm;
 use wcf\form\AbstractFormBuilderForm;
 use wcf\system\cache\builder\DiscordCurrentGuildsCacheBuilder;
 use wcf\system\discord\DiscordApi;
-use wcf\system\discord\SecretFormField;
 use wcf\system\form\builder\button\FormButton;
 use wcf\system\form\builder\container\FormContainer;
 use wcf\system\form\builder\field\BooleanFormField;
 use wcf\system\form\builder\field\dependency\NonEmptyFormFieldDependency;
 use wcf\system\form\builder\field\HiddenFormField;
+use wcf\system\form\builder\field\PasswordFormField;
 use wcf\system\form\builder\field\SingleSelectionFormField;
 use wcf\system\form\builder\field\TextFormField;
 use wcf\system\form\builder\field\validation\FormFieldValidationError;
@@ -123,11 +123,13 @@ class DiscordBotAddManagerForm extends AbstractFormBuilderForm
         $this->form->appendChildren([
             FormContainer::create('data')
                 ->appendChildren([
-                    SecretFormField::create('botToken')
+                    PasswordFormField::create('botToken')
                         ->label('wcf.acp.discordBotAdd.botToken')
                         ->description('wcf.acp.discordBotAddManager.botToken.description')
+                        ->addFieldClass('long')
+                        ->removeFieldClass('medium')
                         ->required(true)
-                        ->addValidator(new FormFieldValidator('tokenCheck', function (SecretFormField $formField) {
+                        ->addValidator(new FormFieldValidator('tokenCheck', function (PasswordFormField $formField) {
                             $botToken = $formField->getValue();
 
                             $discord = new DiscordApi(0, $botToken);
@@ -228,8 +230,10 @@ class DiscordBotAddManagerForm extends AbstractFormBuilderForm
                         ->description('wcf.acp.discordBotAddManager.useOAuth2.description')
                         ->required($this->isDiscordSyncInstalled())
                         ->value($this->isDiscordSyncInstalled()),
-                    SecretFormField::create('clientSecret')
+                    PasswordFormField::create('clientSecret')
                         ->label('wcf.acp.discordBotAddManager.clientSecret')
+                        ->addFieldClass('long')
+                        ->removeFieldClass('medium')
                         ->required()
                         ->addDependency(
                             NonEmptyFormFieldDependency::create('isUsingOauth2')
