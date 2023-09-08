@@ -29,7 +29,7 @@
 		<instruction type="cronjob"/>
 		<instruction type="userGroupOption"/>
 		<instruction type="option"/>
-		<instruction type="script">acp/install_dev.hanashi.wsc.discord-api.php</instruction>
+		<instruction type="database">acp/database/install_dev.hanashi.wsc.discord-api.php</instruction>
 	</instructions>
 	<instructions type="update" fromversion="2.5.1">
 		<instruction type="file"/>
