@@ -1068,7 +1068,7 @@ class DiscordApi
      */
     public function editChannelPermissions($channelID, $overwriteID, $params)
     {
-        $url = \sprintf('%s/channels/%s/permissions/%s', $this->apiURL, $channelID, $overwriteID);
+        $url = \sprintf('%s/channels/%s/permissions/%s', $this->apiUrl, $channelID, $overwriteID);
 
         return $this->execute($url, 'PUT', $params, 'application/json');
     }

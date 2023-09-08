@@ -19,6 +19,7 @@ use wcf\system\form\builder\field\validation\FormFieldValidationError;
 
 /**
  * Backport für WSC 5.3
+ * @deprecated use wcf\system\form\builder\field\PasswordFormField
  */
 class SecretFormField extends AbstractFormField implements
     IAutoFocusFormField,

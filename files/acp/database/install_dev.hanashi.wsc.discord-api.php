@@ -6,12 +6,10 @@ use wcf\system\database\table\column\TextDatabaseTableColumn;
 use wcf\system\database\table\column\TinyintDatabaseTableColumn;
 use wcf\system\database\table\column\VarcharDatabaseTableColumn;
 use wcf\system\database\table\DatabaseTable;
-use wcf\system\database\table\DatabaseTableChangeProcessor;
 use wcf\system\database\table\index\DatabaseTablePrimaryIndex;
 use wcf\system\database\table\PartialDatabaseTable;
-use wcf\system\WCF;
 
-$tables = [
+return [
     // wcf1_category
     PartialDatabaseTable::create('wcf1_category')
         ->columns([
@@ -87,9 +85,3 @@ $tables = [
                 ->columns(['webhookID']),
         ]),
 ];
-
-(new DatabaseTableChangeProcessor(
-    $this->installation->getPackage(),
-    $tables,
-    WCF::getDB()->getEditor()
-))->process();

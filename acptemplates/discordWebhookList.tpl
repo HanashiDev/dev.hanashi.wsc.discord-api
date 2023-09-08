@@ -41,7 +41,7 @@
 				{foreach from=$objects item=webhook}
 					<tr class="jsRow">
 						<td class="columnIcon">
-							<a href="#" class="jsDeleteButton jsTooltip" title="{lang}wcf.global.button.delete{/lang}" data-confirm-message-html="{lang}wcf.acp.discordWebhookList.deleteRequest{/lang}" data-object-id="{@$webhook->webhookID}"><span class="icon icon24 fa-times"></span></a>
+							<a href="#" class="jsDeleteButton jsTooltip" title="{lang}wcf.global.button.delete{/lang}" data-confirm-message-html="{lang}wcf.acp.discordWebhookList.deleteRequest{/lang}" data-object-id="{@$webhook->webhookID}">{icon size=16 name='times'}</a>
 
 							{event name='icons'}
 						</td>
