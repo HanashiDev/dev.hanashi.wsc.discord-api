@@ -185,8 +185,12 @@ class DiscordApi
      * @param   string  $botToken       Geheimer Schlüssel des Discord-Bots
      * @param   string  $botType        Bot-Typ
      */
-    public function __construct($guildID, $botToken, $botType = 'Bot')
-    {
+    public function __construct(
+        $guildID,
+        #[\SensitiveParameter]
+        $botToken,
+        $botType = 'Bot'
+    ) {
         $this->guildID = $guildID;
         $this->botToken = $botToken;
         $this->botType = $botType;
@@ -433,8 +437,12 @@ class DiscordApi
      * @param  array $params
      * @return array
      */
-    public function createInteractionResponse($interactionID, $interactionToken, $params)
-    {
+    public function createInteractionResponse(
+        $interactionID,
+        #[\SensitiveParameter]
+        $interactionToken,
+        $params
+    ) {
         $url = \sprintf('%s/interactions/%s/%s/callback', $this->apiUrl, $interactionID, $interactionToken);
 
         return $this->execute($url, 'POST', $params, 'application/json');
@@ -447,8 +455,11 @@ class DiscordApi
      * @param  string $interactionToken
      * @return array
      */
-    public function getOriginalInteractionResponse($applicationID, $interactionToken)
-    {
+    public function getOriginalInteractionResponse(
+        $applicationID,
+        #[\SensitiveParameter]
+        $interactionToken
+    ) {
         $url = \sprintf('%s/webhooks/%s/%s/messages/@original', $this->apiUrl, $applicationID, $interactionToken);
 
         return $this->execute($url, 'GET');
@@ -462,8 +473,12 @@ class DiscordApi
      * @param  array $params
      * @return array
      */
-    public function editOriginalInteractionResponse($applicationID, $interactionToken, $params)
-    {
+    public function editOriginalInteractionResponse(
+        $applicationID,
+        #[\SensitiveParameter]
+        $interactionToken,
+        $params
+    ) {
         $url = \sprintf('%s/webhooks/%s/%s/messages/@original', $this->apiUrl, $applicationID, $interactionToken);
 
         return $this->execute($url, 'PATCH', $params, 'application/json');
@@ -476,8 +491,11 @@ class DiscordApi
      * @param  string $interactionToken
      * @return array
      */
-    public function deleteOriginalInteractionResponse($applicationID, $interactionToken)
-    {
+    public function deleteOriginalInteractionResponse(
+        $applicationID,
+        #[\SensitiveParameter]
+        $interactionToken
+    ) {
         $url = \sprintf('%s/webhooks/%s/%s/messages/@original', $this->apiUrl, $applicationID, $interactionToken);
 
         return $this->execute($url, 'DELETE');
@@ -493,8 +511,12 @@ class DiscordApi
      * @param  array $params
      * @return array
      */
-    public function createFollowupMessage($applicationID, $interactionToken, $params)
-    {
+    public function createFollowupMessage(
+        $applicationID,
+        #[\SensitiveParameter]
+        $interactionToken,
+        $params
+    ) {
         $url = \sprintf('%s/webhooks/%s/%s', $this->apiUrl, $applicationID, $interactionToken);
 
         return $this->execute($url, 'POST', $params, 'application/json');
@@ -509,8 +531,13 @@ class DiscordApi
      * @param  array $params
      * @return array
      */
-    public function editFollowupMessage($applicationID, $interactionToken, $messageID, $params)
-    {
+    public function editFollowupMessage(
+        $applicationID,
+        #[\SensitiveParameter]
+        $interactionToken,
+        $messageID,
+        $params
+    ) {
         $url = \sprintf('%s/webhooks/%s/%s/messages/%s', $this->apiUrl, $applicationID, $interactionToken, $messageID);
 
         return $this->execute($url, 'PATCH', $params, 'application/json');
@@ -524,8 +551,12 @@ class DiscordApi
      * @param  integer $messageID
      * @return array
      */
-    public function deleteFollowupMessage($applicationID, $interactionToken, $messageID)
-    {
+    public function deleteFollowupMessage(
+        $applicationID,
+        #[\SensitiveParameter]
+        $interactionToken,
+        $messageID
+    ) {
         $url = \sprintf('%s/webhooks/%s/%s/messages/%s', $this->apiUrl, $applicationID, $interactionToken, $messageID);
 
         return $this->execute($url, 'DELETE');
@@ -1709,8 +1740,12 @@ class DiscordApi
      * @param   array       $params         Zusätzliche optionale Parameter
      * @return  array
      */
-    public function addGuildMember($userID, $accessToken, $params = [])
-    {
+    public function addGuildMember(
+        $userID,
+        #[\SensitiveParameter]
+        $accessToken,
+        $params = []
+    ) {
         $url = \sprintf('%s/guilds/%s/members/%s', $this->apiUrl, $this->guildID, $userID);
         $params = \array_merge([
             'access_token' => $accessToken,
@@ -2866,8 +2901,11 @@ class DiscordApi
      * @param   string  $webhookToken   Token des Webhooks
      * @return  array
      */
-    public function getWebhookWithToken($webhookID, $webhookToken)
-    {
+    public function getWebhookWithToken(
+        $webhookID,
+        #[\SensitiveParameter]
+        $webhookToken
+    ) {
         $url = \sprintf('%s/webhooks/%s/%s', $this->apiUrl, $webhookID, $webhookToken);
 
         return $this->execute($url);
@@ -2898,8 +2936,12 @@ class DiscordApi
      * @param   array   $params         Parameter
      * @return  array
      */
-    public function modifyWebhookWithToken($webhookID, $webhookToken, $params)
-    {
+    public function modifyWebhookWithToken(
+        $webhookID,
+        #[\SensitiveParameter]
+        $webhookToken,
+        $params
+    ) {
         $url = \sprintf('%s/webhooks/%s/%s', $this->apiUrl, $webhookID, $webhookToken);
 
         return $this->execute($url, 'PATCH', $params, 'application/json');
@@ -2927,8 +2969,11 @@ class DiscordApi
      * @param   string  $webhookToken   Token des Webhooks
      * @return  array
      */
-    public function deleteWebhookWithToken($webhookID, $webhookToken)
-    {
+    public function deleteWebhookWithToken(
+        $webhookID,
+        #[\SensitiveParameter]
+        $webhookToken
+    ) {
         $url = \sprintf('%s/webhooks/%s/%s', $this->apiUrl, $webhookID, $webhookToken);
 
         return $this->execute($url, 'DELETE');
@@ -2945,8 +2990,14 @@ class DiscordApi
      *                                  does not return an error)
      * @return  array
      */
-    public function executeWebhook($webhookID, $webhookToken, $params, $wait = false, $threadID = null)
-    {
+    public function executeWebhook(
+        $webhookID,
+        #[\SensitiveParameter]
+        $webhookToken,
+        $params,
+        $wait = false,
+        $threadID = null
+    ) {
         $url = new Uri(
             \sprintf('%s/webhooks/%s/%s', $this->apiUrl, $webhookID, $webhookToken)
         );
@@ -2983,8 +3034,13 @@ class DiscordApi
      *                                  does not return an error)
      * @return  array
      */
-    public function executeSlackCompatibleWebhook($webhookID, $webhookToken, $params, $wait = false)
-    {
+    public function executeSlackCompatibleWebhook(
+        $webhookID,
+        #[\SensitiveParameter]
+        $webhookToken,
+        $params,
+        $wait = false
+    ) {
         $url = \sprintf('%s/webhooks/%s/%s/slack', $this->apiUrl, $webhookID, $webhookToken);
 
         return $this->execute($url, 'POST', $params, 'application/json');
@@ -3003,8 +3059,13 @@ class DiscordApi
      *                                  does not return an error)
      * @return  array
      */
-    public function executeGithubCompatibleWebhook($webhookID, $webhookToken, $params, $wait = false)
-    {
+    public function executeGithubCompatibleWebhook(
+        $webhookID,
+        #[\SensitiveParameter]
+        $webhookToken,
+        $params,
+        $wait = false
+    ) {
         $url = \sprintf('%s/webhooks/%s/%s/github', $this->apiUrl, $webhookID, $webhookToken);
 
         return $this->execute($url, 'POST', $params, 'application/json');
@@ -3051,8 +3112,14 @@ class DiscordApi
      * @param   string  $grantType      Grant-Type (authorization_code, refresh_token, client_credentials)
      * @return  array
      */
-    public function oauth2Token($clientID, $clientSecret, $code, $redirectUri, $grantType = 'authorization_code')
-    {
+    public function oauth2Token(
+        $clientID,
+        #[\SensitiveParameter]
+        $clientSecret,
+        $code,
+        $redirectUri,
+        $grantType = 'authorization_code'
+    ) {
         $url = \sprintf('%s/oauth2/token', $this->apiUrl);
         $params = [
             'client_id' => $clientID,
