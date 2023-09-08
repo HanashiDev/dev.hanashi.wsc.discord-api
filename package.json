@@ -6,7 +6,7 @@
         "eslint-config-prettier": "^8.6.0",
         "prettier": "^2.8.3",
         "tslib": "^2.5.0",
-        "typescript": "~4.9"
+        "typescript": "~5.2"
     },
     "dependencies": {
         "@woltlab/wcf": "https://github.com/WoltLab/WCF.git#5.5"
