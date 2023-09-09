@@ -5,7 +5,7 @@
 			{if $guildChannel['type'] == 0}
 				{icon size=16 name='hashtag'}
 			{else if $guildChannel['type'] == 2}
-				{icon size=16 name='volume-up'}
+				{icon size=16 name='volume-high'}
 			{else if $guildChannel['type'] == 5}
 				{icon size=16 name='bullhorn'}
 			{else if $guildChannel['type'] == 13}
@@ -13,7 +13,7 @@
 			{else if $guildChannel['type'] == 14}
 				{icon size=16 name='compass'}
 			{else if $guildChannel['type'] == 15}
-				{icon size=16 name='comments-o'}
+				{icon size=16 name='comments'}
 			{/if}
 			{$guildChannel['name']}
 		</label>
