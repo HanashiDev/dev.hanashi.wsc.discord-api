@@ -1,11 +1,5 @@
 {include file='header' pageTitle='wcf.acp.menu.link.configuration.discord.discordWebhookList'}
 
-<script data-relocate="true">
-	$(function() {
-		new WCF.Action.Delete('wcf\\data\\discord\\webhook\\DiscordWebhookAction', $('.jsRow'));
-	});
-</script>
-
 <header class="contentHeader">
 	<div class="contentHeaderTitle">
 		<h1 class="contentTitle">{lang}wcf.acp.menu.link.configuration.discord.discordWebhookList{/lang}</h1>
@@ -22,7 +16,7 @@
 
 {if $objects|count}
 	<div class="section tabularBox">
-		<table class="table">
+		<table class="table jsObjectActionContainer"  data-object-action-class-name="wcf\data\discord\webhook\DiscordWebhookAction">
 			<thead>
 				<tr>
 					<th class="columnIcon"></th>
@@ -39,9 +33,9 @@
 
 			<tbody>
 				{foreach from=$objects item=webhook}
-					<tr class="jsRow">
+					<tr class="jsObjectActionObject" data-object-id="{$webhook->webhookID}">
 						<td class="columnIcon">
-							<a href="#" class="jsDeleteButton jsTooltip" title="{lang}wcf.global.button.delete{/lang}" data-confirm-message-html="{lang}wcf.acp.discordWebhookList.deleteRequest{/lang}" data-object-id="{@$webhook->webhookID}">{icon size=16 name='times'}</a>
+							{objectAction action="delete" objectTitle=$webhook->webhookName}
 
 							{event name='icons'}
 						</td>

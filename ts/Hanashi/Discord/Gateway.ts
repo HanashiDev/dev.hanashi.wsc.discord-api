@@ -1,22 +1,52 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import * as EventHandler from "WoltLabSuite/Core/Event/Handler";
+
+export type GatewayEvent = {
+  op: number;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  d: any;
+  s?: number;
+  t?: string;
+};
+
+export type PresenceActivity = {
+  name: string;
+  type: number;
+};
+
+export type PresenceUpdate = {
+  since?: number;
+  activities: PresenceActivity[];
+  status: string;
+  afk: boolean;
+};
 
 export class DiscordGateway {
   private readonly token: string;
-  private readonly presence: object = {};
+  private readonly intents: number;
+  private readonly presence: PresenceUpdate | undefined;
 
   protected socket: WebSocket;
 
   private heartbeatInterval = 0;
   private seq: number | null = null;
 
-  constructor(token: string, presence: object = {}) {
+  constructor(token: string, intents = 3276799, presence: PresenceUpdate | undefined) {
     this.token = token;
+    this.intents = intents;
     this.presence = presence;
 
-    this.socket = new WebSocket("wss://gateway.discord.gg/?v=6&encoding=json");
-    this.socket.addEventListener("open", () => this.onopen());
-    this.socket.addEventListener("error", (ev: Event) => this.onerror(ev));
-    this.socket.addEventListener("message", (ev: MessageEvent<any>) => this.onmessage(ev));
+    this.socket = new WebSocket("wss://gateway.discord.gg/?v=10&encoding=json");
+    this.socket.addEventListener("open", () => {
+      this.onopen();
+    });
+    this.socket.addEventListener("error", (ev: Event) => {
+      this.onerror(ev);
+    });
+    this.socket.addEventListener("message", (ev: MessageEvent) => {
+      this.onmessage(ev);
+    });
 
     const data = {
       token: this.token,
@@ -33,26 +63,33 @@ export class DiscordGateway {
     EventHandler.fire("dev.hanashi.wsc.discord.gateway", "onerror", ev);
   }
 
-  protected onmessage(ev: MessageEvent<any>): void {
-    const data = JSON.parse(ev.data as string);
+  protected onmessage(ev: MessageEvent): void {
+    if (ev.data === undefined || typeof ev.data !== "string") {
+      return;
+    }
+    const data = JSON.parse(ev.data) as GatewayEvent;
 
     switch (data.op) {
       case 0: {
-        this.seq = data.s;
-        EventHandler.fire("dev.hanashi.wsc.discord.gateway", "dispatch", data as object);
+        if (data.s !== undefined) {
+          this.seq = data.s;
+        }
+        EventHandler.fire("dev.hanashi.wsc.discord.gateway", "dispatch", data);
         break;
       }
       case 10: {
         // heartbeating
-        this.heartbeatInterval = data.d.heartbeat_interval;
-        this.sendHeartbeat();
+        if (data.d.heartbeat_interval !== undefined && typeof data.d.heartbeat_interval === "number") {
+          this.heartbeatInterval = data.d.heartbeat_interval;
+          this.sendHeartbeat();
+        }
 
-        EventHandler.fire("dev.hanashi.wsc.discord.gateway", "beforeVerify", data as object);
+        EventHandler.fire("dev.hanashi.wsc.discord.gateway", "beforeVerify", data);
 
         // verify
         this.verify();
 
-        EventHandler.fire("dev.hanashi.wsc.discord.gateway", "afterVerify", data as object);
+        EventHandler.fire("dev.hanashi.wsc.discord.gateway", "afterVerify", data);
         break;
       }
       case 11: {
@@ -60,17 +97,19 @@ export class DiscordGateway {
         break;
       }
       default: {
-        EventHandler.fire("dev.hanashi.wsc.discord.gateway", "unknownReceived", data as object);
+        EventHandler.fire("dev.hanashi.wsc.discord.gateway", "unknownReceived", data);
       }
     }
   }
 
   private sendHeartbeat() {
-    setTimeout(() => this.heartbeat(), this.heartbeatInterval);
+    setTimeout(() => {
+      this.heartbeat();
+    }, this.heartbeatInterval);
   }
 
   private heartbeat() {
-    const sendData = {
+    const sendData: GatewayEvent = {
       op: 1,
       d: this.seq,
     };
@@ -78,12 +117,13 @@ export class DiscordGateway {
   }
 
   private verify() {
-    const sendData = {
+    const sendData: GatewayEvent = {
       op: 2,
       d: {
         token: this.token,
         properties: {},
         presence: this.presence,
+        intents: this.intents,
       },
     };
     this.socket.send(JSON.stringify(sendData));
