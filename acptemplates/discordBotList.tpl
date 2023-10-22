@@ -1,11 +1,5 @@
 {include file='header' pageTitle='wcf.acp.menu.link.configuration.discord.discordBotList'}
 
-<script data-relocate="true">
-	$(function() {
-		new WCF.Action.Delete('wcf\\data\\discord\\bot\\DiscordBotAction', $('.jsRow'));
-	});
-</script>
-
 <header class="contentHeader">
 	<div class="contentHeaderTitle">
 		<h1 class="contentTitle">{lang}wcf.acp.menu.link.configuration.discord.discordBotList{/lang}</h1>
@@ -29,7 +23,7 @@
 
 {if $objects|count}
 	<div class="section tabularBox">
-		<table class="table">
+		<table class="table jsObjectActionContainer" data-object-action-class-name="wcf\data\discord\bot\DiscordBotAction">
 			<thead>
 				<tr>
 					<th class="columnIcon"></th>
@@ -44,10 +38,10 @@
 
 			<tbody>
 				{foreach from=$objects item=discordBot}
-					<tr class="jsRow">
+					<tr class="jsObjectActionObject" data-object-id="{$discordBot->botID}">
 						<td class="columnIcon">
 							<a href="{link controller='DiscordBotEdit' id=$discordBot->botID}{/link}" title="{lang}wcf.global.button.edit{/lang}" class="jsTooltip">{icon size=16 name='pencil'}</a>
-							<a href="#" class="jsDeleteButton jsTooltip" title="{lang}wcf.global.button.delete{/lang}" data-confirm-message-html="{lang}wcf.acp.discordBotList.deleteRequest{/lang}" data-object-id="{@$discordBot->botID}">{icon size=16 name='times'}</a>
+							{objectAction action="delete" objectTitle=$discordBot->botName}
 
 							{event name='icons'}
 						</td>
