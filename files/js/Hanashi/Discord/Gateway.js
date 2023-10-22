@@ -4,16 +4,26 @@ define(["require", "exports", "tslib", "WoltLabSuite/Core/Event/Handler"], funct
     exports.DiscordGateway = void 0;
     EventHandler = tslib_1.__importStar(EventHandler);
     class DiscordGateway {
-        constructor(token, presence = {}) {
-            this.presence = {};
-            this.heartbeatInterval = 0;
-            this.seq = null;
+        token;
+        intents;
+        presence;
+        socket;
+        heartbeatInterval = 0;
+        seq = null;
+        constructor(token, intents = 3276799, presence) {
             this.token = token;
+            this.intents = intents;
             this.presence = presence;
-            this.socket = new WebSocket("wss://gateway.discord.gg/?v=6&encoding=json");
-            this.socket.addEventListener("open", () => this.onopen());
-            this.socket.addEventListener("error", (ev) => this.onerror(ev));
-            this.socket.addEventListener("message", (ev) => this.onmessage(ev));
+            this.socket = new WebSocket("wss://gateway.discord.gg/?v=10&encoding=json");
+            this.socket.addEventListener("open", () => {
+                this.onopen();
+            });
+            this.socket.addEventListener("error", (ev) => {
+                this.onerror(ev);
+            });
+            this.socket.addEventListener("message", (ev) => {
+                this.onmessage(ev);
+            });
             const data = {
                 token: this.token,
                 socket: this.socket,
@@ -27,17 +37,24 @@ define(["require", "exports", "tslib", "WoltLabSuite/Core/Event/Handler"], funct
             EventHandler.fire("dev.hanashi.wsc.discord.gateway", "onerror", ev);
         }
         onmessage(ev) {
+            if (ev.data === undefined || typeof ev.data !== "string") {
+                return;
+            }
             const data = JSON.parse(ev.data);
             switch (data.op) {
                 case 0: {
-                    this.seq = data.s;
+                    if (data.s !== undefined) {
+                        this.seq = data.s;
+                    }
                     EventHandler.fire("dev.hanashi.wsc.discord.gateway", "dispatch", data);
                     break;
                 }
                 case 10: {
                     // heartbeating
-                    this.heartbeatInterval = data.d.heartbeat_interval;
-                    this.sendHeartbeat();
+                    if (data.d.heartbeat_interval !== undefined && typeof data.d.heartbeat_interval === "number") {
+                        this.heartbeatInterval = data.d.heartbeat_interval;
+                        this.sendHeartbeat();
+                    }
                     EventHandler.fire("dev.hanashi.wsc.discord.gateway", "beforeVerify", data);
                     // verify
                     this.verify();
@@ -54,7 +71,9 @@ define(["require", "exports", "tslib", "WoltLabSuite/Core/Event/Handler"], funct
             }
         }
         sendHeartbeat() {
-            setTimeout(() => this.heartbeat(), this.heartbeatInterval);
+            setTimeout(() => {
+                this.heartbeat();
+            }, this.heartbeatInterval);
         }
         heartbeat() {
             const sendData = {
@@ -70,6 +89,7 @@ define(["require", "exports", "tslib", "WoltLabSuite/Core/Event/Handler"], funct
                     token: this.token,
                     properties: {},
                     presence: this.presence,
+                    intents: this.intents,
                 },
             };
             this.socket.send(JSON.stringify(sendData));
