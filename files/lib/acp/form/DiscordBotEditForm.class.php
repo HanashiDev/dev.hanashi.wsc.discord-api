@@ -2,7 +2,9 @@
 
 namespace wcf\acp\form;
 
+use CuyZ\Valinor\Mapper\MappingError;
 use wcf\data\discord\bot\DiscordBot;
+use wcf\http\Helper;
 use wcf\system\exception\IllegalLinkException;
 
 class DiscordBotEditForm extends DiscordBotAddForm
@@ -19,12 +21,21 @@ class DiscordBotEditForm extends DiscordBotAddForm
     {
         parent::readParameters();
 
-        $botID = 0;
-        if (isset($_REQUEST['id'])) {
-            $botID = (int)$_REQUEST['id'];
-        }
-        $this->formObject = new DiscordBot($botID);
-        if (!$this->formObject->botID) {
+        try {
+            $queryParameters = Helper::mapQueryParameters(
+                $_GET,
+                <<<'EOT'
+                    array {
+                        id: positive-int
+                    }
+                    EOT
+            );
+            $this->formObject = new DiscordBot($queryParameters['id']);
+
+            if (!$this->formObject->botID) {
+                throw new IllegalLinkException();
+            }
+        } catch (MappingError) {
             throw new IllegalLinkException();
         }
     }
