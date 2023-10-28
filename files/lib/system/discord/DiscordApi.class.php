@@ -138,6 +138,16 @@ class DiscordApi
     public const DISCORD_FAILED_TO_MENTION_SOME_ROLES_IN_THREAD = 1 << 8;
 
     /**
+     * this message will not trigger push and desktop notifications
+     */
+    public const DISCORD_SUPPRESS_NOTIFICATIONS = 1 << 12;
+
+    /**
+     * this message is a voice message
+     */
+    public const DISCORD_IS_VOICE_MESSAGE = 1 << 13;
+
+    /**
      * URL zur Discord-API
      *
      * @var string
