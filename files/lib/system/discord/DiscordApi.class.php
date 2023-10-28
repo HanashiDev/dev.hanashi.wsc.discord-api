@@ -661,10 +661,10 @@ class DiscordApi
      */
     public static function verifyRequest($publicKey, $body)
     {
-        if (empty($_SERVER['HTTP_X_SIGNATURE_ED25519'])) {
+        if (!isset($_SERVER['HTTP_X_SIGNATURE_ED25519'])) {
             return false;
         }
-        if (empty($_SERVER['HTTP_X_SIGNATURE_TIMESTAMP'])) {
+        if (!isset($_SERVER['HTTP_X_SIGNATURE_TIMESTAMP'])) {
             return false;
         }
 
@@ -696,7 +696,7 @@ class DiscordApi
     public function getGuildAuditLog($params = [])
     {
         $url = \sprintf('%s/guilds/%s/audit-logs', $this->apiUrl, $this->guildID);
-        if (!empty($params)) {
+        if ($params !== []) {
             $url .= '?' . \http_build_query($params, '', '&');
         }
 
@@ -879,7 +879,7 @@ class DiscordApi
     public function getChannelMessages($channelID, $params = [])
     {
         $url = \sprintf('%s/channels/%s/messages', $this->apiUrl, $channelID);
-        if (!empty($params)) {
+        if ($params !== []) {
             $url .= '?' . \http_build_query($params, '', '&');
         }
 
@@ -1016,7 +1016,7 @@ class DiscordApi
     public function getReactions($channelID, $messageID, $emoji, $params = [])
     {
         $url = \sprintf('%s/channels/%s/messages/%s/reactions/%s', $this->apiUrl, $channelID, $messageID, $emoji);
-        if (!empty($params)) {
+        if ($params !== []) {
             $url .= '?' . \http_build_query($params, '', '&');
         }
 
@@ -1455,7 +1455,7 @@ class DiscordApi
     public function listPublicArchivedThreads($channelID, $params = [])
     {
         $url = \sprintf('%s/channels/%s/threads/archived/public', $this->apiUrl, $channelID);
-        if (!empty($params)) {
+        if ($params !== []) {
             $url .= '?' . \http_build_query($params, '', '&');
         }
 
@@ -1473,7 +1473,7 @@ class DiscordApi
     public function listPrivateArchivedThreads($channelID, $params = [])
     {
         $url = \sprintf('%s/channels/%s/threads/archived/private', $this->apiUrl, $channelID);
-        if (!empty($params)) {
+        if ($params !== []) {
             $url .= '?' . \http_build_query($params, '', '&');
         }
 
@@ -1491,7 +1491,7 @@ class DiscordApi
     public function listJoinedPrivateArchivedThreads($channelID, $params = [])
     {
         $url = \sprintf('%s/channels/%s/users/@me/threads/archived/private', $this->apiUrl, $channelID);
-        if (!empty($params)) {
+        if ($params !== []) {
             $url .= '?' . \http_build_query($params, '', '&');
         }
 
@@ -1731,7 +1731,7 @@ class DiscordApi
     public function listGuildMembers($params = [])
     {
         $url = \sprintf('%s/guilds/%s/members', $this->apiUrl, $this->guildID);
-        if (!empty($params)) {
+        if ($params !== []) {
             $url .= '?' . \http_build_query($params, '', '&');
         }
 
@@ -2366,7 +2366,7 @@ class DiscordApi
     public function getGuildScheduledEventUsers($guildID, $scheduledEventID, array $queryParams = [])
     {
         $url = \sprintf('%s/guilds/%s/scheduled-events/%s/users', $this->apiUrl, $guildID, $scheduledEventID);
-        if (!empty($queryParams)) {
+        if ($queryParams !== []) {
             $url .= '?' . \http_build_query($queryParams, '', '&');
         }
 
@@ -2735,7 +2735,7 @@ class DiscordApi
     public function getCurrentUserGuilds($params = [])
     {
         $url = \sprintf('%s/users/@me/guilds', $this->apiUrl);
-        if (!empty($params)) {
+        if ($params !== []) {
             $url .= '?' . \http_build_query($params, '', '&');
         }
 
@@ -2858,7 +2858,7 @@ class DiscordApi
         $params = [
             'name' => $name,
         ];
-        if (!empty($avatar)) {
+        if ($avatar !== null && $avatar !== '') {
             $params['avatar'] = $avatar;
         }
 
@@ -3016,7 +3016,7 @@ class DiscordApi
         if ($wait) {
             $queryParams['wait'] = 'true';
         }
-        if (!empty($threadID)) {
+        if ($threadID !== null) {
             $queryParams['thread_id'] = $threadID;
         }
 
@@ -3341,7 +3341,7 @@ class DiscordApi
             'content-type' => $contentType,
         ];
         if ($method !== 'GET') {
-            if (empty($parameters)) {
+            if ($parameters === []) {
                 $headers['content-length'] = 0;
             }
         }
