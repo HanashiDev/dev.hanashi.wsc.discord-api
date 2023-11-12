@@ -17,7 +17,7 @@ use wcf\system\discord\DiscordApi;
  * @license Freie Lizenz (https://hanashi.dev/freie-lizenz/)
  * @package WoltLabSuite\Core\System\Cronjob
  */
-class DiscordApiRefresherCronjob extends AbstractCronjob
+final class DiscordApiRefresherCronjob extends AbstractCronjob
 {
     /**
      * @inheritDoc

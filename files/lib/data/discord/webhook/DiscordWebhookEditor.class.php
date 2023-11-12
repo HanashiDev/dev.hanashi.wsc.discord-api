@@ -16,7 +16,7 @@ use wcf\data\DatabaseObjectEditor;
  * @method      DiscordWebhook     getDecoratedObject()
  * @mixin       DiscordWebhook
  */
-class DiscordWebhookEditor extends DatabaseObjectEditor
+final class DiscordWebhookEditor extends DatabaseObjectEditor
 {
     /**
      * @inheritDoc

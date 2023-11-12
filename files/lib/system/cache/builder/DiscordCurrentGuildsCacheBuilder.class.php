@@ -12,7 +12,7 @@ use wcf\system\discord\DiscordApi;
  * @license Freie Lizenz (https://hanashi.dev/freie-lizenz/)
  * @package WoltLabSuite\Core\System\Cache\Builder
  */
-class DiscordCurrentGuildsCacheBuilder extends AbstractCacheBuilder
+final class DiscordCurrentGuildsCacheBuilder extends AbstractCacheBuilder
 {
     /**
      * @inheritDoc

@@ -19,7 +19,7 @@ use wcf\system\WCF;
  * @method  DiscordBotEditor[] getObjects()
  * @method  DiscordBotEditor   getSingleObject()
  */
-class DiscordBotAction extends AbstractDatabaseObjectAction
+final class DiscordBotAction extends AbstractDatabaseObjectAction
 {
     /**
      * @inheritDoc

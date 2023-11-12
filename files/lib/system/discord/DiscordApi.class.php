@@ -23,7 +23,7 @@ use wcf\util\JSON;
  * @license Freie Lizenz (https://hanashi.eu/freie-lizenz/)
  * @package WoltLabSuite\Core\System\Discord
  */
-class DiscordApi
+final class DiscordApi
 {
     // ApplicationCommandType https://discord.com/developers/docs/interactions/application-commands#application-command-object-application-command-types
     /**
