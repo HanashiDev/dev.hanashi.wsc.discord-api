@@ -18,6 +18,6 @@ use wcf\data\DatabaseObjectList;
  * @method  DiscordBot|null    search($objectID)
  * @property    DiscordBot[] $objects
  */
-class DiscordBotList extends DatabaseObjectList
+final class DiscordBotList extends DatabaseObjectList
 {
 }

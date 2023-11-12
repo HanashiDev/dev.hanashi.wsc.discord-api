@@ -8,7 +8,7 @@ use wcf\system\discord\event\MessageCommandReceived;
 use wcf\system\discord\event\ModalCommandReceived;
 use wcf\system\event\EventHandler;
 
-class DiscordInteractionAction extends AbstractDiscordInteractionAction
+final class DiscordInteractionAction extends AbstractDiscordInteractionAction
 {
     public function handleApplicationCommand(array $data)
     {

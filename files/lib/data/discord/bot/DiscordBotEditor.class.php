@@ -16,7 +16,7 @@ use wcf\data\DatabaseObjectEditor;
  * @method      DiscordBot     getDecoratedObject()
  * @mixin       DiscordBot
  */
-class DiscordBotEditor extends DatabaseObjectEditor
+final class DiscordBotEditor extends DatabaseObjectEditor
 {
     /**
      * @inheritDoc

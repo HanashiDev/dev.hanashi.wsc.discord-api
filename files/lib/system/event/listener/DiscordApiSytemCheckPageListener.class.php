@@ -2,7 +2,7 @@
 
 namespace wcf\system\event\listener;
 
-class DiscordApiSytemCheckPageListener implements IParameterizedEventListener
+final class DiscordApiSytemCheckPageListener implements IParameterizedEventListener
 {
     /**
      * @inheritDoc

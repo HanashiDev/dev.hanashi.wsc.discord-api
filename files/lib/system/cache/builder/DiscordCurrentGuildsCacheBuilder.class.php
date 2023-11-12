@@ -12,7 +12,7 @@ use wcf\system\discord\DiscordApi;
  * @license Freie Lizenz (https://hanashi.dev/freie-lizenz/)
  * @package WoltLabSuite\Core\System\Cache\Builder
  */
-class DiscordCurrentGuildsCacheBuilder extends AbstractCacheBuilder
+final class DiscordCurrentGuildsCacheBuilder extends AbstractCacheBuilder
 {
     /**
      * @inheritDoc
@@ -24,7 +24,7 @@ class DiscordCurrentGuildsCacheBuilder extends AbstractCacheBuilder
      */
     public function rebuild(array $parameters)
     {
-        if (empty($parameters['botToken'])) {
+        if (!isset($parameters['botToken']) || $parameters['botToken'] === '') {
             return [];
         }
         $discord = new DiscordApi(0, $parameters['botToken']);
@@ -32,8 +32,8 @@ class DiscordCurrentGuildsCacheBuilder extends AbstractCacheBuilder
         $currentUserGuilds = $discord->getCurrentUserGuilds();
         if (
             !isset($currentUserGuilds['body'])
-            || \count($currentUserGuilds['body'])
-            && empty($currentUserGuilds['body'][0])
+            || !\is_array($currentUserGuilds['body'])
+            || $currentUserGuilds['body'] === []
         ) {
             return [];
         }

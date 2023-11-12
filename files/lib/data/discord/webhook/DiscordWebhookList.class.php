@@ -18,6 +18,6 @@ use wcf\data\DatabaseObjectList;
  * @method  DiscordWebhook|null    search($objectID)
  * @property    DiscordWebhook[] $objects
  */
-class DiscordWebhookList extends DatabaseObjectList
+final class DiscordWebhookList extends DatabaseObjectList
 {
 }

@@ -23,7 +23,7 @@ use wcf\system\discord\DiscordApi;
  * @property-read string $usageBy
  * @property-read int $webhookTime
  */
-class DiscordWebhook extends DatabaseObject
+final class DiscordWebhook extends DatabaseObject
 {
     /**
      * @inheritDoc

@@ -28,11 +28,11 @@ class RoleMultiSelectDiscordType extends AbstractDiscordType
         $roles = [];
         $guildRoles = $this->getGuildRoles();
         foreach ($this->getDiscordBotList() as $discordBot) {
-            $rolesTmp = [];
-            if (isset($guildRoles[$discordBot->botID])) {
-                $rolesTmp = $guildRoles[$discordBot->botID];
+            if (!isset($guildRoles[$discordBot->botID]['body'])) {
+                continue;
             }
-            $rolesTmp = $rolesTmp['body'];
+
+            $rolesTmp = $guildRoles[$discordBot->botID]['body'];
             if (!\is_array($rolesTmp)) {
                 $rolesTmp = [];
             }
@@ -65,7 +65,7 @@ class RoleMultiSelectDiscordType extends AbstractDiscordType
     {
         $guildRoles = $this->getGuildRoles();
         foreach ($newValue as $botID => $roleIDs) {
-            if (empty($roleIDs)) {
+            if (!\is_array($roleIDs) || $roleIDs === []) {
                 continue;
             }
 

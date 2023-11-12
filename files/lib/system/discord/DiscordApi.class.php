@@ -5,12 +5,12 @@ namespace wcf\system\discord;
 use Exception;
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Exception\BadResponseException;
-use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\RequestOptions;
 use Laminas\Diactoros\Uri;
 use Psr\Http\Message\ResponseInterface;
 use SensitiveParameter;
+use Throwable;
 use wcf\data\discord\bot\DiscordBot;
 use wcf\system\io\HttpFactory;
 use wcf\util\JSON;
@@ -23,7 +23,7 @@ use wcf\util\JSON;
  * @license Freie Lizenz (https://hanashi.eu/freie-lizenz/)
  * @package WoltLabSuite\Core\System\Discord
  */
-class DiscordApi
+final class DiscordApi
 {
     // ApplicationCommandType https://discord.com/developers/docs/interactions/application-commands#application-command-object-application-command-types
     /**
@@ -136,6 +136,16 @@ class DiscordApi
      * this message failed to mention some roles and add their members to the thread
      */
     public const DISCORD_FAILED_TO_MENTION_SOME_ROLES_IN_THREAD = 1 << 8;
+
+    /**
+     * this message will not trigger push and desktop notifications
+     */
+    public const DISCORD_SUPPRESS_NOTIFICATIONS = 1 << 12;
+
+    /**
+     * this message is a voice message
+     */
+    public const DISCORD_IS_VOICE_MESSAGE = 1 << 13;
 
     /**
      * URL zur Discord-API
@@ -651,10 +661,10 @@ class DiscordApi
      */
     public static function verifyRequest($publicKey, $body)
     {
-        if (empty($_SERVER['HTTP_X_SIGNATURE_ED25519'])) {
+        if (!isset($_SERVER['HTTP_X_SIGNATURE_ED25519'])) {
             return false;
         }
-        if (empty($_SERVER['HTTP_X_SIGNATURE_TIMESTAMP'])) {
+        if (!isset($_SERVER['HTTP_X_SIGNATURE_TIMESTAMP'])) {
             return false;
         }
 
@@ -686,7 +696,7 @@ class DiscordApi
     public function getGuildAuditLog($params = [])
     {
         $url = \sprintf('%s/guilds/%s/audit-logs', $this->apiUrl, $this->guildID);
-        if (!empty($params)) {
+        if ($params !== []) {
             $url .= '?' . \http_build_query($params, '', '&');
         }
 
@@ -869,7 +879,7 @@ class DiscordApi
     public function getChannelMessages($channelID, $params = [])
     {
         $url = \sprintf('%s/channels/%s/messages', $this->apiUrl, $channelID);
-        if (!empty($params)) {
+        if ($params !== []) {
             $url .= '?' . \http_build_query($params, '', '&');
         }
 
@@ -1006,7 +1016,7 @@ class DiscordApi
     public function getReactions($channelID, $messageID, $emoji, $params = [])
     {
         $url = \sprintf('%s/channels/%s/messages/%s/reactions/%s', $this->apiUrl, $channelID, $messageID, $emoji);
-        if (!empty($params)) {
+        if ($params !== []) {
             $url .= '?' . \http_build_query($params, '', '&');
         }
 
@@ -1445,7 +1455,7 @@ class DiscordApi
     public function listPublicArchivedThreads($channelID, $params = [])
     {
         $url = \sprintf('%s/channels/%s/threads/archived/public', $this->apiUrl, $channelID);
-        if (!empty($params)) {
+        if ($params !== []) {
             $url .= '?' . \http_build_query($params, '', '&');
         }
 
@@ -1463,7 +1473,7 @@ class DiscordApi
     public function listPrivateArchivedThreads($channelID, $params = [])
     {
         $url = \sprintf('%s/channels/%s/threads/archived/private', $this->apiUrl, $channelID);
-        if (!empty($params)) {
+        if ($params !== []) {
             $url .= '?' . \http_build_query($params, '', '&');
         }
 
@@ -1481,7 +1491,7 @@ class DiscordApi
     public function listJoinedPrivateArchivedThreads($channelID, $params = [])
     {
         $url = \sprintf('%s/channels/%s/users/@me/threads/archived/private', $this->apiUrl, $channelID);
-        if (!empty($params)) {
+        if ($params !== []) {
             $url .= '?' . \http_build_query($params, '', '&');
         }
 
@@ -1721,7 +1731,7 @@ class DiscordApi
     public function listGuildMembers($params = [])
     {
         $url = \sprintf('%s/guilds/%s/members', $this->apiUrl, $this->guildID);
-        if (!empty($params)) {
+        if ($params !== []) {
             $url .= '?' . \http_build_query($params, '', '&');
         }
 
@@ -2356,7 +2366,7 @@ class DiscordApi
     public function getGuildScheduledEventUsers($guildID, $scheduledEventID, array $queryParams = [])
     {
         $url = \sprintf('%s/guilds/%s/scheduled-events/%s/users', $this->apiUrl, $guildID, $scheduledEventID);
-        if (!empty($queryParams)) {
+        if ($queryParams !== []) {
             $url .= '?' . \http_build_query($queryParams, '', '&');
         }
 
@@ -2725,7 +2735,7 @@ class DiscordApi
     public function getCurrentUserGuilds($params = [])
     {
         $url = \sprintf('%s/users/@me/guilds', $this->apiUrl);
-        if (!empty($params)) {
+        if ($params !== []) {
             $url .= '?' . \http_build_query($params, '', '&');
         }
 
@@ -2848,7 +2858,7 @@ class DiscordApi
         $params = [
             'name' => $name,
         ];
-        if (!empty($avatar)) {
+        if ($avatar !== null && $avatar !== '') {
             $params['avatar'] = $avatar;
         }
 
@@ -3006,7 +3016,7 @@ class DiscordApi
         if ($wait) {
             $queryParams['wait'] = 'true';
         }
-        if (!empty($threadID)) {
+        if ($threadID !== null) {
             $queryParams['thread_id'] = $threadID;
         }
 
@@ -3331,7 +3341,7 @@ class DiscordApi
             'content-type' => $contentType,
         ];
         if ($method !== 'GET') {
-            if (empty($parameters)) {
+            if ($parameters === []) {
                 $headers['content-length'] = 0;
             }
         }
@@ -3363,7 +3373,7 @@ class DiscordApi
                 'botToken' => $this->botToken,
                 'botType' => $this->botType,
             ];
-        } catch (GuzzleException $e) {
+        } catch (Throwable $e) {
             if (\ENABLE_DEBUG_MODE) {
                 \wcf\functions\exception\logThrowable($e);
             }

@@ -6,8 +6,8 @@
 		<packagename language="de">Discord-API</packagename>
 		<packagedescription>API to cummincate with Discord.</packagedescription>
 		<packagedescription language="de">API um mit Discord zu kommunizieren.</packagedescription>
-		<version>2.6.2</version>
-		<date>2023-10-22</date>
+		<version>2.6.3</version>
+		<date>2023-11-12</date>
 		<license>https://creativecommons.org/publicdomain/zero/1.0/deed.en</license>
 	</packageinformation>
 	<authorinformation>
@@ -31,8 +31,7 @@
 		<instruction type="option"/>
 		<instruction type="database">acp/database/install_dev.hanashi.wsc.discord-api.php</instruction>
 	</instructions>
-	<instructions type="update" fromversion="2.6.1">
+	<instructions type="update" fromversion="2.6.2">
 		<instruction type="file"/>
-		<instruction type="acpTemplate"/>
 	</instructions>
 </package>

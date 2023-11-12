@@ -41,7 +41,7 @@ class DiscordBotSelectOptionType extends AbstractOptionType
      */
     public function validate(Option $option, $newValue)
     {
-        if (!empty($newValue)) {
+        if ($newValue !== 0 && $newValue !== '') {
             $discordBot = new DiscordBot($newValue);
             if (!$discordBot->botID) {
                 throw new UserInputException($option->optionName);

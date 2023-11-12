@@ -12,7 +12,7 @@ use wcf\system\discord\DiscordApi;
  * @license Freie Lizenz (https://hanashi.dev/freie-lizenz/)
  * @package WoltLabSuite\Core\System\Cache\Builder
  */
-class DiscordGuildChannelCacheBuilder extends AbstractCacheBuilder
+final class DiscordGuildChannelCacheBuilder extends AbstractCacheBuilder
 {
     /**
      * @inheritDoc
@@ -24,7 +24,12 @@ class DiscordGuildChannelCacheBuilder extends AbstractCacheBuilder
      */
     public function rebuild(array $parameters)
     {
-        if (empty($parameters['guildID']) || empty($parameters['botToken'])) {
+        if (
+            !isset($parameters['guildID'])
+            || !isset($parameters['botToken'])
+            || $parameters['guildID'] === ''
+            || $parameters['botToken'] === ''
+        ) {
             return [];
         }
 

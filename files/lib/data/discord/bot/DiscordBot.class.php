@@ -26,7 +26,7 @@ use wcf\system\discord\DiscordApi;
  * @property-read string|null $publicKey
  * @property-read int $botTime
  */
-class DiscordBot extends DatabaseObject
+final class DiscordBot extends DatabaseObject
 {
     /**
      * @inheritDoc

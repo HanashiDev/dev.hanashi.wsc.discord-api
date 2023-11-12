@@ -10,7 +10,7 @@ use wcf\data\discord\bot\DiscordBotList;
  * @license Freie Lizenz (https://hanashi.dev/freie-lizenz/)
  * @package WoltLabSuite\Core\System\Cache\Runtime
  */
-class DiscordBotRuntimeCache extends AbstractRuntimeCache
+final class DiscordBotRuntimeCache extends AbstractRuntimeCache
 {
     /**
      * @inheritDoc

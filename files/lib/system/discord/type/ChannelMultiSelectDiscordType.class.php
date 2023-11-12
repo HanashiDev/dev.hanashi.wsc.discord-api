@@ -36,7 +36,7 @@ class ChannelMultiSelectDiscordType extends AbstractDiscordType
 
             $channelsGroupedTmp = [];
             foreach ($channelsTmp as $channel) {
-                if (empty($channel['parent_id'])) {
+                if (!isset($channel['parent_id'])) {
                     $childs = [];
                     if (isset($channelsGroupedTmp[$channel['id']]['childs'])) {
                         $childs = $channelsGroupedTmp[$channel['id']]['childs'];
@@ -75,7 +75,7 @@ class ChannelMultiSelectDiscordType extends AbstractDiscordType
     {
         $guildChannels = $this->getGuildChannels();
         foreach ($newValue as $botID => $channelIDs) {
-            if (empty($channelIDs)) {
+            if (!\is_array($channelIDs) || $channelIDs === []) {
                 continue;
             }
 

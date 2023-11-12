@@ -15,7 +15,7 @@ use wcf\data\AbstractDatabaseObjectAction;
  * @method  DiscordWebhookEditor[] getObjects()
  * @method  DiscordWebhookEditor   getSingleObject()
  */
-class DiscordWebhookAction extends AbstractDatabaseObjectAction
+final class DiscordWebhookAction extends AbstractDatabaseObjectAction
 {
     /**
      * @inheritDoc
