@@ -5,12 +5,12 @@ namespace wcf\system\discord;
 use Exception;
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Exception\BadResponseException;
-use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\RequestOptions;
 use Laminas\Diactoros\Uri;
 use Psr\Http\Message\ResponseInterface;
 use SensitiveParameter;
+use Throwable;
 use wcf\data\discord\bot\DiscordBot;
 use wcf\system\io\HttpFactory;
 use wcf\util\JSON;
@@ -3373,7 +3373,7 @@ class DiscordApi
                 'botToken' => $this->botToken,
                 'botType' => $this->botType,
             ];
-        } catch (GuzzleException $e) {
+        } catch (Throwable $e) {
             if (\ENABLE_DEBUG_MODE) {
                 \wcf\functions\exception\logThrowable($e);
             }
