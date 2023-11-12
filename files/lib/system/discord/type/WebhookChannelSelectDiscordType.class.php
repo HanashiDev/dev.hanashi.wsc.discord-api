@@ -9,15 +9,15 @@ use wcf\util\FileUtil;
 
 class WebhookChannelSelectDiscordType extends ChannelSelectDiscordType
 {
-    public function validate($newValue, $maxChannels = null)
+    public function validate($newValue, ?int $maxChannels = null)
     {
-        if (empty($newValue)) {
+        if (!\is_array($newValue) || $newValue === []) {
             return;
         }
         if (!\is_array($newValue)) {
             throw new UserInputException($this->optionName);
         }
-        if (!empty($maxChannels) && \count($newValue) > $maxChannels) {
+        if ($maxChannels !== null && \count($newValue) > $maxChannels) {
             throw new UserInputException($this->optionName, 'discordMaxChannels');
         }
 
@@ -37,7 +37,8 @@ class WebhookChannelSelectDiscordType extends ChannelSelectDiscordType
         $webhookChannelIDs = [];
         foreach ($discordWebhookList as $discordWebhook) {
             if (
-                empty($webhookChannelIDs[$discordWebhook->botID])
+                !isset($webhookChannelIDs[$discordWebhook->botID])
+                || !\is_array($webhookChannelIDs[$discordWebhook->botID])
                 || !\in_array($discordWebhook->channelID, $webhookChannelIDs[$discordWebhook->botID])
             ) {
                 $webhookChannelIDs[$discordWebhook->botID][] = $discordWebhook->channelID;
@@ -46,10 +47,6 @@ class WebhookChannelSelectDiscordType extends ChannelSelectDiscordType
 
         $guildChannels = $this->getGuildChannels();
         foreach ($newValue as $botID => $channelID) {
-            if (empty($channelID)) {
-                continue;
-            }
-
             if (!isset($guildChannels[$botID])) {
                 throw new UserInputException($this->optionName);
             }

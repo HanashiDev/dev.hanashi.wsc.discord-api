@@ -11,7 +11,7 @@ class WebhookChannelMultiSelectDiscordType extends ChannelMultiSelectDiscordType
 {
     public function validate($newValue)
     {
-        if (empty($newValue)) {
+        if (!\is_array($newValue) || $newValue === []) {
             return;
         }
 
@@ -36,7 +36,8 @@ class WebhookChannelMultiSelectDiscordType extends ChannelMultiSelectDiscordType
         $webhookChannelIDs = [];
         foreach ($discordWebhookList as $discordWebhook) {
             if (
-                empty($webhookChannelIDs[$discordWebhook->botID])
+                !isset($webhookChannelIDs[$discordWebhook->botID])
+                || !\is_array($webhookChannelIDs[$discordWebhook->botID])
                 || !\in_array($discordWebhook->channelID, $webhookChannelIDs[$discordWebhook->botID])
             ) {
                 $webhookChannelIDs[$discordWebhook->botID][] = $discordWebhook->channelID;
@@ -45,7 +46,7 @@ class WebhookChannelMultiSelectDiscordType extends ChannelMultiSelectDiscordType
 
         $guildChannels = $this->getGuildChannels();
         foreach ($newValue as $botID => $channelIDs) {
-            if (empty($channelIDs)) {
+            if (!\is_array($channelIDs) || $channelIDs === []) {
                 continue;
             }
 

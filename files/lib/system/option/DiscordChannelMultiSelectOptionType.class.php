@@ -56,7 +56,7 @@ class DiscordChannelMultiSelectOptionType extends AbstractOptionType
     private function getChannelTypes(Option $option): array
     {
         $channelTypes = $option->channeltypes;
-        if (empty($channelTypes)) {
+        if ($channelTypes === null || $channelTypes === '') {
             return [];
         }
 

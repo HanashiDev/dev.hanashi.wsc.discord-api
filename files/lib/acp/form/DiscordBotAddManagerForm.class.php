@@ -134,7 +134,7 @@ class DiscordBotAddManagerForm extends AbstractFormBuilderForm
 
                             $discord = new DiscordApi(0, $botToken);
                             $bot = $discord->getCurrentUser();
-                            if (empty($bot['body']['id'])) {
+                            if (!isset($bot['body']['id'])) {
                                 $formField->addValidationError(new FormFieldValidationError(
                                     'invalidBotToken',
                                     'wcf.acp.discordBotAddManager.botToken.invalid'
@@ -195,7 +195,7 @@ class DiscordBotAddManagerForm extends AbstractFormBuilderForm
                                     $requestData = $this->form->getRequestData();
                                     $discord = new DiscordApi($guildID, $requestData['botToken']);
                                     $guild = $discord->getGuild();
-                                    if (empty($guild['body']['id'])) {
+                                    if (!isset($guild['body']['id'])) {
                                         $formField->addValidationError(new FormFieldValidationError(
                                             'invalidGuild',
                                             'wcf.acp.discordBotAddManager.guildID.invalid'

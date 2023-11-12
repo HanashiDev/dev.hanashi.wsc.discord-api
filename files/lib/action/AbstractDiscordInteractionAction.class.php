@@ -23,7 +23,7 @@ abstract class AbstractDiscordInteractionAction extends AbstractAction implement
         try {
             $serverRequest = ServerRequest::fromGlobals();
             $body = (string)$serverRequest->getBody();
-            if (empty($body)) {
+            if ($body === '') {
                 throw new BadMethodCallException('body is empty');
             }
             $data = [];
@@ -34,7 +34,7 @@ abstract class AbstractDiscordInteractionAction extends AbstractAction implement
             }
 
             $publicKeys = $this->getPublicKeys();
-            if (empty($publicKeys)) {
+            if ($publicKeys === []) {
                 throw new UnexpectedValueException('public key is empty');
             }
 
@@ -49,7 +49,7 @@ abstract class AbstractDiscordInteractionAction extends AbstractAction implement
                 throw new OutOfBoundsException('invalid request signature');
             }
 
-            if (empty($data['type'])) {
+            if (!isset($data['type'])) {
                 throw new BadMethodCallException('type is empty');
             }
 

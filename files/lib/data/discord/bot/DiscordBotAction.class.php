@@ -56,10 +56,10 @@ class DiscordBotAction extends AbstractDatabaseObjectAction
      */
     public function update()
     {
-        if (isset($this->parameters['data']['botToken']) && empty($this->parameters['data']['botToken'])) {
+        if (isset($this->parameters['data']['botToken']) && $this->parameters['data']['botToken'] === '') {
             unset($this->parameters['data']['botToken']);
         }
-        if (isset($this->parameters['data']['clientSecret']) && empty($this->parameters['data']['clientSecret'])) {
+        if (isset($this->parameters['data']['clientSecret']) && $this->parameters['data']['clientSecret'] === '') {
             unset($this->parameters['data']['clientSecret']);
         }
 
@@ -67,7 +67,7 @@ class DiscordBotAction extends AbstractDatabaseObjectAction
 
         foreach ($this->getObjects() as $object) {
             if (isset($this->parameters['webhookIcon']) && \is_array($this->parameters['webhookIcon'])) {
-                if (empty($this->parameters['webhookIcon'])) {
+                if ($this->parameters['webhookIcon'] === '') {
                     $filename = \sprintf('%simages/discord_webhook/%s.png', WCF_DIR, $object->botID);
                     if (\file_exists($filename)) {
                         \unlink($filename);
@@ -120,7 +120,7 @@ class DiscordBotAction extends AbstractDatabaseObjectAction
      */
     public function validateGetBotToken()
     {
-        if (\is_array($this->permissionsGetBotToken) && !empty($this->permissionsGetBotToken)) {
+        if (\is_array($this->permissionsGetBotToken) && $this->permissionsGetBotToken !== []) {
             WCF::getSession()->checkPermissions($this->permissionsGetBotToken);
         } else {
             throw new PermissionDeniedException();
@@ -134,7 +134,7 @@ class DiscordBotAction extends AbstractDatabaseObjectAction
      */
     public function getBotToken()
     {
-        if (empty($this->parameters['data']['botID'])) {
+        if (!isset($this->parameters['data']['botID'])) {
             throw new AJAXException('invalid bot id');
         }
         $botID = $this->parameters['data']['botID'];

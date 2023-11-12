@@ -24,7 +24,12 @@ class DiscordGuildChannelCacheBuilder extends AbstractCacheBuilder
      */
     public function rebuild(array $parameters)
     {
-        if (empty($parameters['guildID']) || empty($parameters['botToken'])) {
+        if (
+            !isset($parameters['guildID'])
+            || !isset($parameters['botToken'])
+            || $parameters['guildID'] === ''
+            || $parameters['botToken'] === ''
+        ) {
             return [];
         }
 

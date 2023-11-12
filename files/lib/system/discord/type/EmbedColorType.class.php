@@ -26,7 +26,7 @@ class EmbedColorType extends AbstractDiscordType
      */
     public function validate($newValue)
     {
-        if (!empty($newValue)) {
+        if ($newValue !== '') {
             $regex = new Regex('rgba\(\d{1,3}, \d{1,3}, \d{1,3}, (1|1\.00?|0|0?\.[0-9]{1,2})\)');
 
             if (!$regex->match($newValue)) {

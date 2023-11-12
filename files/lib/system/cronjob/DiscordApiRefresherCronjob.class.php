@@ -47,7 +47,7 @@ class DiscordApiRefresherCronjob extends AbstractCronjob
             }
 
             $webhookName = $discordWebhook->webhookName;
-            if (!empty($webhook['body']['name'])) {
+            if (isset($webhook['body']['name']) && $webhook['body']['name'] !== '') {
                 $webhookName = $webhook['body']['name'];
             }
             $action = new DiscordWebhookAction([$discordWebhook], 'update', [
@@ -74,10 +74,10 @@ class DiscordApiRefresherCronjob extends AbstractCronjob
 
             $guildName = $discordBot->guildName;
             $guildIcon = $discordBot->guildIcon;
-            if (!empty($guild['body']['name'])) {
+            if (isset($guild['body']['name']) && $guild['body']['name'] !== '') {
                 $guildName = $guild['body']['name'];
             }
-            if (!empty($guild['body']['icon'])) {
+            if (isset($guild['body']['icon']) && $guild['body']['icon'] !== '') {
                 $guildIcon = $guild['body']['icon'];
             }
 

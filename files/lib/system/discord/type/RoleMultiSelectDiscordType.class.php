@@ -65,7 +65,7 @@ class RoleMultiSelectDiscordType extends AbstractDiscordType
     {
         $guildRoles = $this->getGuildRoles();
         foreach ($newValue as $botID => $roleIDs) {
-            if (empty($roleIDs)) {
+            if (!\is_array($roleIDs) || $roleIDs === []) {
                 continue;
             }
 

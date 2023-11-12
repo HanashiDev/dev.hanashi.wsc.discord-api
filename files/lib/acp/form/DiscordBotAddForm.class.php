@@ -76,7 +76,7 @@ class DiscordBotAddForm extends AbstractFormBuilderForm
                             $requestData = $this->form->getRequestData();
                             $botToken = $requestData['botToken'];
 
-                            if ($this->formAction == 'edit' && empty($botToken)) {
+                            if ($this->formAction == 'edit' && $botToken === '') {
                                 $botToken = $this->formObject->botToken;
                             }
 
@@ -94,10 +94,10 @@ class DiscordBotAddForm extends AbstractFormBuilderForm
                                 ));
                             }
 
-                            if (!empty($guild['body']['name'])) {
+                            if (isset($guild['body']['name']) && $guild['body']['name'] !== '') {
                                 $this->guildName = $guild['body']['name'];
                             }
-                            if (!empty($guild['body']['icon'])) {
+                            if (isset($guild['body']['icon']) && $guild['body']['icon'] !== '') {
                                 $this->guildIcon = $guild['body']['icon'];
                             }
                         })),

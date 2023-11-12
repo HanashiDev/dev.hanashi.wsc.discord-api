@@ -37,7 +37,7 @@ class ChannelSelectDiscordType extends AbstractDiscordType
 
             $channelsGroupedTmp = [];
             foreach ($channelsTmp as $channel) {
-                if (empty($channel['parent_id'])) {
+                if (!isset($channel['parent_id'])) {
                     $childs = [];
                     if (isset($channelsGroupedTmp[$channel['id']]['childs'])) {
                         $childs = $channelsGroupedTmp[$channel['id']]['childs'];
@@ -73,20 +73,16 @@ class ChannelSelectDiscordType extends AbstractDiscordType
         return WCF::getTPL()->fetch('discordChannelSelectOptionType');
     }
 
-    public function validate($newValue, $maxChannels = null)
+    public function validate($newValue, ?int $maxChannels = null)
     {
         if (!\is_array($newValue)) {
             throw new UserInputException($this->optionName);
         }
-        if (!empty($maxChannels) && \count($newValue) > $maxChannels) {
+        if ($maxChannels !== null && \count($newValue) > $maxChannels) {
             throw new UserInputException($this->optionName, 'discordMaxChannels');
         }
         $guildChannels = $this->getGuildChannels();
         foreach ($newValue as $botID => $channelID) {
-            if (empty($channelID)) {
-                continue;
-            }
-
             if (!isset($guildChannels[$botID])) {
                 throw new UserInputException($this->optionName);
             }
