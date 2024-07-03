@@ -2,6 +2,7 @@
 
 namespace wcf\system\discord\type;
 
+use Throwable;
 use wcf\data\discord\bot\DiscordBotList;
 use wcf\system\exception\UserInputException;
 use wcf\system\WCF;
@@ -27,11 +28,11 @@ class RoleMultiSelectDiscordType extends AbstractDiscordType
         $roles = [];
         $guildRoles = $this->getGuildRoles();
         foreach ($this->getDiscordBotList() as $discordBot) {
-            $rolesTmp = [];
-            if (isset($guildRoles[$discordBot->botID])) {
-                $rolesTmp = $guildRoles[$discordBot->botID];
+            if (!isset($guildRoles[$discordBot->botID]['body'])) {
+                continue;
             }
-            $rolesTmp = $rolesTmp['body'];
+
+            $rolesTmp = $guildRoles[$discordBot->botID]['body'];
             if (!\is_array($rolesTmp)) {
                 $rolesTmp = [];
             }
@@ -44,10 +45,17 @@ class RoleMultiSelectDiscordType extends AbstractDiscordType
             ];
         }
 
+        $realValue = [];
+        try {
+            $realValue = \unserialize($value);
+        } catch (Throwable $e) {
+            // do nothing
+        }
+
         WCF::getTPL()->assign([
             'bots' => $roles,
             'optionName' => $this->optionName,
-            'value' => \unserialize($value),
+            'value' => $realValue,
         ]);
 
         return WCF::getTPL()->fetch('discordRoleMultiSelect');
