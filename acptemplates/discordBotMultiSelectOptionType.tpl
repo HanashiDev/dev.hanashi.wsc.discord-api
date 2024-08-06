@@ -17,7 +17,7 @@
 			{jsphrase name='wcf.global.filter.visibility.highlightActive'}
 			{jsphrase name='wcf.global.filter.visibility.showAll'}
 			
-			new UiItemListFilter('{$optionName|encodeJS}');
+			new UiItemListFilter('{unsafe:$optionName|encodeJS}');
 		});
 	</script>
 {else}

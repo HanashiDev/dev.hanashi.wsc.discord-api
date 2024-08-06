@@ -24,7 +24,7 @@
 				</div>
 				<script data-relocate="true">
 					require(['WoltLabSuite/Core/Ui/ItemList/Filter'], function(UiItemListFilter) {
-						new UiItemListFilter('{$optionName|encodeJS}_{$bot['botID']|encodeJS}');
+						new UiItemListFilter('{unsafe:$optionName|encodeJS}_{unsafe:$bot['botID']|encodeJS}');
 					});
 				</script>
 			{/foreach}
@@ -58,7 +58,7 @@
 			{jsphrase name='wcf.global.filter.visibility.highlightActive'}
 			{jsphrase name='wcf.global.filter.visibility.showAll'}
 			
-			new UiItemListFilter('{$optionName|encodeJS}');
+			new UiItemListFilter('{unsafe:$optionName|encodeJS}');
 		});
 	</script>
 {else}
