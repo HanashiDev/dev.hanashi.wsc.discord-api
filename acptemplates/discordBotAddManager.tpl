@@ -60,7 +60,7 @@
 	{/if}
 </div>
 {if $step != 6 && $step != 0}
-	{@$form->getHtml()}
+	{unsafe:$form->getHtml()}
 {/if}
 {if $step == 0}
 	<div class="formSubmit">

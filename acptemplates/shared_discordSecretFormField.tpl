@@ -1,6 +1,6 @@
 <input type="password" {*
-	*}id="{@$field->getPrefixedId()}" {*
-	*}name="{@$field->getPrefixedId()}" {*
+	*}id="{unsafe:$field->getPrefixedId()}" {*
+	*}name="{unsafe:$field->getPrefixedId()}" {*
 	*}value="{$field->getValue()}"{*
 	*}class="long"{*
 	*}{if $field->isAutofocused()} autofocus{/if}{*

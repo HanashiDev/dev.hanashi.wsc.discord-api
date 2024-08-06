@@ -2,7 +2,7 @@
 	<ul class="scrollableCheckboxList" id="{$optionName}" style="height: 200px;">
 		{foreach from=$discordBotList item=discordBot}
 			<li>
-				<label><input type="checkbox" name="values[{$optionName}][]" value="{@$discordBot->botID}"{if $discordBot->botID|in_array:$value} checked{/if}> {$discordBot->botName} ({lang}wcf.acp.discordBotList.server{/lang}: {$discordBot->guildName})</label>
+				<label><input type="checkbox" name="values[{$optionName}][]" value="{unsafe:$discordBot->botID}"{if $discordBot->botID|in_array:$value} checked{/if}> {$discordBot->botName} ({lang}wcf.acp.discordBotList.server{/lang}: {$discordBot->guildName})</label>
 			</li>
 		{/foreach}
 	</ul>
