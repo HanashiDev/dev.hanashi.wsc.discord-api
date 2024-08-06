@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<package xmlns="http://www.woltlab.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.woltlab.com http://www.woltlab.com/XSD/5.4/package.xsd" name="dev.hanashi.wsc.discord-api">
+<package xmlns="http://www.woltlab.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.woltlab.com http://www.woltlab.com/XSD/6.0/package.xsd" name="dev.hanashi.wsc.discord-api">
 	<packageinformation>
 		<!-- dev.hanashi.wsc.discord-api -->
 		<packagename>Discord API</packagename>
 		<packagename language="de">Discord-API</packagename>
 		<packagedescription>API to cummincate with Discord.</packagedescription>
 		<packagedescription language="de">API um mit Discord zu kommunizieren.</packagedescription>
-		<version>2.6.4</version>
-		<date>2024-07-03</date>
+		<version>2.7.0</version>
+		<date>2024-08-06</date>
 		<license>https://creativecommons.org/publicdomain/zero/1.0/deed.en</license>
 	</packageinformation>
 	<authorinformation>
@@ -15,7 +15,7 @@
 		<authorurl>https://hanashi.dev/</authorurl>
 	</authorinformation>
 	<requiredpackages>
-		<requiredpackage minversion="6.0.2">com.woltlab.wcf</requiredpackage>
+		<requiredpackage minversion="6.1.0 Alpha 1">com.woltlab.wcf</requiredpackage>
 	</requiredpackages>
 	<excludedpackages>
 		<excludedpackage version="7.0.0 Alpha 1">com.woltlab.wcf</excludedpackage>
@@ -31,13 +31,8 @@
 		<instruction type="option"/>
 		<instruction type="database">acp/database/install_dev.hanashi.wsc.discord-api.php</instruction>
 	</instructions>
-	<instructions type="update" fromversion="2.6.3">
-		<void/>
-	</instructions>
-	<instructions type="update" fromversion="2.5.*">
+	<instructions type="update" fromversion="2.6.*">
 		<instruction type="file"/>
-		<instruction type="acpTemplate"/>
-		<instruction type="eventListener"/>
 		<instruction type="acpMenu"/>
 	</instructions>
 </package>
