@@ -58,7 +58,7 @@
 							{$webhook->getDiscordBot()->guildName}
 						</td>
 						<td class="columnDate">
-							{unsafe:$webhook->webhookTime|time}
+							{time time=$webhook->webhookTime}
 						</td>
 
 						{event name='columnsItem'}

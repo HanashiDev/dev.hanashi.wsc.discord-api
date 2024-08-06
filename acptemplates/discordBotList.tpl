@@ -58,7 +58,7 @@
 							{$discordBot->guildName}
 						</td>
 						<td class="columnDate">
-							{unsafe:$discordBot->botTime|time}
+							{time time=$discordBot->botTime}
 						</td>
 
 						{event name='columnsItem'}
