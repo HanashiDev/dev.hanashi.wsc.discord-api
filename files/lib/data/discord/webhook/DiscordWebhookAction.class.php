@@ -2,6 +2,7 @@
 
 namespace wcf\data\discord\webhook;
 
+use Override;
 use wcf\data\AbstractDatabaseObjectAction;
 
 /**
@@ -27,9 +28,7 @@ final class DiscordWebhookAction extends AbstractDatabaseObjectAction
      */
     protected $objects = [];
 
-    /**
-     * @inheritDoc
-     */
+    #[Override]
     public function delete()
     {
         foreach ($this->objects as $object) {

@@ -2,6 +2,7 @@
 
 namespace wcf\data\discord\bot;
 
+use Override;
 use wcf\data\AbstractDatabaseObjectAction;
 use wcf\system\exception\AJAXException;
 use wcf\system\exception\PermissionDeniedException;
@@ -33,9 +34,7 @@ final class DiscordBotAction extends AbstractDatabaseObjectAction
      */
     protected $permissionsGetBotToken = ['admin.discord.canManageConnection'];
 
-    /**
-     * @inheritDoc
-     */
+    #[Override]
     public function create()
     {
         if (isset($this->parameters['data']['useApplicationCommands'])) {
@@ -51,9 +50,7 @@ final class DiscordBotAction extends AbstractDatabaseObjectAction
         return $discordBot;
     }
 
-    /**
-     * @inheritDoc
-     */
+    #[Override]
     public function update()
     {
         if (isset($this->parameters['data']['botToken']) && $this->parameters['data']['botToken'] === '') {

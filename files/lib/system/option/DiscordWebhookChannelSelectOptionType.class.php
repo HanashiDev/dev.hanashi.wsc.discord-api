@@ -2,6 +2,7 @@
 
 namespace wcf\system\option;
 
+use Override;
 use wcf\data\option\Option;
 use wcf\system\discord\type\WebhookChannelSelectDiscordType;
 
@@ -15,9 +16,7 @@ use wcf\system\discord\type\WebhookChannelSelectDiscordType;
  */
 class DiscordWebhookChannelSelectOptionType extends DiscordChannelSelectOptionType
 {
-    /**
-     * @inheritDoc
-     */
+    #[Override]
     public function validate(Option $option, $newValue)
     {
         $channelMultiSelectType = new WebhookChannelSelectDiscordType($option->optionName);

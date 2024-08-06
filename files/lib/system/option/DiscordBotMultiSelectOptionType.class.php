@@ -2,6 +2,7 @@
 
 namespace wcf\system\option;
 
+use Override;
 use wcf\data\option\Option;
 use wcf\system\discord\type\BotMultiSelectType;
 
@@ -17,9 +18,7 @@ class DiscordBotMultiSelectOptionType extends AbstractOptionType
 {
     protected $botMultiSelectType = [];
 
-    /**
-     * @inheritDoc
-     */
+    #[Override]
     public function getFormElement(Option $option, $value)
     {
         if (!isset($this->botMultiSelectType[$option->optionName])) {
@@ -29,9 +28,7 @@ class DiscordBotMultiSelectOptionType extends AbstractOptionType
         return $this->botMultiSelectType[$option->optionName]->getFormElement($value);
     }
 
-    /**
-     * @inheritDoc
-     */
+    #[Override]
     public function validate(Option $option, $newValue)
     {
         if (!isset($this->botMultiSelectType[$option->optionName])) {
@@ -40,9 +37,7 @@ class DiscordBotMultiSelectOptionType extends AbstractOptionType
         $this->botMultiSelectType[$option->optionName]->validate($newValue);
     }
 
-    /**
-     * @inheritDoc
-     */
+    #[Override]
     public function getData(Option $option, $newValue)
     {
         if (!isset($this->botMultiSelectType[$option->optionName])) {

@@ -2,6 +2,7 @@
 
 namespace wcf\acp\form;
 
+use Override;
 use wcf\data\discord\bot\DiscordBotAction;
 use wcf\data\package\PackageCache;
 use wcf\form\AbstractForm;
@@ -73,9 +74,7 @@ class DiscordBotAddManagerForm extends AbstractFormBuilderForm
      */
     protected $guilds = [];
 
-    /**
-     * @inheritDoc
-     */
+    #[Override]
     public function readParameters()
     {
         parent::readParameters();
@@ -85,9 +84,7 @@ class DiscordBotAddManagerForm extends AbstractFormBuilderForm
         }
     }
 
-    /**
-     * @inheritDoc
-     */
+    #[Override]
     protected function createForm()
     {
         parent::createForm();
@@ -296,17 +293,13 @@ class DiscordBotAddManagerForm extends AbstractFormBuilderForm
         ]);
     }
 
-    /**
-     * @inheritDoc
-     */
+    #[Override]
     protected function setFormAction()
     {
         $this->form->action(LinkHandler::getInstance()->getControllerLink(static::class, ['step' => $this->step]));
     }
 
-    /**
-     * @inheritDoc
-     */
+    #[Override]
     public function save()
     {
         $this->step++;
@@ -322,9 +315,7 @@ class DiscordBotAddManagerForm extends AbstractFormBuilderForm
         }
     }
 
-    /**
-     * @inheritDoc
-     */
+    #[Override]
     public function assignVariables()
     {
         parent::assignVariables();

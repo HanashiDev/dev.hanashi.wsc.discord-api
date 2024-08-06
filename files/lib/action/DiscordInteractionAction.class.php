@@ -2,6 +2,7 @@
 
 namespace wcf\action;
 
+use Override;
 use wcf\system\discord\event\ApplicationCommandAutocompleteReceived;
 use wcf\system\discord\event\ApplicationCommandReceived;
 use wcf\system\discord\event\MessageCommandReceived;
@@ -10,6 +11,7 @@ use wcf\system\event\EventHandler;
 
 final class DiscordInteractionAction extends AbstractDiscordInteractionAction
 {
+    #[Override]
     public function handleApplicationCommand(array $data)
     {
         EventHandler::getInstance()->fire(new ApplicationCommandReceived($data));
@@ -20,6 +22,7 @@ final class DiscordInteractionAction extends AbstractDiscordInteractionAction
         EventHandler::getInstance()->fireAction($this, 'applicationCommand', $data);
     }
 
+    #[Override]
     public function handleMessageCommand(array $data)
     {
         EventHandler::getInstance()->fire(new MessageCommandReceived($data));
@@ -30,6 +33,7 @@ final class DiscordInteractionAction extends AbstractDiscordInteractionAction
         EventHandler::getInstance()->fireAction($this, 'messageCommand', $data);
     }
 
+    #[Override]
     public function handleApplicationCommandAutocomplete(array $data)
     {
         EventHandler::getInstance()->fire(new ApplicationCommandAutocompleteReceived($data));
@@ -40,6 +44,7 @@ final class DiscordInteractionAction extends AbstractDiscordInteractionAction
         EventHandler::getInstance()->fireAction($this, 'applicationCommandAutocomplete', $data);
     }
 
+    #[Override]
     public function handleModalCommand(array $data)
     {
         EventHandler::getInstance()->fire(new ModalCommandReceived($data));

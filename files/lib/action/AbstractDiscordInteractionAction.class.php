@@ -6,6 +6,7 @@ use BadMethodCallException;
 use Exception;
 use GuzzleHttp\Psr7\ServerRequest;
 use OutOfBoundsException;
+use Override;
 use UnexpectedValueException;
 use wcf\data\discord\bot\DiscordBotList;
 use wcf\system\discord\DiscordApi;
@@ -13,9 +14,7 @@ use wcf\util\JSON;
 
 abstract class AbstractDiscordInteractionAction extends AbstractAction implements IDiscordInteractionAction
 {
-    /**
-     * @inheritDoc
-     */
+    #[Override]
     public function execute()
     {
         parent::execute();
@@ -99,9 +98,7 @@ abstract class AbstractDiscordInteractionAction extends AbstractAction implement
         ]);
     }
 
-    /**
-     * @inheritDoc
-     */
+    #[Override]
     public function getPublicKeys(): array
     {
         $publicKeys = [];

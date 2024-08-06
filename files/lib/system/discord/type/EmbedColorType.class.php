@@ -8,9 +8,6 @@ use wcf\system\WCF;
 
 class EmbedColorType extends AbstractDiscordType
 {
-    /**
-     * @inheritDoc
-     */
     public function getFormElement($value)
     {
         $value = $this->generateRgbaByDec($value);
@@ -21,9 +18,6 @@ class EmbedColorType extends AbstractDiscordType
         ]);
     }
 
-    /**
-     * @inheritDoc
-     */
     public function validate($newValue)
     {
         if ($newValue !== '') {

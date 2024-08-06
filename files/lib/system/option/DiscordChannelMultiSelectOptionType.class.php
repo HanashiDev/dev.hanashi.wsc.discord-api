@@ -2,6 +2,7 @@
 
 namespace wcf\system\option;
 
+use Override;
 use wcf\data\option\Option;
 use wcf\system\discord\type\ChannelMultiSelectDiscordType;
 
@@ -17,9 +18,7 @@ class DiscordChannelMultiSelectOptionType extends AbstractOptionType
 {
     protected $channelMultiSelectType = [];
 
-    /**
-     * @inheritDoc
-     */
+    #[Override]
     public function getFormElement(Option $option, $value)
     {
         if (!isset($this->channelMultiSelectType[$option->optionName])) {
@@ -30,9 +29,7 @@ class DiscordChannelMultiSelectOptionType extends AbstractOptionType
         return $this->channelMultiSelectType[$option->optionName]->getFormElement($value, $channelTypes);
     }
 
-    /**
-     * @inheritDoc
-     */
+    #[Override]
     public function validate(Option $option, $newValue)
     {
         if (!isset($this->channelMultiSelectType[$option->optionName])) {
@@ -41,9 +38,7 @@ class DiscordChannelMultiSelectOptionType extends AbstractOptionType
         $this->channelMultiSelectType[$option->optionName]->validate($newValue);
     }
 
-    /**
-     * @inheritDoc
-     */
+    #[Override]
     public function getData(Option $option, $newValue)
     {
         if (!isset($this->channelMultiSelectType[$option->optionName])) {
