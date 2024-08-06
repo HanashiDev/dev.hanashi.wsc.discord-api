@@ -33,6 +33,7 @@
 	</instructions>
 	<instructions type="update" fromversion="2.6.*">
 		<instruction type="file"/>
+		<instruction type="acpTemplate"/>
 		<instruction type="acpMenu"/>
 	</instructions>
 </package>
