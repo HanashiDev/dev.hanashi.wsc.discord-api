@@ -3,6 +3,7 @@
 use wcf\acp\form\DiscordBotAddManagerForm;
 use wcf\acp\page\DiscordBotListPage;
 use wcf\acp\page\DiscordWebhookListPage;
+use wcf\event\acp\dashboard\box\PHPExtensionCollecting;
 use wcf\event\acp\menu\item\ItemCollecting;
 use wcf\system\event\EventHandler;
 use wcf\system\menu\acp\AcpMenuItem;
@@ -60,4 +61,11 @@ return static function (): void {
             );
         }
     });
+
+    EventHandler::getInstance()->register(
+        PHPExtensionCollecting::class,
+        static function (PHPExtensionCollecting $event) {
+            $event->register('sodium');
+        }
+    );
 };
