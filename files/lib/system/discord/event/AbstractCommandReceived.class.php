@@ -2,9 +2,9 @@
 
 namespace wcf\system\discord\event;
 
-use wcf\system\event\IEvent;
+use wcf\event\IPsr14Event;
 
-abstract class AbstractCommandReceived implements IEvent
+abstract class AbstractCommandReceived implements IPsr14Event
 {
     /**
      * @var array
