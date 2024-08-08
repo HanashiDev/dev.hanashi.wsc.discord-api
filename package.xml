@@ -23,6 +23,7 @@
 	<instructions type="install">
 		<instruction type="file"/>
 		<instruction type="acpTemplate"/>
+		<instruction type="template"/>
 		<instruction type="eventListener"/>
 		<instruction type="language"/>
 		<instruction type="acpMenu"/>
@@ -34,6 +35,7 @@
 	<instructions type="update" fromversion="2.6.*">
 		<instruction type="file"/>
 		<instruction type="acpTemplate"/>
+		<instruction type="template"/>
 		<instruction type="acpMenu"/>
 		<instruction type="fileDelete"/>
 		<instruction type="acpTemplateDelete"/>
