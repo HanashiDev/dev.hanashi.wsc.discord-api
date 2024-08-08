@@ -40,7 +40,7 @@ final class DiscordChannelMultiSelectFormField extends AbstractFormField impleme
      */
     protected $value = [];
 
-    private $allowedTypes = [0, 5];
+    private $allowedTypes = [];
 
     #[Override]
     public function hasSaveValue()
