@@ -43,7 +43,11 @@
 							{$webhook->webhookID}
 						</td>
 						<td class="webhookID">
-							{$webhook->channelID}
+							{if $channels[$webhook->botID][$webhook->channelID]|isset}
+								{$channels[$webhook->botID][$webhook->channelID]['name']}<br>({$webhook->channelID})
+							{else}
+								{$webhook->channelID}
+							{/if}
 						</td>
 						<td class="columnText">
 							{$webhook->webhookTitle}

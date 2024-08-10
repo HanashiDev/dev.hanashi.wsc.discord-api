@@ -2,8 +2,11 @@
 
 namespace wcf\acp\page;
 
+use Override;
 use wcf\data\discord\webhook\DiscordWebhookList;
 use wcf\page\SortablePage;
+use wcf\system\cache\builder\DiscordGuildChannelsCacheBuilder;
+use wcf\system\WCF;
 
 /**
  * Übersicht der erstellten Discord-Webhooks
@@ -44,4 +47,24 @@ class DiscordWebhookListPage extends SortablePage
      * @inheritDoc
      */
     public $validSortFields = ['channelID', 'botID', 'webhookID', 'webhookName', 'webhookTitle', 'webhookTime'];
+
+    protected array $channels = [];
+
+    #[Override]
+    public function readData()
+    {
+        parent::readData();
+
+        $this->channels = DiscordGuildChannelsCacheBuilder::getInstance()->getData();
+    }
+
+    #[Override]
+    public function assignVariables()
+    {
+        parent::assignVariables();
+
+        WCF::getTPL()->assign([
+            'channels' => $this->channels,
+        ]);
+    }
 }

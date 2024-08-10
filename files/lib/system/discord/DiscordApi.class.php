@@ -1010,10 +1010,10 @@ final class DiscordApi
      * @param   integer $channelID  Channel-ID
      * @param   integer $messageID  ID der Nachricht
      * @param   integer $emoji      ID des Emoji oder Unicode des Emoji
-     * @param   integer $params     optionale Query-Parameters
+     * @param   array $params     optionale Query-Parameters
      * @return  array
      */
-    public function getReactions($channelID, $messageID, $emoji, $params = [])
+    public function getReactions($channelID, $messageID, $emoji, array $params = [])
     {
         $url = \sprintf('%s/channels/%s/messages/%s/reactions/%s', $this->apiUrl, $channelID, $messageID, $emoji);
         if ($params !== []) {
