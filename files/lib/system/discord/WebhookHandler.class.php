@@ -14,11 +14,11 @@ final class WebhookHandler extends SingletonFactory
 {
     public function saveWebhooks(int $botID, array $channelIDs, string $usageBy)
     {
+        /** @var DiscordBot */
         $bot = DiscordBotRuntimeCache::getInstance()->getObject($botID);
         if ($bot === null || $channelIDs === []) {
             return;
         }
-        \assert($bot instanceof DiscordBot);
         $api = $bot->getDiscordApi();
 
         $avatar = null;
