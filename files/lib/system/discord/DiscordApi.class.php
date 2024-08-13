@@ -1010,7 +1010,7 @@ final class DiscordApi
      * @param   integer $channelID  Channel-ID
      * @param   integer $messageID  ID der Nachricht
      * @param   integer $emoji      ID des Emoji oder Unicode des Emoji
-     * @param   integer $params     optionale Query-Parameters
+     * @param   array $params     optionale Query-Parameters
      * @return  array
      */
     public function getReactions($channelID, $messageID, $emoji, $params = [])
@@ -1592,6 +1592,68 @@ final class DiscordApi
         return $this->execute($url, 'DELETE');
     }
 
+    /**
+     * Returns an object containing a list of emoji objects for the given application under the `items` key. Includes a
+     * `user` object for the team member that uploaded the emoji from the app's settings, or for the bot user if
+     * uploaded using the API.
+     */
+    public function listApplicationEmojis(int $applicationID): array
+    {
+        $url = \sprintf('%s/applications/%s/emojis', $this->apiUrl, $applicationID);
+
+        return $this->execute($url);
+    }
+
+    /**
+     * Returns an emoji object for the given application and emoji IDs. Includes the `user` field.
+     */
+    public function getApplicationEmoji(int $applicationID, int $emojiID): array
+    {
+        $url = \sprintf('%s/applications/%s/emojis/%s', $this->apiUrl, $applicationID, $emojiID);
+
+        return $this->execute($url);
+    }
+
+    /**
+     * Create a new emoji for the application. Returns the new emoji object on success.
+     *
+     * Emojis and animated emojis have a maximum file size of 256 KiB. Attempting to upload an emoji larger than this
+     * limit will fail and return 400 Bad Request and an error message, but not a JSON status code.
+     */
+    public function createApplicationEmoji(int $applicationID, string $name, string $image): array
+    {
+        $url = \sprintf('%s/applications/%s/emojis', $applicationID);
+        $params = [
+            'name' => $name,
+            'image' => $image,
+        ];
+
+        return $this->execute($url, 'POST', $params, 'application/json');
+    }
+
+    /**
+     * Modify the given emoji. Returns the updated emoji object on success.
+     */
+    public function modifyApplicationEmoji(int $applicationID, int $emojiID, string $name): array
+    {
+        $url = \sprintf('%s/applications/%s/emojis/%s', $this->apiUrl, $applicationID, $emojiID);
+        $params = [
+            'name' => $name,
+        ];
+
+        return $this->execute($url, 'PATCH', $params, 'application/json');
+    }
+
+    /**
+     * Delete the given emoji. Returns `204 No Content` on success.
+     */
+    public function deleteApplicationEmoji(int $applicationID, int $emojiID): array
+    {
+        $url = \sprintf('%s/applications/%s/emojis/%s', $this->apiUrl, $applicationID, $emojiID);
+
+        return $this->execute($url, 'DELETE');
+    }
+
     /////////////////////////////////////
     // Emoji End
     /////////////////////////////////////
@@ -1624,6 +1686,17 @@ final class DiscordApi
         if ($withCounts) {
             $url .= '?with_counts=1';
         }
+
+        return $this->execute($url);
+    }
+
+    /**
+     * Returns the guild preview object for the given id. If the user is not in the guild, then the guild must be
+     * discoverable.
+     */
+    public function getGuildPreview(): array
+    {
+        $url = \sprintf('%s/guilds/%s/preview', $this->apiUrl, $this->guildID);
 
         return $this->execute($url);
     }
@@ -1710,6 +1783,17 @@ final class DiscordApi
     }
 
     /**
+     * Returns all active threads in the guild, including public and private threads. Threads are ordered by their
+     * `id`, in descending order.
+     */
+    public function listActiveGuildThreads(): array
+    {
+        $url = \sprintf('%s/guilds/%s/threads/active', $this->apiUrl, $this->guildID);
+
+        return $this->execute($url);
+    }
+
+    /**
      * Returns a guild member object for the specified user.
      *
      * @param   integer     $userID     ID des Benutzer
@@ -1734,6 +1818,20 @@ final class DiscordApi
         if ($params !== []) {
             $url .= '?' . \http_build_query($params, '', '&');
         }
+
+        return $this->execute($url);
+    }
+
+    /**
+     * Returns a list of guild member objects whose username or nickname starts with a provided string.
+     */
+    public function searchGuildMembers(string $query, int $limit = 1): array
+    {
+        $url = \sprintf('%s/guilds/%s/members', $this->apiUrl, $this->guildID);
+        $url .= '?' . \http_build_query([
+            'query' => $query,
+            'limit' => $limit,
+        ], '', '&');
 
         return $this->execute($url);
     }
@@ -1785,12 +1883,27 @@ final class DiscordApi
     }
 
     /**
+     * Modifies the current member in a guild. Returns a 200 with the updated member object on success. Fires a Guild
+     * Member Update Gateway event.
+     */
+    public function modifyCurrentMember(?string $nick): array
+    {
+        $url = \sprintf('%s/guilds/%s/members/@me', $this->apiUrl, $this->guildID);
+        $params = [
+            'nick' => $nick,
+        ];
+
+        return $this->execute($url, 'PATCH', $params, 'application/json');
+    }
+
+    /**
      * Modifies the nickname of the current user in a guild.
      * Returns a 200 with the nickname on success.
      * Fires a Guild Member Update Gateway event.
      *
      * @param   string  $nick   Neuer Nickname
      * @return  array
+     * @deprecated use modifyCurrentMember
      */
     public function modifyCurrentUserNick($nick)
     {
@@ -3152,12 +3265,54 @@ final class DiscordApi
      * Returns the bot's OAuth2 application info.
      *
      * @return array
+     * @deprecated since 2.6.5, use getCurrentApplication
      */
     public function getCurrentApplicationInformation()
     {
         $url = \sprintf('%s/oauth2/applications/@me', $this->apiUrl);
 
         return $this->execute($url);
+    }
+
+    /**
+     * Returns the application object associated with the requesting bot user.
+     */
+    public function getCurrentApplication(): array
+    {
+        $url = \sprintf('%s/oauth2/applications/@me', $this->apiUrl);
+
+        return $this->execute($url);
+    }
+
+    /**
+     * Edit properties of the app associated with the requesting bot user. Only properties that are passed will be
+     * updated. Returns the updated application object on success.
+     */
+    public function editCurrentApplication(array $params): array
+    {
+        $url = \sprintf('%s/applications/@me', $this->apiUrl);
+
+        return $this->execute($url, 'PATCH', $params, 'application/json');
+    }
+
+    /**
+     * Returns a list of application role connection metadata objects for the given application.
+     */
+    public function getApplicationRoleConnectionMetadataRecords(int $applicationID): array
+    {
+        $url = \sprintf('%s/applications/%s/role-connections/metadata', $this->apiUrl, $applicationID);
+
+        return $this->execute($url);
+    }
+
+    /**
+     * Updates and returns a list of application role connection metadata objects for the given application.
+     */
+    public function updateApplicationRoleConnectionMetadataRecords($applicationID): array
+    {
+        $url = \sprintf('%s/applications/%s/role-connections/metadata', $this->apiUrl, $applicationID);
+
+        return $this->execute($url, 'PUT');
     }
 
     /////////////////////////////////////
