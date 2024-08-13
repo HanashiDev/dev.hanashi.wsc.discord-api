@@ -32,6 +32,6 @@
 		<instruction type="database">acp/database/install_dev.hanashi.wsc.discord-api.php</instruction>
 	</instructions>
 	<instructions type="update" fromversion="2.6.4">
-		<void/>
+		<instruction type="file"/>
 	</instructions>
 </package>
