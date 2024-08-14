@@ -41,24 +41,13 @@ class DiscordBotAddManagerForm extends AbstractFormBuilderForm
 
     /**
      * current step of bot add manager
-     *
-     * @var int
      */
-    protected $step = 0;
+    protected int $step = 0;
 
     /**
      * cached bot data
-     *
-     * @var array
      */
-    protected $botData = [];
-
-    /**
-     * object of discord api
-     *
-     * @var DiscordApi
-     */
-    protected $discord;
+    protected array $botData = [];
 
     /**
      * temp information
@@ -69,10 +58,8 @@ class DiscordBotAddManagerForm extends AbstractFormBuilderForm
 
     /**
      * list of guilds
-     *
-     * @var array
      */
-    protected $guilds = [];
+    protected array $guilds = [];
 
     #[Override]
     public function readParameters()
@@ -327,7 +314,7 @@ class DiscordBotAddManagerForm extends AbstractFormBuilderForm
         ]);
     }
 
-    private function isDiscordSyncInstalled()
+    private function isDiscordSyncInstalled(): bool
     {
         $package = PackageCache::getInstance()->getPackageByIdentifier('eu.hanashi.discord-sync');
 
