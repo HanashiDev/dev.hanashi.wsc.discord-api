@@ -35,6 +35,11 @@ final class DiscordBotAction extends AbstractDatabaseObjectAction
      */
     protected $permissionsGetBotToken = ['admin.discord.canManageConnection'];
 
+    /**
+     * @inheritDoc
+     */
+    public $className = DiscordBotEditor::class;
+
     #[Override]
     public function create()
     {

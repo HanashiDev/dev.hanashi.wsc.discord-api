@@ -20,4 +20,8 @@ use wcf\data\DatabaseObjectList;
  */
 final class DiscordWebhookList extends DatabaseObjectList
 {
+    /**
+     * @inheritDoc
+     */
+    public $className = DiscordWebhook::class;
 }

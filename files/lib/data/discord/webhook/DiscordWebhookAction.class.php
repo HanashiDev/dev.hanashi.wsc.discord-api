@@ -25,6 +25,11 @@ final class DiscordWebhookAction extends AbstractDatabaseObjectAction
     protected $permissionsDelete = ['admin.discord.canManageWebhooks'];
 
     /**
+     * @inheritDoc
+     */
+    public $className = DiscordWebhookEditor::class;
+
+    /**
      * @var DiscordWebhookEditor
      */
     protected $objects = [];

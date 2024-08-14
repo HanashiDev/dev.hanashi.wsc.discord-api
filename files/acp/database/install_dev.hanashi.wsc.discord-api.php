@@ -1,6 +1,7 @@
 <?php
 
 use wcf\system\database\table\column\BigintDatabaseTableColumn;
+use wcf\system\database\table\column\BlobDatabaseTableColumn;
 use wcf\system\database\table\column\NotNullInt10DatabaseTableColumn;
 use wcf\system\database\table\column\ObjectIdDatabaseTableColumn;
 use wcf\system\database\table\column\TextDatabaseTableColumn;
@@ -87,5 +88,18 @@ return [
         ->indices([
             DatabaseTablePrimaryIndex::create()
                 ->columns(['webhookID']),
+        ]),
+
+    // wcf1_discord_interaction_log
+    DatabaseTable::create('wcf1_discord_interaction_log')
+        ->columns([
+            ObjectIdDatabaseTableColumn::create('logID'),
+            BlobDatabaseTableColumn::create('log')
+                ->notNull(),
+            NotNullInt10DatabaseTableColumn::create('time'),
+        ])
+        ->indices([
+            DatabaseTablePrimaryIndex::create()
+                ->columns(['logID']),
         ]),
 ];
