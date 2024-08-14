@@ -2,6 +2,7 @@
 
 use wcf\system\database\table\column\BigintDatabaseTableColumn;
 use wcf\system\database\table\column\NotNullInt10DatabaseTableColumn;
+use wcf\system\database\table\column\ObjectIdDatabaseTableColumn;
 use wcf\system\database\table\column\TextDatabaseTableColumn;
 use wcf\system\database\table\column\TinyintDatabaseTableColumn;
 use wcf\system\database\table\column\VarcharDatabaseTableColumn;
@@ -29,8 +30,7 @@ return [
     // wcf1_discord_bot
     DatabaseTable::create('wcf1_discord_bot')
         ->columns([
-            NotNullInt10DatabaseTableColumn::create('botID')
-                ->autoIncrement(),
+            ObjectIdDatabaseTableColumn::create('botID'),
             VarcharDatabaseTableColumn::create('botName')
                 ->length(50)
                 ->notNull(),
@@ -54,6 +54,10 @@ return [
             VarcharDatabaseTableColumn::create('publicKey')
                 ->length(100),
             NotNullInt10DatabaseTableColumn::create('botTime'),
+        ])
+        ->indices([
+            DatabaseTablePrimaryIndex::create()
+                ->columns(['botID']),
         ]),
 
     // wcf1_discord_webhook
