@@ -12,7 +12,6 @@ final class DeferredUpdateMessageInteractionCallback extends AbstractInteraction
      */
     protected int $type = DiscordApi::DISCORD_DEFERRED_UPDATE_MESSAGE;
 
-    #[Override]
     public function __construct()
     {
     }

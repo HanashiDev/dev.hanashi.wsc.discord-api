@@ -12,7 +12,6 @@ final class DeferredChannelMessageWithSourceInteractionCallback extends Abstract
      */
     protected int $type = DiscordApi::DISCORD_DEFERRED_CHANNEL_MESSAGE_WITH_SOURCE;
 
-    #[Override]
     public function __construct()
     {
     }

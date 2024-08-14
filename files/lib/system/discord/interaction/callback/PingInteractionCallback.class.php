@@ -12,7 +12,6 @@ final class PingInteractionCallback extends AbstractInteractionCallback
      */
     protected int $type = DiscordApi::DISCORD_PING;
 
-    #[Override]
     public function __construct()
     {
     }

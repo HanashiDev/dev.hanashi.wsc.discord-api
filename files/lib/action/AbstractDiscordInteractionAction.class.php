@@ -15,6 +15,7 @@ use UnexpectedValueException;
 use wcf\data\discord\bot\DiscordBotList;
 use wcf\data\discord\interaction\log\DiscordInteractionLogAction;
 use wcf\system\discord\DiscordApi;
+use wcf\system\discord\interaction\callback\PingInteractionCallback;
 use wcf\system\exception\SystemException;
 use wcf\util\JSON;
 
@@ -104,9 +105,7 @@ abstract class AbstractDiscordInteractionAction implements RequestHandlerInterfa
      */
     private function sendPong(): JsonResponse
     {
-        return new JsonResponse([
-            'type' => DiscordApi::DISCORD_PONG,
-        ]);
+        return new JsonResponse((new PingInteractionCallback())->getInteractionResponse());
     }
 
     #[Override]
