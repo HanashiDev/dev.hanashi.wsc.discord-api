@@ -4,24 +4,25 @@ namespace wcf\action;
 
 use BadMethodCallException;
 use Exception;
-use GuzzleHttp\Psr7\ServerRequest;
+use Laminas\Diactoros\Response\HtmlResponse;
+use Laminas\Diactoros\Response\JsonResponse;
 use OutOfBoundsException;
 use Override;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Server\RequestHandlerInterface;
 use UnexpectedValueException;
 use wcf\data\discord\bot\DiscordBotList;
 use wcf\system\discord\DiscordApi;
 use wcf\util\JSON;
 
-abstract class AbstractDiscordInteractionAction extends AbstractAction implements IDiscordInteractionAction
+abstract class AbstractDiscordInteractionAction implements RequestHandlerInterface, IDiscordInteractionAction
 {
     #[Override]
-    public function execute()
+    public function handle(ServerRequestInterface $request): ResponseInterface
     {
-        parent::execute();
-
         try {
-            $serverRequest = ServerRequest::fromGlobals();
-            $body = (string)$serverRequest->getBody();
+            $body = (string)$request->getBody();
             if ($body === '') {
                 throw new BadMethodCallException('body is empty');
             }
@@ -54,46 +55,39 @@ abstract class AbstractDiscordInteractionAction extends AbstractAction implement
 
             switch ($data['type']) {
                 case DiscordApi::DISCORD_PING:
-                    $this->sendPong();
+                    return $this->sendPong();
                     break;
                 case DiscordApi::DISCORD_APPLICATION_COMMAND:
-                    $this->handleApplicationCommand($data);
+                    return $this->handleApplicationCommand($data);
                     break;
                 case DiscordApi::DISCORD_MESSAGE_COMPONENT:
-                    $this->handleMessageCommand($data);
+                    return $this->handleMessageCommand($data);
                     break;
                 case DiscordApi::DISCORD_APPLICATION_COMMAND_AUTOCOMPLETE:
-                    $this->handleApplicationCommandAutocomplete($data);
+                    return $this->handleApplicationCommandAutocomplete($data);
                     break;
                 case DiscordApi::DISCORD_MODAL_SUBMIT:
-                    $this->handleModalCommand($data);
+                    return $this->handleModalCommand($data);
                     break;
                 default:
                     throw new BadMethodCallException('unknown component');
                     break;
             }
         } catch (BadMethodCallException $e) {
-            @\header('HTTP/1.1 400 Bad Request');
-            echo $e->getMessage();
+            return new HtmlResponse($e->getMessage(), 400);
         } catch (OutOfBoundsException $e) {
-            @\header('HTTP/1.1 401 Unauthorized');
-            echo $e->getMessage();
+            return new HtmlResponse($e->getMessage(), 401);
         } catch (UnexpectedValueException $e) {
-            @\header('HTTP/1.1 501 Not Implemented');
-            echo $e->getMessage();
+            return new HtmlResponse($e->getMessage(), 501);
         }
-
-        $this->executed();
     }
 
     /**
      * sendet pong zurück an Discord
-     *
-     * @return void
      */
-    private function sendPong()
+    private function sendPong(): JsonResponse
     {
-        echo JSON::encode([
+        return new JsonResponse([
             'type' => DiscordApi::DISCORD_PONG,
         ]);
     }

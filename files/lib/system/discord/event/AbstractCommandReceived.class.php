@@ -6,10 +6,9 @@ use wcf\event\IPsr14Event;
 
 abstract class AbstractCommandReceived implements IPsr14Event
 {
-    /**
-     * @var array
-     */
-    private $data;
+    private array $data;
+
+    private array $response = [];
 
     public function __construct(array $data)
     {
@@ -19,5 +18,15 @@ abstract class AbstractCommandReceived implements IPsr14Event
     public function getData(): array
     {
         return $this->data;
+    }
+
+    public function setResponse(array $response)
+    {
+        return $this->response = $response;
+    }
+
+    public function getResponse(): array
+    {
+        return $this->response;
     }
 }

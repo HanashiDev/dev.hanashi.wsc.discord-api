@@ -2,6 +2,8 @@
 
 namespace wcf\action;
 
+use Psr\Http\Message\ResponseInterface;
+
 interface IDiscordInteractionAction
 {
     /**
@@ -17,7 +19,7 @@ interface IDiscordInteractionAction
      * @param  array $data
      * @return void
      */
-    public function handleApplicationCommand(array $data);
+    public function handleApplicationCommand(array $data): ResponseInterface;
 
     /**
      * verarbeitet die von Discord gesendeten Daten für Components
@@ -25,7 +27,7 @@ interface IDiscordInteractionAction
      * @param  array $data
      * @return void
      */
-    public function handleMessageCommand(array $data);
+    public function handleMessageCommand(array $data): ResponseInterface;
 
     /**
      * verarbeitet die von Discord gesendeten Daten für Application Command Autocomplete
@@ -33,7 +35,7 @@ interface IDiscordInteractionAction
      * @param  array $data
      * @return void
      */
-    public function handleApplicationCommandAutocomplete(array $data);
+    public function handleApplicationCommandAutocomplete(array $data): ResponseInterface;
 
     /**
      * verarbeitet die von Discord gesendeten Daten für Modal
@@ -41,5 +43,5 @@ interface IDiscordInteractionAction
      * @param  array $data
      * @return void
      */
-    public function handleModalCommand(array $data);
+    public function handleModalCommand(array $data): ResponseInterface;
 }
