@@ -15,33 +15,21 @@ interface IDiscordInteractionAction
 
     /**
      * verarbeitet die von Discord gesendeten Daten für Application Commands
-     *
-     * @param  array $data
-     * @return void
      */
     public function handleApplicationCommand(array $data): ResponseInterface;
 
     /**
      * verarbeitet die von Discord gesendeten Daten für Components
-     *
-     * @param  array $data
-     * @return void
      */
     public function handleMessageCommand(array $data): ResponseInterface;
 
     /**
      * verarbeitet die von Discord gesendeten Daten für Application Command Autocomplete
-     *
-     * @param  array $data
-     * @return void
      */
     public function handleApplicationCommandAutocomplete(array $data): ResponseInterface;
 
     /**
      * verarbeitet die von Discord gesendeten Daten für Modal
-     *
-     * @param  array $data
-     * @return void
      */
     public function handleModalCommand(array $data): ResponseInterface;
 }

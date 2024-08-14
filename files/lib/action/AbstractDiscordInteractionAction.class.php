@@ -3,7 +3,6 @@
 namespace wcf\action;
 
 use BadMethodCallException;
-use Exception;
 use Laminas\Diactoros\Response\HtmlResponse;
 use Laminas\Diactoros\Response\JsonResponse;
 use LogicException;
@@ -16,6 +15,7 @@ use UnexpectedValueException;
 use wcf\data\discord\bot\DiscordBotList;
 use wcf\data\discord\interaction\log\DiscordInteractionLogAction;
 use wcf\system\discord\DiscordApi;
+use wcf\system\exception\SystemException;
 use wcf\util\JSON;
 
 abstract class AbstractDiscordInteractionAction implements RequestHandlerInterface, IDiscordInteractionAction
@@ -43,7 +43,7 @@ abstract class AbstractDiscordInteractionAction implements RequestHandlerInterfa
                 $data = [];
                 try {
                     $data = JSON::decode($body, true);
-                } catch (Exception $e) {
+                } catch (SystemException) {
                     throw new BadMethodCallException('body is not valid json');
                 }
 

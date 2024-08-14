@@ -5,7 +5,6 @@ use wcf\acp\page\DiscordBotListPage;
 use wcf\acp\page\DiscordWebhookListPage;
 use wcf\event\acp\dashboard\box\PHPExtensionCollecting;
 use wcf\event\acp\menu\item\ItemCollecting;
-use wcf\system\discord\event\ApplicationCommandReceived;
 use wcf\system\event\EventHandler;
 use wcf\system\menu\acp\AcpMenuItem;
 use wcf\system\request\LinkHandler;

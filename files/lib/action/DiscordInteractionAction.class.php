@@ -2,6 +2,7 @@
 
 namespace wcf\action;
 
+use Laminas\Diactoros\Response\EmptyResponse;
 use Laminas\Diactoros\Response\JsonResponse;
 use Override;
 use Psr\Http\Message\ResponseInterface;
@@ -21,7 +22,12 @@ final class DiscordInteractionAction extends AbstractDiscordInteractionAction
         $event = new ApplicationCommandReceived($data);
         EventHandler::getInstance()->fire($event);
 
-        return new JsonResponse($event->getResponse());
+        $callback = $event->getCallback();
+        if ($callback !== null) {
+            return new JsonResponse($callback->getInteractionResponse());
+        }
+
+        return new EmptyResponse();
     }
 
     #[Override]
@@ -30,7 +36,12 @@ final class DiscordInteractionAction extends AbstractDiscordInteractionAction
         $event = new MessageCommandReceived($data);
         EventHandler::getInstance()->fire($event);
 
-        return new JsonResponse($event->getResponse());
+        $callback = $event->getCallback();
+        if ($callback !== null) {
+            return new JsonResponse($callback->getInteractionResponse());
+        }
+
+        return new EmptyResponse();
     }
 
     #[Override]
@@ -39,7 +50,12 @@ final class DiscordInteractionAction extends AbstractDiscordInteractionAction
         $event = new ApplicationCommandAutocompleteReceived($data);
         EventHandler::getInstance()->fire($event);
 
-        return new JsonResponse($event->getResponse());
+        $callback = $event->getCallback();
+        if ($callback !== null) {
+            return new JsonResponse($callback->getInteractionResponse());
+        }
+
+        return new EmptyResponse();
     }
 
     #[Override]
@@ -48,6 +64,11 @@ final class DiscordInteractionAction extends AbstractDiscordInteractionAction
         $event = new ModalCommandReceived($data);
         EventHandler::getInstance()->fire($event);
 
-        return new JsonResponse($event->getResponse());
+        $callback = $event->getCallback();
+        if ($callback !== null) {
+            return new JsonResponse($callback->getInteractionResponse());
+        }
+
+        return new EmptyResponse();
     }
 }

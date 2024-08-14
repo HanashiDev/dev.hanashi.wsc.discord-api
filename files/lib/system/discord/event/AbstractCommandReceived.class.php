@@ -2,31 +2,35 @@
 
 namespace wcf\system\discord\event;
 
-use wcf\event\IPsr14Event;
+use Override;
+use wcf\system\discord\interaction\callback\IDiscordInteractionCallback;
 
-abstract class AbstractCommandReceived implements IPsr14Event
+abstract class AbstractCommandReceived implements ICommandReceived
 {
     private array $data;
 
-    private array $response = [];
+    protected IDiscordInteractionCallback $response;
 
     public function __construct(array $data)
     {
         $this->data = $data;
     }
 
+    #[Override]
     public function getData(): array
     {
         return $this->data;
     }
 
-    public function setResponse(array $response)
+    #[Override]
+    public function setCallback(IDiscordInteractionCallback $response): void
     {
-        return $this->response = $response;
+        $this->response = $response;
     }
 
-    public function getResponse(): array
+    #[Override]
+    public function getCallback(): ?IDiscordInteractionCallback
     {
-        return $this->response;
+        return $this->response ?? null;
     }
 }
