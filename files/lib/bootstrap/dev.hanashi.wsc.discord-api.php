@@ -69,11 +69,4 @@ return static function (): void {
             $event->register('sodium');
         }
     );
-
-    EventHandler::getInstance()->register(
-        ApplicationCommandReceived::class,
-        static function (ApplicationCommandReceived $event) {
-            \file_put_contents(WCF_DIR . '/test.log', \print_r($event->getData(), true));
-        }
-    );
 };
