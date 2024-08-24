@@ -4,11 +4,13 @@ namespace wcf\acp\form;
 
 use Override;
 use wcf\data\discord\bot\DiscordBotAction;
-use wcf\data\package\PackageCache;
+use wcf\event\discord\DiscordOAuthRequiredCollecting;
+use wcf\event\discord\DiscordPublicKeyRequiredCollecting;
 use wcf\form\AbstractForm;
 use wcf\form\AbstractFormBuilderForm;
 use wcf\system\cache\builder\DiscordCurrentGuildsCacheBuilder;
 use wcf\system\discord\DiscordApi;
+use wcf\system\event\EventHandler;
 use wcf\system\form\builder\button\FormButton;
 use wcf\system\form\builder\container\FormContainer;
 use wcf\system\form\builder\field\BooleanFormField;
@@ -205,15 +207,17 @@ class DiscordBotAddManagerForm extends AbstractFormBuilderForm
 
     protected function createFormStep4()
     {
+        $oauthRequiredCollecting = new DiscordOAuthRequiredCollecting();
+        EventHandler::getInstance()->fire($oauthRequiredCollecting);
+
         $requestData = $this->form->getRequestData();
         $this->form->appendChildren([
             FormContainer::create('data')
                 ->appendChildren([
                     BooleanFormField::create('useOAuth2')
                         ->label('wcf.acp.discordBotAddManager.useOAuth2')
-                        ->description('wcf.acp.discordBotAddManager.useOAuth2.description')
-                        ->required($this->isDiscordSyncInstalled())
-                        ->value($this->isDiscordSyncInstalled()),
+                        ->required($oauthRequiredCollecting->needOauth2())
+                        ->value($oauthRequiredCollecting->needOauth2()),
                     PasswordFormField::create('clientSecret')
                         ->label('wcf.acp.discordBotAddManager.clientSecret')
                         ->addFieldClass('long')
@@ -245,12 +249,17 @@ class DiscordBotAddManagerForm extends AbstractFormBuilderForm
 
     protected function createFormStep5()
     {
+        $publicKeyRequiredCollecting = new DiscordPublicKeyRequiredCollecting();
+        EventHandler::getInstance()->fire($publicKeyRequiredCollecting);
+
         $requestData = $this->form->getRequestData();
         $this->form->appendChildren([
             FormContainer::create('data')
                 ->appendChildren([
                     BooleanFormField::create('useApplicationCommands')
-                        ->label('wcf.acp.discordBotAddManager.useApplicationCommands'),
+                        ->label('wcf.acp.discordBotAddManager.useApplicationCommands')
+                        ->required($publicKeyRequiredCollecting->needPublicKey())
+                        ->value($publicKeyRequiredCollecting->needPublicKey()),
                     TextFormField::create('publicKey')
                         ->label('wcf.acp.discordBotAddManager.publicKey')
                         ->required()
@@ -293,6 +302,7 @@ class DiscordBotAddManagerForm extends AbstractFormBuilderForm
         if ($this->step == 6) {
             $this->additionalFields['botTime'] = \TIME_NOW;
             $this->additionalFields['webhookName'] = \PAGE_TITLE;
+
             parent::save();
         } else {
             AbstractForm::save();
@@ -310,14 +320,6 @@ class DiscordBotAddManagerForm extends AbstractFormBuilderForm
         WCF::getTPL()->assign([
             'step' => $this->step,
             'tempInfo' => $this->tempInfo,
-            'discordSyncInstalled' => $this->isDiscordSyncInstalled(),
         ]);
-    }
-
-    private function isDiscordSyncInstalled(): bool
-    {
-        $package = PackageCache::getInstance()->getPackageByIdentifier('eu.hanashi.discord-sync');
-
-        return $package !== null;
     }
 }

@@ -52,13 +52,14 @@
 
 		{lang}wcf.acp.discordBotAddManager.step6Intro{/lang}<br><br>
 
-		{if $discordSyncInstalled}
-			{lang}wcf.acp.discordBotAddManager.step6DiscordSync{/lang}<br><br>
-		{/if}
+		{event name='outro'}
 
 		{lang}wcf.acp.discordBotAddManager.step6Outro{/lang}
 	{/if}
 </div>
+
+{event name='message'}
+
 {if $step != 6 && $step != 0}
 	{unsafe:$form->getHtml()}
 {/if}
