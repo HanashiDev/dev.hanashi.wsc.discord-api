@@ -53,7 +53,6 @@
 			<item name="wcf.acp.discordBotAddManager.guildID"><![CDATA[Server]]></item>
 			<item name="wcf.acp.discordBotAddManager.guildID.invalid"><![CDATA[The selected server does not exist.]]></item>
 			<item name="wcf.acp.discordBotAddManager.useOAuth2"><![CDATA[Is OAuth2 required?]]></item>
-			<item name="wcf.acp.discordBotAddManager.useOAuth2.description"><![CDATA[If you have the Discord Sync plugin installed, you must answer yes to this question.]]></item>
 			<item name="wcf.acp.discordBotAddManager.clientSecret"><![CDATA[Client Secret]]></item>
 			<item name="wcf.acp.discordBotAddManager.useApplicationCommands"><![CDATA[Are application commands used?]]></item>
 			<item name="wcf.acp.discordBotAddManager.publicKey"><![CDATA[Public Key]]></item>
@@ -97,9 +96,6 @@
 <b>Where can I find the public key?</b><br>
 Go the <a href="https://discord.com/developers/applications" class="externalURL" rel="noopener noreferrer">Developer Portal</a> from Discord. Select your previously created application. Click on the menu item "<b>General Information</b>" in the left menu. Here you will also find the public key. With a click on the button "<b>Copy</b>", you can paste the public key directly into the clipboard. Also, for "Interactions Endpoint Url" add the URL <kbd>{link controller='DiscordInteraction' forceFrontend=true application='wcf'}{/link}</kbd>.]]></item>
 			<item name="wcf.acp.discordBotAddManager.step6Intro"><![CDATA[Your Discord bot has been successfully created and configured.]]></item>
-			<item name="wcf.acp.discordBotAddManager.step6DiscordSync"><![CDATA[Since you have installed the Discord Sync plugin, you now need to configure your redirect URL. Go the <a href="https://discord.com/developers/applications" class="externalURL" rel="noopener noreferrer">Developer Portal</a> from Discord. Select your previously created application. Click on the menu item "<b>OAuth2</b>" in the left menu. Click on the "<b>Add Redirect</b>" button. Now paste the following URL into the input field for redirects:<br><br>
-	<b>Redirect URL:</b> <kbd>{link controller='DiscordAuth' forceFrontend=true application='wcf'}{/link}</kbd><br><br>
-		Click on "<b>Save Changes</b>" to save.]]></item>
 			<item name="wcf.acp.discordBotAddManager.step6Outro"><![CDATA[Congratulations, you are now done with the configuration wizard and ready to use your Discord Bot.]]></item>
 		</category>
 		<category name="wcf.acp.discordBotList">
@@ -121,4 +117,8 @@ Go the <a href="https://discord.com/developers/applications" class="externalURL"
 			<item name="wcf.acp.discordBotSelectOptionType.noBot"><![CDATA[You haven't created a discord bot yet. You can do this under <a href="{link controller="DiscordBotAddManager"}{/link}">Discord bot</a>.]]></item>
 		</category>
 	</import>
+	<delete>
+		<item name="wcf.acp.discordBotAddManager.useOAuth2.description"/>
+		<item name="wcf.acp.discordBotAddManager.step6DiscordSync"/>
+	</delete>
 </language>

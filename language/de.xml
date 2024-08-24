@@ -53,7 +53,6 @@
 			<item name="wcf.acp.discordBotAddManager.guildID"><![CDATA[Server]]></item>
 			<item name="wcf.acp.discordBotAddManager.guildID.invalid"><![CDATA[Der ausgewählte Server existiert nicht.]]></item>
 			<item name="wcf.acp.discordBotAddManager.useOAuth2"><![CDATA[Wird OAuth2 benötigt?]]></item>
-			<item name="wcf.acp.discordBotAddManager.useOAuth2.description"><![CDATA[Wenn {if LANGUAGE_USE_INFORMAL_VARIANT}du{else}Sie{/if} das Plugin Discord-Sync installiert {if LANGUAGE_USE_INFORMAL_VARIANT}hast, musst du{else}haben, müssen Sie{/if} diese Frage mit Ja beantworten.]]></item>
 			<item name="wcf.acp.discordBotAddManager.clientSecret"><![CDATA[Client Secret]]></item>
 			<item name="wcf.acp.discordBotAddManager.useApplicationCommands"><![CDATA[Werden Application Commands genutzt?]]></item>
 			<item name="wcf.acp.discordBotAddManager.publicKey"><![CDATA[Public Key]]></item>
@@ -97,9 +96,6 @@
 <b>Wo finde ich den Public Key?</b><br>
 {if LANGUAGE_USE_INFORMAL_VARIANT}Gehe{else}Gehen Sie{/if} in das <a href="https://discord.com/developers/applications" class="externalURL" rel="noopener noreferrer">Entwickler-Portal</a> von Discord. {if LANGUAGE_USE_INFORMAL_VARIANT}Wähle deine{else}Wählen Sie Ihre{/if} zuvor erstellte Anwendung aus. {if LANGUAGE_USE_INFORMAL_VARIANT}Klicke{else}Klicken Sie{/if} links im Menü auf den Menüpunkt „<b>General Information</b>“. Hier {if LANGUAGE_USE_INFORMAL_VARIANT}findest du{else}finden Sie{/if} auch schon den Public Key. Mit einem Klick auf den Button „<b>Copy</b>“, {if LANGUAGE_USE_INFORMAL_VARIANT}kannst du{else}können Sie{/if} den Public Key direkt in die Zwischenablage einfügen. {if LANGUAGE_USE_INFORMAL_VARIANT}Füge{else}Fügen Sie{/if} außerdem bei „Interactions Endpoint Url“ die URL <kbd>{link controller='DiscordInteraction' forceFrontend=true application='wcf'}{/link}</kbd> ein.]]></item>
 			<item name="wcf.acp.discordBotAddManager.step6Intro"><![CDATA[{if LANGUAGE_USE_INFORMAL_VARIANT}Dein{else}Ihr{/if} Discord Bot wurde erfolgreich angelegt und konfiguriert.]]></item>
-			<item name="wcf.acp.discordBotAddManager.step6DiscordSync"><![CDATA[Da {if LANGUAGE_USE_INFORMAL_VARIANT}du{else}Sie{/if} das Plugin Discord-Sync installiert {if LANGUAGE_USE_INFORMAL_VARIANT}hast, musst du nun noch deine{else}haben, müssen Sie nun noch Ihre{/if} Redirect URL konfigurieren. {if LANGUAGE_USE_INFORMAL_VARIANT}Gehe{else}Gehen Sie{/if} in das <a href="https://discord.com/developers/applications" class="externalURL" rel="noopener noreferrer">Entwickler-Portal</a> von Discord. {if LANGUAGE_USE_INFORMAL_VARIANT}Wähle deine{else}Wählen Sie Ihre{/if} zuvor erstellte Anwendung aus. {if LANGUAGE_USE_INFORMAL_VARIANT}Klicke{else}Klicken Sie{/if} links im Menü auf den Menüpunkt „<b>OAuth2</b>“. {if LANGUAGE_USE_INFORMAL_VARIANT}Klicke{else}Klicken Sie{/if} auf den Button „<b>Add Redirect</b>“. {if LANGUAGE_USE_INFORMAL_VARIANT}Füge{else}Fügen Sie{/if} nun die folgende URL in das Eingabefeld für Redirects ein:<br><br>
-	<b>Redirect URL:</b> <kbd>{link controller='DiscordAuth' forceFrontend=true application='wcf'}{/link}</kbd><br><br>
-	{if LANGUAGE_USE_INFORMAL_VARIANT}Klicke{else}Klicken Sie{/if} zum Speichern auf „<b>Save Changes</b>“.]]></item>
 			<item name="wcf.acp.discordBotAddManager.step6Outro"><![CDATA[Herzlichen Glückwunsch, {if LANGUAGE_USE_INFORMAL_VARIANT}du bist{else}Sie sind{/if} nun fertig mit dem Konfigurationsassistenten und {if LANGUAGE_USE_INFORMAL_VARIANT}kannst deinen{else}können Ihren{/if} Discord Bot nutzen.]]></item>
 		</category>
 		<category name="wcf.acp.discordBotList">
@@ -121,4 +117,8 @@
 			<item name="wcf.acp.discordBotSelectOptionType.noBot"><![CDATA[{if LANGUAGE_USE_INFORMAL_VARIANT}Du hast{else}Sie haben{/if} noch keinen Discord-Bot angelegt. Dies {if LANGUAGE_USE_INFORMAL_VARIANT}kannst du{else}können Sie{/if} unter <a href="{link controller="DiscordBotAddManager"}{/link}">Discord-Bot</a> erledigen.]]></item>
 		</category>
 	</import>
+	<delete>
+		<item name="wcf.acp.discordBotAddManager.useOAuth2.description"/>
+		<item name="wcf.acp.discordBotAddManager.step6DiscordSync"/>
+	</delete>
 </language>
