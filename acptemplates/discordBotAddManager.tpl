@@ -58,6 +58,16 @@
 	{/if}
 </div>
 
+{if $step == 1}
+	{if $neededIntents|count}
+		<p class="warning">
+			{lang}wcf.acp.discordBotAddManager.gatewaysNeeded{/lang} {', '|implode:$neededIntents}
+		</p>
+	{else}
+		<p class="info">{lang}wcf.acp.discordBotAddManager.noGatewaysNeeded{/lang}</p>
+	{/if}
+{/if}
+
 {event name='message'}
 
 {if $step != 6 && $step != 0}

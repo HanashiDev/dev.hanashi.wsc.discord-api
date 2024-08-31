@@ -4,6 +4,7 @@ namespace wcf\acp\form;
 
 use Override;
 use wcf\data\discord\bot\DiscordBotAction;
+use wcf\event\discord\DiscordIntentsCollecting;
 use wcf\event\discord\DiscordOAuthRequiredCollecting;
 use wcf\event\discord\DiscordPublicKeyRequiredCollecting;
 use wcf\form\AbstractForm;
@@ -63,6 +64,8 @@ class DiscordBotAddManagerForm extends AbstractFormBuilderForm
      */
     protected array $guilds = [];
 
+    protected array $neededIntents = [];
+
     #[Override]
     public function readParameters()
     {
@@ -106,6 +109,10 @@ class DiscordBotAddManagerForm extends AbstractFormBuilderForm
 
     protected function createFormStep1()
     {
+        $intentsCollection = new DiscordIntentsCollecting();
+        EventHandler::getInstance()->fire($intentsCollection);
+        $this->neededIntents = $intentsCollection->neededIntents();
+
         $this->form->appendChildren([
             FormContainer::create('data')
                 ->appendChildren([
@@ -119,8 +126,12 @@ class DiscordBotAddManagerForm extends AbstractFormBuilderForm
                             $botToken = $formField->getValue();
 
                             $discord = new DiscordApi(0, $botToken);
-                            $bot = $discord->getCurrentUser();
-                            if (!isset($bot['body']['id'])) {
+                            $bot = $discord->getCurrentApplication();
+                            if (
+                                !isset($bot['body']['bot']['id'])
+                                || !isset($bot['body']['bot']['username'])
+                                || !isset($bot['body']['bot']['discriminator'])
+                            ) {
                                 $formField->addValidationError(new FormFieldValidationError(
                                     'invalidBotToken',
                                     'wcf.acp.discordBotAddManager.botToken.invalid'
@@ -143,12 +154,12 @@ class DiscordBotAddManagerForm extends AbstractFormBuilderForm
                         ->value($requestData['botToken'])
                         ->required(),
                     HiddenFormField::create('clientID')
-                        ->value($requestData['clientID'] ?? $this->tempInfo['id'])
+                        ->value($requestData['clientID'] ?? $this->tempInfo['bot']['id'])
                         ->required(),
                     HiddenFormField::create('botName')
                         ->value(
-                            $requestData['botName'] ?? $this->tempInfo['username'] . '#'
-                                                       . $this->tempInfo['discriminator']
+                            $requestData['botName'] ?? $this->tempInfo['bot']['username'] . '#'
+                                                       . $this->tempInfo['bot']['discriminator']
                         )
                         ->required(),
                 ]),
@@ -320,6 +331,7 @@ class DiscordBotAddManagerForm extends AbstractFormBuilderForm
         WCF::getTPL()->assign([
             'step' => $this->step,
             'tempInfo' => $this->tempInfo,
+            'neededIntents' => $this->neededIntents,
         ]);
     }
 }

@@ -76,8 +76,7 @@
 	Go the <a href="https://discord.com/developers/applications" class="externalURL" rel="noopener noreferrer">Developer Portal</a> from Discord. Select your previously created application. Click on the menu item "<b>Bot</b>" in the left menu. No bot should be visible here yet. Click on the "<b>Add Bot</b>" button. Now you will be asked if you really want to do it, confirm with "<b>Yes, do it!</b>". Your bot was successfully created.<br><br>
 
 	<b>3. Privileged Gateway Intents aktivieren</b><br>
-	Go the <a href="https://discord.com/developers/applications" class="externalURL" rel="noopener noreferrer">Developer Portal</a> from Discord. Select your previously created application. Click on the menu item "<b>Bot</b>" in the left menu. Scroll to the subheading „<b>Privileged Gateway Intents</b>“ and activate the sliders at „<b>Server Member Intents</b>“ and „<b>Message Content Intents</b>“. Click on „<b>Save Changes</b>“.<br>
-	<i>(Server Member Intents is required for the Discord Sync plugin to read users from the server and manage their rights. Message Content Intents is required for the Discord Shoutbox plugin to read messages from the channels and display them in the Shoutbox.)</i><br><br>
+	Go the <a href="https://discord.com/developers/applications" class="externalURL" rel="noopener noreferrer">Developer Portal</a> from Discord. Select your previously created application. Click on the menu item "<b>Bot</b>" in the left menu. Scroll to the subheading „<b>Privileged Gateway Intents</b>“ and activate the sliders for the required intents (see below). Click on „<b>Save Changes</b>“.<br><br>
 
 	<b>4. Find Bot Token</b><br>
 	Go the <a href="https://discord.com/developers/applications" class="externalURL" rel="noopener noreferrer">Developer Portal</a> from Discord. Select your previously created application. Click on the menu item "<b>Bot</b>" in the left menu. Click on the button "<b>Reset Token</b>". Now you will be asked if you really want to do it, confirm with "<b>Yes, do it!</b>". If you have enabled two-factor authentication on Discord, you will now need to enter your code and press "<b>Submit</b>". You will now see your token. With a click on the button "<b>Copy</b>", you can paste the token directly into the clipboard.]]></item>
@@ -97,6 +96,8 @@
 Go the <a href="https://discord.com/developers/applications" class="externalURL" rel="noopener noreferrer">Developer Portal</a> from Discord. Select your previously created application. Click on the menu item "<b>General Information</b>" in the left menu. Here you will also find the public key. With a click on the button "<b>Copy</b>", you can paste the public key directly into the clipboard. Also, for "Interactions Endpoint Url" add the URL <kbd>{link controller='DiscordInteraction' forceFrontend=true application='wcf'}{/link}</kbd>.]]></item>
 			<item name="wcf.acp.discordBotAddManager.step6Intro"><![CDATA[Your Discord bot has been successfully created and configured.]]></item>
 			<item name="wcf.acp.discordBotAddManager.step6Outro"><![CDATA[Congratulations, you are now done with the configuration wizard and ready to use your Discord Bot.]]></item>
+			<item name="wcf.acp.discordBotAddManager.noGatewaysNeeded"><![CDATA[It is not necessary to activate Privilaged Gateway Intents for the installed plugins.]]></item>
+			<item name="wcf.acp.discordBotAddManager.gatewaysNeeded"><![CDATA[The following Privilaged Gateway intents must be activated for the installed plugins:]]></item>
 		</category>
 		<category name="wcf.acp.discordBotList">
 			<item name="wcf.acp.discordBotList.botName"><![CDATA[Bot Name]]></item>
