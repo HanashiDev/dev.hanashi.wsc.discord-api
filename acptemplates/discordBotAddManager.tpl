@@ -52,15 +52,26 @@
 
 		{lang}wcf.acp.discordBotAddManager.step6Intro{/lang}<br><br>
 
-		{if $discordSyncInstalled}
-			{lang}wcf.acp.discordBotAddManager.step6DiscordSync{/lang}<br><br>
-		{/if}
+		{event name='outro'}
 
 		{lang}wcf.acp.discordBotAddManager.step6Outro{/lang}
 	{/if}
 </div>
+
+{if $step == 1}
+	{if $neededIntents|count}
+		<p class="warning">
+			{lang}wcf.acp.discordBotAddManager.gatewaysNeeded{/lang} {', '|implode:$neededIntents}
+		</p>
+	{else}
+		<p class="info">{lang}wcf.acp.discordBotAddManager.noGatewaysNeeded{/lang}</p>
+	{/if}
+{/if}
+
+{event name='message'}
+
 {if $step != 6 && $step != 0}
-	{@$form->getHtml()}
+	{unsafe:$form->getHtml()}
 {/if}
 {if $step == 0}
 	<div class="formSubmit">

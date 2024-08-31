@@ -2,6 +2,9 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import * as EventHandler from "WoltLabSuite/Core/Event/Handler";
 
+/**
+ * @deprecated
+ */
 export type GatewayEvent = {
   op: number;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -10,11 +13,17 @@ export type GatewayEvent = {
   t?: string;
 };
 
+/**
+ * @deprecated
+ */
 export type PresenceActivity = {
   name: string;
   type: number;
 };
 
+/**
+ * @deprecated
+ */
 export type PresenceUpdate = {
   since?: number;
   activities: PresenceActivity[];
@@ -22,6 +31,9 @@ export type PresenceUpdate = {
   afk: boolean;
 };
 
+/**
+ * @deprecated
+ */
 export class DiscordGateway {
   private readonly token: string;
   private readonly intents: number;

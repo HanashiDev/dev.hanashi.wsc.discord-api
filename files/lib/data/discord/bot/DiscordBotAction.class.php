@@ -2,7 +2,9 @@
 
 namespace wcf\data\discord\bot;
 
+use Override;
 use wcf\data\AbstractDatabaseObjectAction;
+use wcf\system\cache\builder\DiscordGuildChannelsCacheBuilder;
 use wcf\system\exception\AJAXException;
 use wcf\system\exception\PermissionDeniedException;
 use wcf\system\file\upload\UploadFile;
@@ -36,6 +38,9 @@ final class DiscordBotAction extends AbstractDatabaseObjectAction
     /**
      * @inheritDoc
      */
+    public $className = DiscordBotEditor::class;
+
+    #[Override]
     public function create()
     {
         if (isset($this->parameters['data']['useApplicationCommands'])) {
@@ -51,9 +56,7 @@ final class DiscordBotAction extends AbstractDatabaseObjectAction
         return $discordBot;
     }
 
-    /**
-     * @inheritDoc
-     */
+    #[Override]
     public function update()
     {
         if (isset($this->parameters['data']['botToken']) && $this->parameters['data']['botToken'] === '') {
@@ -79,9 +82,7 @@ final class DiscordBotAction extends AbstractDatabaseObjectAction
         }
     }
 
-    /**
-     * @inheritDoc
-     */
+    #[Override]
     public function delete()
     {
         $returnValues = parent::delete();
@@ -94,6 +95,12 @@ final class DiscordBotAction extends AbstractDatabaseObjectAction
         }
 
         return $returnValues;
+    }
+
+    #[Override]
+    protected function resetCache()
+    {
+        DiscordGuildChannelsCacheBuilder::getInstance()->reset();
     }
 
     /**

@@ -2,6 +2,7 @@
 
 namespace wcf\system\option;
 
+use Override;
 use wcf\data\option\Option;
 use wcf\system\discord\type\EmbedColorType;
 
@@ -9,9 +10,7 @@ class DiscordEmbedColorOptionType extends AbstractOptionType
 {
     protected $embedColorType = [];
 
-    /**
-     * @inheritDoc
-     */
+    #[Override]
     public function getFormElement(Option $option, $value)
     {
         if (!isset($this->embedColorType[$option->optionName])) {
@@ -21,9 +20,7 @@ class DiscordEmbedColorOptionType extends AbstractOptionType
         return $this->embedColorType[$option->optionName]->getFormElement($value);
     }
 
-    /**
-     * @inheritDoc
-     */
+    #[Override]
     public function validate(Option $option, $newValue)
     {
         if (!isset($this->embedColorType[$option->optionName])) {
@@ -32,6 +29,7 @@ class DiscordEmbedColorOptionType extends AbstractOptionType
         $this->embedColorType[$option->optionName]->validate($newValue);
     }
 
+    #[Override]
     public function getData(Option $option, $newValue)
     {
         if (!isset($this->embedColorType[$option->optionName])) {

@@ -3,6 +3,9 @@ define(["require", "exports", "tslib", "WoltLabSuite/Core/Event/Handler"], funct
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.DiscordGateway = void 0;
     EventHandler = tslib_1.__importStar(EventHandler);
+    /**
+     * @deprecated
+     */
     class DiscordGateway {
         token;
         intents;

@@ -2,6 +2,7 @@
 
 namespace wcf\system\option;
 
+use Override;
 use wcf\data\option\Option;
 use wcf\system\discord\type\RoleMultiSelectDiscordType;
 
@@ -17,9 +18,7 @@ class DiscordRoleMultiSelectOptionType extends AbstractOptionType
 {
     protected $roleMultiSelectType = [];
 
-    /**
-     * @inheritDoc
-     */
+    #[Override]
     public function getFormElement(Option $option, $value)
     {
         if (!isset($this->roleMultiSelectType[$option->optionName])) {
@@ -29,9 +28,7 @@ class DiscordRoleMultiSelectOptionType extends AbstractOptionType
         return $this->roleMultiSelectType[$option->optionName]->getFormElement($value);
     }
 
-    /**
-     * @inheritDoc
-     */
+    #[Override]
     public function validate(Option $option, $newValue)
     {
         if (!isset($this->roleMultiSelectType[$option->optionName])) {
@@ -40,9 +37,7 @@ class DiscordRoleMultiSelectOptionType extends AbstractOptionType
         $this->roleMultiSelectType[$option->optionName]->validate($newValue);
     }
 
-    /**
-     * @inheritDoc
-     */
+    #[Override]
     public function getData(Option $option, $newValue)
     {
         if (!isset($this->roleMultiSelectType[$option->optionName])) {

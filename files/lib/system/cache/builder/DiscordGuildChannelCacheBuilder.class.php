@@ -2,6 +2,7 @@
 
 namespace wcf\system\cache\builder;
 
+use Override;
 use wcf\system\discord\DiscordApi;
 
 /**
@@ -19,9 +20,7 @@ final class DiscordGuildChannelCacheBuilder extends AbstractCacheBuilder
      */
     protected $maxLifetime = 10;
 
-    /**
-     * @inheritDoc
-     */
+    #[Override]
     public function rebuild(array $parameters)
     {
         if (

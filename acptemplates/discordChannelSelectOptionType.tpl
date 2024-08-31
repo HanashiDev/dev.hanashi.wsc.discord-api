@@ -28,24 +28,20 @@
 				</div>
 				<script data-relocate="true">
 					require(['WoltLabSuite/Core/Ui/ItemList/Filter'], function(UiItemListFilter) {
-						new UiItemListFilter('{$optionName|encodeJS}_{$bot['botID']|encodeJS}');
+						new UiItemListFilter('{unsafe:$optionName|encodeJS}_{unsafe:$bot['botID']|encodeJS}');
 					});
 				</script>
 			{/foreach}
 		</div>
 	</div>
 	<script data-relocate="true">
-		require(['Language'], function(Language) {
-			Language.addObject({
-				'wcf.global.filter.button.visibility': '{jslang}wcf.global.filter.button.visibility{/jslang}',
-				'wcf.global.filter.button.clear': '{jslang}wcf.global.filter.button.clear{/jslang}',
-				'wcf.global.filter.error.noMatches': '{jslang}wcf.global.filter.error.noMatches{/jslang}',
-				'wcf.global.filter.placeholder': '{jslang}wcf.global.filter.placeholder{/jslang}',
-				'wcf.global.filter.visibility.activeOnly': '{jslang}wcf.global.filter.visibility.activeOnly{/jslang}',
-				'wcf.global.filter.visibility.highlightActive': '{jslang}wcf.global.filter.visibility.highlightActive{/jslang}',
-				'wcf.global.filter.visibility.showAll': '{jslang}wcf.global.filter.visibility.showAll{/jslang}'
-			});
-		});
+		{jsphrase name='wcf.global.filter.button.visibility'}
+		{jsphrase name='wcf.global.filter.button.clear'}
+		{jsphrase name='wcf.global.filter.error.noMatches'}
+		{jsphrase name='wcf.global.filter.placeholder'}
+		{jsphrase name='wcf.global.filter.visibility.activeOnly'}
+		{jsphrase name='wcf.global.filter.visibility.highlightActive'}
+		{jsphrase name='wcf.global.filter.visibility.showAll'}
 	</script>
 {else if $bots|count == 1}
 	<ul class="scrollableCheckboxList" id="{$optionName}" style="height: 200px;">
@@ -61,18 +57,16 @@
 	</ul>
 
 	<script data-relocate="true">
-		require(['Language', 'WoltLabSuite/Core/Ui/ItemList/Filter'], function(Language, UiItemListFilter) {
-			Language.addObject({
-				'wcf.global.filter.button.visibility': '{jslang}wcf.global.filter.button.visibility{/jslang}',
-				'wcf.global.filter.button.clear': '{jslang}wcf.global.filter.button.clear{/jslang}',
-				'wcf.global.filter.error.noMatches': '{jslang}wcf.global.filter.error.noMatches{/jslang}',
-				'wcf.global.filter.placeholder': '{jslang}wcf.global.filter.placeholder{/jslang}',
-				'wcf.global.filter.visibility.activeOnly': '{jslang}wcf.global.filter.visibility.activeOnly{/jslang}',
-				'wcf.global.filter.visibility.highlightActive': '{jslang}wcf.global.filter.visibility.highlightActive{/jslang}',
-				'wcf.global.filter.visibility.showAll': '{jslang}wcf.global.filter.visibility.showAll{/jslang}'
-			});
+		require(['WoltLabSuite/Core/Ui/ItemList/Filter'], function(UiItemListFilter) {
+			{jsphrase name='wcf.global.filter.button.visibility'}
+			{jsphrase name='wcf.global.filter.button.clear'}
+			{jsphrase name='wcf.global.filter.error.noMatches'}
+			{jsphrase name='wcf.global.filter.placeholder'}
+			{jsphrase name='wcf.global.filter.visibility.activeOnly'}
+			{jsphrase name='wcf.global.filter.visibility.highlightActive'}
+			{jsphrase name='wcf.global.filter.visibility.showAll'}
 			
-			new UiItemListFilter('{$optionName|encodeJS}');
+			new UiItemListFilter('{unsafe:$optionName|encodeJS}');
 		});
 	</script>
 {else}

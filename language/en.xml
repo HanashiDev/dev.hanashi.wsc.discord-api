@@ -53,7 +53,6 @@
 			<item name="wcf.acp.discordBotAddManager.guildID"><![CDATA[Server]]></item>
 			<item name="wcf.acp.discordBotAddManager.guildID.invalid"><![CDATA[The selected server does not exist.]]></item>
 			<item name="wcf.acp.discordBotAddManager.useOAuth2"><![CDATA[Is OAuth2 required?]]></item>
-			<item name="wcf.acp.discordBotAddManager.useOAuth2.description"><![CDATA[If you have the Discord Sync plugin installed, you must answer yes to this question.]]></item>
 			<item name="wcf.acp.discordBotAddManager.clientSecret"><![CDATA[Client Secret]]></item>
 			<item name="wcf.acp.discordBotAddManager.useApplicationCommands"><![CDATA[Are application commands used?]]></item>
 			<item name="wcf.acp.discordBotAddManager.publicKey"><![CDATA[Public Key]]></item>
@@ -77,8 +76,7 @@
 	Go the <a href="https://discord.com/developers/applications" class="externalURL" rel="noopener noreferrer">Developer Portal</a> from Discord. Select your previously created application. Click on the menu item "<b>Bot</b>" in the left menu. No bot should be visible here yet. Click on the "<b>Add Bot</b>" button. Now you will be asked if you really want to do it, confirm with "<b>Yes, do it!</b>". Your bot was successfully created.<br><br>
 
 	<b>3. Privileged Gateway Intents aktivieren</b><br>
-	Go the <a href="https://discord.com/developers/applications" class="externalURL" rel="noopener noreferrer">Developer Portal</a> from Discord. Select your previously created application. Click on the menu item "<b>Bot</b>" in the left menu. Scroll to the subheading „<b>Privileged Gateway Intents</b>“ and activate the sliders at „<b>Server Member Intents</b>“ and „<b>Message Content Intents</b>“. Click on „<b>Save Changes</b>“.<br>
-	<i>(Server Member Intents is required for the Discord Sync plugin to read users from the server and manage their rights. Message Content Intents is required for the Discord Shoutbox plugin to read messages from the channels and display them in the Shoutbox.)</i><br><br>
+	Go the <a href="https://discord.com/developers/applications" class="externalURL" rel="noopener noreferrer">Developer Portal</a> from Discord. Select your previously created application. Click on the menu item "<b>Bot</b>" in the left menu. Scroll to the subheading „<b>Privileged Gateway Intents</b>“ and activate the sliders for the required intents (see below). Click on „<b>Save Changes</b>“.<br><br>
 
 	<b>4. Find Bot Token</b><br>
 	Go the <a href="https://discord.com/developers/applications" class="externalURL" rel="noopener noreferrer">Developer Portal</a> from Discord. Select your previously created application. Click on the menu item "<b>Bot</b>" in the left menu. Click on the button "<b>Reset Token</b>". Now you will be asked if you really want to do it, confirm with "<b>Yes, do it!</b>". If you have enabled two-factor authentication on Discord, you will now need to enter your code and press "<b>Submit</b>". You will now see your token. With a click on the button "<b>Copy</b>", you can paste the token directly into the clipboard.]]></item>
@@ -88,7 +86,7 @@
 			<item name="wcf.acp.discordBotAddManager.step3"><![CDATA[Your bot should now be on your server and have all the necessary permissions. In the list below, please select which server you want to use with this bot.<br><br>
 
 	A maximum of 200 servers are displayed in this list. If your bot is on more than 200 servers, please perform <a href="{link controller='DiscordBotAdd'}{/link}">manual configuration</a> of the bot.]]></item>
-			<item name="wcf.acp.discordBotAddManager.step4"><![CDATA[In this step you configure the information for OAuth2. This information is needed, for example, to link a user account in WoltLab Suite with a Discord account. {if $discordSyncInstalled}You have installed the Discord Sync plugin and it is mandatory to perform this step.{else}You have not installed the Discord Sync plugin. If you do not plan to use the Discord Sync plugin in the future, you can skip this point.{/if}<br><br>
+			<item name="wcf.acp.discordBotAddManager.step4"><![CDATA[In this step you configure the information for OAuth2. This information is needed, for example, to link a user account in WoltLab Suite with a Discord account.<br><br>
 
 	<b>Where can I find the Client Secret?</b><br>
 	Go the <a href="https://discord.com/developers/applications" class="externalURL" rel="noopener noreferrer">Developer Portal</a> from Discord. Select your previously created application. Click on the menu item "<b>OAuth2</b>" in the left menu. Click on the "<b>Reset Secret</b>" button. Now you will be asked if you really want to do it, confirm with "<b>Yes, do it!</b>". If you have enabled two-factor authentication on Discord, you will now need to enter your code and press "<b>Submit</b>". You will now see your client Secret. With a click on the button "<b>Copy</b>", you can paste the Client Secret directly into the clipboard.]]></item>
@@ -97,10 +95,9 @@
 <b>Where can I find the public key?</b><br>
 Go the <a href="https://discord.com/developers/applications" class="externalURL" rel="noopener noreferrer">Developer Portal</a> from Discord. Select your previously created application. Click on the menu item "<b>General Information</b>" in the left menu. Here you will also find the public key. With a click on the button "<b>Copy</b>", you can paste the public key directly into the clipboard. Also, for "Interactions Endpoint Url" add the URL <kbd>{link controller='DiscordInteraction' forceFrontend=true application='wcf'}{/link}</kbd>.]]></item>
 			<item name="wcf.acp.discordBotAddManager.step6Intro"><![CDATA[Your Discord bot has been successfully created and configured.]]></item>
-			<item name="wcf.acp.discordBotAddManager.step6DiscordSync"><![CDATA[Since you have installed the Discord Sync plugin, you now need to configure your redirect URL. Go the <a href="https://discord.com/developers/applications" class="externalURL" rel="noopener noreferrer">Developer Portal</a> from Discord. Select your previously created application. Click on the menu item "<b>OAuth2</b>" in the left menu. Click on the "<b>Add Redirect</b>" button. Now paste the following URL into the input field for redirects:<br><br>
-	<b>Redirect URL:</b> <kbd>{link controller='DiscordAuth' forceFrontend=true application='wcf'}{/link}</kbd><br><br>
-		Click on "<b>Save Changes</b>" to save.]]></item>
 			<item name="wcf.acp.discordBotAddManager.step6Outro"><![CDATA[Congratulations, you are now done with the configuration wizard and ready to use your Discord Bot.]]></item>
+			<item name="wcf.acp.discordBotAddManager.noGatewaysNeeded"><![CDATA[It is not necessary to activate Privilaged Gateway Intents for the installed plugins.]]></item>
+			<item name="wcf.acp.discordBotAddManager.gatewaysNeeded"><![CDATA[The following Privilaged Gateway intents must be activated for the installed plugins:]]></item>
 		</category>
 		<category name="wcf.acp.discordBotList">
 			<item name="wcf.acp.discordBotList.botName"><![CDATA[Bot Name]]></item>
@@ -121,4 +118,8 @@ Go the <a href="https://discord.com/developers/applications" class="externalURL"
 			<item name="wcf.acp.discordBotSelectOptionType.noBot"><![CDATA[You haven't created a discord bot yet. You can do this under <a href="{link controller="DiscordBotAddManager"}{/link}">Discord bot</a>.]]></item>
 		</category>
 	</import>
+	<delete>
+		<item name="wcf.acp.discordBotAddManager.useOAuth2.description"/>
+		<item name="wcf.acp.discordBotAddManager.step6DiscordSync"/>
+	</delete>
 </language>

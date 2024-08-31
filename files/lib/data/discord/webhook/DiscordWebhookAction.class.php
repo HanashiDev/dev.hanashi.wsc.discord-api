@@ -2,7 +2,9 @@
 
 namespace wcf\data\discord\webhook;
 
+use Override;
 use wcf\data\AbstractDatabaseObjectAction;
+use wcf\system\cache\builder\DiscordGuildChannelsCacheBuilder;
 
 /**
  * Discord-Webhook-Objekt-Action
@@ -23,13 +25,16 @@ final class DiscordWebhookAction extends AbstractDatabaseObjectAction
     protected $permissionsDelete = ['admin.discord.canManageWebhooks'];
 
     /**
+     * @inheritDoc
+     */
+    public $className = DiscordWebhookEditor::class;
+
+    /**
      * @var DiscordWebhookEditor
      */
     protected $objects = [];
 
-    /**
-     * @inheritDoc
-     */
+    #[Override]
     public function delete()
     {
         foreach ($this->objects as $object) {
@@ -39,5 +44,11 @@ final class DiscordWebhookAction extends AbstractDatabaseObjectAction
         }
 
         return parent::delete();
+    }
+
+    #[Override]
+    protected function resetCache()
+    {
+        DiscordGuildChannelsCacheBuilder::getInstance()->reset();
     }
 }

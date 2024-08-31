@@ -2,12 +2,16 @@
 
 namespace wcf\acp\form;
 
+use Override;
 use wcf\data\discord\bot\DiscordBotAction;
-use wcf\data\package\PackageCache;
+use wcf\event\discord\DiscordIntentsCollecting;
+use wcf\event\discord\DiscordOAuthRequiredCollecting;
+use wcf\event\discord\DiscordPublicKeyRequiredCollecting;
 use wcf\form\AbstractForm;
 use wcf\form\AbstractFormBuilderForm;
 use wcf\system\cache\builder\DiscordCurrentGuildsCacheBuilder;
 use wcf\system\discord\DiscordApi;
+use wcf\system\event\EventHandler;
 use wcf\system\form\builder\button\FormButton;
 use wcf\system\form\builder\container\FormContainer;
 use wcf\system\form\builder\field\BooleanFormField;
@@ -40,24 +44,13 @@ class DiscordBotAddManagerForm extends AbstractFormBuilderForm
 
     /**
      * current step of bot add manager
-     *
-     * @var int
      */
-    protected $step = 0;
+    protected int $step = 0;
 
     /**
      * cached bot data
-     *
-     * @var array
      */
-    protected $botData = [];
-
-    /**
-     * object of discord api
-     *
-     * @var DiscordApi
-     */
-    protected $discord;
+    protected array $botData = [];
 
     /**
      * temp information
@@ -68,14 +61,12 @@ class DiscordBotAddManagerForm extends AbstractFormBuilderForm
 
     /**
      * list of guilds
-     *
-     * @var array
      */
-    protected $guilds = [];
+    protected array $guilds = [];
 
-    /**
-     * @inheritDoc
-     */
+    protected array $neededIntents = [];
+
+    #[Override]
     public function readParameters()
     {
         parent::readParameters();
@@ -85,9 +76,7 @@ class DiscordBotAddManagerForm extends AbstractFormBuilderForm
         }
     }
 
-    /**
-     * @inheritDoc
-     */
+    #[Override]
     protected function createForm()
     {
         parent::createForm();
@@ -120,6 +109,10 @@ class DiscordBotAddManagerForm extends AbstractFormBuilderForm
 
     protected function createFormStep1()
     {
+        $intentsCollection = new DiscordIntentsCollecting();
+        EventHandler::getInstance()->fire($intentsCollection);
+        $this->neededIntents = $intentsCollection->neededIntents();
+
         $this->form->appendChildren([
             FormContainer::create('data')
                 ->appendChildren([
@@ -133,8 +126,12 @@ class DiscordBotAddManagerForm extends AbstractFormBuilderForm
                             $botToken = $formField->getValue();
 
                             $discord = new DiscordApi(0, $botToken);
-                            $bot = $discord->getCurrentUser();
-                            if (!isset($bot['body']['id'])) {
+                            $bot = $discord->getCurrentApplication();
+                            if (
+                                !isset($bot['body']['bot']['id'])
+                                || !isset($bot['body']['bot']['username'])
+                                || !isset($bot['body']['bot']['discriminator'])
+                            ) {
                                 $formField->addValidationError(new FormFieldValidationError(
                                     'invalidBotToken',
                                     'wcf.acp.discordBotAddManager.botToken.invalid'
@@ -157,12 +154,12 @@ class DiscordBotAddManagerForm extends AbstractFormBuilderForm
                         ->value($requestData['botToken'])
                         ->required(),
                     HiddenFormField::create('clientID')
-                        ->value($requestData['clientID'] ?? $this->tempInfo['id'])
+                        ->value($requestData['clientID'] ?? $this->tempInfo['bot']['id'])
                         ->required(),
                     HiddenFormField::create('botName')
                         ->value(
-                            $requestData['botName'] ?? $this->tempInfo['username'] . '#'
-                                                       . $this->tempInfo['discriminator']
+                            $requestData['botName'] ?? $this->tempInfo['bot']['username'] . '#'
+                                                       . $this->tempInfo['bot']['discriminator']
                         )
                         ->required(),
                 ]),
@@ -221,15 +218,17 @@ class DiscordBotAddManagerForm extends AbstractFormBuilderForm
 
     protected function createFormStep4()
     {
+        $oauthRequiredCollecting = new DiscordOAuthRequiredCollecting();
+        EventHandler::getInstance()->fire($oauthRequiredCollecting);
+
         $requestData = $this->form->getRequestData();
         $this->form->appendChildren([
             FormContainer::create('data')
                 ->appendChildren([
                     BooleanFormField::create('useOAuth2')
                         ->label('wcf.acp.discordBotAddManager.useOAuth2')
-                        ->description('wcf.acp.discordBotAddManager.useOAuth2.description')
-                        ->required($this->isDiscordSyncInstalled())
-                        ->value($this->isDiscordSyncInstalled()),
+                        ->required($oauthRequiredCollecting->needOauth2())
+                        ->value($oauthRequiredCollecting->needOauth2()),
                     PasswordFormField::create('clientSecret')
                         ->label('wcf.acp.discordBotAddManager.clientSecret')
                         ->addFieldClass('long')
@@ -261,12 +260,17 @@ class DiscordBotAddManagerForm extends AbstractFormBuilderForm
 
     protected function createFormStep5()
     {
+        $publicKeyRequiredCollecting = new DiscordPublicKeyRequiredCollecting();
+        EventHandler::getInstance()->fire($publicKeyRequiredCollecting);
+
         $requestData = $this->form->getRequestData();
         $this->form->appendChildren([
             FormContainer::create('data')
                 ->appendChildren([
                     BooleanFormField::create('useApplicationCommands')
-                        ->label('wcf.acp.discordBotAddManager.useApplicationCommands'),
+                        ->label('wcf.acp.discordBotAddManager.useApplicationCommands')
+                        ->required($publicKeyRequiredCollecting->needPublicKey())
+                        ->value($publicKeyRequiredCollecting->needPublicKey()),
                     TextFormField::create('publicKey')
                         ->label('wcf.acp.discordBotAddManager.publicKey')
                         ->required()
@@ -296,23 +300,20 @@ class DiscordBotAddManagerForm extends AbstractFormBuilderForm
         ]);
     }
 
-    /**
-     * @inheritDoc
-     */
+    #[Override]
     protected function setFormAction()
     {
         $this->form->action(LinkHandler::getInstance()->getControllerLink(static::class, ['step' => $this->step]));
     }
 
-    /**
-     * @inheritDoc
-     */
+    #[Override]
     public function save()
     {
         $this->step++;
         if ($this->step == 6) {
             $this->additionalFields['botTime'] = \TIME_NOW;
             $this->additionalFields['webhookName'] = \PAGE_TITLE;
+
             parent::save();
         } else {
             AbstractForm::save();
@@ -322,9 +323,7 @@ class DiscordBotAddManagerForm extends AbstractFormBuilderForm
         }
     }
 
-    /**
-     * @inheritDoc
-     */
+    #[Override]
     public function assignVariables()
     {
         parent::assignVariables();
@@ -332,14 +331,7 @@ class DiscordBotAddManagerForm extends AbstractFormBuilderForm
         WCF::getTPL()->assign([
             'step' => $this->step,
             'tempInfo' => $this->tempInfo,
-            'discordSyncInstalled' => $this->isDiscordSyncInstalled(),
+            'neededIntents' => $this->neededIntents,
         ]);
-    }
-
-    private function isDiscordSyncInstalled()
-    {
-        $package = PackageCache::getInstance()->getPackageByIdentifier('eu.hanashi.discord-sync');
-
-        return $package !== null;
     }
 }

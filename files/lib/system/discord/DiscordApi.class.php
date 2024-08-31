@@ -1013,7 +1013,7 @@ final class DiscordApi
      * @param   array $params     optionale Query-Parameters
      * @return  array
      */
-    public function getReactions($channelID, $messageID, $emoji, $params = [])
+    public function getReactions($channelID, $messageID, $emoji, array $params = [])
     {
         $url = \sprintf('%s/channels/%s/messages/%s/reactions/%s', $this->apiUrl, $channelID, $messageID, $emoji);
         if ($params !== []) {
@@ -3363,9 +3363,9 @@ final class DiscordApi
      * returns encoded user flag informations
      *
      * @param   integer $flag       Benutzer Flag als Decimalwert
-     * @return array
+     * @return string[]
      */
-    public function getUserFlagsArray($flag)
+    public function getUserFlagsArray(int $flag): array
     {
         $userFlags = [
             1 => 'Discord Employee', // 1 << 0
@@ -3385,6 +3385,34 @@ final class DiscordApi
         foreach ($userFlags as $userFlag => $description) {
             if (($flag & $userFlag) == $userFlag) {
                 $flags[] = $description;
+            }
+        }
+
+        return $flags;
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getApplicationFlags(int $flag): array
+    {
+        $applicationFlags = [
+            1 << 6 => 'APPLICATION_AUTO_MODERATION_RULE_CREATE_BADGE',
+            1 << 12 => 'GATEWAY_PRESENCE',
+            1 << 13 => 'GATEWAY_PRESENCE_LIMITED',
+            1 << 14 => 'GATEWAY_GUILD_MEMBERS',
+            1 << 15 => 'GATEWAY_GUILD_MEMBERS_LIMITED',
+            1 << 16 => 'VERIFICATION_PENDING_GUILD_LIMIT',
+            1 << 17 => 'EMBEDDED',
+            1 << 18 => 'GATEWAY_MESSAGE_CONTENT',
+            1 << 19 => 'GATEWAY_MESSAGE_CONTENT_LIMITED',
+            1 << 23 => 'APPLICATION_COMMAND_BADGE',
+        ];
+        $flags = [];
+
+        foreach ($applicationFlags as $applicationFlag => $name) {
+            if (($flag & $applicationFlag) == $applicationFlag) {
+                $flags[] = $name;
             }
         }
 
@@ -3467,7 +3495,7 @@ final class DiscordApi
     {
         if (!$this->httpClient) {
             $this->httpClient = HttpFactory::makeClient([
-                RequestOptions::TIMEOUT => 2,
+                RequestOptions::TIMEOUT => 10,
             ]);
         }
 

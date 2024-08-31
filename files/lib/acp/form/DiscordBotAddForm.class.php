@@ -2,6 +2,7 @@
 
 namespace wcf\acp\form;
 
+use Override;
 use wcf\data\discord\bot\DiscordBotAction;
 use wcf\form\AbstractFormBuilderForm;
 use wcf\system\discord\DiscordApi;
@@ -44,9 +45,7 @@ class DiscordBotAddForm extends AbstractFormBuilderForm
      */
     protected $guildIcon;
 
-    /**
-     * @inheritDoc
-     */
+    #[Override]
     protected function createForm()
     {
         parent::createForm();
@@ -143,9 +142,7 @@ class DiscordBotAddForm extends AbstractFormBuilderForm
         ]);
     }
 
-    /**
-     * @inheritDoc
-     */
+    #[Override]
     public function save()
     {
         $additionalFields = [

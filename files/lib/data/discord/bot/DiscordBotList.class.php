@@ -20,4 +20,8 @@ use wcf\data\DatabaseObjectList;
  */
 final class DiscordBotList extends DatabaseObjectList
 {
+    /**
+     * @inheritDoc
+     */
+    public $className = DiscordBot::class;
 }

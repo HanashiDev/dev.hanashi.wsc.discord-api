@@ -20,12 +20,12 @@
 			<thead>
 				<tr>
 					<th class="columnIcon"></th>
-					<th class="columnText columnWebhookID{if $sortField == 'webhookID'} active {@$sortOrder}{/if}"><a href="{link controller='DiscordWebhookList'}pageNo={@$pageNo}&sortField=webhookID&sortOrder={if $sortField == 'webhookID' && $sortOrder == 'ASC'}DESC{else}ASC{/if}{/link}">{lang}wcf.global.objectID{/lang}</a></th>
-					<th class="columnText columnChannelID{if $sortField == 'channelID'} active {@$sortOrder}{/if}"><a href="{link controller='DiscordWebhookList'}pageNo={@$pageNo}&sortField=channelID&sortOrder={if $sortField == 'channelID' && $sortOrder == 'ASC'}DESC{else}ASC{/if}{/link}">{lang}wcf.acp.discordWebhookList.channelID{/lang}</a></th>
-					<th class="columnText columnWebhookTitle{if $sortField == 'webhookTitle'} active {@$sortOrder}{/if}"><a href="{link controller='DiscordWebhookList'}pageNo={@$pageNo}&sortField=webhookTitle&sortOrder={if $sortField == 'webhookTitle' && $sortOrder == 'ASC'}DESC{else}ASC{/if}{/link}">{lang}wcf.acp.discordWebhookList.webhookTitle{/lang}</a></th>
-					<th class="columnText columnWebhook-Name{if $sortField == 'webhookName'} active {@$sortOrder}{/if}"><a href="{link controller='DiscordWebhookList'}pageNo={@$pageNo}&sortField=webhookName&sortOrder={if $sortField == 'webhookName' && $sortOrder == 'ASC'}DESC{else}ASC{/if}{/link}">{lang}wcf.acp.discordWebhookList.webhookName{/lang}</a></th>
-					<th class="columnText columnBotID{if $sortField == 'botID'} active {@$sortOrder}{/if}"><a href="{link controller='DiscordWebhookList'}pageNo={@$pageNo}&sortField=botID&sortOrder={if $sortField == 'botID' && $sortOrder == 'ASC'}DESC{else}ASC{/if}{/link}">{lang}wcf.acp.discordBotList.server{/lang}</a></th>
-					<th class="columnDate columnWebhookTime{if $sortField == 'webhookTime'} active {@$sortOrder}{/if}"><a href="{link controller='DiscordWebhookList'}pageNo={@$pageNo}&sortField=webhookTime&sortOrder={if $sortField == 'webhookTime' && $sortOrder == 'ASC'}DESC{else}ASC{/if}{/link}">{lang}wcf.global.date{/lang}</a></th>
+					<th class="columnText columnWebhookID{if $sortField == 'webhookID'} active {$sortOrder}{/if}"><a href="{link controller='DiscordWebhookList'}pageNo={$pageNo}&sortField=webhookID&sortOrder={if $sortField == 'webhookID' && $sortOrder == 'ASC'}DESC{else}ASC{/if}{/link}">{lang}wcf.global.objectID{/lang}</a></th>
+					<th class="columnText columnChannelID{if $sortField == 'channelID'} active {$sortOrder}{/if}"><a href="{link controller='DiscordWebhookList'}pageNo={$pageNo}&sortField=channelID&sortOrder={if $sortField == 'channelID' && $sortOrder == 'ASC'}DESC{else}ASC{/if}{/link}">{lang}wcf.acp.discordWebhookList.channelID{/lang}</a></th>
+					<th class="columnText columnWebhookTitle{if $sortField == 'webhookTitle'} active {$sortOrder}{/if}"><a href="{link controller='DiscordWebhookList'}pageNo={$pageNo}&sortField=webhookTitle&sortOrder={if $sortField == 'webhookTitle' && $sortOrder == 'ASC'}DESC{else}ASC{/if}{/link}">{lang}wcf.acp.discordWebhookList.webhookTitle{/lang}</a></th>
+					<th class="columnText columnWebhook-Name{if $sortField == 'webhookName'} active {$sortOrder}{/if}"><a href="{link controller='DiscordWebhookList'}pageNo={$pageNo}&sortField=webhookName&sortOrder={if $sortField == 'webhookName' && $sortOrder == 'ASC'}DESC{else}ASC{/if}{/link}">{lang}wcf.acp.discordWebhookList.webhookName{/lang}</a></th>
+					<th class="columnText columnBotID{if $sortField == 'botID'} active {$sortOrder}{/if}"><a href="{link controller='DiscordWebhookList'}pageNo={$pageNo}&sortField=botID&sortOrder={if $sortField == 'botID' && $sortOrder == 'ASC'}DESC{else}ASC{/if}{/link}">{lang}wcf.acp.discordBotList.server{/lang}</a></th>
+					<th class="columnDate columnWebhookTime{if $sortField == 'webhookTime'} active {$sortOrder}{/if}"><a href="{link controller='DiscordWebhookList'}pageNo={$pageNo}&sortField=webhookTime&sortOrder={if $sortField == 'webhookTime' && $sortOrder == 'ASC'}DESC{else}ASC{/if}{/link}">{lang}wcf.global.date{/lang}</a></th>
 
 					{event name='columns'}
 				</tr>
@@ -43,7 +43,11 @@
 							{$webhook->webhookID}
 						</td>
 						<td class="webhookID">
-							{$webhook->channelID}
+							{if $channels[$webhook->botID][$webhook->channelID]|isset}
+								{$channels[$webhook->botID][$webhook->channelID]['name']}<br>({$webhook->channelID})
+							{else}
+								{$webhook->channelID}
+							{/if}
 						</td>
 						<td class="columnText">
 							{$webhook->webhookTitle}
@@ -58,7 +62,7 @@
 							{$webhook->getDiscordBot()->guildName}
 						</td>
 						<td class="columnDate">
-							{@$webhook->webhookTime|time}
+							{time time=$webhook->webhookTime}
 						</td>
 
 						{event name='columnsItem'}
@@ -71,7 +75,7 @@
 	<footer class="contentFooter">
 		{hascontent}
 			<div class="paginationBottom">
-				{content}{@$pagesLinks}{/content}
+				{content}{unsafe:$pagesLinks}{/content}
 			</div>
 		{/hascontent}
 		

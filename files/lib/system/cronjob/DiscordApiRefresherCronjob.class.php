@@ -2,6 +2,7 @@
 
 namespace wcf\system\cronjob;
 
+use Override;
 use wcf\data\cronjob\Cronjob;
 use wcf\data\discord\bot\DiscordBotAction;
 use wcf\data\discord\bot\DiscordBotList;
@@ -19,9 +20,7 @@ use wcf\system\discord\DiscordApi;
  */
 final class DiscordApiRefresherCronjob extends AbstractCronjob
 {
-    /**
-     * @inheritDoc
-     */
+    #[Override]
     public function execute(Cronjob $cronjob)
     {
         parent::execute($cronjob);
