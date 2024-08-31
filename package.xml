@@ -7,7 +7,7 @@
 		<packagedescription>API to cummincate with Discord.</packagedescription>
 		<packagedescription language="de">API um mit Discord zu kommunizieren.</packagedescription>
 		<version>2.7.0</version>
-		<date>2024-08-06</date>
+		<date>2024-08-31</date>
 		<license>https://creativecommons.org/publicdomain/zero/1.0/deed.en</license>
 	</packageinformation>
 	<authorinformation>
@@ -15,7 +15,7 @@
 		<authorurl>https://hanashi.dev/</authorurl>
 	</authorinformation>
 	<requiredpackages>
-		<requiredpackage minversion="6.1.0 Alpha 1">com.woltlab.wcf</requiredpackage>
+		<requiredpackage minversion="6.1.0 Beta 1">com.woltlab.wcf</requiredpackage>
 	</requiredpackages>
 	<excludedpackages>
 		<excludedpackage version="7.0.0 Alpha 1">com.woltlab.wcf</excludedpackage>
