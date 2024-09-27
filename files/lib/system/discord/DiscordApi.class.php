@@ -3467,7 +3467,7 @@ final class DiscordApi
     {
         if (!$this->httpClient) {
             $this->httpClient = HttpFactory::makeClient([
-                RequestOptions::TIMEOUT => 2,
+                RequestOptions::TIMEOUT => 10,
             ]);
         }
 
