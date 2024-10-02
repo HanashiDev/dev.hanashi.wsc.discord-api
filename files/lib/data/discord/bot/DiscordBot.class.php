@@ -42,6 +42,8 @@ final class DiscordBot extends DatabaseObject
 
     protected DiscordApi $discordApi;
 
+    protected ?File $file;
+
     public function getDiscordApi(): DiscordApi
     {
         if (!isset($this->discordApi)) {
@@ -57,7 +59,7 @@ final class DiscordBot extends DatabaseObject
 
         if ($this->webhookIconID !== null) {
             $file = new File($this->webhookIconID);
-            $files[] = $file->getPath();
+            $files[] = $file->getPathname();
         }
 
         return $files;
@@ -69,5 +71,28 @@ final class DiscordBot extends DatabaseObject
             'guildID' => $this->guildID,
             'botToken' => $this->botToken,
         ]);
+    }
+
+    public function getWebhookAvatar(): ?File
+    {
+        if ($this->webhookIconID === null) {
+            return null;
+        }
+
+        if (!isset($this->file)) {
+            $this->file = new File($this->webhookIconID);
+        }
+
+        return $this->file;
+    }
+
+    public function getWebhookAvatarData(): ?string
+    {
+        $file = $this->getWebhookAvatar();
+        if ($file === null) {
+            return null;
+        }
+
+        return 'data:' . $file->mimeType . ';base64,' . \base64_encode(\file_get_contents($file->getPathname()));
     }
 }
