@@ -7,10 +7,10 @@ use wcf\data\discord\bot\DiscordBotAction;
 use wcf\form\AbstractFormBuilderForm;
 use wcf\system\discord\DiscordApi;
 use wcf\system\form\builder\container\FormContainer;
+use wcf\system\form\builder\field\FileProcessorFormField;
 use wcf\system\form\builder\field\IntegerFormField;
 use wcf\system\form\builder\field\PasswordFormField;
 use wcf\system\form\builder\field\TextFormField;
-use wcf\system\form\builder\field\UploadFormField;
 use wcf\system\form\builder\field\validation\FormFieldValidationError;
 use wcf\system\form\builder\field\validation\FormFieldValidator;
 
@@ -110,13 +110,12 @@ class DiscordBotAddForm extends AbstractFormBuilderForm
                         ->required()
                         ->maximumLength(50)
                         ->value(PAGE_TITLE),
-                    UploadFormField::create('webhookIcon')
+                    FileProcessorFormField::create('webhookIconID')
+                        ->objectType('dev.hanashi.wsc.discord.webhook.avatar')
                         ->label('wcf.acp.discordBotAdd.webhookIcon')
                         ->description('wcf.acp.discordBotAdd.webhookIcon.description')
-                        ->maximum(1)
-                        ->imageOnly()
-                        ->maximumFilesize(8000000)
-                        ->setAcceptableFiles(['image/jpeg', 'image/png', 'image/gif']),
+                        ->singleFileUpload()
+                        ->bigPreview(),
                 ]),
             FormContainer::create('oauth2Settings')
                 ->label('wcf.acp.discordBotAdd.oauth2Settings')
