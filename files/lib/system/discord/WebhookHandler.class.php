@@ -8,7 +8,6 @@ use wcf\data\discord\webhook\DiscordWebhookAction;
 use wcf\data\discord\webhook\DiscordWebhookList;
 use wcf\system\cache\runtime\DiscordBotRuntimeCache;
 use wcf\system\SingletonFactory;
-use wcf\util\FileUtil;
 
 final class WebhookHandler extends SingletonFactory
 {
@@ -21,12 +20,7 @@ final class WebhookHandler extends SingletonFactory
         }
         $api = $bot->getDiscordApi();
 
-        $avatar = null;
-        $avatarFile = \sprintf('%simages/discord_webhook/%s.png', WCF_DIR, $botID);
-        if (\file_exists($avatarFile)) {
-            $mimeType = FileUtil::getMimeType($avatarFile);
-            $avatar = 'data:' . $mimeType . ';base64,' . \base64_encode(\file_get_contents($avatarFile));
-        }
+        $avatar = $bot->getWebhookAvatarData();
 
         $list = new DiscordWebhookList();
         $list->getConditionBuilder()->add('botID = ?', [$bot->botID]);
