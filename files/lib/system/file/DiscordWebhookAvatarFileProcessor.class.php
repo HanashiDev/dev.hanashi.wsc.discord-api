@@ -40,6 +40,9 @@ final class DiscordWebhookAvatarFileProcessor extends AbstractFileProcessor
         if ($imageData === false) {
             throw new UserInputException('file', 'noImage');
         }
+        if ($imageData[0] < 128 || $imageData[1] < 128) {
+            throw new UserInputException('file', 'tooSmall');
+        }
     }
 
     #[Override]
