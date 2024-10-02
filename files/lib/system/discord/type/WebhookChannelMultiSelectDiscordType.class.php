@@ -6,7 +6,6 @@ use Override;
 use wcf\data\discord\webhook\DiscordWebhookAction;
 use wcf\data\discord\webhook\DiscordWebhookList;
 use wcf\system\exception\UserInputException;
-use wcf\util\FileUtil;
 
 class WebhookChannelMultiSelectDiscordType extends ChannelMultiSelectDiscordType
 {
@@ -67,12 +66,7 @@ class WebhookChannelMultiSelectDiscordType extends ChannelMultiSelectDiscordType
 
                 if (!isset($webhookChannelIDs[$botID]) || !\in_array($channelID, $webhookChannelIDs[$botID])) {
                     $discordApi = $discordBots[$botID]->getDiscordApi();
-                    $avatar = null;
-                    $avatarFile = \sprintf('%simages/discord_webhook/%s.png', WCF_DIR, $botID);
-                    if (\file_exists($avatarFile)) {
-                        $mimeType = FileUtil::getMimeType($avatarFile);
-                        $avatar = 'data:' . $mimeType . ';base64,' . \base64_encode(\file_get_contents($avatarFile));
-                    }
+                    $avatar = $discordBots[$botID]->getWebhookAvatarData();
                     $response = $discordApi->createWebhook($channelID, $discordBots[$botID]->webhookName, $avatar);
                     if (!$response['error']) {
                         $action = new DiscordWebhookAction([], 'create', [

@@ -2,12 +2,14 @@
 
 use wcf\system\database\table\column\BigintDatabaseTableColumn;
 use wcf\system\database\table\column\BlobDatabaseTableColumn;
+use wcf\system\database\table\column\IntDatabaseTableColumn;
 use wcf\system\database\table\column\NotNullInt10DatabaseTableColumn;
 use wcf\system\database\table\column\ObjectIdDatabaseTableColumn;
 use wcf\system\database\table\column\TextDatabaseTableColumn;
 use wcf\system\database\table\column\TinyintDatabaseTableColumn;
 use wcf\system\database\table\column\VarcharDatabaseTableColumn;
 use wcf\system\database\table\DatabaseTable;
+use wcf\system\database\table\index\DatabaseTableForeignKey;
 use wcf\system\database\table\index\DatabaseTablePrimaryIndex;
 use wcf\system\database\table\PartialDatabaseTable;
 
@@ -55,10 +57,19 @@ return [
             VarcharDatabaseTableColumn::create('publicKey')
                 ->length(100),
             NotNullInt10DatabaseTableColumn::create('botTime'),
+            IntDatabaseTableColumn::create('webhookIconID')
+                ->length(10),
         ])
         ->indices([
             DatabaseTablePrimaryIndex::create()
                 ->columns(['botID']),
+        ])
+        ->foreignKeys([
+            DatabaseTableForeignKey::create()
+                ->columns(['webhookIconID'])
+                ->referencedTable('wcf1_file')
+                ->referencedColumns(['fileID'])
+                ->onDelete('SET NULL'),
         ]),
 
     // wcf1_discord_webhook

@@ -7,6 +7,7 @@ use Override;
 use wcf\data\discord\bot\DiscordBot;
 use wcf\http\Helper;
 use wcf\system\exception\IllegalLinkException;
+use wcf\system\form\builder\field\FileProcessorFormField;
 
 class DiscordBotEditForm extends DiscordBotAddForm
 {
@@ -37,5 +38,17 @@ class DiscordBotEditForm extends DiscordBotAddForm
         } catch (MappingError) {
             throw new IllegalLinkException();
         }
+    }
+
+    #[Override]
+    protected function createForm()
+    {
+        parent::createForm();
+
+        $webhookIconFormField = $this->form->getNodeById('webhookIconID');
+        \assert($webhookIconFormField instanceof FileProcessorFormField);
+        $webhookIconFormField->context([
+            'botID' => $this->formObject->botID,
+        ]);
     }
 }

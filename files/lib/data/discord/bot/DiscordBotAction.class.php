@@ -7,7 +7,6 @@ use wcf\data\AbstractDatabaseObjectAction;
 use wcf\system\cache\builder\DiscordGuildChannelsCacheBuilder;
 use wcf\system\exception\AJAXException;
 use wcf\system\exception\PermissionDeniedException;
-use wcf\system\file\upload\UploadFile;
 use wcf\system\WCF;
 
 /**
@@ -47,13 +46,7 @@ final class DiscordBotAction extends AbstractDatabaseObjectAction
             unset($this->parameters['data']['useApplicationCommands']);
         }
 
-        $discordBot = parent::create();
-
-        if (isset($this->parameters['webhookIcon']) && \is_array($this->parameters['webhookIcon'])) {
-            $this->processWebhookIcon($discordBot->botID);
-        }
-
-        return $discordBot;
+        return parent::create();
     }
 
     #[Override]
@@ -67,57 +60,12 @@ final class DiscordBotAction extends AbstractDatabaseObjectAction
         }
 
         parent::update();
-
-        foreach ($this->getObjects() as $object) {
-            if (isset($this->parameters['webhookIcon']) && \is_array($this->parameters['webhookIcon'])) {
-                if ($this->parameters['webhookIcon'] === '') {
-                    $filename = \sprintf('%simages/discord_webhook/%s.png', WCF_DIR, $object->botID);
-                    if (\file_exists($filename)) {
-                        \unlink($filename);
-                    }
-                } else {
-                    $this->processWebhookIcon($object->botID);
-                }
-            }
-        }
-    }
-
-    #[Override]
-    public function delete()
-    {
-        $returnValues = parent::delete();
-
-        foreach ($this->getObjects() as $object) {
-            $filename = \sprintf('%simages/discord_webhook/%s.png', WCF_DIR, $object->botID);
-            if (\file_exists($filename)) {
-                \unlink($filename);
-            }
-        }
-
-        return $returnValues;
     }
 
     #[Override]
     protected function resetCache()
     {
         DiscordGuildChannelsCacheBuilder::getInstance()->reset();
-    }
-
-    /**
-     * verarbeitet hochgeladenes Icon
-     *
-     * @param  mixed $botID
-     * @return void
-     */
-    protected function processWebhookIcon(int $botID)
-    {
-        $iconFile = \reset($this->parameters['webhookIcon']);
-        if ($iconFile instanceof UploadFile && !$iconFile->isProcessed()) {
-            $filename = \sprintf('%simages/discord_webhook/%s.png', WCF_DIR, $botID);
-
-            \rename($iconFile->getLocation(), $filename);
-            $iconFile->setProcessed($filename);
-        }
     }
 
     /**

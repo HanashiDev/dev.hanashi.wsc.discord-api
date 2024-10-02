@@ -117,6 +117,10 @@
 		<category name="wcf.acp.discordBotSelectOptionType">
 			<item name="wcf.acp.discordBotSelectOptionType.noBot"><![CDATA[{if LANGUAGE_USE_INFORMAL_VARIANT}Du hast{else}Sie haben{/if} noch keinen Discord-Bot angelegt. Dies {if LANGUAGE_USE_INFORMAL_VARIANT}kannst du{else}können Sie{/if} unter <a href="{link controller="DiscordBotAddManager"}{/link}">Discord-Bot</a> erledigen.]]></item>
 		</category>
+		<category name="wcf.acp.rebuildData">
+			<item name="wcf.acp.rebuildData.wcf_system_worker_DiscordWebhookAvatarRebuildDataWorker"><![CDATA[Discord-Webhook-Avatar aktualisieren]]></item>
+			<item name="wcf.acp.rebuildData.wcf_system_worker_DiscordWebhookAvatarRebuildDataWorker.description"><![CDATA[Aktualisiert Avatare für Discord-Webhook.]]></item>
+		</category>
 	</import>
 	<delete>
 		<item name="wcf.acp.discordBotAddManager.useOAuth2.description"/>

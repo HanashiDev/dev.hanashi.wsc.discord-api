@@ -117,6 +117,10 @@ Go the <a href="https://discord.com/developers/applications" class="externalURL"
 		<category name="wcf.acp.discordBotSelectOptionType">
 			<item name="wcf.acp.discordBotSelectOptionType.noBot"><![CDATA[You haven't created a discord bot yet. You can do this under <a href="{link controller="DiscordBotAddManager"}{/link}">Discord bot</a>.]]></item>
 		</category>
+		<category name="wcf.acp.rebuildData">
+			<item name="wcf.acp.rebuildData.wcf_system_worker_DiscordWebhookAvatarRebuildDataWorker"><![CDATA[Update discord webhook avatar]]></item>
+			<item name="wcf.acp.rebuildData.wcf_system_worker_DiscordWebhookAvatarRebuildDataWorker.description"><![CDATA[Updates avatars for discord webhook.]]></item>
+		</category>
 	</import>
 	<delete>
 		<item name="wcf.acp.discordBotAddManager.useOAuth2.description"/>

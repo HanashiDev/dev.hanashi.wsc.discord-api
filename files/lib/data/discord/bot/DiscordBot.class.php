@@ -3,6 +3,7 @@
 namespace wcf\data\discord\bot;
 
 use wcf\data\DatabaseObject;
+use wcf\data\file\File;
 use wcf\system\cache\builder\DiscordGuildChannelCacheBuilder;
 use wcf\system\discord\DiscordApi;
 
@@ -25,6 +26,7 @@ use wcf\system\discord\DiscordApi;
  * @property-read string|null $clientSecret
  * @property-read string|null $publicKey
  * @property-read int $botTime
+ * @property-read int|null $webhookIconID
  */
 final class DiscordBot extends DatabaseObject
 {
@@ -40,6 +42,8 @@ final class DiscordBot extends DatabaseObject
 
     protected DiscordApi $discordApi;
 
+    protected ?File $file;
+
     public function getDiscordApi(): DiscordApi
     {
         if (!isset($this->discordApi)) {
@@ -53,9 +57,9 @@ final class DiscordBot extends DatabaseObject
     {
         $files = [];
 
-        $filename = \sprintf('%simages/discord_webhook/%s.png', WCF_DIR, $this->botID);
-        if (\file_exists($filename)) {
-            $files[] = $filename;
+        if ($this->webhookIconID !== null) {
+            $file = new File($this->webhookIconID);
+            $files[] = $file->getPathname();
         }
 
         return $files;
@@ -67,5 +71,28 @@ final class DiscordBot extends DatabaseObject
             'guildID' => $this->guildID,
             'botToken' => $this->botToken,
         ]);
+    }
+
+    public function getWebhookAvatar(): ?File
+    {
+        if ($this->webhookIconID === null) {
+            return null;
+        }
+
+        if (!isset($this->file)) {
+            $this->file = new File($this->webhookIconID);
+        }
+
+        return $this->file;
+    }
+
+    public function getWebhookAvatarData(): ?string
+    {
+        $file = $this->getWebhookAvatar();
+        if ($file === null) {
+            return null;
+        }
+
+        return 'data:' . $file->mimeType . ';base64,' . \base64_encode(\file_get_contents($file->getPathname()));
     }
 }
