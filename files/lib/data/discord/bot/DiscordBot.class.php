@@ -97,7 +97,7 @@ final class DiscordBot extends DatabaseObject
         return 'data:' . $file->mimeType . ';base64,' . \base64_encode(\file_get_contents($file->getPathname()));
     }
 
-    public static function findByFileID(int $fileID): ?DiscordBot
+    public static function findByFileID(int $fileID): ?self
     {
         $sql = "
             SELECT  *
@@ -107,6 +107,6 @@ final class DiscordBot extends DatabaseObject
         $stmnt = WCF::getDB()->prepare($sql);
         $stmnt->execute([$fileID]);
 
-        return $stmnt->fetchObject(DiscordBot::class);
+        return $stmnt->fetchObject(self::class);
     }
 }
