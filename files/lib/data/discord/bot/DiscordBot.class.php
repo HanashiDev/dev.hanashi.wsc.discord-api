@@ -6,6 +6,7 @@ use wcf\data\DatabaseObject;
 use wcf\data\file\File;
 use wcf\system\cache\builder\DiscordGuildChannelCacheBuilder;
 use wcf\system\discord\DiscordApi;
+use wcf\system\WCF;
 
 /**
  * Discord-Bot-Objekt
@@ -94,5 +95,18 @@ final class DiscordBot extends DatabaseObject
         }
 
         return 'data:' . $file->mimeType . ';base64,' . \base64_encode(\file_get_contents($file->getPathname()));
+    }
+
+    public static function findByFileID(int $fileID): ?DiscordBot
+    {
+        $sql = "
+            SELECT  *
+            FROM    wcf1_discord_bot
+            WHERE   botID = ?
+        ";
+        $stmnt = WCF::getDB()->prepare($sql);
+        $stmnt->execute([$fileID]);
+
+        return $stmnt->fetchObject(DiscordBot::class);
     }
 }
