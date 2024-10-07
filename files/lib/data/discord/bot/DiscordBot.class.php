@@ -102,7 +102,7 @@ final class DiscordBot extends DatabaseObject
         $sql = "
             SELECT  *
             FROM    wcf1_discord_bot
-            WHERE   botID = ?
+            WHERE   webhookIconID = ?
         ";
         $stmnt = WCF::getDB()->prepare($sql);
         $stmnt->execute([$fileID]);
