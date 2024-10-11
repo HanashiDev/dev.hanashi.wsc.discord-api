@@ -48,7 +48,18 @@ final class DiscordWebhookAvatarFileProcessor extends AbstractFileProcessor
     #[Override]
     public function canAdopt(File $file, array $context): bool
     {
-        return DiscordBot::findByFileID($file->fileID) === null;
+        $botContext = $this->getBot($context);
+        $botFile = DiscordBot::findByFileID($file->fileID);
+
+        if ($botFile === null) {
+            return true;
+        }
+
+        if ($botFile->botID === $botContext->botID) {
+            return true;
+        }
+
+        return false;
     }
 
     #[Override]
