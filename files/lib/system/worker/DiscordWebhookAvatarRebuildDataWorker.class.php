@@ -7,12 +7,17 @@ use wcf\data\discord\bot\DiscordBotEditor;
 use wcf\data\discord\bot\DiscordBotList;
 use wcf\data\file\FileEditor;
 
-final class DiscordWebhookAvatarRebuildDataWorker extends AbstractRebuildDataWorker
+final class DiscordWebhookAvatarRebuildDataWorker extends AbstractLinearRebuildDataWorker
 {
     /**
      * @inheritDoc
      */
     protected $objectListClassName = DiscordBotList::class;
+
+    /**
+     * @inheritDoc
+     */
+    protected $limit = 100;
 
     #[Override]
     public function execute()
