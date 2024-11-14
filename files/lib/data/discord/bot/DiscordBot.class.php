@@ -2,8 +2,10 @@
 
 namespace wcf\data\discord\bot;
 
+use Override;
 use wcf\data\DatabaseObject;
 use wcf\data\file\File;
+use wcf\data\ITitledObject;
 use wcf\system\cache\builder\DiscordGuildChannelCacheBuilder;
 use wcf\system\discord\DiscordApi;
 use wcf\system\WCF;
@@ -29,7 +31,7 @@ use wcf\system\WCF;
  * @property-read int $botTime
  * @property-read int|null $webhookIconID
  */
-final class DiscordBot extends DatabaseObject
+final class DiscordBot extends DatabaseObject implements ITitledObject
 {
     /**
      * @inheritDoc
@@ -44,6 +46,12 @@ final class DiscordBot extends DatabaseObject
     protected DiscordApi $discordApi;
 
     protected ?File $file;
+
+    #[Override]
+    public function getTitle(): string
+    {
+        return $this->botName;
+    }
 
     public function getDiscordApi(): DiscordApi
     {
