@@ -3,10 +3,12 @@
 namespace wcf\system\gridView;
 
 use Override;
+use wcf\acp\form\DiscordBotEditForm;
 use wcf\data\DatabaseObjectList;
 use wcf\data\discord\bot\DiscordBot;
 use wcf\data\discord\bot\DiscordBotList;
 use wcf\system\gridView\action\DeleteAction;
+use wcf\system\gridView\action\EditAction;
 use wcf\system\gridView\renderer\DefaultColumnRenderer;
 use wcf\system\gridView\renderer\NumberColumnRenderer;
 use wcf\system\gridView\renderer\TimeColumnRenderer;
@@ -57,6 +59,7 @@ final class DiscordBotListGridView extends DatabaseObjectListGridView
         ]);
 
         $this->addActions([
+            new EditAction(DiscordBotEditForm::class),
             new DeleteAction('hanashi/discord/bot/%s'),
         ]);
         $this->setSortField('botID');
