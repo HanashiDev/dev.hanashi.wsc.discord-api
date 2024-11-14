@@ -55,7 +55,8 @@ final class DiscordBotListGridView extends DatabaseObjectListGridView
                 ->sortable(),
             GridViewColumn::for('botTime')
                 ->label('wcf.global.date')
-                ->renderer(new TimeColumnRenderer()),
+                ->renderer(new TimeColumnRenderer())
+                ->sortable(),
         ]);
 
         $this->addActions([
