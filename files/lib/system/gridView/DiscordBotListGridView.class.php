@@ -87,8 +87,8 @@ final class DiscordBotListGridView extends DatabaseObjectListGridView
     }
 
     #[Override]
-     protected function getInitializedEvent(): ?IPsr14Event
-     {
-         return new DiscordBotListGridViewInitialized($this);
-     }
+    protected function getInitializedEvent(): ?IPsr14Event
+    {
+        return new DiscordBotListGridViewInitialized($this);
+    }
 }
