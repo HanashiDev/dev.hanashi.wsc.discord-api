@@ -7,8 +7,12 @@ use wcf\acp\form\DiscordBotEditForm;
 use wcf\data\DatabaseObjectList;
 use wcf\data\discord\bot\DiscordBot;
 use wcf\data\discord\bot\DiscordBotList;
+use wcf\event\IPsr14Event;
+use wcf\system\event\gridView\DiscordBotListGridViewInitialized;
 use wcf\system\gridView\action\DeleteAction;
 use wcf\system\gridView\action\EditAction;
+use wcf\system\gridView\filter\TextFilter;
+use wcf\system\gridView\filter\TimeFilter;
 use wcf\system\gridView\renderer\DefaultColumnRenderer;
 use wcf\system\gridView\renderer\NumberColumnRenderer;
 use wcf\system\gridView\renderer\TimeColumnRenderer;
@@ -27,7 +31,8 @@ final class DiscordBotListGridView extends DatabaseObjectListGridView
             GridViewColumn::for('botName')
                 ->label('wcf.acp.discordBotList.botName')
                 ->renderer(new TitleColumnRenderer())
-                ->sortable(),
+                ->sortable()
+                ->filter(new TextFilter()),
             GridViewColumn::for('guildName')
                 ->label('wcf.acp.discordBotList.server')
                 ->renderer([
@@ -52,11 +57,13 @@ final class DiscordBotListGridView extends DatabaseObjectListGridView
                         }
                     },
                 ])
-                ->sortable(),
+                ->sortable()
+                ->filter(new TextFilter()),
             GridViewColumn::for('botTime')
                 ->label('wcf.global.date')
                 ->renderer(new TimeColumnRenderer())
-                ->sortable(),
+                ->sortable()
+                ->filter(new TimeFilter()),
         ]);
 
         $this->addActions([
@@ -78,4 +85,10 @@ final class DiscordBotListGridView extends DatabaseObjectListGridView
     {
         return new DiscordBotList();
     }
+
+    #[Override]
+     protected function getInitializedEvent(): ?IPsr14Event
+     {
+         return new DiscordBotListGridViewInitialized($this);
+     }
 }
