@@ -14,6 +14,7 @@ use wcf\system\gridView\GridViewColumn;
 use wcf\system\gridView\renderer\DefaultColumnRenderer;
 use wcf\system\gridView\renderer\TimeColumnRenderer;
 use wcf\system\interaction\admin\DiscordWebhookInteractions;
+use wcf\system\WCF;
 
 final class DiscordWebhookGridView extends AbstractGridView
 {
@@ -89,6 +90,12 @@ final class DiscordWebhookGridView extends AbstractGridView
 
         $this->setSortField('webhookID');
         $this->setSortOrder('ASC');
+    }
+
+    #[Override]
+    public function isAccessible(): bool
+    {
+        return WCF::getSession()->getPermission('admin.discord.canManageWebhooks');
     }
 
     #[Override]
