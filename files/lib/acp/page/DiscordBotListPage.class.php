@@ -17,6 +17,14 @@ use wcf\system\gridView\admin\DiscordBotGridView;
  */
 final class DiscordBotListPage extends AbstractGridViewPage
 {
+    /**
+     * @inheritDoc
+     */
+    public $neededPermissions = ['admin.discord.canManageConnection'];
+
+    /**
+     * @inheritDoc
+     */
     public $activeMenuItem = 'wcf.acp.menu.link.configuration.discord.discordBotList';
 
     #[Override]

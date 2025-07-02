@@ -14,7 +14,7 @@
 </header>
 
 <div class="section">
-    {unsafe:$gridView->render()}
+	{unsafe:$gridView->render()}
 </div>
 
 {include file='footer'}
