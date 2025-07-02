@@ -3,7 +3,6 @@
 namespace wcf\system\interaction\admin;
 
 use Override;
-use wcf\data\discord\bot\DiscordBot;
 use wcf\data\discord\webhook\DiscordWebhook;
 use wcf\event\interaction\admin\DiscordWebhookInteractionCollecting;
 use wcf\system\event\EventHandler;
