@@ -32,7 +32,7 @@ class DiscordBotSelectOptionType extends AbstractOptionType
             'value' => $value,
         ]);
 
-        return WCF::getTPL()->fetch('discordBotSelectOptionType');
+        return WCF::getTPL()->render('wcf', 'discordBotSelectOptionType', []);
     }
 
     #[Override]

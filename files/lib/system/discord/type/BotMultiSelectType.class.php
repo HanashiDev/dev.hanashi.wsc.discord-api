@@ -22,7 +22,7 @@ class BotMultiSelectType extends AbstractDiscordType
             'value' => !\is_array($value) ? \explode("\n", $value) : $value,
         ]);
 
-        return WCF::getTPL()->fetch('discordBotMultiSelectOptionType');
+        return WCF::getTPL()->render('wcf', 'discordBotMultiSelectOptionType', []);
     }
 
     public function validate($newValue)

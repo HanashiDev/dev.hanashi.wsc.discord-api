@@ -70,7 +70,7 @@ class ChannelSelectDiscordType extends AbstractDiscordType
             'channelTypes' => $channelTypes,
         ]);
 
-        return WCF::getTPL()->fetch('discordChannelSelectOptionType');
+        return WCF::getTPL()->render('wcf', 'discordChannelSelectOptionType', []);
     }
 
     public function validate($newValue, ?int $maxChannels = null)

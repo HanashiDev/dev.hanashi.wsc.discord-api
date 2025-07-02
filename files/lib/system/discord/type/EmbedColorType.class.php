@@ -12,7 +12,7 @@ class EmbedColorType extends AbstractDiscordType
     {
         $value = $this->generateRgbaByDec($value);
 
-        return WCF::getTPL()->fetch('discordEmbedColorOptionType', 'wcf', [
+        return WCF::getTPL()->render('wcf', 'discordEmbedColorOptionType', [
             'optionName' => $this->optionName,
             'value' => $value,
         ]);

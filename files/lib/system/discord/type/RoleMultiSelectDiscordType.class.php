@@ -58,7 +58,7 @@ class RoleMultiSelectDiscordType extends AbstractDiscordType
             'value' => $realValue,
         ]);
 
-        return WCF::getTPL()->fetch('discordRoleMultiSelect');
+        return WCF::getTPL()->render('wcf', 'discordRoleMultiSelect', []);
     }
 
     public function validate($newValue)
