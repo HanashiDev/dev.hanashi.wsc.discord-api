@@ -1,0 +1,99 @@
+<?php
+
+namespace wcf\system\gridView\admin;
+
+use Override;
+use wcf\data\DatabaseObjectList;
+use wcf\data\discord\webhook\DiscordWebhook;
+use wcf\data\discord\webhook\DiscordWebhookList;
+use wcf\system\cache\builder\DiscordGuildChannelsCacheBuilder;
+use wcf\system\gridView\AbstractGridView;
+use wcf\system\gridView\filter\TextFilter;
+use wcf\system\gridView\filter\TimeFilter;
+use wcf\system\gridView\GridViewColumn;
+use wcf\system\gridView\renderer\DefaultColumnRenderer;
+use wcf\system\gridView\renderer\TimeColumnRenderer;
+use wcf\system\interaction\admin\DiscordWebhookInteractions;
+
+final class DiscordWebhookGridView extends AbstractGridView
+{
+    public function __construct()
+    {
+        $this->addColumns([
+            GridViewColumn::for('webhookID')
+                ->label('wcf.global.objectID')
+                ->sortable(),
+            GridViewColumn::for('channelID')
+                ->label('wcf.acp.discordWebhookList.channelID')
+                ->renderer([
+                    new class extends DefaultColumnRenderer {
+                        public function render(mixed $value, mixed $context = null): string
+                        {
+                            \assert($context instanceof DiscordWebhook);
+
+                            $channels = DiscordGuildChannelsCacheBuilder::getInstance()->getData();
+
+                            if (!isset($channels[$context->botID][$value])) {
+                                return $value;
+                            }
+
+                            return \sprintf('%s<br>(%s)', $channels[$context->botID][$value]['name'], $value);
+                        }
+                    },
+                ])
+                ->sortable(),
+            GridViewColumn::for('webhookTitle')
+                ->label('wcf.acp.discordWebhookList.webhookTitle')
+                ->titleColumn()
+                ->sortable()
+                ->filter(new TextFilter()),
+            GridViewColumn::for('webhookName')
+                ->label('wcf.acp.discordWebhookList.webhookName')
+                ->sortable()
+                ->filter(new TextFilter()),
+            GridViewColumn::for('botID')
+                ->label('wcf.acp.discordBotList.server')
+                ->renderer([
+                    new class extends DefaultColumnRenderer {
+                        public function render(mixed $value, mixed $context = null): string
+                        {
+                            \assert($context instanceof DiscordWebhook);
+
+                            $bot = $context->getDiscordBot();
+
+                            $content = '';
+                            if (!empty($bot->guildIcon)) {
+                                $content = \sprintf(
+                                    '<img
+                                         src="https://cdn.discordapp.com/icons/%s/%s.png"
+                                         style="max-width: 32px; border-radius: 50%%; margin-right: 10px;"
+                                     >',
+                                    $bot->guildID,
+                                    $bot->guildIcon
+                                );
+                            }
+
+                            return $content . $bot->guildName;
+                        }
+                    },
+                ]),
+            GridViewColumn::for('webhookTime')
+                ->label('wcf.global.date')
+                ->renderer(new TimeColumnRenderer())
+                ->sortable()
+                ->filter(new TimeFilter()),
+        ]);
+
+        $provider = new DiscordWebhookInteractions();
+        $this->setInteractionProvider($provider);
+
+        $this->setSortField('webhookID');
+        $this->setSortOrder('ASC');
+    }
+
+    #[Override]
+    protected function createObjectList(): DatabaseObjectList
+    {
+        return new DiscordWebhookList();
+    }
+}

@@ -3,10 +3,9 @@
 namespace wcf\acp\page;
 
 use Override;
-use wcf\data\discord\webhook\DiscordWebhookList;
-use wcf\page\SortablePage;
-use wcf\system\cache\builder\DiscordGuildChannelsCacheBuilder;
-use wcf\system\WCF;
+use wcf\page\AbstractGridViewPage;
+use wcf\system\gridView\AbstractGridView;
+use wcf\system\gridView\admin\DiscordWebhookGridView;
 
 /**
  * Übersicht der erstellten Discord-Webhooks
@@ -16,7 +15,7 @@ use wcf\system\WCF;
  * @license Freie Lizenz (https://hanashi.dev/freie-lizenz/)
  * @package WoltLabSuite\Core\Acp\Page
  */
-class DiscordWebhookListPage extends SortablePage
+final class DiscordWebhookListPage extends AbstractGridViewPage
 {
     /**
      * @inheritDoc
@@ -28,43 +27,9 @@ class DiscordWebhookListPage extends SortablePage
      */
     public $activeMenuItem = 'wcf.acp.menu.link.configuration.discord.discordWebhookList';
 
-    /**
-     * @inheritDoc
-     */
-    public $objectListClassName = DiscordWebhookList::class;
-
-    /**
-     * @inheritDoc
-     */
-    public $defaultSortField = 'webhookID';
-
-    /**
-     * @inheritDoc
-     */
-    public $defaultSortOrder = 'ASC';
-
-    /**
-     * @inheritDoc
-     */
-    public $validSortFields = ['channelID', 'botID', 'webhookID', 'webhookName', 'webhookTitle', 'webhookTime'];
-
-    protected array $channels = [];
-
     #[Override]
-    public function readData()
+    protected function createGridView(): AbstractGridView
     {
-        parent::readData();
-
-        $this->channels = DiscordGuildChannelsCacheBuilder::getInstance()->getData();
-    }
-
-    #[Override]
-    public function assignVariables()
-    {
-        parent::assignVariables();
-
-        WCF::getTPL()->assign([
-            'channels' => $this->channels,
-        ]);
+        return new DiscordWebhookGridView();
     }
 }

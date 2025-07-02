@@ -5,7 +5,10 @@ use wcf\acp\page\DiscordBotListPage;
 use wcf\acp\page\DiscordWebhookListPage;
 use wcf\event\acp\dashboard\box\PHPExtensionCollecting;
 use wcf\event\acp\menu\item\ItemCollecting;
+use wcf\event\endpoint\ControllerCollecting;
 use wcf\event\worker\RebuildWorkerCollecting;
+use wcf\system\endpoint\controller\hanashi\discord\bot\DeleteBot;
+use wcf\system\endpoint\controller\hanashi\discord\webhook\DeleteWebhook;
 use wcf\system\event\EventHandler;
 use wcf\system\menu\acp\AcpMenuItem;
 use wcf\system\request\LinkHandler;
@@ -75,6 +78,14 @@ return static function (): void {
         RebuildWorkerCollecting::class,
         static function (RebuildWorkerCollecting $event) {
             $event->register(DiscordWebhookAvatarRebuildDataWorker::class, 0);
+        }
+    );
+
+    EventHandler::getInstance()->register(
+        ControllerCollecting::class,
+        static function (ControllerCollecting $event) {
+            $event->register(new DeleteBot());
+            $event->register(new DeleteWebhook());
         }
     );
 };
