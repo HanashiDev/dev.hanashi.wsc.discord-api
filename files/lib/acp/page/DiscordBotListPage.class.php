@@ -2,8 +2,10 @@
 
 namespace wcf\acp\page;
 
-use wcf\data\discord\bot\DiscordBotList;
-use wcf\page\SortablePage;
+use Override;
+use wcf\page\AbstractGridViewPage;
+use wcf\system\gridView\AbstractGridView;
+use wcf\system\gridView\admin\DiscordBotGridView;
 
 /**
  * Übersicht aller Discord-Bots
@@ -13,35 +15,13 @@ use wcf\page\SortablePage;
  * @license Freie Lizenz (https://hanashi.dev/freie-lizenz/)
  * @package WoltLabSuite\Core\Acp\Page
  */
-class DiscordBotListPage extends SortablePage
+final class DiscordBotListPage extends AbstractGridViewPage
 {
-    /**
-     * @inheritDoc
-     */
-    public $neededPermissions = ['admin.discord.canManageConnection'];
-
-    /**
-     * @inheritDoc
-     */
     public $activeMenuItem = 'wcf.acp.menu.link.configuration.discord.discordBotList';
 
-    /**
-     * @inheritDoc
-     */
-    public $objectListClassName = DiscordBotList::class;
-
-    /**
-     * @inheritDoc
-     */
-    public $defaultSortField = 'botID';
-
-    /**
-     * @inheritDoc
-     */
-    public $defaultSortOrder = 'ASC';
-
-    /**
-     * @inheritDoc
-     */
-    public $validSortFields = ['botID', 'botName', 'guildID', 'guildName', 'botTime'];
+    #[Override]
+    protected function createGridView(): AbstractGridView
+    {
+        return new DiscordBotGridView();
+    }
 }
