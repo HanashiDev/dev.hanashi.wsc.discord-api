@@ -66,8 +66,8 @@ final class DiscordWebhookGridView extends AbstractGridView
                             if (!empty($bot->guildIcon)) {
                                 $content = \sprintf(
                                     '<img
-                                         src="https://cdn.discordapp.com/icons/%s/%s.png"
-                                         style="max-width: 32px; border-radius: 50%%; margin-right: 10px;"
+                                        src="https://cdn.discordapp.com/icons/%s/%s.png"
+                                        style="max-width: 32px; border-radius: 50%%; margin-right: 10px;"
                                      >',
                                     $bot->guildID,
                                     $bot->guildIcon
