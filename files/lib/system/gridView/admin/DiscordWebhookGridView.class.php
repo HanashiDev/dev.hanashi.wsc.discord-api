@@ -3,6 +3,7 @@
 namespace wcf\system\gridView\admin;
 
 use Override;
+use wcf\data\DatabaseObject;
 use wcf\data\DatabaseObjectList;
 use wcf\data\discord\webhook\DiscordWebhook;
 use wcf\data\discord\webhook\DiscordWebhookList;
@@ -28,17 +29,18 @@ final class DiscordWebhookGridView extends AbstractGridView
                 ->label('wcf.acp.discordWebhookList.channelID')
                 ->renderer([
                     new class extends DefaultColumnRenderer {
-                        public function render(mixed $value, mixed $context = null): string
+                        #[Override]
+                        public function render(mixed $value, DatabaseObject $row): string
                         {
-                            \assert($context instanceof DiscordWebhook);
+                            \assert($row instanceof DiscordWebhook);
 
                             $channels = DiscordGuildChannelsCacheBuilder::getInstance()->getData();
 
-                            if (!isset($channels[$context->botID][$value])) {
+                            if (!isset($channels[$row->botID][$value])) {
                                 return $value;
                             }
 
-                            return \sprintf('%s<br>(%s)', $channels[$context->botID][$value]['name'], $value);
+                            return \sprintf('%s<br>(%s)', $channels[$row->botID][$value]['name'], $value);
                         }
                     },
                 ])

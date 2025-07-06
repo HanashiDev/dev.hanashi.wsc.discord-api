@@ -4,6 +4,7 @@ namespace wcf\system\gridView\admin;
 
 use Override;
 use wcf\acp\form\DiscordBotEditForm;
+use wcf\data\DatabaseObject;
 use wcf\data\DatabaseObjectList;
 use wcf\data\discord\bot\DiscordBot;
 use wcf\data\discord\bot\DiscordBotList;
@@ -37,23 +38,24 @@ final class DiscordBotGridView extends AbstractGridView
                 ->label('wcf.acp.discordBotList.server')
                 ->renderer([
                     new class extends DefaultColumnRenderer {
-                        public function render(mixed $value, mixed $context = null): string
+                        #[Override]
+                        public function render(mixed $value, DatabaseObject $row): string
                         {
-                            \assert($context instanceof DiscordBot);
+                            \assert($row instanceof DiscordBot);
 
                             $content = '';
-                            if (!empty($context->guildIcon)) {
+                            if (!empty($row->guildIcon)) {
                                 $content = \sprintf(
                                     '<img
                                         src="https://cdn.discordapp.com/icons/%s/%s.png"
                                         style="max-width: 32px; border-radius: 50%%; margin-right: 10px;"
                                      >',
-                                    $context->guildID,
-                                    $context->guildIcon
+                                    $row->guildID,
+                                    $row->guildIcon
                                 );
                             }
 
-                            return $content . $context->guildName;
+                            return $content . $row->guildName;
                         }
                     },
                 ])
