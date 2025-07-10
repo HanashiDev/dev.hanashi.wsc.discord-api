@@ -15,6 +15,7 @@ use wcf\system\gridView\GridViewColumn;
 use wcf\system\gridView\renderer\DefaultColumnRenderer;
 use wcf\system\gridView\renderer\TimeColumnRenderer;
 use wcf\system\interaction\admin\DiscordWebhookInteractions;
+use wcf\system\interaction\bulk\admin\DiscordWebhookBulkInteractions;
 use wcf\system\WCF;
 
 final class DiscordWebhookGridView extends AbstractGridView
@@ -89,6 +90,7 @@ final class DiscordWebhookGridView extends AbstractGridView
 
         $provider = new DiscordWebhookInteractions();
         $this->setInteractionProvider($provider);
+        $this->setBulkInteractionProvider(new DiscordWebhookBulkInteractions());
 
         $this->setSortField('webhookID');
         $this->setSortOrder('ASC');
