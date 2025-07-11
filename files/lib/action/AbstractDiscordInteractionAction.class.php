@@ -11,12 +11,12 @@ use Override;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
+use Throwable;
 use UnexpectedValueException;
 use wcf\data\discord\bot\DiscordBotList;
 use wcf\data\discord\interaction\log\DiscordInteractionLogAction;
 use wcf\system\discord\DiscordApi;
 use wcf\system\discord\interaction\callback\PingInteractionCallback;
-use wcf\system\exception\SystemException;
 use wcf\util\JSON;
 
 abstract class AbstractDiscordInteractionAction implements RequestHandlerInterface, IDiscordInteractionAction
@@ -44,7 +44,7 @@ abstract class AbstractDiscordInteractionAction implements RequestHandlerInterfa
                 $data = [];
                 try {
                     $data = JSON::decode($body, true);
-                } catch (SystemException) {
+                } catch (Throwable) {
                     throw new BadMethodCallException('body is not valid json');
                 }
 
