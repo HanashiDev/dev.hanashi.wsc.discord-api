@@ -9,13 +9,13 @@ use wcf\data\discord\webhook\DiscordWebhook;
 use wcf\data\discord\webhook\DiscordWebhookList;
 use wcf\system\cache\builder\DiscordGuildChannelsCacheBuilder;
 use wcf\system\gridView\AbstractGridView;
-use wcf\system\gridView\filter\TextFilter;
-use wcf\system\gridView\filter\TimeFilter;
 use wcf\system\gridView\GridViewColumn;
 use wcf\system\gridView\renderer\DefaultColumnRenderer;
 use wcf\system\gridView\renderer\TimeColumnRenderer;
 use wcf\system\interaction\admin\DiscordWebhookInteractions;
 use wcf\system\interaction\bulk\admin\DiscordWebhookBulkInteractions;
+use wcf\system\view\filter\TextFilter;
+use wcf\system\view\filter\TimeFilter;
 use wcf\system\WCF;
 
 final class DiscordWebhookGridView extends AbstractGridView
@@ -50,11 +50,11 @@ final class DiscordWebhookGridView extends AbstractGridView
                 ->label('wcf.acp.discordWebhookList.webhookTitle')
                 ->titleColumn()
                 ->sortable()
-                ->filter(new TextFilter()),
+                ->filter(TextFilter::class),
             GridViewColumn::for('webhookName')
                 ->label('wcf.acp.discordWebhookList.webhookName')
                 ->sortable()
-                ->filter(new TextFilter()),
+                ->filter(TextFilter::class),
             GridViewColumn::for('botID')
                 ->label('wcf.acp.discordBotList.server')
                 ->renderer([
@@ -85,15 +85,15 @@ final class DiscordWebhookGridView extends AbstractGridView
                 ->label('wcf.global.date')
                 ->renderer(new TimeColumnRenderer())
                 ->sortable()
-                ->filter(new TimeFilter()),
+                ->filter(TimeFilter::class),
         ]);
 
         $provider = new DiscordWebhookInteractions();
         $this->setInteractionProvider($provider);
         $this->setBulkInteractionProvider(new DiscordWebhookBulkInteractions());
 
-        $this->setSortField('webhookID');
-        $this->setSortOrder('ASC');
+        $this->setDefaultSortField('webhookID');
+        $this->setDefaultSortOrder('ASC');
     }
 
     #[Override]

@@ -9,8 +9,6 @@ use wcf\data\DatabaseObjectList;
 use wcf\data\discord\bot\DiscordBot;
 use wcf\data\discord\bot\DiscordBotList;
 use wcf\system\gridView\AbstractGridView;
-use wcf\system\gridView\filter\TextFilter;
-use wcf\system\gridView\filter\TimeFilter;
 use wcf\system\gridView\GridViewColumn;
 use wcf\system\gridView\renderer\DefaultColumnRenderer;
 use wcf\system\gridView\renderer\ObjectIdColumnRenderer;
@@ -18,6 +16,8 @@ use wcf\system\gridView\renderer\TimeColumnRenderer;
 use wcf\system\interaction\admin\DiscordBotInteractions;
 use wcf\system\interaction\Divider;
 use wcf\system\interaction\EditInteraction;
+use wcf\system\view\filter\TextFilter;
+use wcf\system\view\filter\TimeFilter;
 use wcf\system\WCF;
 
 final class DiscordBotGridView extends AbstractGridView
@@ -33,7 +33,7 @@ final class DiscordBotGridView extends AbstractGridView
                 ->label('wcf.acp.discordBotList.botName')
                 ->sortable()
                 ->titleColumn()
-                ->filter(new TextFilter()),
+                ->filter(TextFilter::class),
             GridViewColumn::for('guildName')
                 ->label('wcf.acp.discordBotList.server')
                 ->renderer([
@@ -60,12 +60,12 @@ final class DiscordBotGridView extends AbstractGridView
                     },
                 ])
                 ->sortable()
-                ->filter(new TextFilter()),
+                ->filter(TextFilter::class),
             GridViewColumn::for('botTime')
                 ->label('wcf.global.date')
                 ->renderer(new TimeColumnRenderer())
                 ->sortable()
-                ->filter(new TimeFilter()),
+                ->filter(TimeFilter::class),
         ]);
 
         $provider = new DiscordBotInteractions();
@@ -75,8 +75,8 @@ final class DiscordBotGridView extends AbstractGridView
         ]);
         $this->setInteractionProvider($provider);
 
-        $this->setSortField('botID');
-        $this->setSortOrder('ASC');
+        $this->setDefaultSortField('botID');
+        $this->setDefaultSortOrder('ASC');
     }
 
     #[Override]
