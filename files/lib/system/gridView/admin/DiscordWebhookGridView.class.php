@@ -17,6 +17,7 @@ use wcf\system\interaction\bulk\admin\DiscordWebhookBulkInteractions;
 use wcf\system\view\filter\TextFilter;
 use wcf\system\view\filter\TimeFilter;
 use wcf\system\WCF;
+use wcf\util\StringUtil;
 
 final class DiscordWebhookGridView extends AbstractGridView
 {
@@ -41,7 +42,11 @@ final class DiscordWebhookGridView extends AbstractGridView
                                 return $value;
                             }
 
-                            return \sprintf('%s<br>(%s)', $channels[$row->botID][$value]['name'], $value);
+                            return \sprintf(
+                                '%s<br>(%s)',
+                                StringUtil::encodeHTML($channels[$row->botID][$value]['name']),
+                                StringUtil::encodeHTML($value)
+                            );
                         }
                     },
                 ])
