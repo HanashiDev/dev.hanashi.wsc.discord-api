@@ -2,7 +2,7 @@
 
 namespace wcf\data\discord\webhook;
 
-use wcf\data\DatabaseObject;
+use wcf\data\CollectionDatabaseObject;
 use wcf\data\discord\bot\DiscordBot;
 use wcf\system\discord\DiscordApi;
 
@@ -22,8 +22,10 @@ use wcf\system\discord\DiscordApi;
  * @property-read string $webhookTitle
  * @property-read string $usageBy
  * @property-read int $webhookTime
+ *
+ * @extends CollectionDatabaseObject<DiscordWebhookCollection>
  */
-final class DiscordWebhook extends DatabaseObject
+final class DiscordWebhook extends CollectionDatabaseObject
 {
     /**
      * @inheritDoc
@@ -36,40 +38,18 @@ final class DiscordWebhook extends DatabaseObject
     protected static $databaseTableIndexName = 'webhookID';
 
     /**
-     * Objekt eines Discord-Bots
-     */
-    protected DiscordBot $discordBot;
-
-    /**
-     * Objekt der Discord-API
-     */
-    protected DiscordApi $discordApi;
-
-    /**
      * gibt den zugehörigen Discord-Bot zurück
-     *
-     * @return DiscordBot
      */
     public function getDiscordBot(): DiscordBot
     {
-        if (!isset($this->discordBot)) {
-            $this->discordBot = new DiscordBot($this->botID);
-        }
-
-        return $this->discordBot;
+        return $this->getCollection()->getDiscordBot($this);
     }
 
     /**
      * gibt ein Objekt der Discors-API zurück
-     *
-     * @return DiscordApi
      */
     public function getDiscordApi(): DiscordApi
     {
-        if (!isset($this->discordApi)) {
-            $this->discordApi = new DiscordApi($this->guildID, $this->botToken);
-        }
-
-        return $this->discordApi;
+        return $this->getCollection()->getDiscordApi($this);
     }
 }
