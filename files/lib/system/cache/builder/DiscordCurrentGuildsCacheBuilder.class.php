@@ -37,7 +37,7 @@ final class DiscordCurrentGuildsCacheBuilder extends AbstractCacheBuilder
             return [];
         }
         $guilds = $currentUserGuilds['body'];
-        \usort($guilds, static fn ($a, $b) => \strtoupper($a['name']) <=> \strtoupper($b['name']));
+        \usort($guilds, static fn($a, $b) => \strtoupper($a['name']) <=> \strtoupper($b['name']));
 
         $newGuilds = [];
         foreach ($guilds as $guild) {
