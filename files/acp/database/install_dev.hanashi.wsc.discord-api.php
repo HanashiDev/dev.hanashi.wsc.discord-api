@@ -21,11 +21,9 @@ return [
             VarcharDatabaseTableColumn::create('discordPostPrefix')
                 ->length(100),
             TinyintDatabaseTableColumn::create('discordPostTitleInContext')
-                ->length(1)
                 ->notNull()
                 ->defaultValue(0),
             TinyintDatabaseTableColumn::create('discordPostType')
-                ->length(1)
                 ->notNull()
                 ->defaultValue(0),
         ]),
@@ -41,7 +39,6 @@ return [
                 ->length(100)
                 ->notNull(),
             BigintDatabaseTableColumn::create('guildID')
-                ->length(20)
                 ->notNull(),
             VarcharDatabaseTableColumn::create('guildName')
                 ->length(100),
@@ -50,15 +47,13 @@ return [
             VarcharDatabaseTableColumn::create('webhookName')
                 ->length(50)
                 ->notNull(),
-            BigintDatabaseTableColumn::create('clientID')
-                ->length(20),
+            BigintDatabaseTableColumn::create('clientID'),
             VarcharDatabaseTableColumn::create('clientSecret')
                 ->length(100),
             VarcharDatabaseTableColumn::create('publicKey')
                 ->length(100),
             NotNullInt10DatabaseTableColumn::create('botTime'),
-            IntDatabaseTableColumn::create('webhookIconID')
-                ->length(10),
+            IntDatabaseTableColumn::create('webhookIconID'),
         ])
         ->indices([
             DatabaseTablePrimaryIndex::create()
@@ -76,10 +71,8 @@ return [
     DatabaseTable::create('wcf1_discord_webhook')
         ->columns([
             BigintDatabaseTableColumn::create('webhookID')
-                ->length(20)
                 ->notNull(),
             BigintDatabaseTableColumn::create('channelID')
-                ->length(20)
                 ->notNull(),
             NotNullInt10DatabaseTableColumn::create('botID'),
             VarcharDatabaseTableColumn::create('webhookToken')
