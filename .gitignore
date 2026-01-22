@@ -2,3 +2,4 @@
 node_modules/
 .phpcs-cache
 *.cache
+.DS_Store
