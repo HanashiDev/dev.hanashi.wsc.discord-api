@@ -5,8 +5,7 @@ namespace wcf\data\discord\interaction\log;
 use wcf\data\AbstractDatabaseObjectAction;
 
 /**
- * @method  DiscordInteractionLogEditor[] getObjects()
- * @method  DiscordInteractionLogEditor   getSingleObject()
+ * @extends AbstractDatabaseObjectAction<DiscordInteractionLog, DiscordInteractionLogEditor>
  */
 final class DiscordInteractionLogAction extends AbstractDatabaseObjectAction
 {

@@ -12,11 +12,7 @@ use wcf\data\DatabaseObjectList;
  * @license Freie Lizenz (https://hanashi.dev/freie-lizenz/)
  * @package WoltLabSuite\Core\Data\Discord\Webhook
  *
- * @method  DiscordInteractionLog     current()
- * @method  DiscordInteractionLog[]       getObjects()
- * @method  DiscordInteractionLog|null    getSingleObject()
- * @method  DiscordInteractionLog|null    search($objectID)
- * @property    DiscordInteractionLog[] $objects
+ * @extends DatabaseObjectList<DiscordInteractionLog>
  */
 final class DiscordInteractionLogList extends DatabaseObjectList
 {

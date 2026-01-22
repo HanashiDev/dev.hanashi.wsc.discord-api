@@ -12,9 +12,8 @@ use wcf\data\DatabaseObjectEditor;
  * @license Freie Lizenz (https://hanashi.dev/freie-lizenz/)
  * @package WoltLabSuite\Core\Data\Discord\Bot
  *
- * @method static DiscordBot     create(array $parameters = [])
- * @method      DiscordBot     getDecoratedObject()
  * @mixin       DiscordBot
+ * @extends DatabaseObjectEditor<DiscordBot>
  */
 final class DiscordBotEditor extends DatabaseObjectEditor
 {

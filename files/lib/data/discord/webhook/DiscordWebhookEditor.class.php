@@ -12,9 +12,8 @@ use wcf\data\DatabaseObjectEditor;
  * @license Freie Lizenz (https://hanashi.dev/freie-lizenz/)
  * @package WoltLabSuite\Core\Data\Discord\Webhook
  *
- * @method static DiscordWebhook     create(array $parameters = [])
- * @method      DiscordWebhook     getDecoratedObject()
  * @mixin       DiscordWebhook
+ * @extends DatabaseObjectEditor<DiscordWebhook>
  */
 final class DiscordWebhookEditor extends DatabaseObjectEditor
 {

@@ -14,8 +14,7 @@ use wcf\system\cache\builder\DiscordGuildChannelsCacheBuilder;
  * @license Freie Lizenz (https://hanashi.dev/freie-lizenz/)
  * @package WoltLabSuite\Core\Data\Discord\Webhook
  *
- * @method  DiscordWebhookEditor[] getObjects()
- * @method  DiscordWebhookEditor   getSingleObject()
+ * @extends AbstractDatabaseObjectAction<DiscordWebhook, DiscordWebhookEditor>
  */
 final class DiscordWebhookAction extends AbstractDatabaseObjectAction
 {
