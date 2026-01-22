@@ -2,6 +2,7 @@
 
 namespace wcf\system\cache\runtime;
 
+use wcf\data\discord\bot\DiscordBot;
 use wcf\data\discord\bot\DiscordBotList;
 
 /**
@@ -9,6 +10,8 @@ use wcf\data\discord\bot\DiscordBotList;
  * @copyright   Hanashi
  * @license Freie Lizenz (https://hanashi.dev/freie-lizenz/)
  * @package WoltLabSuite\Core\System\Cache\Runtime
+ *
+ * @extends AbstractRuntimeCache<DiscordBot, DiscordBotList>
  */
 final class DiscordBotRuntimeCache extends AbstractRuntimeCache
 {
