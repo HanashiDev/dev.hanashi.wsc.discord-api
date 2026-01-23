@@ -23,7 +23,7 @@ abstract class AbstractDiscordInteractionAction implements RequestHandlerInterfa
                 $body = (string)$request->getBody();
 
                 if (ENABLE_DEBUG_MODE) {
-                    (new LogDiscordInteraction($body));
+                    (new LogDiscordInteraction($body))();
                 }
 
                 if ($body === '') {
