@@ -2,7 +2,6 @@
 
 namespace wcf\system\discord\interaction\callback;
 
-use Override;
 use wcf\system\discord\DiscordApi;
 
 final class DeferredUpdateMessageInteractionCallback extends AbstractInteractionCallback
@@ -16,7 +15,7 @@ final class DeferredUpdateMessageInteractionCallback extends AbstractInteraction
     {
     }
 
-    #[Override]
+    #[\Override]
     public function getData(): ?array
     {
         return null;

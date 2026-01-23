@@ -2,7 +2,6 @@
 
 namespace wcf\system\interaction\bulk\admin;
 
-use Override;
 use wcf\data\discord\webhook\DiscordWebhookList;
 use wcf\event\interaction\bulk\admin\DiscordWebhookBulkInteractionCollecting;
 use wcf\system\event\EventHandler;
@@ -22,7 +21,7 @@ final class DiscordWebhookBulkInteractions extends AbstractBulkInteractionProvid
         );
     }
 
-    #[Override]
+    #[\Override]
     public function getObjectListClassName(): string
     {
         return DiscordWebhookList::class;

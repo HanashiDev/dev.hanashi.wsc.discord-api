@@ -2,7 +2,6 @@
 
 namespace wcf\system\discord\event;
 
-use Override;
 use wcf\system\discord\interaction\callback\IDiscordInteractionCallback;
 
 abstract class AbstractCommandReceived implements ICommandReceived
@@ -16,19 +15,19 @@ abstract class AbstractCommandReceived implements ICommandReceived
     {
     }
 
-    #[Override]
+    #[\Override]
     public function getData(): array
     {
         return $this->data;
     }
 
-    #[Override]
+    #[\Override]
     public function setCallback(IDiscordInteractionCallback $response): void
     {
         $this->response = $response;
     }
 
-    #[Override]
+    #[\Override]
     public function getCallback(): ?IDiscordInteractionCallback
     {
         return $this->response ?? null;

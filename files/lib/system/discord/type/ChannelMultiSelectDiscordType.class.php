@@ -2,7 +2,6 @@
 
 namespace wcf\system\discord\type;
 
-use Throwable;
 use wcf\data\discord\bot\DiscordBotList;
 use wcf\system\exception\UserInputException;
 use wcf\system\WCF;
@@ -59,7 +58,7 @@ class ChannelMultiSelectDiscordType extends AbstractDiscordType
         $realValue = [];
         try {
             $realValue = \unserialize($value);
-        } catch (Throwable) {
+        } catch (\Throwable) {
         }
 
         return WCF::getTPL()->render('wcf', 'discordChannelMultiSelect', [

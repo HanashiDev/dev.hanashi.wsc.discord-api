@@ -4,7 +4,6 @@ namespace wcf\action;
 
 use Laminas\Diactoros\Response\EmptyResponse;
 use Laminas\Diactoros\Response\JsonResponse;
-use Override;
 use Psr\Http\Message\ResponseInterface;
 use wcf\http\attribute\DisableXsrfCheck;
 use wcf\system\discord\event\ApplicationCommandAutocompleteReceived;
@@ -16,7 +15,7 @@ use wcf\system\event\EventHandler;
 #[DisableXsrfCheck]
 final class DiscordInteractionAction extends AbstractDiscordInteractionAction
 {
-    #[Override]
+    #[\Override]
     public function handleApplicationCommand(array $data): ResponseInterface
     {
         $event = new ApplicationCommandReceived($data);
@@ -30,7 +29,7 @@ final class DiscordInteractionAction extends AbstractDiscordInteractionAction
         return new EmptyResponse();
     }
 
-    #[Override]
+    #[\Override]
     public function handleMessageCommand(array $data): ResponseInterface
     {
         $event = new MessageCommandReceived($data);
@@ -44,7 +43,7 @@ final class DiscordInteractionAction extends AbstractDiscordInteractionAction
         return new EmptyResponse();
     }
 
-    #[Override]
+    #[\Override]
     public function handleApplicationCommandAutocomplete(array $data): ResponseInterface
     {
         $event = new ApplicationCommandAutocompleteReceived($data);
@@ -58,7 +57,7 @@ final class DiscordInteractionAction extends AbstractDiscordInteractionAction
         return new EmptyResponse();
     }
 
-    #[Override]
+    #[\Override]
     public function handleModalCommand(array $data): ResponseInterface
     {
         $event = new ModalCommandReceived($data);

@@ -2,7 +2,6 @@
 
 namespace wcf\system\discord;
 
-use Exception;
 use wcf\data\discord\webhook\DiscordWebhookAction;
 use wcf\data\discord\webhook\DiscordWebhookList;
 use wcf\system\cache\runtime\DiscordBotRuntimeCache;
@@ -55,9 +54,9 @@ final class WebhookHandler extends SingletonFactory
                 $action->executeAction();
             } else {
                 if (isset($response['body']['code']) && $response['body']['code'] == '30007') {
-                    throw new Exception("maximum webhooks for channel {$channelID} reached");
+                    throw new \Exception("maximum webhooks for channel {$channelID} reached");
                 } else {
-                    throw new Exception('unknown error on webhook creation');
+                    throw new \Exception('unknown error on webhook creation');
                 }
             }
         }

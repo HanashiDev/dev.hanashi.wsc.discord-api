@@ -2,17 +2,11 @@
 
 namespace wcf\action;
 
-use BadMethodCallException;
 use Laminas\Diactoros\Response\HtmlResponse;
 use Laminas\Diactoros\Response\JsonResponse;
-use LogicException;
-use OutOfBoundsException;
-use Override;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
-use Throwable;
-use UnexpectedValueException;
 use wcf\data\discord\bot\DiscordBotList;
 use wcf\data\discord\interaction\log\DiscordInteractionLogAction;
 use wcf\system\discord\DiscordApi;
@@ -21,7 +15,7 @@ use wcf\util\JSON;
 
 abstract class AbstractDiscordInteractionAction implements RequestHandlerInterface, IDiscordInteractionAction
 {
-    #[Override]
+    #[\Override]
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
         if ($request->getMethod() === 'POST') {
@@ -39,18 +33,18 @@ abstract class AbstractDiscordInteractionAction implements RequestHandlerInterfa
                 }
 
                 if ($body === '') {
-                    throw new BadMethodCallException('body is empty');
+                    throw new \BadMethodCallException('body is empty');
                 }
                 $data = [];
                 try {
                     $data = JSON::decode($body, true);
-                } catch (Throwable) {
-                    throw new BadMethodCallException('body is not valid json');
+                } catch (\Throwable) {
+                    throw new \BadMethodCallException('body is not valid json');
                 }
 
                 $publicKeys = $this->getPublicKeys();
                 if ($publicKeys === []) {
-                    throw new UnexpectedValueException('public key is empty');
+                    throw new \UnexpectedValueException('public key is empty');
                 }
 
                 $validRequest = false;
@@ -61,11 +55,11 @@ abstract class AbstractDiscordInteractionAction implements RequestHandlerInterfa
                     }
                 }
                 if (!$validRequest) {
-                    throw new OutOfBoundsException('invalid request signature');
+                    throw new \OutOfBoundsException('invalid request signature');
                 }
 
                 if (!isset($data['type'])) {
-                    throw new BadMethodCallException('type is empty');
+                    throw new \BadMethodCallException('type is empty');
                 }
 
                 switch ($data['type']) {
@@ -80,17 +74,17 @@ abstract class AbstractDiscordInteractionAction implements RequestHandlerInterfa
                     case DiscordApi::DISCORD_MODAL_SUBMIT:
                         return $this->handleModalCommand($data);
                     default:
-                        throw new BadMethodCallException('unknown component');
+                        throw new \BadMethodCallException('unknown component');
                 }
-            } catch (BadMethodCallException $e) {
+            } catch (\BadMethodCallException $e) {
                 return new HtmlResponse($e->getMessage(), 400);
-            } catch (OutOfBoundsException $e) {
+            } catch (\OutOfBoundsException $e) {
                 return new HtmlResponse($e->getMessage(), 401);
-            } catch (UnexpectedValueException $e) {
+            } catch (\UnexpectedValueException $e) {
                 return new HtmlResponse($e->getMessage(), 501);
             }
         } else {
-            throw new LogicException('Unreachable');
+            throw new \LogicException('Unreachable');
         }
     }
 
@@ -102,7 +96,7 @@ abstract class AbstractDiscordInteractionAction implements RequestHandlerInterfa
         return new JsonResponse((new PingInteractionCallback())->getInteractionResponse());
     }
 
-    #[Override]
+    #[\Override]
     public function getPublicKeys(): array
     {
         $publicKeys = [];

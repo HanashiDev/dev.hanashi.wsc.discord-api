@@ -2,7 +2,6 @@
 
 namespace wcf\system\file;
 
-use Override;
 use wcf\data\discord\bot\DiscordBot;
 use wcf\data\discord\bot\DiscordBotEditor;
 use wcf\data\file\File;
@@ -16,7 +15,7 @@ use wcf\util\FileUtil;
 
 final class DiscordWebhookAvatarFileProcessor extends AbstractFileProcessor
 {
-    #[Override]
+    #[\Override]
     public function acceptUpload(string $filename, int $fileSize, array $context): FileProcessorPreflightResult
     {
         if (isset($context['botID'])) {
@@ -33,7 +32,7 @@ final class DiscordWebhookAvatarFileProcessor extends AbstractFileProcessor
         return FileProcessorPreflightResult::Passed;
     }
 
-    #[Override]
+    #[\Override]
     public function validateUpload(File $file): void
     {
         $imageData = @\getimagesize($file->getPathname());
@@ -45,7 +44,7 @@ final class DiscordWebhookAvatarFileProcessor extends AbstractFileProcessor
         }
     }
 
-    #[Override]
+    #[\Override]
     public function canAdopt(File $file, array $context): bool
     {
         $botContext = $this->getBot($context);
@@ -62,7 +61,7 @@ final class DiscordWebhookAvatarFileProcessor extends AbstractFileProcessor
         return false;
     }
 
-    #[Override]
+    #[\Override]
     public function adopt(File $file, array $context): void
     {
         $bot = $this->getBot($context);
@@ -74,19 +73,19 @@ final class DiscordWebhookAvatarFileProcessor extends AbstractFileProcessor
         }
     }
 
-    #[Override]
+    #[\Override]
     public function canDelete(File $file): bool
     {
         return WCF::getSession()->getPermission('admin.discord.canManageConnection');
     }
 
-    #[Override]
+    #[\Override]
     public function canDownload(File $file): bool
     {
         return WCF::getSession()->getPermission('admin.discord.canManageConnection');
     }
 
-    #[Override]
+    #[\Override]
     public function delete(array $fileIDs, array $thumbnailIDs): void
     {
         $conditionBuilder = new PreparedStatementConditionBuilder();
@@ -99,13 +98,13 @@ final class DiscordWebhookAvatarFileProcessor extends AbstractFileProcessor
         $statement->execute($conditionBuilder->getParameters());
     }
 
-    #[Override]
+    #[\Override]
     public function getObjectTypeName(): string
     {
         return 'dev.hanashi.wsc.discord.webhook.avatar';
     }
 
-    #[Override]
+    #[\Override]
     public function getAllowedFileExtensions(array $context): array
     {
         return [
@@ -116,7 +115,7 @@ final class DiscordWebhookAvatarFileProcessor extends AbstractFileProcessor
         ];
     }
 
-    #[Override]
+    #[\Override]
     public function getMaximumSize(array $context): int
     {
         return 8000000;

@@ -2,7 +2,6 @@
 
 namespace wcf\acp\page;
 
-use Override;
 use wcf\page\AbstractGridViewPage;
 use wcf\system\gridView\admin\DiscordWebhookGridView;
 
@@ -28,7 +27,7 @@ final class DiscordWebhookListPage extends AbstractGridViewPage
      */
     public $activeMenuItem = 'wcf.acp.menu.link.configuration.discord.discordWebhookList';
 
-    #[Override]
+    #[\Override]
     protected function createGridView(): DiscordWebhookGridView
     {
         return new DiscordWebhookGridView();

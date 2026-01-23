@@ -2,9 +2,6 @@
 
 namespace wcf\system\discord\field;
 
-use InvalidArgumentException;
-use Override;
-use UnexpectedValueException;
 use wcf\system\form\builder\data\processor\CustomFormDataProcessor;
 use wcf\system\form\builder\exception\InvalidFormFieldValue;
 use wcf\system\form\builder\field\AbstractFormField;
@@ -45,13 +42,13 @@ final class DiscordChannelMultiSelectFormField extends AbstractFormField impleme
      */
     private array $allowedTypes = [];
 
-    #[Override]
+    #[\Override]
     public function hasSaveValue(): bool
     {
         return false;
     }
 
-    #[Override]
+    #[\Override]
     public function getOptions(): ?array
     {
         $options = $this->options;
@@ -66,7 +63,7 @@ final class DiscordChannelMultiSelectFormField extends AbstractFormField impleme
         return $options;
     }
 
-    #[Override]
+    #[\Override]
     public function populate(): static
     {
         parent::populate();
@@ -87,7 +84,7 @@ final class DiscordChannelMultiSelectFormField extends AbstractFormField impleme
         return $this;
     }
 
-    #[Override]
+    #[\Override]
     public function readValue(): static
     {
         if ($this->getDocument()->hasRequestData($this->getPrefixedId())) {
@@ -101,7 +98,7 @@ final class DiscordChannelMultiSelectFormField extends AbstractFormField impleme
         return $this;
     }
 
-    #[Override]
+    #[\Override]
     public function validate(): void
     {
         $value = $this->getValue();
@@ -118,7 +115,7 @@ final class DiscordChannelMultiSelectFormField extends AbstractFormField impleme
         parent::validate();
     }
 
-    #[Override]
+    #[\Override]
     public function value($value): static
     {
         // ignore `null` as value which can be passed either for nullable
@@ -134,23 +131,23 @@ final class DiscordChannelMultiSelectFormField extends AbstractFormField impleme
         return parent::value($value);
     }
 
-    #[Override]
+    #[\Override]
     public function supportsNestedOptions(): bool
     {
         return false;
     }
 
-    #[Override]
+    #[\Override]
     public function options($options, $nestedOptions = false, $labelLanguageItems = true): static
     {
         if (!\is_array($options)) {
-            throw new UnexpectedValueException('options must be an array');
+            throw new \UnexpectedValueException('options must be an array');
         }
 
         foreach ($options as $option) {
             foreach (['id', 'type', 'name', 'parent_id', 'position'] as $entry) {
                 if (!isset($option[$entry])) {
-                    throw new InvalidArgumentException("Option has no {$entry} entry for field '{$this->getId()}'.");
+                    throw new \InvalidArgumentException("Option has no {$entry} entry for field '{$this->getId()}'.");
                 }
             }
         }

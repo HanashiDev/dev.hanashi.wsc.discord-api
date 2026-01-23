@@ -2,7 +2,6 @@
 
 namespace wcf\system\interaction\admin;
 
-use Override;
 use wcf\data\discord\bot\DiscordBot;
 use wcf\event\interaction\admin\DiscordBotInteractionCollecting;
 use wcf\system\event\EventHandler;
@@ -22,7 +21,7 @@ final class DiscordBotInteractions extends AbstractInteractionProvider
         );
     }
 
-    #[Override]
+    #[\Override]
     public function getObjectClassName(): string
     {
         return DiscordBot::class;

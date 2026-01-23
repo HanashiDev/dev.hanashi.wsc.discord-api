@@ -3,7 +3,6 @@
 namespace wcf\system\endpoint\controller\hanashi\discord\bot;
 
 use Laminas\Diactoros\Response\JsonResponse;
-use Override;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use wcf\data\discord\bot\DiscordBot;
@@ -16,7 +15,7 @@ use wcf\system\WCF;
 #[DeleteRequest('/hanashi/discord/bot/{id:\d+}')]
 final class DeleteBot implements IController
 {
-    #[Override]
+    #[\Override]
     public function __invoke(ServerRequestInterface $request, array $variables): ResponseInterface
     {
         $bot = Helper::fetchObjectFromRequestParameter($variables['id'], DiscordBot::class);

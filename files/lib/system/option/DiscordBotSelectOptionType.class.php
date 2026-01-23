@@ -2,7 +2,6 @@
 
 namespace wcf\system\option;
 
-use Override;
 use wcf\data\discord\bot\DiscordBot;
 use wcf\data\discord\bot\DiscordBotList;
 use wcf\data\option\Option;
@@ -19,7 +18,7 @@ use wcf\system\WCF;
  */
 class DiscordBotSelectOptionType extends AbstractOptionType
 {
-    #[Override]
+    #[\Override]
     public function getFormElement(Option $option, $value)
     {
         $discordBotList = new DiscordBotList();
@@ -35,7 +34,7 @@ class DiscordBotSelectOptionType extends AbstractOptionType
         return WCF::getTPL()->render('wcf', 'discordBotSelectOptionType', []);
     }
 
-    #[Override]
+    #[\Override]
     public function validate(Option $option, $newValue)
     {
         if ($newValue !== 0 && $newValue !== '') {

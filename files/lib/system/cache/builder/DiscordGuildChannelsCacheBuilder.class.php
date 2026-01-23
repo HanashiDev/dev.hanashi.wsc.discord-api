@@ -2,14 +2,13 @@
 
 namespace wcf\system\cache\builder;
 
-use Override;
 use wcf\data\discord\bot\DiscordBotList;
 
 final class DiscordGuildChannelsCacheBuilder extends AbstractCacheBuilder
 {
     protected $maxLifetime = 86400;
 
-    #[Override]
+    #[\Override]
     public function rebuild(array $parameters)
     {
         $data = [];

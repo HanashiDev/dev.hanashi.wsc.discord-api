@@ -3,7 +3,6 @@
 namespace wcf\acp\form;
 
 use CuyZ\Valinor\Mapper\MappingError;
-use Override;
 use wcf\data\discord\bot\DiscordBot;
 use wcf\http\Helper;
 use wcf\system\exception\IllegalLinkException;
@@ -16,7 +15,7 @@ class DiscordBotEditForm extends DiscordBotAddForm
      */
     public $formAction = 'edit';
 
-    #[Override]
+    #[\Override]
     public function readParameters()
     {
         parent::readParameters();
@@ -40,7 +39,7 @@ class DiscordBotEditForm extends DiscordBotAddForm
         }
     }
 
-    #[Override]
+    #[\Override]
     protected function createForm()
     {
         parent::createForm();

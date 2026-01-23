@@ -2,7 +2,6 @@
 
 namespace wcf\data\discord\webhook;
 
-use Override;
 use wcf\data\AbstractDatabaseObjectAction;
 use wcf\system\cache\builder\DiscordGuildChannelsCacheBuilder;
 
@@ -28,7 +27,7 @@ final class DiscordWebhookAction extends AbstractDatabaseObjectAction
      */
     public $className = DiscordWebhookEditor::class;
 
-    #[Override]
+    #[\Override]
     public function delete()
     {
         foreach ($this->objects as $object) {
@@ -40,7 +39,7 @@ final class DiscordWebhookAction extends AbstractDatabaseObjectAction
         return parent::delete();
     }
 
-    #[Override]
+    #[\Override]
     protected function resetCache()
     {
         DiscordGuildChannelsCacheBuilder::getInstance()->reset();

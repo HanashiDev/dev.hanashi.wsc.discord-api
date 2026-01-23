@@ -2,14 +2,13 @@
 
 namespace wcf\system\discord\type;
 
-use Override;
 use wcf\data\discord\webhook\DiscordWebhookAction;
 use wcf\data\discord\webhook\DiscordWebhookList;
 use wcf\system\exception\UserInputException;
 
 class WebhookChannelMultiSelectDiscordType extends ChannelMultiSelectDiscordType
 {
-    #[Override]
+    #[\Override]
     public function validate(mixed $newValue): void
     {
         if (!\is_array($newValue) || $newValue === []) {

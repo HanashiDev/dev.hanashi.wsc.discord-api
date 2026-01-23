@@ -2,8 +2,6 @@
 
 namespace wcf\system\discord\interaction\callback;
 
-use Override;
-
 abstract class AbstractInteractionCallback implements IDiscordInteractionCallback
 {
     /**
@@ -16,13 +14,13 @@ abstract class AbstractInteractionCallback implements IDiscordInteractionCallbac
     ) {
     }
 
-    #[Override]
+    #[\Override]
     public function getType(): int
     {
         return $this->type;
     }
 
-    #[Override]
+    #[\Override]
     public function getData(): ?array
     {
         if ($this->data === null) {
@@ -32,7 +30,7 @@ abstract class AbstractInteractionCallback implements IDiscordInteractionCallbac
         return $this->data->getData();
     }
 
-    #[Override]
+    #[\Override]
     public function getInteractionResponse(): array
     {
         $response = [

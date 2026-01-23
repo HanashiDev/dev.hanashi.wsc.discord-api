@@ -2,7 +2,6 @@
 
 namespace wcf\system\worker;
 
-use Override;
 use wcf\data\discord\bot\DiscordBotEditor;
 use wcf\data\discord\bot\DiscordBotList;
 use wcf\data\file\FileEditor;
@@ -22,7 +21,7 @@ final class DiscordWebhookAvatarRebuildDataWorker extends AbstractLinearRebuildD
      */
     protected $limit = 100;
 
-    #[Override]
+    #[\Override]
     public function execute()
     {
         parent::execute();
@@ -55,7 +54,7 @@ final class DiscordWebhookAvatarRebuildDataWorker extends AbstractLinearRebuildD
         }
     }
 
-    #[Override]
+    #[\Override]
     protected function initObjectList()
     {
         parent::initObjectList();

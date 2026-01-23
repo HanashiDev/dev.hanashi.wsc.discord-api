@@ -2,7 +2,6 @@
 
 namespace wcf\system\gridView\admin;
 
-use Override;
 use wcf\acp\form\DiscordBotEditForm;
 use wcf\data\DatabaseObject;
 use wcf\data\discord\bot\DiscordBot;
@@ -40,7 +39,7 @@ final class DiscordBotGridView extends AbstractGridView
                 ->label('wcf.acp.discordBotList.server')
                 ->renderer([
                     new class extends DefaultColumnRenderer {
-                        #[Override]
+                        #[\Override]
                         public function render(mixed $value, DatabaseObject $row): string
                         {
                             \assert($row instanceof DiscordBot);
@@ -81,13 +80,13 @@ final class DiscordBotGridView extends AbstractGridView
         $this->setDefaultSortOrder('ASC');
     }
 
-    #[Override]
+    #[\Override]
     public function isAccessible(): bool
     {
         return WCF::getSession()->getPermission('admin.discord.canManageConnection');
     }
 
-    #[Override]
+    #[\Override]
     protected function createObjectList(): DiscordBotList
     {
         return new DiscordBotList();

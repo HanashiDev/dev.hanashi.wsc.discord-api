@@ -2,7 +2,6 @@
 
 namespace wcf\system\interaction\admin;
 
-use Override;
 use wcf\data\discord\webhook\DiscordWebhook;
 use wcf\event\interaction\admin\DiscordWebhookInteractionCollecting;
 use wcf\system\event\EventHandler;
@@ -22,7 +21,7 @@ final class DiscordWebhookInteractions extends AbstractInteractionProvider
         );
     }
 
-    #[Override]
+    #[\Override]
     public function getObjectClassName(): string
     {
         return DiscordWebhook::class;

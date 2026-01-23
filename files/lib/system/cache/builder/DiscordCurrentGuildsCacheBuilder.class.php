@@ -2,7 +2,6 @@
 
 namespace wcf\system\cache\builder;
 
-use Override;
 use wcf\system\discord\DiscordApi;
 
 /**
@@ -20,7 +19,7 @@ final class DiscordCurrentGuildsCacheBuilder extends AbstractCacheBuilder
      */
     protected $maxLifetime = 10;
 
-    #[Override]
+    #[\Override]
     public function rebuild(array $parameters)
     {
         if (!isset($parameters['botToken']) || $parameters['botToken'] === '') {

@@ -3,7 +3,6 @@
 namespace wcf\system\endpoint\controller\hanashi\discord\webhook;
 
 use Laminas\Diactoros\Response\JsonResponse;
-use Override;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use wcf\data\discord\webhook\DiscordWebhook;
@@ -16,7 +15,7 @@ use wcf\system\WCF;
 #[DeleteRequest('/hanashi/discord/webhook/{id:\d+}')]
 final class DeleteWebhook implements IController
 {
-    #[Override]
+    #[\Override]
     public function __invoke(ServerRequestInterface $request, array $variables): ResponseInterface
     {
         $bot = Helper::fetchObjectFromRequestParameter($variables['id'], DiscordWebhook::class);

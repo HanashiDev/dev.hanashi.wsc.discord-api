@@ -2,7 +2,6 @@
 
 namespace wcf\system\gridView\admin;
 
-use Override;
 use wcf\data\DatabaseObject;
 use wcf\data\discord\webhook\DiscordWebhook;
 use wcf\data\discord\webhook\DiscordWebhookList;
@@ -33,7 +32,7 @@ final class DiscordWebhookGridView extends AbstractGridView
                 ->label('wcf.acp.discordWebhookList.channelID')
                 ->renderer([
                     new class extends DefaultColumnRenderer {
-                        #[Override]
+                        #[\Override]
                         public function render(mixed $value, DatabaseObject $row): string
                         {
                             \assert($row instanceof DiscordWebhook);
@@ -103,13 +102,13 @@ final class DiscordWebhookGridView extends AbstractGridView
         $this->setDefaultSortOrder('ASC');
     }
 
-    #[Override]
+    #[\Override]
     public function isAccessible(): bool
     {
         return WCF::getSession()->getPermission('admin.discord.canManageWebhooks');
     }
 
-    #[Override]
+    #[\Override]
     protected function createObjectList(): DiscordWebhookList
     {
         return new DiscordWebhookList();
