@@ -10,15 +10,17 @@ class RoleMultiSelectDiscordType extends AbstractDiscordType
 {
     /**
      * Liste von Discord-Bots
+     *
+     * @var DiscordBotList
      */
-    protected DiscordBotList $discordBotList;
+    protected $discordBotList;
 
     /**
      * Liste von Server-Rollen
      *
      * @var array<int, mixed>
      */
-    protected array $guildRoles;
+    protected $guildRoles;
 
     public function getFormElement(mixed $value): string
     {
@@ -88,10 +90,12 @@ class RoleMultiSelectDiscordType extends AbstractDiscordType
 
     /**
      * gibt Liste von Discord-Bots zurück
+     *
+     * @return DiscordBotList
      */
-    protected function getDiscordBotList(): DiscordBotList
+    protected function getDiscordBotList()
     {
-        if (!isset($this->discordBotList)) {
+        if ($this->discordBotList === null) {
             $this->discordBotList = new DiscordBotList();
             $this->discordBotList->sqlOrderBy = 'botName ASC';
             $this->discordBotList->readObjects();
@@ -105,9 +109,9 @@ class RoleMultiSelectDiscordType extends AbstractDiscordType
      *
      * @return array<int, mixed>
      */
-    protected function getGuildRoles(): array
+    protected function getGuildRoles()
     {
-        if (!isset($this->guildRoles)) {
+        if ($this->guildRoles === null) {
             foreach ($this->getDiscordBotList() as $discordBot) {
                 $discordApi = $discordBot->getDiscordApi();
                 $this->guildRoles[$discordBot->botID] = $discordApi->getGuildRoles();
