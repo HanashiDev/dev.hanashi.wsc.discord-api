@@ -1,5 +1,3 @@
- 
- 
 import * as EventHandler from "WoltLabSuite/Core/Event/Handler";
 
 /**
@@ -7,7 +5,7 @@ import * as EventHandler from "WoltLabSuite/Core/Event/Handler";
  */
 export type GatewayEvent = {
   op: number;
-   
+
   d: any;
   s?: number;
   t?: string;
