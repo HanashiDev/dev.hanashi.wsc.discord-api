@@ -1,0 +1,14 @@
+includes:
+    - ../WCF/phpstan-ambient.neon
+
+parameters:
+    level: 6
+    phpVersion:
+        min: 80102
+        max: 80499
+    paths:
+        - files
+    scanFiles:
+        - ../WCF/constants.php
+    scanDirectories:
+        - ../WCF/wcfsetup/install/files

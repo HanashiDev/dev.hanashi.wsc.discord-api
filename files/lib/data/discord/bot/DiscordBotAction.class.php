@@ -29,9 +29,9 @@ final class DiscordBotAction extends AbstractDatabaseObjectAction
     /**
      * Rechte um den Token zu erhalten
      *
-     * @var array
+     * @var string[]
      */
-    protected $permissionsGetBotToken = ['admin.discord.canManageConnection'];
+    protected array $permissionsGetBotToken = ['admin.discord.canManageConnection'];
 
     /**
      * @inheritDoc
@@ -72,9 +72,9 @@ final class DiscordBotAction extends AbstractDatabaseObjectAction
      *
      * @throws PermissionDeniedException
      */
-    public function validateGetBotToken()
+    public function validateGetBotToken(): void
     {
-        if (\is_array($this->permissionsGetBotToken) && $this->permissionsGetBotToken !== []) {
+        if ($this->permissionsGetBotToken !== []) {
             WCF::getSession()->checkPermissions($this->permissionsGetBotToken);
         } else {
             throw new PermissionDeniedException();
@@ -84,9 +84,9 @@ final class DiscordBotAction extends AbstractDatabaseObjectAction
     /**
      * gibt den Bot Token der Bot ID zurück
      *
-     * @return array
+     * @return array{token: string}
      */
-    public function getBotToken()
+    public function getBotToken(): array
     {
         if (!isset($this->parameters['data']['botID'])) {
             throw new AJAXException('invalid bot id');

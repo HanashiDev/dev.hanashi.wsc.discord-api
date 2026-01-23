@@ -11,11 +11,15 @@ interface IDiscordInteractionCallback
 
     /**
      * an optional response message
+     *
+     * @return array<mixed>
      */
     public function getData(): ?array;
 
     /**
      * interaction response
+     *
+     * @return array<mixed>
      */
     public function getInteractionResponse(): array;
 }

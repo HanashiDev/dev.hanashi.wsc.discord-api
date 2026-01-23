@@ -3,6 +3,7 @@
 namespace wcf\acp\form;
 
 use Override;
+use wcf\data\discord\bot\DiscordBot;
 use wcf\data\discord\bot\DiscordBotAction;
 use wcf\event\discord\DiscordIntentsCollecting;
 use wcf\event\discord\DiscordOAuthRequiredCollecting;
@@ -25,6 +26,9 @@ use wcf\system\form\builder\field\validation\FormFieldValidator;
 use wcf\system\request\LinkHandler;
 use wcf\system\WCF;
 
+/**
+ * @extends AbstractFormBuilderForm<DiscordBot>
+ */
 class DiscordBotAddManagerForm extends AbstractFormBuilderForm
 {
     /**
@@ -48,26 +52,19 @@ class DiscordBotAddManagerForm extends AbstractFormBuilderForm
     protected int $step = 0;
 
     /**
-     * cached bot data
-     */
-    protected array $botData = [];
-
-    /**
      * temp information
      *
-     * @var array
+     * @var array<mixed>
      */
-    protected $tempInfo;
+    protected array $tempInfo = [];
 
     /**
-     * list of guilds
+     * @var string[]
      */
-    protected array $guilds = [];
-
     protected array $neededIntents = [];
 
     #[Override]
-    public function readParameters()
+    public function readParameters(): void
     {
         parent::readParameters();
 
@@ -77,7 +74,7 @@ class DiscordBotAddManagerForm extends AbstractFormBuilderForm
     }
 
     #[Override]
-    protected function createForm()
+    protected function createForm(): void
     {
         parent::createForm();
 
@@ -107,7 +104,7 @@ class DiscordBotAddManagerForm extends AbstractFormBuilderForm
         );
     }
 
-    protected function createFormStep1()
+    protected function createFormStep1(): void
     {
         $intentsCollection = new DiscordIntentsCollecting();
         EventHandler::getInstance()->fire($intentsCollection);
@@ -125,7 +122,7 @@ class DiscordBotAddManagerForm extends AbstractFormBuilderForm
                         ->addValidator(new FormFieldValidator('tokenCheck', function (PasswordFormField $formField) {
                             $botToken = $formField->getValue();
 
-                            $discord = new DiscordApi(0, $botToken);
+                            $discord = new DiscordApi(null, $botToken);
                             $bot = $discord->getCurrentApplication();
                             if (
                                 !isset($bot['body']['bot']['id'])
@@ -144,7 +141,7 @@ class DiscordBotAddManagerForm extends AbstractFormBuilderForm
         ]);
     }
 
-    protected function createFormStep2()
+    protected function createFormStep2(): void
     {
         $requestData = $this->form->getRequestData();
         $this->form->appendChildren([
@@ -166,7 +163,7 @@ class DiscordBotAddManagerForm extends AbstractFormBuilderForm
         ]);
     }
 
-    protected function createFormStep3()
+    protected function createFormStep3(): void
     {
         $requestData = $this->form->getRequestData();
         $this->form->appendChildren([
@@ -216,7 +213,7 @@ class DiscordBotAddManagerForm extends AbstractFormBuilderForm
         ]);
     }
 
-    protected function createFormStep4()
+    protected function createFormStep4(): void
     {
         $oauthRequiredCollecting = new DiscordOAuthRequiredCollecting();
         EventHandler::getInstance()->fire($oauthRequiredCollecting);
@@ -258,7 +255,7 @@ class DiscordBotAddManagerForm extends AbstractFormBuilderForm
         ]);
     }
 
-    protected function createFormStep5()
+    protected function createFormStep5(): void
     {
         $publicKeyRequiredCollecting = new DiscordPublicKeyRequiredCollecting();
         EventHandler::getInstance()->fire($publicKeyRequiredCollecting);
@@ -301,13 +298,13 @@ class DiscordBotAddManagerForm extends AbstractFormBuilderForm
     }
 
     #[Override]
-    protected function setFormAction()
+    protected function setFormAction(): void
     {
         $this->form->action(LinkHandler::getInstance()->getControllerLink(static::class, ['step' => $this->step]));
     }
 
     #[Override]
-    public function save()
+    public function save(): void
     {
         $this->step++;
         if ($this->step == 6) {
@@ -324,7 +321,7 @@ class DiscordBotAddManagerForm extends AbstractFormBuilderForm
     }
 
     #[Override]
-    public function assignVariables()
+    public function assignVariables(): void
     {
         parent::assignVariables();
 

@@ -45,7 +45,7 @@ final class DiscordBotCollection extends DatabaseObjectCollection
 
         $this->discordApis = [];
         foreach ($this->getObjects() as $object) {
-            $this->discordApis[$object->botID] = new DiscordApi($object->guildID, $object->botToken);
+            $this->discordApis[$object->botID] = new DiscordApi((string)$object->guildID, $object->botToken);
         }
     }
 

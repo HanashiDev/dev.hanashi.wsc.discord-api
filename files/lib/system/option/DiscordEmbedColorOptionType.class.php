@@ -8,10 +8,13 @@ use wcf\system\discord\type\EmbedColorType;
 
 class DiscordEmbedColorOptionType extends AbstractOptionType
 {
-    protected $embedColorType = [];
+    /**
+     * @var array<string, EmbedColorType>
+     */
+    protected array $embedColorType = [];
 
     #[Override]
-    public function getFormElement(Option $option, $value)
+    public function getFormElement(Option $option, $value): string
     {
         if (!isset($this->embedColorType[$option->optionName])) {
             $this->embedColorType[$option->optionName] = new EmbedColorType($option->optionName);
@@ -21,7 +24,7 @@ class DiscordEmbedColorOptionType extends AbstractOptionType
     }
 
     #[Override]
-    public function validate(Option $option, $newValue)
+    public function validate(Option $option, $newValue): void
     {
         if (!isset($this->embedColorType[$option->optionName])) {
             $this->embedColorType[$option->optionName] = new EmbedColorType($option->optionName);
@@ -30,7 +33,7 @@ class DiscordEmbedColorOptionType extends AbstractOptionType
     }
 
     #[Override]
-    public function getData(Option $option, $newValue)
+    public function getData(Option $option, $newValue): string
     {
         if (!isset($this->embedColorType[$option->optionName])) {
             $this->embedColorType[$option->optionName] = new EmbedColorType($option->optionName);

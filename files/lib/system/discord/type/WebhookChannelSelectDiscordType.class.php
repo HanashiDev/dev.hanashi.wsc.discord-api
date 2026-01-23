@@ -10,13 +10,10 @@ use wcf\system\exception\UserInputException;
 class WebhookChannelSelectDiscordType extends ChannelSelectDiscordType
 {
     #[Override]
-    public function validate($newValue, ?int $maxChannels = null)
+    public function validate(mixed $newValue, ?int $maxChannels = null): void
     {
         if (!\is_array($newValue) || $newValue === []) {
             return;
-        }
-        if (!\is_array($newValue)) {
-            throw new UserInputException($this->optionName);
         }
         if ($maxChannels !== null && \count($newValue) > $maxChannels) {
             throw new UserInputException($this->optionName, 'discordMaxChannels');
@@ -39,7 +36,6 @@ class WebhookChannelSelectDiscordType extends ChannelSelectDiscordType
         foreach ($discordWebhookList as $discordWebhook) {
             if (
                 !isset($webhookChannelIDs[$discordWebhook->botID])
-                || !\is_array($webhookChannelIDs[$discordWebhook->botID])
                 || !\in_array($discordWebhook->channelID, $webhookChannelIDs[$discordWebhook->botID])
             ) {
                 $webhookChannelIDs[$discordWebhook->botID][] = $discordWebhook->channelID;

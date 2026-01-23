@@ -16,7 +16,10 @@ use wcf\system\discord\type\RoleMultiSelectDiscordType;
  */
 class DiscordRoleMultiSelectOptionType extends AbstractOptionType
 {
-    protected $roleMultiSelectType = [];
+    /**
+     * @var array<string, RoleMultiSelectDiscordType>
+     */
+    protected array $roleMultiSelectType = [];
 
     #[Override]
     public function getFormElement(Option $option, $value)

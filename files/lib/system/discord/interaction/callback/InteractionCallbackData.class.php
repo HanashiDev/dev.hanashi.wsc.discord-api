@@ -7,18 +7,21 @@ use wcf\util\JSON;
 
 final class InteractionCallbackData
 {
+    /**
+     * @var array<mixed>
+     */
     private array $additionalData = [];
 
     /**
-     * @param null|bool $tts                is the response TTS
-     * @param null|string $content          message content
-     * @param null|array $embeds            supports up to 10 embeds
-     * @param null|array $allowedMentions   allowed mentions object
-     * @param null|int $flags               message flags combined as a bitfield (only `SUPPRESS_EMBEDS`, `EPHEMERAL`,
-     *                                      and `SUPPRESS_NOTIFICATIONS` can be set)
-     * @param null|array $components        message components
-     * @param null|array $attachments       attachment objects with filename and description
-     * @param null|array $poll              A poll!
+     * @param ?bool $tts                        is the response TTS
+     * @param ?string $content                  message content
+     * @param ?array<mixed> $embeds             supports up to 10 embeds
+     * @param ?array<mixed> $allowedMentions    allowed mentions object
+     * @param ?int $flags                       message flags combined as a bitfield (only `SUPPRESS_EMBEDS`,
+     *                                          `EPHEMERAL` and `SUPPRESS_NOTIFICATIONS` can be set)
+     * @param ?array<mixed> $components         message components
+     * @param ?array<mixed> $attachments        attachment objects with filename and description
+     * @param ?array<mixed> $poll               A poll!
      */
     public function __construct(
         private ?bool $tts = null,
@@ -54,6 +57,8 @@ final class InteractionCallbackData
 
     /**
      * supports up to 10 embeds
+     *
+     * @param ?array<mixed> $embeds
      */
     public function embeds(?array $embeds = null): static
     {
@@ -64,6 +69,8 @@ final class InteractionCallbackData
 
     /**
      * allowed mentions object
+     *
+     * @param ?array<mixed> $allowedMentions
      */
     public function allowedMentions(?array $allowedMentions): static
     {
@@ -85,6 +92,8 @@ final class InteractionCallbackData
 
     /**
      * message components
+     *
+     * @param ?array<mixed> $components
      */
     public function components(?array $components): static
     {
@@ -95,6 +104,8 @@ final class InteractionCallbackData
 
     /**
      * attachment objects with filename and description
+     *
+     * @param ?array<mixed> $attachments
      */
     public function attachments(?array $attachments): static
     {
@@ -105,6 +116,8 @@ final class InteractionCallbackData
 
     /**
      * A poll!
+     *
+     * @param ?array<mixed> $poll
      */
     public function poll(?array $poll): static
     {
@@ -146,6 +159,9 @@ final class InteractionCallbackData
         return $this;
     }
 
+    /**
+     * @return null|array<string, mixed>
+     */
     public function getData(): ?array
     {
         $data = [];

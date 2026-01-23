@@ -117,11 +117,14 @@ final class DiscordWebhookAvatarFileProcessor extends AbstractFileProcessor
     }
 
     #[Override]
-    public function getMaximumSize(array $context): ?int
+    public function getMaximumSize(array $context): int
     {
         return 8000000;
     }
 
+    /**
+     * @param array<string, mixed> $context
+     */
     private function getBot(array $context): ?DiscordBot
     {
         $botID = $context['botID'] ?? null;

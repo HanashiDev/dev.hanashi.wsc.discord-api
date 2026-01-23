@@ -4,7 +4,6 @@ namespace wcf\system\gridView\admin;
 
 use Override;
 use wcf\data\DatabaseObject;
-use wcf\data\DatabaseObjectList;
 use wcf\data\discord\webhook\DiscordWebhook;
 use wcf\data\discord\webhook\DiscordWebhookList;
 use wcf\system\cache\builder\DiscordGuildChannelsCacheBuilder;
@@ -19,6 +18,9 @@ use wcf\system\view\filter\TimeFilter;
 use wcf\system\WCF;
 use wcf\util\StringUtil;
 
+/**
+ * @extends AbstractGridView<DiscordWebhook, DiscordWebhookList>
+ */
 final class DiscordWebhookGridView extends AbstractGridView
 {
     public function __construct()
@@ -108,7 +110,7 @@ final class DiscordWebhookGridView extends AbstractGridView
     }
 
     #[Override]
-    protected function createObjectList(): DatabaseObjectList
+    protected function createObjectList(): DiscordWebhookList
     {
         return new DiscordWebhookList();
     }

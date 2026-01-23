@@ -16,7 +16,10 @@ use wcf\system\discord\type\BotMultiSelectType;
  */
 class DiscordBotMultiSelectOptionType extends AbstractOptionType
 {
-    protected $botMultiSelectType = [];
+    /**
+     * @var array<string, BotMultiSelectType>
+     */
+    protected array $botMultiSelectType = [];
 
     #[Override]
     public function getFormElement(Option $option, $value)

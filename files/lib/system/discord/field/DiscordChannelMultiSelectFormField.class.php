@@ -40,16 +40,19 @@ final class DiscordChannelMultiSelectFormField extends AbstractFormField impleme
      */
     protected $value = [];
 
-    private $allowedTypes = [];
+    /**
+     * @var int[]
+     */
+    private array $allowedTypes = [];
 
     #[Override]
-    public function hasSaveValue()
+    public function hasSaveValue(): false
     {
         return false;
     }
 
     #[Override]
-    public function getOptions()
+    public function getOptions(): ?array
     {
         $options = $this->options;
 
@@ -64,7 +67,7 @@ final class DiscordChannelMultiSelectFormField extends AbstractFormField impleme
     }
 
     #[Override]
-    public function populate()
+    public function populate(): static
     {
         parent::populate();
 
@@ -85,7 +88,7 @@ final class DiscordChannelMultiSelectFormField extends AbstractFormField impleme
     }
 
     #[Override]
-    public function readValue()
+    public function readValue(): static
     {
         if ($this->getDocument()->hasRequestData($this->getPrefixedId())) {
             $value = $this->getDocument()->getRequestData($this->getPrefixedId());
@@ -99,7 +102,7 @@ final class DiscordChannelMultiSelectFormField extends AbstractFormField impleme
     }
 
     #[Override]
-    public function validate()
+    public function validate(): void
     {
         $value = $this->getValue();
 
@@ -116,7 +119,7 @@ final class DiscordChannelMultiSelectFormField extends AbstractFormField impleme
     }
 
     #[Override]
-    public function value($value)
+    public function value($value): static
     {
         // ignore `null` as value which can be passed either for nullable
         // fields or as value if no options are available
@@ -132,13 +135,13 @@ final class DiscordChannelMultiSelectFormField extends AbstractFormField impleme
     }
 
     #[Override]
-    public function supportsNestedOptions()
+    public function supportsNestedOptions(): false
     {
         return false;
     }
 
     #[Override]
-    public function options($options, $nestedOptions = false, $labelLanguageItems = true)
+    public function options($options, $nestedOptions = false, $labelLanguageItems = true): static
     {
         if (!\is_array($options)) {
             throw new UnexpectedValueException('options must be an array');
@@ -146,7 +149,7 @@ final class DiscordChannelMultiSelectFormField extends AbstractFormField impleme
 
         foreach ($options as $option) {
             foreach (['id', 'type', 'name', 'parent_id', 'position'] as $entry) {
-                if (!isset($entry, $option)) {
+                if (!isset($option[$entry])) {
                     throw new InvalidArgumentException("Option has no {$entry} entry for field '{$this->getId()}'.");
                 }
             }
@@ -170,6 +173,10 @@ final class DiscordChannelMultiSelectFormField extends AbstractFormField impleme
         return $this;
     }
 
+    /**
+     * @param array<mixed> $options
+     * @return array<mixed>
+     */
     private function sortOptions(array $options): array
     {
         \usort(
@@ -196,13 +203,19 @@ final class DiscordChannelMultiSelectFormField extends AbstractFormField impleme
         return $options;
     }
 
-    public function allowedTypes(array $allowedTypes = [])
+    /**
+     * @param int[] $allowedTypes
+     */
+    public function allowedTypes(array $allowedTypes = []): static
     {
         $this->allowedTypes = $allowedTypes;
 
         return $this;
     }
 
+    /**
+     * @return int[]
+     */
     public function getAllowedTypes(): array
     {
         return $this->allowedTypes;

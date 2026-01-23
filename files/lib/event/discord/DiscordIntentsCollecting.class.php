@@ -42,6 +42,9 @@ final class DiscordIntentsCollecting implements IPsr14Event
         return $this->messageContentIntent;
     }
 
+    /**
+     * @return string[]
+     */
     public function neededIntents(): array
     {
         $data = [];

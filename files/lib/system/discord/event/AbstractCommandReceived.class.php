@@ -7,13 +7,13 @@ use wcf\system\discord\interaction\callback\IDiscordInteractionCallback;
 
 abstract class AbstractCommandReceived implements ICommandReceived
 {
-    private array $data;
-
     protected IDiscordInteractionCallback $response;
 
-    public function __construct(array $data)
+    /**
+     * @param array<mixed> $data
+     */
+    public function __construct(private array $data)
     {
-        $this->data = $data;
     }
 
     #[Override]

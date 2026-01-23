@@ -10,22 +10,20 @@ use wcf\util\StringUtil;
 
 class BotMultiSelectType extends AbstractDiscordType
 {
-    public function getFormElement($value)
+    public function getFormElement(mixed $value): string
     {
         $discordBotList = new DiscordBotList();
         $discordBotList->sqlOrderBy = 'botName ASC';
         $discordBotList->readObjects();
 
-        WCF::getTPL()->assign([
+        return WCF::getTPL()->render('wcf', 'discordBotMultiSelectOptionType', [
             'discordBotList' => $discordBotList,
             'optionName' => $this->optionName,
             'value' => !\is_array($value) ? \explode("\n", $value) : $value,
         ]);
-
-        return WCF::getTPL()->render('wcf', 'discordBotMultiSelectOptionType', []);
     }
 
-    public function validate($newValue)
+    public function validate(mixed $newValue): void
     {
         if (!\is_array($newValue)) {
             $newValue = [];
@@ -43,12 +41,8 @@ class BotMultiSelectType extends AbstractDiscordType
         }
     }
 
-    public function getData($newValue)
+    public function getData(mixed $newValue): string
     {
-        if (!\is_array($newValue)) {
-            $newValue = [];
-        }
-
         return \implode("\n", ArrayUtil::toIntegerArray(StringUtil::unifyNewlines($newValue)));
     }
 }

@@ -71,22 +71,16 @@ abstract class AbstractDiscordInteractionAction implements RequestHandlerInterfa
                 switch ($data['type']) {
                     case DiscordApi::DISCORD_PING:
                         return $this->sendPong();
-                        break;
                     case DiscordApi::DISCORD_APPLICATION_COMMAND:
                         return $this->handleApplicationCommand($data);
-                        break;
                     case DiscordApi::DISCORD_MESSAGE_COMPONENT:
                         return $this->handleMessageCommand($data);
-                        break;
                     case DiscordApi::DISCORD_APPLICATION_COMMAND_AUTOCOMPLETE:
                         return $this->handleApplicationCommandAutocomplete($data);
-                        break;
                     case DiscordApi::DISCORD_MODAL_SUBMIT:
                         return $this->handleModalCommand($data);
-                        break;
                     default:
                         throw new BadMethodCallException('unknown component');
-                        break;
                 }
             } catch (BadMethodCallException $e) {
                 return new HtmlResponse($e->getMessage(), 400);

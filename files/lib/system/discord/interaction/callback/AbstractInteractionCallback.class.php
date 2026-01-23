@@ -25,7 +25,7 @@ abstract class AbstractInteractionCallback implements IDiscordInteractionCallbac
     #[Override]
     public function getData(): ?array
     {
-        if (!isset($this->data) || $this->data === null) {
+        if ($this->data === null) {
             return null;
         }
 

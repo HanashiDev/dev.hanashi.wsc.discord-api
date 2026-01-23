@@ -28,11 +28,6 @@ final class DiscordWebhookAction extends AbstractDatabaseObjectAction
      */
     public $className = DiscordWebhookEditor::class;
 
-    /**
-     * @var DiscordWebhookEditor
-     */
-    protected $objects = [];
-
     #[Override]
     public function delete()
     {

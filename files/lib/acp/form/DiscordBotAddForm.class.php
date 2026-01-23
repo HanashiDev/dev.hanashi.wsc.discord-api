@@ -3,6 +3,7 @@
 namespace wcf\acp\form;
 
 use Override;
+use wcf\data\discord\bot\DiscordBot;
 use wcf\data\discord\bot\DiscordBotAction;
 use wcf\form\AbstractFormBuilderForm;
 use wcf\system\discord\DiscordApi;
@@ -14,6 +15,9 @@ use wcf\system\form\builder\field\TextFormField;
 use wcf\system\form\builder\field\validation\FormFieldValidationError;
 use wcf\system\form\builder\field\validation\FormFieldValidator;
 
+/**
+ * @extends AbstractFormBuilderForm<DiscordBot>
+ */
 class DiscordBotAddForm extends AbstractFormBuilderForm
 {
     /**

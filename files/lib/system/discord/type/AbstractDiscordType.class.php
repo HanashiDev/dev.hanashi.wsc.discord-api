@@ -4,10 +4,7 @@ namespace wcf\system\discord\type;
 
 abstract class AbstractDiscordType
 {
-    protected $optionName;
-
-    public function __construct($optionName)
+    public function __construct(protected string $optionName)
     {
-        $this->optionName = $optionName;
     }
 }

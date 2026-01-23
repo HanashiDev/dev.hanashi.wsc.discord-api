@@ -11,19 +11,20 @@ class ChannelMultiSelectDiscordType extends AbstractDiscordType
 {
     /**
      * Liste von Discord-Bots
-     *
-     * @var DiscordBotList
      */
-    protected $discordBotList;
+    protected DiscordBotList $discordBotList;
 
     /**
      * Liste von Server-Channeln
      *
-     * @var array
+     * @var array<int, mixed>
      */
-    protected $guildChannels;
+    protected array $guildChannels;
 
-    public function getFormElement($value, $channelTypes = [])
+    /**
+     * @param array<mixed> $channelTypes
+     */
+    public function getFormElement(mixed $value, array $channelTypes = []): string
     {
         $channels = [];
         $guildChannels = $this->getGuildChannels();
@@ -58,20 +59,18 @@ class ChannelMultiSelectDiscordType extends AbstractDiscordType
         $realValue = [];
         try {
             $realValue = \unserialize($value);
-        } catch (Throwable $e) {
+        } catch (Throwable) {
         }
 
-        WCF::getTPL()->assign([
+        return WCF::getTPL()->render('wcf', 'discordChannelMultiSelect', [
             'bots' => $channels,
             'optionName' => $this->optionName,
             'value' => $realValue,
             'channelTypes' => $channelTypes,
         ]);
-
-        return WCF::getTPL()->render('wcf', 'discordChannelMultiSelect', []);
     }
 
-    public function validate($newValue)
+    public function validate(mixed $newValue): void
     {
         $guildChannels = $this->getGuildChannels();
         foreach ($newValue as $botID => $channelIDs) {
@@ -95,7 +94,7 @@ class ChannelMultiSelectDiscordType extends AbstractDiscordType
         }
     }
 
-    public function getData($newValue)
+    public function getData(mixed $newValue): string
     {
         if (!\is_array($newValue)) {
             $newValue = [];
@@ -106,12 +105,10 @@ class ChannelMultiSelectDiscordType extends AbstractDiscordType
 
     /**
      * gibt Liste von Discord-Bots zurück
-     *
-     * @return DiscordBotList
      */
-    protected function getDiscordBotList()
+    protected function getDiscordBotList(): DiscordBotList
     {
-        if ($this->discordBotList === null) {
+        if (!isset($this->discordBotList)) {
             $this->discordBotList = new DiscordBotList();
             $this->discordBotList->sqlOrderBy = 'botName ASC';
             $this->discordBotList->readObjects();
@@ -123,11 +120,11 @@ class ChannelMultiSelectDiscordType extends AbstractDiscordType
     /**
      * Gibt Liste von Discord-Channeln zurück
      *
-     * @return array
+     * @return array<int, mixed>
      */
-    protected function getGuildChannels()
+    protected function getGuildChannels(): array
     {
-        if ($this->guildChannels === null) {
+        if (!isset($this->guildChannels)) {
             foreach ($this->getDiscordBotList() as $discordBot) {
                 $guildChannelsTmp = $discordBot->getCachedDiscordChannel();
                 if ($guildChannelsTmp['status'] != 200) {

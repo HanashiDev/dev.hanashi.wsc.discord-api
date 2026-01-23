@@ -5,7 +5,6 @@ namespace wcf\system\gridView\admin;
 use Override;
 use wcf\acp\form\DiscordBotEditForm;
 use wcf\data\DatabaseObject;
-use wcf\data\DatabaseObjectList;
 use wcf\data\discord\bot\DiscordBot;
 use wcf\data\discord\bot\DiscordBotList;
 use wcf\system\gridView\AbstractGridView;
@@ -20,6 +19,9 @@ use wcf\system\view\filter\TextFilter;
 use wcf\system\view\filter\TimeFilter;
 use wcf\system\WCF;
 
+/**
+ * @extends AbstractGridView<DiscordBot, DiscordBotList>
+ */
 final class DiscordBotGridView extends AbstractGridView
 {
     public function __construct()
@@ -86,7 +88,7 @@ final class DiscordBotGridView extends AbstractGridView
     }
 
     #[Override]
-    protected function createObjectList(): DatabaseObjectList
+    protected function createObjectList(): DiscordBotList
     {
         return new DiscordBotList();
     }

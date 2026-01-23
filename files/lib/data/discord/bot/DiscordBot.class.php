@@ -48,6 +48,9 @@ final class DiscordBot extends CollectionDatabaseObject
         return $this->getCollection()->getApi($this);
     }
 
+    /**
+     * @return string[]
+     */
     public function getWebhookIconUploadFileLocations(): array
     {
         $file = $this->getWebhookAvatar();
@@ -58,7 +61,10 @@ final class DiscordBot extends CollectionDatabaseObject
         return [$file->getPathname()];
     }
 
-    public function getCachedDiscordChannel()
+    /**
+     * @return array<mixed>
+     */
+    public function getCachedDiscordChannel(): array
     {
         return DiscordGuildChannelCacheBuilder::getInstance()->getData([
             'guildID' => $this->guildID,

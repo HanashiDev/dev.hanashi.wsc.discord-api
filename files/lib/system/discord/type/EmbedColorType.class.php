@@ -8,7 +8,7 @@ use wcf\system\WCF;
 
 class EmbedColorType extends AbstractDiscordType
 {
-    public function getFormElement($value)
+    public function getFormElement(mixed $value): string
     {
         $value = $this->generateRgbaByDec($value);
 
@@ -18,7 +18,7 @@ class EmbedColorType extends AbstractDiscordType
         ]);
     }
 
-    public function validate($newValue)
+    public function validate(mixed $newValue): void
     {
         if ($newValue !== '') {
             $regex = new Regex('rgba\(\d{1,3}, \d{1,3}, \d{1,3}, (1|1\.00?|0|0?\.[0-9]{1,2})\)');
@@ -29,20 +29,20 @@ class EmbedColorType extends AbstractDiscordType
         }
     }
 
-    public function getData($newValue)
+    public function getData(string $newValue): string
     {
         \preg_match('/rgba\((\d{1,3}), (\d{1,3}), (\d{1,3}), (1|1\.00?|0|0?\.[0-9]{1,2})\)/', $newValue, $matches);
         $hex = \sprintf(
             '%s%s%s',
-            \str_pad(\dechex($matches[1]), 2, '0', \STR_PAD_LEFT),
-            \str_pad(\dechex($matches[2]), 2, '0', \STR_PAD_LEFT),
-            \str_pad(\dechex($matches[3]), 2, '0', \STR_PAD_LEFT),
+            \str_pad(\dechex((int)$matches[1]), 2, '0', \STR_PAD_LEFT),
+            \str_pad(\dechex((int)$matches[2]), 2, '0', \STR_PAD_LEFT),
+            \str_pad(\dechex((int)$matches[3]), 2, '0', \STR_PAD_LEFT),
         );
 
-        return \hexdec($hex);
+        return (string)\hexdec($hex);
     }
 
-    public function generateRgbaByDec($value)
+    public function generateRgbaByDec(int $value): string
     {
         $hex = \str_pad(\dechex($value), 6, '0', \STR_PAD_LEFT);
         $colorParts = \explode(' ', \chunk_split($hex, 2, ' '));

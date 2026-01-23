@@ -26,7 +26,7 @@ final class DiscordCurrentGuildsCacheBuilder extends AbstractCacheBuilder
         if (!isset($parameters['botToken']) || $parameters['botToken'] === '') {
             return [];
         }
-        $discord = new DiscordApi(0, $parameters['botToken']);
+        $discord = new DiscordApi(null, $parameters['botToken']);
 
         $currentUserGuilds = $discord->getCurrentUserGuilds();
         if (

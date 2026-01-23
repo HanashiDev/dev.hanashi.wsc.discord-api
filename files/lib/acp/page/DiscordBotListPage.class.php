@@ -4,7 +4,6 @@ namespace wcf\acp\page;
 
 use Override;
 use wcf\page\AbstractGridViewPage;
-use wcf\system\gridView\AbstractGridView;
 use wcf\system\gridView\admin\DiscordBotGridView;
 
 /**
@@ -14,6 +13,8 @@ use wcf\system\gridView\admin\DiscordBotGridView;
  * @copyright   Hanashi
  * @license Freie Lizenz (https://hanashi.dev/freie-lizenz/)
  * @package WoltLabSuite\Core\Acp\Page
+ *
+ * @extends AbstractGridViewPage<DiscordBotGridView>
  */
 final class DiscordBotListPage extends AbstractGridViewPage
 {
@@ -28,7 +29,7 @@ final class DiscordBotListPage extends AbstractGridViewPage
     public $activeMenuItem = 'wcf.acp.menu.link.configuration.discord.discordBotList';
 
     #[Override]
-    protected function createGridView(): AbstractGridView
+    protected function createGridView(): DiscordBotGridView
     {
         return new DiscordBotGridView();
     }

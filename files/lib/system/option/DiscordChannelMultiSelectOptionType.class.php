@@ -16,7 +16,10 @@ use wcf\system\discord\type\ChannelMultiSelectDiscordType;
  */
 class DiscordChannelMultiSelectOptionType extends AbstractOptionType
 {
-    protected $channelMultiSelectType = [];
+    /**
+     * @var array<string, ChannelMultiSelectDiscordType>
+     */
+    protected array $channelMultiSelectType = [];
 
     #[Override]
     public function getFormElement(Option $option, $value)
@@ -48,6 +51,9 @@ class DiscordChannelMultiSelectOptionType extends AbstractOptionType
         return $this->channelMultiSelectType[$option->optionName]->getData($newValue);
     }
 
+    /**
+     * @return string[]
+     */
     private function getChannelTypes(Option $option): array
     {
         $channelTypes = $option->channeltypes;

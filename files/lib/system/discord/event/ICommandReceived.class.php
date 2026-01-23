@@ -9,6 +9,8 @@ interface ICommandReceived extends IPsr14Event
 {
     /**
      * get input data
+     *
+     * @return array<mixed>
      */
     public function getData(): array;
 

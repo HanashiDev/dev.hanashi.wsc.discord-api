@@ -10,7 +10,7 @@ use wcf\system\exception\UserInputException;
 class WebhookChannelMultiSelectDiscordType extends ChannelMultiSelectDiscordType
 {
     #[Override]
-    public function validate($newValue)
+    public function validate(mixed $newValue): void
     {
         if (!\is_array($newValue) || $newValue === []) {
             return;
@@ -38,7 +38,6 @@ class WebhookChannelMultiSelectDiscordType extends ChannelMultiSelectDiscordType
         foreach ($discordWebhookList as $discordWebhook) {
             if (
                 !isset($webhookChannelIDs[$discordWebhook->botID])
-                || !\is_array($webhookChannelIDs[$discordWebhook->botID])
                 || !\in_array($discordWebhook->channelID, $webhookChannelIDs[$discordWebhook->botID])
             ) {
                 $webhookChannelIDs[$discordWebhook->botID][] = $discordWebhook->channelID;

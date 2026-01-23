@@ -58,7 +58,7 @@ final class DiscordWebhookCollection extends DatabaseObjectCollection
 
         $this->discordApis = [];
         foreach ($this->getObjects() as $object) {
-            $this->discordApis[$object->webhookID] = new DiscordApi($object->guildID, $object->botToken);
+            $this->discordApis[$object->webhookID] = $this->getDiscordBot($object)->getDiscordApi();
         }
     }
 }

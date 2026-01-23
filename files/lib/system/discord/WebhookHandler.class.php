@@ -3,7 +3,6 @@
 namespace wcf\system\discord;
 
 use Exception;
-use wcf\data\discord\bot\DiscordBot;
 use wcf\data\discord\webhook\DiscordWebhookAction;
 use wcf\data\discord\webhook\DiscordWebhookList;
 use wcf\system\cache\runtime\DiscordBotRuntimeCache;
@@ -11,9 +10,11 @@ use wcf\system\SingletonFactory;
 
 final class WebhookHandler extends SingletonFactory
 {
-    public function saveWebhooks(int $botID, array $channelIDs, string $usageBy)
+    /**
+     * @param string[] $channelIDs
+     */
+    public function saveWebhooks(int $botID, array $channelIDs, string $usageBy): void
     {
-        /** @var DiscordBot */
         $bot = DiscordBotRuntimeCache::getInstance()->getObject($botID);
         if ($bot === null || $channelIDs === []) {
             return;

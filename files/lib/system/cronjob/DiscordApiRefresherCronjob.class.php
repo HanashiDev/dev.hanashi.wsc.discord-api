@@ -21,7 +21,7 @@ use wcf\system\discord\DiscordApi;
 final class DiscordApiRefresherCronjob extends AbstractCronjob
 {
     #[Override]
-    public function execute(Cronjob $cronjob)
+    public function execute(Cronjob $cronjob): void
     {
         parent::execute($cronjob);
 
@@ -32,7 +32,7 @@ final class DiscordApiRefresherCronjob extends AbstractCronjob
     /**
      * Aktualisiert die Namen der Webhooks
      */
-    protected function refreshWebhooks()
+    protected function refreshWebhooks(): void
     {
         $discordWebhookList = new DiscordWebhookList();
         $discordWebhookList->readObjects();
@@ -59,7 +59,7 @@ final class DiscordApiRefresherCronjob extends AbstractCronjob
     /**
      * Aktualisiert Namen und Icons der Server
      */
-    protected function refreshGuilds()
+    protected function refreshGuilds(): void
     {
         $discordBotList = new DiscordBotList();
         $discordBotList->readObjects();

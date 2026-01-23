@@ -2,7 +2,6 @@
 
 namespace wcf\system\discord;
 
-use Exception;
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Exception\BadResponseException;
 use GuzzleHttp\Psr7\Request;
@@ -12,6 +11,7 @@ use Psr\Http\Message\ResponseInterface;
 use SensitiveParameter;
 use Throwable;
 use wcf\data\discord\bot\DiscordBot;
+use wcf\system\cache\runtime\DiscordBotRuntimeCache;
 use wcf\system\io\HttpFactory;
 use wcf\util\JSON;
 
@@ -48,7 +48,7 @@ final class DiscordApi
 
     public const DISCORD_STRING = 3;
 
-    public const DISCORD_INTEGER = 4;
+    public const DISCORD_INT = 4;
 
     public const DISCORD_BOOLEAN = 5;
 
@@ -149,86 +149,61 @@ final class DiscordApi
 
     /**
      * URL zur Discord-API
-     *
-     * @var string
      */
-    protected $apiUrl = 'https://discord.com/api';
-
-    /**
-     * Server-ID des Discord-Servers
-     *
-     * @var integer
-     */
-    protected $guildID;
-
-    /**
-     * Geheimer Schlüssel des Discord-Bots
-     *
-     * @var string
-     */
-    protected $botToken;
-
-    /**
-     * Bot-Typ
-     * Bot = Bot
-     * Bearer = Benutzer
-     *
-     * @var string
-     */
-    protected $botType;
+    private string $apiUrl = 'https://discord.com/api';
 
     /**
      * Instanz des Discord-Bot-Objekts
-     *
-     * @var DiscordBot
+     * @deprecated
      */
-    protected $discordBot;
+    private DiscordBot $discordBot;
 
-    /**
-     * @var ClientInterface
-     */
-    private $httpClient;
+    private ClientInterface $httpClient;
 
     /**
      * Konstruktor
      *
-     * @param   integer $guildID        Server-ID des Discord-Servers
-     * @param   string  $botToken       Geheimer Schlüssel des Discord-Bots
-     * @param   string  $botType        Bot-Typ
+     * @param   string $guildID        Server-ID des Discord-Servers
+     * @param   string $botToken       Geheimer Schlüssel des Discord-Bots
+     * @param   string $botType        Bot-Typ (Bot = Bot, Bearer = Benutzer)
      */
     public function __construct(
-        $guildID,
+        private readonly ?string $guildID,
         #[SensitiveParameter]
-        $botToken,
-        $botType = 'Bot'
+        private readonly ?string $botToken,
+        private readonly string $botType = 'Bot'
     ) {
-        $this->guildID = $guildID;
-        $this->botToken = $botToken;
-        $this->botType = $botType;
     }
 
     /**
      * Erstellt ein API-Objekt anhand der Bot-ID
      *
-     * @param   integer $botID  ID des Bots
-     * @return  DiscordApi
+     * @param   int $botID  ID des Bots
      */
-    public static function getApiByID($botID)
+    public static function getApiByID(int $botID): ?self
     {
-        $discordBot = new DiscordBot($botID);
-        if (!$discordBot->botID) {
+        $discordBot = DiscordBotRuntimeCache::getInstance()->getObject($botID);
+        if ($discordBot === null) {
             return null;
         }
 
-        $discordApi = $discordBot->getDiscordApi();
-        $discordApi->discordBot($discordBot);
-
-        return $discordApi;
+        return $discordBot->getDiscordApi();
     }
 
-    public function discordBot($bot)
+    /**
+     * @deprecated
+     */
+    public function discordBot(DiscordBot $bot): void
     {
         $this->discordBot = $bot;
+    }
+
+    /**
+     * @deprecated
+     */
+    public function getDiscordBot(): DiscordBot
+    {
+        return $this->discordBot;
     }
 
     /////////////////////////////////////
@@ -238,10 +213,9 @@ final class DiscordApi
     /**
      * Fetch all of the global commands for your application. Returns an array of ApplicationCommand objects.
      *
-     * @param  integer   $applicationID
-     * @return array
+     * @return array<mixed>
      */
-    public function getGlobalApplicationCommands($applicationID, bool $withLocalizations = false)
+    public function getGlobalApplicationCommands(int $applicationID, bool $withLocalizations = false): array
     {
         $url = \sprintf('%s/applications/%s/commands', $this->apiUrl, $applicationID);
         if ($withLocalizations) {
@@ -255,11 +229,10 @@ final class DiscordApi
      * Create a new global command. New global commands will be available in all guilds after 1 hour. Returns 201 and
      * an ApplicationCommand object.
      *
-     * @param  integer $applicationID
-     * @param  array $params
-     * @return array
+     * @param  array<mixed> $params
+     * @return array<mixed>
      */
-    public function createGlobalApplicationCommand($applicationID, $params)
+    public function createGlobalApplicationCommand(int $applicationID, array $params): array
     {
         $url = \sprintf('%s/applications/%s/commands', $this->apiUrl, $applicationID);
 
@@ -269,11 +242,9 @@ final class DiscordApi
     /**
      * Fetch a global command for your application. Returns an ApplicationCommand object.
      *
-     * @param  integer $applicationID
-     * @param  integer $commandID
-     * @return array
+     * @return array<mixed>
      */
-    public function getGlobalApplicationCommand($applicationID, $commandID)
+    public function getGlobalApplicationCommand(int $applicationID, int $commandID): array
     {
         $url = \sprintf('%s/applications/%s/commands/%s', $this->apiUrl, $applicationID, $commandID);
 
@@ -284,12 +255,10 @@ final class DiscordApi
      * Edit a global command. Updates will be available in all guilds after 1 hour. Returns 200 and an
      * ApplicationCommand object.
      *
-     * @param  integer $applicationID
-     * @param  integer $commandID
-     * @param  array $params
-     * @return array
+     * @param  array<mixed> $params
+     * @return array<mixed>
      */
-    public function editGlobalApplicationCommand($applicationID, $commandID, $params)
+    public function editGlobalApplicationCommand(int $applicationID, int $commandID, array $params): array
     {
         $url = \sprintf('%s/applications/%s/commands/%s', $this->apiUrl, $applicationID, $commandID);
 
@@ -299,11 +268,9 @@ final class DiscordApi
     /**
      * Deletes a global command. Returns 204.
      *
-     * @param  integer $applicationID
-     * @param  integer $commandID
-     * @return array
+     * @return array<mixed>
      */
-    public function deleteGlobalApplicationCommand($applicationID, $commandID)
+    public function deleteGlobalApplicationCommand(int $applicationID, int $commandID): array
     {
         $url = \sprintf('%s/applications/%s/commands/%s', $this->apiUrl, $applicationID, $commandID);
 
@@ -314,12 +281,13 @@ final class DiscordApi
      * Fetch all of the guild commands for your application for a specific guild. Returns an array of
      * ApplicationCommand objects.
      *
-     * @param  integer $applicationID
-     * @param  integer $commandID
-     * @return array
+     * @return array<mixed>
      */
-    public function getGuildApplicationCommands($applicationID, $commandID, bool $withLocalizations = false)
-    {
+    public function getGuildApplicationCommands(
+        int $applicationID,
+        int $commandID,
+        bool $withLocalizations = false
+    ): array {
         $url = \sprintf('%s/applications/%s/commands/%s', $this->apiUrl, $applicationID, $commandID);
         if ($withLocalizations) {
             $url .= '?with_localizations=1';
@@ -333,10 +301,9 @@ final class DiscordApi
      * application. Updates will be available in all guilds after 1 hour. Returns 200 and a list of ApplicationCommand
      * objects. Commands that do not already exist will count toward daily application command create limits.
      *
-     * @param  integer $applicationID
-     * @return array
+     * @return array<mixed>
      */
-    public function bulkOverwriteGlobalApplicationCommands($applicationID)
+    public function bulkOverwriteGlobalApplicationCommands(int $applicationID): array
     {
         $url = \sprintf('%s/applications/%s/commands', $this->apiUrl, $applicationID);
 
@@ -348,12 +315,10 @@ final class DiscordApi
      * ApplicationCommand object. If the command did not already exist, it will count toward daily application command
      * create limits.
      *
-     * @param  integer $applicationID
-     * @param  integer $guildID
-     * @param  array $params
-     * @return array
+     * @param  array<mixed> $params
+     * @return array<mixed>
      */
-    public function createGuildApplicationCommand($applicationID, $guildID, $params)
+    public function createGuildApplicationCommand(int $applicationID, int $guildID, array $params): array
     {
         $url = \sprintf('%s/applications/%s/guilds/%s/commands', $this->apiUrl, $applicationID, $guildID);
 
@@ -363,12 +328,9 @@ final class DiscordApi
     /**
      * Fetch a guild command for your application. Returns an ApplicationCommand object.
      *
-     * @param  integer $applicationID
-     * @param  integer $guildID
-     * @param  integer $commandID
-     * @return array
+     * @return array<mixed>
      */
-    public function getGuildApplicationCommand($applicationID, $guildID, $commandID)
+    public function getGuildApplicationCommand(int $applicationID, int $guildID, int $commandID): array
     {
         $url = \sprintf(
             '%s/applications/%s/guilds/%s/commands/%s',
@@ -385,13 +347,10 @@ final class DiscordApi
      * Edit a guild command. Updates for guild commands will be available immediately. Returns 200 and an
      * ApplicationCommand object.
      *
-     * @param  integer $applicationID
-     * @param  integer $guildID
-     * @param  integer $commandID
-     * @param  array $params
-     * @return array
+     * @param  array<mixed> $params
+     * @return array<mixed>
      */
-    public function editGuildApplicationCommand($applicationID, $guildID, $commandID, $params)
+    public function editGuildApplicationCommand(int $applicationID, int $guildID, int $commandID, array $params): array
     {
         $url = \sprintf(
             '%s/applications/%s/guilds/%s/commands/%s',
@@ -407,12 +366,9 @@ final class DiscordApi
     /**
      * Delete a guild command. Returns 204 on success.
      *
-     * @param  integer $applicationID
-     * @param  integer $guildID
-     * @param  integer $commandID
-     * @return array
+     * @return array<mixed>
      */
-    public function deleteGuildApplicationCommand($applicationID, $guildID, $commandID)
+    public function deleteGuildApplicationCommand(int $applicationID, int $guildID, int $commandID): array
     {
         $url = \sprintf(
             '%s/applications/%s/guilds/%s/commands/%s',
@@ -429,11 +385,9 @@ final class DiscordApi
      * Takes a list of application commands, overwriting existing commands for the guild. Returns 200 and a list of
      * ApplicationCommand objects.
      *
-     * @param  integer $applicationID
-     * @param  integer $guildID
-     * @return array
+     * @return array<mixed>
      */
-    public function bulkOverwriteGuildApplicationCommands($applicationID, $guildID)
+    public function bulkOverwriteGuildApplicationCommands(int $applicationID, int $guildID): array
     {
         $url = \sprintf('%s/applications/%s/guilds/%s/commands', $this->apiUrl, $applicationID, $guildID);
 
@@ -443,17 +397,15 @@ final class DiscordApi
     /**
      * Create a response to an Interaction from the gateway. Takes an Interaction response.
      *
-     * @param  integer $interactionID
-     * @param  string $interactionToken
-     * @param  array $params
-     * @return array
+     * @param  array<mixed> $params
+     * @return array<mixed>
      */
     public function createInteractionResponse(
-        $interactionID,
+        int $interactionID,
         #[SensitiveParameter]
-        $interactionToken,
-        $params
-    ) {
+        string $interactionToken,
+        array $params
+    ): array {
         $url = \sprintf('%s/interactions/%s/%s/callback', $this->apiUrl, $interactionID, $interactionToken);
 
         return $this->execute($url, 'POST', $params, 'application/json');
@@ -462,15 +414,13 @@ final class DiscordApi
     /**
      * Returns the initial Interaction response. Functions the same as Get Webhook Message.
      *
-     * @param  integer $applicationID
-     * @param  string $interactionToken
-     * @return array
+     * @return array<mixed>
      */
     public function getOriginalInteractionResponse(
-        $applicationID,
+        int $applicationID,
         #[SensitiveParameter]
-        $interactionToken
-    ) {
+        string $interactionToken
+    ): array {
         $url = \sprintf('%s/webhooks/%s/%s/messages/@original', $this->apiUrl, $applicationID, $interactionToken);
 
         return $this->execute($url, 'GET');
@@ -479,17 +429,15 @@ final class DiscordApi
     /**
      * Edits the initial Interaction response. Functions the same as Edit Webhook Message.
      *
-     * @param  integer $applicationID
-     * @param  string $interactionToken
-     * @param  array $params
-     * @return array
+     * @param  array<mixed> $params
+     * @return array<mixed>
      */
     public function editOriginalInteractionResponse(
-        $applicationID,
+        int $applicationID,
         #[SensitiveParameter]
-        $interactionToken,
-        $params
-    ) {
+        string $interactionToken,
+        array $params
+    ): array {
         $url = \sprintf('%s/webhooks/%s/%s/messages/@original', $this->apiUrl, $applicationID, $interactionToken);
 
         return $this->execute($url, 'PATCH', $params, 'application/json');
@@ -498,15 +446,13 @@ final class DiscordApi
     /**
      * Deletes the initial Interaction response. Returns 204 on success.
      *
-     * @param  integer $applicationID
-     * @param  string $interactionToken
-     * @return array
+     * @return array<mixed>
      */
     public function deleteOriginalInteractionResponse(
-        $applicationID,
+        int $applicationID,
         #[SensitiveParameter]
-        $interactionToken
-    ) {
+        string $interactionToken
+    ): array {
         $url = \sprintf('%s/webhooks/%s/%s/messages/@original', $this->apiUrl, $applicationID, $interactionToken);
 
         return $this->execute($url, 'DELETE');
@@ -517,17 +463,15 @@ final class DiscordApi
      * and flags can be set to 64 in the body to send an ephemeral message. The thread_id query parameter is not
      * required (and is furthermore ignored) when using this endpoint for interaction followups.
      *
-     * @param  integer $applicationID
-     * @param  string $interactionToken
-     * @param  array $params
-     * @return array
+     * @param  array<mixed> $params
+     * @return array<mixed>
      */
     public function createFollowupMessage(
-        $applicationID,
+        int $applicationID,
         #[SensitiveParameter]
-        $interactionToken,
-        $params
-    ) {
+        string $interactionToken,
+        array $params
+    ): array {
         $url = \sprintf('%s/webhooks/%s/%s', $this->apiUrl, $applicationID, $interactionToken);
 
         return $this->execute($url, 'POST', $params, 'application/json');
@@ -536,19 +480,16 @@ final class DiscordApi
     /**
      * Edits a followup message for an Interaction. Functions the same as Edit Webhook Message.
      *
-     * @param  integer $applicationID
-     * @param  string $interactionToken
-     * @param  integer $messageID
-     * @param  array $params
-     * @return array
+     * @param  array<mixed> $params
+     * @return array<mixed>
      */
     public function editFollowupMessage(
-        $applicationID,
+        int $applicationID,
         #[SensitiveParameter]
-        $interactionToken,
-        $messageID,
-        $params
-    ) {
+        string $interactionToken,
+        int $messageID,
+        array $params
+    ): array {
         $url = \sprintf('%s/webhooks/%s/%s/messages/%s', $this->apiUrl, $applicationID, $interactionToken, $messageID);
 
         return $this->execute($url, 'PATCH', $params, 'application/json');
@@ -557,17 +498,14 @@ final class DiscordApi
     /**
      * Deletes a followup message for an Interaction. Returns 204 on success.
      *
-     * @param  integer $applicationID
-     * @param  string $interactionToken
-     * @param  integer $messageID
-     * @return array
+     * @return array<mixed>
      */
     public function deleteFollowupMessage(
-        $applicationID,
+        int $applicationID,
         #[SensitiveParameter]
-        $interactionToken,
-        $messageID
-    ) {
+        string $interactionToken,
+        int $messageID
+    ): array {
         $url = \sprintf('%s/webhooks/%s/%s/messages/%s', $this->apiUrl, $applicationID, $interactionToken, $messageID);
 
         return $this->execute($url, 'DELETE');
@@ -577,11 +515,9 @@ final class DiscordApi
      * Fetches command permissions for all commands for your application in a guild. Returns an array of
      * GuildApplicationCommandPermissions objects.
      *
-     * @param  integer $applicationID
-     * @param  integer $guildID
-     * @return array
+     * @return array<mixed>
      */
-    public function getGuildApplicationCommandPermissions($applicationID, $guildID)
+    public function getGuildApplicationCommandPermissions(int $applicationID, int $guildID): array
     {
         $url = \sprintf('%s/applications/%s/guilds/%s/commands/permissions', $this->apiUrl, $applicationID, $guildID);
 
@@ -592,12 +528,9 @@ final class DiscordApi
      * Fetches command permissions for a specific command for your application in a guild. Returns a
      * GuildApplicationCommandPermissions object.
      *
-     * @param  integer $applicationID
-     * @param  integer $guildID
-     * @param  integer $commandID
-     * @return array
+     * @return array<mixed>
      */
-    public function getApplicationCommandPermissions($applicationID, $guildID, $commandID)
+    public function getApplicationCommandPermissions(int $applicationID, int $guildID, int $commandID): array
     {
         $url = \sprintf(
             '%s/applications/%s/guilds/%s/commands/%s/permissions',
@@ -618,14 +551,15 @@ final class DiscordApi
      *
      * Deleting or renaming a command will permanently delete all permissions for that command
      *
-     * @param  integer $applicationID
-     * @param  integer $guildID
-     * @param  integer $commandID
-     * @param  array $permissions
-     * @return array
+     * @param  array<mixed> $permissions
+     * @return array<mixed>
      */
-    public function editApplicationCommandPermissions($applicationID, $guildID, $commandID, $permissions)
-    {
+    public function editApplicationCommandPermissions(
+        int $applicationID,
+        int $guildID,
+        int $commandID,
+        array $permissions
+    ): array {
         $url = \sprintf(
             '%s/applications/%s/guilds/%s/commands/%s/permissions',
             $this->apiUrl,
@@ -640,12 +574,10 @@ final class DiscordApi
     /**
      * batchEditApplicationCommandPermissions
      *
-     * @param  integer $applicationID
-     * @param  integer $guildID
-     * @param  array $params
-     * @return array
+     * @param  array<mixed> $params
+     * @return array<mixed>
      */
-    public function batchEditApplicationCommandPermissions($applicationID, $guildID, $params)
+    public function batchEditApplicationCommandPermissions(int $applicationID, int $guildID, array $params): array
     {
         $url = \sprintf('%s/applications/%s/guilds/%s/commands/permissions', $this->apiUrl, $applicationID, $guildID);
 
@@ -654,12 +586,8 @@ final class DiscordApi
 
     /**
      * verify a request from discord webhook
-     *
-     * @param  string $publicKey
-     * @param  string $body
-     * @return boolean
      */
-    public static function verifyRequest($publicKey, $body)
+    public static function verifyRequest(string $publicKey, string $body): bool
     {
         if (!isset($_SERVER['HTTP_X_SIGNATURE_ED25519'])) {
             return false;
@@ -691,9 +619,10 @@ final class DiscordApi
      * Returns an audit log object for the guild.
      * Requires the 'VIEW_AUDIT_LOG' permission.
      *
-     * @return array
+     * @param array<mixed> $params
+     * @return array<mixed>
      */
-    public function getGuildAuditLog($params = [])
+    public function getGuildAuditLog(array $params = []): array
     {
         $url = \sprintf('%s/guilds/%s/audit-logs', $this->apiUrl, $this->guildID);
         if ($params !== []) {
@@ -717,9 +646,9 @@ final class DiscordApi
      *
      * This endpoint requires the MANAGE_GUILD permission.
      *
-     * @return array
+     * @return array<mixed>
      */
-    public function listAutoModerationRulesForGuild()
+    public function listAutoModerationRulesForGuild(): array
     {
         $url = \sprintf('%s/guilds/%s/auto-moderation/rules', $this->apiUrl, $this->guildID);
 
@@ -731,10 +660,9 @@ final class DiscordApi
      *
      * This endpoint requires the MANAGE_GUILD permission.
      *
-     * @param  int $ruleID
-     * @return array
+     * @return array<mixed>
      */
-    public function getAutoModerationRule($ruleID)
+    public function getAutoModerationRule(int $ruleID): array
     {
         $url = \sprintf('%s/guilds/%s/auto-moderation/rules/%s', $this->apiUrl, $this->guildID, $ruleID);
 
@@ -749,10 +677,10 @@ final class DiscordApi
      *
      * This endpoint supports the X-Audit-Log-Reason header.
      *
-     * @param  array $params
-     * @return array
+     * @param  array<mixed> $params
+     * @return array<mixed>
      */
-    public function createAutoModerationRule(array $params)
+    public function createAutoModerationRule(array $params): array
     {
         $url = \sprintf('%s/guilds/%s/auto-moderation/rules', $this->apiUrl, $this->guildID);
 
@@ -769,11 +697,10 @@ final class DiscordApi
      *
      * This endpoint supports the X-Audit-Log-Reason header.
      *
-     * @param  int $ruleID
-     * @param  array $params
-     * @return array
+     * @param  array<mixed> $params
+     * @return array<mixed>
      */
-    public function modifyAutoModerationRule($ruleID, array $params)
+    public function modifyAutoModerationRule(int $ruleID, array $params): array
     {
         $url = \sprintf('%s/guilds/%s/auto-moderation/rules/%s', $this->apiUrl, $this->guildID, $ruleID);
 
@@ -787,10 +714,9 @@ final class DiscordApi
      *
      * This endpoint supports the X-Audit-Log-Reason header.
      *
-     * @param  int $ruleID
-     * @return array
+     * @return array<mixed>
      */
-    public function deleteAutoModerationRule($ruleID)
+    public function deleteAutoModerationRule(int $ruleID): array
     {
         $url = \sprintf('%s/guilds/%s/auto-moderation/rules/%s', $this->apiUrl, $this->guildID, $ruleID);
 
@@ -808,10 +734,10 @@ final class DiscordApi
     /**
      * Get a channel by ID. Returns a channel object.
      *
-     * @param   integer $channelID  Channel-ID
-     * @return  array
+     * @param   int $channelID  Channel-ID
+     * @return  array<mixed>
      */
-    public function getChannel($channelID)
+    public function getChannel(int $channelID): array
     {
         $url = \sprintf('%s/channels/%s', $this->apiUrl, $channelID);
 
@@ -826,11 +752,11 @@ final class DiscordApi
      * If modifying a category, individual Channel Update events will fire for each child channel that also changes.
      * For the PATCH method, all the JSON Params are optional.
      *
-     * @param   integer $channelID  Channel-ID
-     * @param   array   $params     JSON-Parameter
-     * @return  array
+     * @param   int $channelID  Channel-ID
+     * @param   array<mixed>   $params     JSON-Parameter
+     * @return  array<mixed>
      */
-    public function modifyChannel($channelID, $params)
+    public function modifyChannel(int $channelID, array $params): array
     {
         $url = \sprintf('%s/channels/%s', $this->apiUrl, $channelID);
 
@@ -845,10 +771,10 @@ final class DiscordApi
      * Returns a channel object on success.
      * Fires a Channel Delete Gateway event.
      *
-     * @param   integer $channelID  Channel-ID
-     * @return  array
+     * @param   int $channelID  Channel-ID
+     * @return  array<mixed>
      */
-    public function deleteChannel($channelID)
+    public function deleteChannel(int $channelID): array
     {
         $url = \sprintf('%s/channels/%s', $this->apiUrl, $channelID);
 
@@ -858,8 +784,10 @@ final class DiscordApi
     /**
      * alias for deleteChannel
      * @see self::deleteChannel()
+     *
+     * @return array<mixed>
      */
-    public function closeChannel($channelID)
+    public function closeChannel(int $channelID): array
     {
         return $this->deleteChannel($channelID);
     }
@@ -872,11 +800,11 @@ final class DiscordApi
      * messages (since they cannot read the message history).
      * Returns an array of message objects on success.
      *
-     * @param   integer $channelID  Channel-ID
-     * @param   array   $params     HTTP-Parameter
-     * @return  array
+     * @param   int $channelID  Channel-ID
+     * @param   array<mixed>   $params     HTTP-Parameter
+     * @return  array<mixed>
      */
-    public function getChannelMessages($channelID, $params = [])
+    public function getChannelMessages(int $channelID, array $params = []): array
     {
         $url = \sprintf('%s/channels/%s/messages', $this->apiUrl, $channelID);
         if ($params !== []) {
@@ -891,12 +819,11 @@ final class DiscordApi
      * If operating on a guild channel, this endpoint requires the 'READ_MESSAGE_HISTORY' permission to be present on
      * the current user. Returns a message object on success.
      *
-     * @param   integer $channelID  Channel-ID
-     * @param   integer $messageID  ID der Nachricht
-     *
-     * @return  array
+     * @param   int $channelID  Channel-ID
+     * @param   int $messageID  ID der Nachricht
+     * @return  array<mixed>
      */
-    public function getChannelMessage($channelID, $messageID)
+    public function getChannelMessage(int $channelID, int $messageID): array
     {
         $url = \sprintf('%s/channels/%s/messages/%s', $this->apiUrl, $channelID, $messageID);
 
@@ -913,11 +840,11 @@ final class DiscordApi
      * See message formatting for more information on how to properly format messages.
      * The maximum request size when sending a message is 8MB.
      *
-     * @param   integer $channelID  Channel-ID
-     * @param   array   $params     POST-Parameter
-     * @return  array
+     * @param   int $channelID  Channel-ID
+     * @param   array<mixed>   $params     POST-Parameter
+     * @return  array<mixed>
      */
-    public function createMessage($channelID, $params)
+    public function createMessage(int $channelID, array $params): array
     {
         $url = \sprintf('%s/channels/%s/messages', $this->apiUrl, $channelID);
 
@@ -931,11 +858,9 @@ final class DiscordApi
      *
      * Returns a message object.
      *
-     * @param  integer $channelID
-     * @param  integer $messageID
-     * @return array
+     * @return array<mixed>
      */
-    public function crosspostMessage($channelID, $messageID)
+    public function crosspostMessage(int $channelID, int $messageID): array
     {
         $url = \sprintf('%s/channels/%s/messages/%s/crosspost', $this->apiUrl, $channelID, $messageID);
 
@@ -950,12 +875,12 @@ final class DiscordApi
      * 'ADD_REACTIONS' permission to be present on the current user.
      * Returns a 204 empty response on success.
      *
-     * @param   integer $channelID  Channel-ID
-     * @param   integer $messageID  ID der Nachricht
-     * @param   integer $emoji      ID des Emoji oder Unicode des Emoji
-     * @return  array
+     * @param   int $channelID  Channel-ID
+     * @param   int $messageID  ID der Nachricht
+     * @param   int $emoji      ID des Emoji oder Unicode des Emoji
+     * @return  array<mixed>
      */
-    public function createReaction($channelID, $messageID, $emoji)
+    public function createReaction(int $channelID, int $messageID, int $emoji): array
     {
         $url = \sprintf('%s/channels/%s/messages/%s/reactions/%s/@me', $this->apiUrl, $channelID, $messageID, $emoji);
 
@@ -966,12 +891,12 @@ final class DiscordApi
      * Delete a reaction the current user has made for the message.
      * Returns a 204 empty response on success.
      *
-     * @param   integer $channelID  Channel-ID
-     * @param   integer $messageID  ID der Nachricht
-     * @param   integer $emoji      ID des Emoji oder Unicode des Emoji
-     * @return  array
+     * @param   int $channelID  Channel-ID
+     * @param   int $messageID  ID der Nachricht
+     * @param   int $emoji      ID des Emoji oder Unicode des Emoji
+     * @return  array<mixed>
      */
-    public function deleteOwnReaction($channelID, $messageID, $emoji)
+    public function deleteOwnReaction(int $channelID, int $messageID, int $emoji): array
     {
         $url = \sprintf('%s/channels/%s/messages/%s/reactions/%s/@me', $this->apiUrl, $channelID, $messageID, $emoji);
 
@@ -983,13 +908,13 @@ final class DiscordApi
      * This endpoint requires the 'MANAGE_MESSAGES' permission to be present on the current user.
      * Returns a 204 empty response on success.
      *
-     * @param   integer $channelID  Channel-ID
-     * @param   integer $messageID  ID der Nachricht
-     * @param   integer $emoji      ID des Emoji oder Unicode des Emoji
-     * @param   integer $userID     ID des Benutzers
-     * @return  array
+     * @param   int $channelID  Channel-ID
+     * @param   int $messageID  ID der Nachricht
+     * @param   int $emoji      ID des Emoji oder Unicode des Emoji
+     * @param   int $userID     ID des Benutzers
+     * @return  array<mixed>
      */
-    public function deleteUserReaction($channelID, $messageID, $emoji, $userID)
+    public function deleteUserReaction(int $channelID, int $messageID, int $emoji, int $userID): array
     {
         $url = \sprintf(
             '%s/channels/%s/messages/%s/reactions/%s/%s',
@@ -1007,13 +932,13 @@ final class DiscordApi
      * Get a list of users that reacted with this emoji.
      * Returns an array of user objects on success.
      *
-     * @param   integer $channelID  Channel-ID
-     * @param   integer $messageID  ID der Nachricht
-     * @param   integer $emoji      ID des Emoji oder Unicode des Emoji
-     * @param   array $params     optionale Query-Parameters
-     * @return  array
+     * @param   int $channelID  Channel-ID
+     * @param   int $messageID  ID der Nachricht
+     * @param   int $emoji      ID des Emoji oder Unicode des Emoji
+     * @param   array<mixed> $params     optionale Query-Parameters
+     * @return  array<mixed>
      */
-    public function getReactions($channelID, $messageID, $emoji, array $params = [])
+    public function getReactions(int $channelID, int $messageID, int $emoji, array $params = []): array
     {
         $url = \sprintf('%s/channels/%s/messages/%s/reactions/%s', $this->apiUrl, $channelID, $messageID, $emoji);
         if ($params !== []) {
@@ -1027,11 +952,11 @@ final class DiscordApi
      * Deletes all reactions on a message.
      * This endpoint requires the 'MANAGE_MESSAGES' permission to be present on the current user.
      *
-     * @param   integer $channelID  Channel-ID
-     * @param   integer $messageID  ID der Nachricht
-     * @return  array
+     * @param   int $channelID  Channel-ID
+     * @param   int $messageID  ID der Nachricht
+     * @return  array<mixed>
      */
-    public function deleteAllReactions($channelID, $messageID)
+    public function deleteAllReactions(int $channelID, int $messageID): array
     {
         $url = \sprintf('%s/channels/%s/messages/%s/reactions', $this->apiUrl, $channelID, $messageID);
 
@@ -1044,12 +969,12 @@ final class DiscordApi
      * Returns a message object.
      * Fires a Message Update Gateway event.
      *
-     * @param   integer $channelID  Channel-ID
-     * @param   integer $messageID  ID der Nachricht
-     * @param   integer $params     optionale Query-Parameters
-     * @return  array
+     * @param   int $channelID  Channel-ID
+     * @param   int $messageID  ID der Nachricht
+     * @param   array<mixed> $params     optionale Query-Parameters
+     * @return  array<mixed>
      */
-    public function editMessage($channelID, $messageID, $params)
+    public function editMessage(int $channelID, int $messageID, array $params): array
     {
         $url = \sprintf('%s/channels/%s/messages/%s', $this->apiUrl, $channelID, $messageID);
 
@@ -1063,11 +988,11 @@ final class DiscordApi
      * Returns a 204 empty response on success.
      * Fires a Message Delete Gateway event.
      *
-     * @param   integer $channelID  Channel-ID
-     * @param   integer $messageID  ID der Nachricht
-     * @return  array
+     * @param   int $channelID  Channel-ID
+     * @param   int $messageID  ID der Nachricht
+     * @return  array<mixed>
      */
-    public function deleteMessage($channelID, $messageID)
+    public function deleteMessage(int $channelID, int $messageID): array
     {
         $url = \sprintf('%s/channels/%s/messages/%s', $this->apiUrl, $channelID, $messageID);
 
@@ -1085,11 +1010,11 @@ final class DiscordApi
      * This endpoint will not delete messages older than 2 weeks, and will fail if any message provided is older than
      * that.
      *
-     * @param   integer $channelID  Channel-ID
-     * @param   array   $messageIDs IDs von Nachrichten
-     * @return  array
+     * @param   int $channelID  Channel-ID
+     * @param   int[]   $messageIDs IDs von Nachrichten
+     * @return  array<mixed>
      */
-    public function bulkDeleteMessage($channelID, $messageIDs)
+    public function bulkDeleteMessage(int $channelID, array $messageIDs): array
     {
         $url = \sprintf('%s/channels/%s/messages/bulk-delete', $this->apiUrl, $channelID);
 
@@ -1103,12 +1028,12 @@ final class DiscordApi
      * Returns a 204 empty response on success.
      * For more information about permissions, see permissions.
      *
-     * @param   integer $channelID      Channel-ID
-     * @param   integer $overwriteID    Overwrite-ID
-     * @param   array   $params         Parameter
-     * @return  array
+     * @param   int $channelID      Channel-ID
+     * @param   int $overwriteID    Overwrite-ID
+     * @param   array<mixed>   $params         Parameter
+     * @return  array<mixed>
      */
-    public function editChannelPermissions($channelID, $overwriteID, $params)
+    public function editChannelPermissions(int $channelID, int $overwriteID, array $params): array
     {
         $url = \sprintf('%s/channels/%s/permissions/%s', $this->apiUrl, $channelID, $overwriteID);
 
@@ -1120,10 +1045,10 @@ final class DiscordApi
      * Only usable for guild channels.
      * Requires the MANAGE_CHANNELS permission.
      *
-     * @param   integer $channelID  Channel-ID
-     * @return  array
+     * @param   int $channelID  Channel-ID
+     * @return  array<mixed>
      */
-    public function getChannelInvites($channelID)
+    public function getChannelInvites(int $channelID): array
     {
         $url = \sprintf('%s/channels/%s/invites', $this->apiUrl, $channelID);
 
@@ -1138,11 +1063,11 @@ final class DiscordApi
      * If you are not sending any fields, you still have to send an empty JSON object ({}).
      * Returns an invite object.
      *
-     * @param   integer $channelID  Channel-ID
-     * @param   array   $params     optionale Parameter
-     * @return  array
+     * @param   int $channelID  Channel-ID
+     * @param   array<mixed>   $params     optionale Parameter
+     * @return  array<mixed>
      */
-    public function createChannelInvite($channelID, $params = [])
+    public function createChannelInvite(int $channelID, array $params = []): array
     {
         $url = \sprintf('%s/channels/%s/invites', $this->apiUrl, $channelID);
 
@@ -1156,11 +1081,11 @@ final class DiscordApi
      * Returns a 204 empty response on success.
      * For more information about permissions, see permissions
      *
-     * @param   integer $channelID      Channel-ID
-     * @param   integer $overwriteID    Overwrite-ID
-     * @return  array
+     * @param   int $channelID      Channel-ID
+     * @param   int $overwriteID    Overwrite-ID
+     * @return  array<mixed>
      */
-    public function deleteChannelPermission($channelID, $overwriteID)
+    public function deleteChannelPermission(int $channelID, int $overwriteID): array
     {
         $url = \sprintf('%s/channels/%s/permissions/%s', $this->apiUrl, $channelID, $overwriteID);
 
@@ -1171,11 +1096,9 @@ final class DiscordApi
      * Follow a News Channel to send messages to a target channel. Requires the MANAGE_WEBHOOKS permission in the
      * target channel. Returns a followed channel object.
      *
-     * @param  integer $channelID
-     * @param  integer $webhookChannelID
-     * @return array
+     * @return array<mixed>
      */
-    public function followNewsChannel($channelID, $webhookChannelID)
+    public function followNewsChannel(int $channelID, int $webhookChannelID): array
     {
         $url = \sprintf('%s/channels/%s/followers', $this->apiUrl, $channelID);
 
@@ -1190,10 +1113,10 @@ final class DiscordApi
      * Returns a 204 empty response on success.
      * Fires a Typing Start Gateway event.
      *
-     * @param   integer $channelID      Channel-ID
-     * @return  array
+     * @param   int $channelID      Channel-ID
+     * @return  array<mixed>
      */
-    public function triggerTypingIndicator($channelID)
+    public function triggerTypingIndicator(int $channelID): array
     {
         $url = \sprintf('%s/channels/%s/typing', $this->apiUrl, $channelID);
 
@@ -1203,10 +1126,10 @@ final class DiscordApi
     /**
      * Returns all pinned messages in the channel as an array of message objects.
      *
-     * @param   integer $channelID      Channel-ID
-     * @return  array
+     * @param   int $channelID      Channel-ID
+     * @return  array<mixed>
      */
-    public function getPinnedMessages($channelID)
+    public function getPinnedMessages(int $channelID): array
     {
         $url = \sprintf('%s/channels/%s/pins', $this->apiUrl, $channelID);
 
@@ -1218,11 +1141,11 @@ final class DiscordApi
      * Requires the MANAGE_MESSAGES permission.
      * Returns a 204 empty response on success.
      *
-     * @param   integer $channelID      Channel-ID
-     * @param   integer $messageID  ID der Nachricht
-     * @return  array
+     * @param   int $channelID      Channel-ID
+     * @param   int $messageID  ID der Nachricht
+     * @return  array<mixed>
      */
-    public function pinMessage($channelID, $messageID)
+    public function pinMessage(int $channelID, int $messageID): array
     {
         $url = \sprintf('%s/channels/%s/pins/%s', $this->apiUrl, $channelID, $messageID);
 
@@ -1234,11 +1157,11 @@ final class DiscordApi
      * Requires the MANAGE_MESSAGES permission.
      * Returns a 204 empty response on success.
      *
-     * @param   integer $channelID      Channel-ID
-     * @param   integer $messageID  ID der Nachricht
-     * @return  array
+     * @param   int $channelID      Channel-ID
+     * @param   int $messageID  ID der Nachricht
+     * @return  array<mixed>
      */
-    public function unpinMessage($channelID, $messageID)
+    public function unpinMessage(int $channelID, int $messageID): array
     {
         $url = \sprintf('%s/channels/%s/pins/%s', $this->apiUrl, $channelID, $messageID);
 
@@ -1248,12 +1171,12 @@ final class DiscordApi
     /**
      * Adds a recipient to a Group DM using their access token
      *
-     * @param   integer $channelID  Channel-ID
-     * @param   integer $userID     User that should join
-     * @param   array   $params     optionale Parameter
-     * @return  array
+     * @param   int $channelID  Channel-ID
+     * @param   int $userID     User that should join
+     * @param   array<mixed> $params     optionale Parameter
+     * @return  array<mixed>
      */
-    public function groupDMAddRecipient($channelID, $userID, $params = [])
+    public function groupDMAddRecipient(int $channelID, int $userID, array $params = []): array
     {
         $url = \sprintf('%s/channels/%s/recipients/%s', $this->apiUrl, $channelID, $userID);
 
@@ -1263,11 +1186,11 @@ final class DiscordApi
     /**
      * Removes a recipient from a Group DM
      *
-     * @param   integer $channelID  Channel-ID
-     * @param   integer $userID     User that should join
-     * @return  array
+     * @param   int $channelID  Channel-ID
+     * @param   int $userID     User that should join
+     * @return  array<mixed>
      */
-    public function groupDMRemoveRecipient($channelID, $userID)
+    public function groupDMRemoveRecipient(int $channelID, int $userID): array
     {
         $url = \sprintf('%s/channels/%s/recipients/%s', $this->apiUrl, $channelID, $userID);
 
@@ -1282,12 +1205,10 @@ final class DiscordApi
      * creates a ANNOUNCEMENT_THREAD. Does not work on a GUILD_FORUM channel. The id of the created thread will be the
      * same as the id of the source message, and as such a message can only have a single thread created from it.
      *
-     * @param  integer $channelID
-     * @param  integer $messageID
-     * @param  array $params
-     * @return array
+     * @param  array<mixed> $params
+     * @return array<mixed>
      */
-    public function startThreadFromMessage($channelID, $messageID, $params)
+    public function startThreadFromMessage(int $channelID, int $messageID, array $params): array
     {
         $url = \sprintf('%s/channels/%s/messages/%s/threads', $this->apiUrl, $channelID, $messageID);
 
@@ -1309,11 +1230,10 @@ final class DiscordApi
      * This is a bit of a weird default though, and thus is highly likely to change in a future API version, so we
      * would recommend always explicitly setting the type parameter.
      *
-     * @param  integer $channelID
-     * @param  array $params
-     * @return array
+     * @param  array<mixed> $params
+     * @return array<mixed>
      */
-    public function startThreadWithoutMessage($channelID, $params)
+    public function startThreadWithoutMessage(int $channelID, array $params): array
     {
         $url = \sprintf('%s/channels/%s/threads', $this->apiUrl, $channelID);
 
@@ -1342,11 +1262,10 @@ final class DiscordApi
      *
      * This endpoint supports the X-Audit-Log-Reason header.
      *
-     * @param  mixed $channelID
-     * @param  mixed $params
-     * @return void
+     * @param array<mixed> $params
+     * @return array<mixed>
      */
-    public function startThreadInForumChannel($channelID, $params)
+    public function startThreadInForumChannel(int $channelID, array $params): array
     {
         $url = \sprintf('%s/channels/%s/threads', $this->apiUrl, $channelID);
 
@@ -1357,10 +1276,9 @@ final class DiscordApi
      * Adds the current user to a thread. Also requires the thread is not archived. Returns a 204 empty response on
      * success. Fires a Thread Members Update Gateway event.
      *
-     * @param  integer $channelID
-     * @return array
+     * @return array<mixed>
      */
-    public function joinThread($channelID)
+    public function joinThread(int $channelID): array
     {
         $url = \sprintf('%s/channels/%s/thread-members/@me', $this->apiUrl, $channelID);
 
@@ -1371,11 +1289,9 @@ final class DiscordApi
      * Adds another member to a thread. Requires the ability to send messages in the thread. Also requires the thread
      * is not archived. Returns a 204 empty response on success. Fires a Thread Members Update Gateway event.
      *
-     * @param  integer $channelID
-     * @param  integer $userID
-     * @return array
+     * @return array<mixed>
      */
-    public function addThreadMember($channelID, $userID)
+    public function addThreadMember(int $channelID, int $userID): array
     {
         $url = \sprintf('%s/channels/%s/thread-members/%s', $this->apiUrl, $channelID, $userID);
 
@@ -1386,10 +1302,9 @@ final class DiscordApi
      * Removes the current user from a thread. Also requires the thread is not archived. Returns a 204 empty response
      * on success. Fires a Thread Members Update Gateway event.
      *
-     * @param  integer $channelID
-     * @return array
+     * @return array<mixed>
      */
-    public function leaveThread($channelID)
+    public function leaveThread(int $channelID): array
     {
         $url = \sprintf('%s/channels/%s/thread-members/@me', $this->apiUrl, $channelID);
 
@@ -1401,11 +1316,9 @@ final class DiscordApi
      * is a GUILD_PRIVATE_THREAD. Also requires the thread is not archived. Returns a 204 empty response on success.
      * Fires a Thread Members Update Gateway event.
      *
-     * @param  integer $channelID
-     * @param  integer $userID
-     * @return array
+     * @return array<mixed>
      */
-    public function removeThreadMember($channelID, $userID)
+    public function removeThreadMember(int $channelID, int $userID): array
     {
         $url = \sprintf('%s/channels/%s/thread-members/%s', $this->apiUrl, $channelID, $userID);
 
@@ -1416,11 +1329,9 @@ final class DiscordApi
      * Returns a thread member object for the specified user if they are a member of the thread, returns a 404 response
      * otherwise.
      *
-     * @param  int $channelID
-     * @param  int $userID
-     * @return array
+     * @return array<mixed>
      */
-    public function getThreadMember($channelID, $userID)
+    public function getThreadMember(int $channelID, int $userID): array
     {
         $url = \sprintf('%s/channels/%s/thread-members/%s', $this->apiUrl, $channelID, $userID);
 
@@ -1433,10 +1344,9 @@ final class DiscordApi
      * This endpoint is restricted according to whether the GUILD_MEMBERS Privileged Intent is enabled for your
      * application.
      *
-     * @param  integer $channelID
-     * @return array
+     * @return array<mixed>
      */
-    public function listThreadMembers($channelID)
+    public function listThreadMembers(int $channelID): array
     {
         $url = \sprintf('%s/channels/%s/thread-members', $this->apiUrl, $channelID);
 
@@ -1448,11 +1358,10 @@ final class DiscordApi
      * type GUILD_PUBLIC_THREAD. When called on a GUILD_NEWS channel returns threads of type GUILD_NEWS_THREAD. Threads
      * are ordered by archive_timestamp, in descending order. Requires the READ_MESSAGE_HISTORY permission.
      *
-     * @param  integer $channelID
-     * @param  array $params
-     * @return array
+     * @param  array<mixed> $params
+     * @return array<mixed>
      */
-    public function listPublicArchivedThreads($channelID, $params = [])
+    public function listPublicArchivedThreads(int $channelID, array $params = []): array
     {
         $url = \sprintf('%s/channels/%s/threads/archived/public', $this->apiUrl, $channelID);
         if ($params !== []) {
@@ -1466,11 +1375,10 @@ final class DiscordApi
      * Returns archived threads in the channel that are of type GUILD_PRIVATE_THREAD. Threads are ordered by
      * archive_timestamp, in descending order. Requires both the READ_MESSAGE_HISTORY and MANAGE_THREADS permissions.
      *
-     * @param  integer $channelID
-     * @param  array $params
-     * @return array
+     * @param  array<mixed> $params
+     * @return array<mixed>
      */
-    public function listPrivateArchivedThreads($channelID, $params = [])
+    public function listPrivateArchivedThreads(int $channelID, array $params = []): array
     {
         $url = \sprintf('%s/channels/%s/threads/archived/private', $this->apiUrl, $channelID);
         if ($params !== []) {
@@ -1484,11 +1392,10 @@ final class DiscordApi
      * Returns archived threads in the channel that are of type GUILD_PRIVATE_THREAD, and the user has joined. Threads
      * are ordered by their id, in descending order. Requires the READ_MESSAGE_HISTORY permission.
      *
-     * @param  integer $channelID
-     * @param  array $params
-     * @return array
+     * @param  array<mixed> $params
+     * @return array<mixed>
      */
-    public function listJoinedPrivateArchivedThreads($channelID, $params = [])
+    public function listJoinedPrivateArchivedThreads(int $channelID, array $params = []): array
     {
         $url = \sprintf('%s/channels/%s/users/@me/threads/archived/private', $this->apiUrl, $channelID);
         if ($params !== []) {
@@ -1509,9 +1416,9 @@ final class DiscordApi
     /**
      * Returns a list of emoji objects for the given guild.
      *
-     * @return  array
+     * @return  array<mixed>
      */
-    public function listGuildEmojis()
+    public function listGuildEmojis(): array
     {
         $url = \sprintf('%s/guilds/%s/emojis', $this->apiUrl, $this->guildID);
 
@@ -1521,10 +1428,10 @@ final class DiscordApi
     /**
      * Returns an emoji object for the given guild and emoji IDs
      *
-     * @param   integer $emojiID    ID des Emojis
-     * @return array
+     * @param   int $emojiID    ID des Emojis
+     * @return array<mixed>
      */
-    public function getGuildEmoji($emojiID)
+    public function getGuildEmoji(int $emojiID): array
     {
         $url = \sprintf('%s/guilds/%s/emojis/%s', $this->apiUrl, $this->guildID, $emojiID);
 
@@ -1542,10 +1449,10 @@ final class DiscordApi
      *
      * @param   string  $name   Name des Emojis
      * @param   string  $image  Bild als base64 code
-     * @param   array   $roles  Gruppen die diesen Emoji nutzen dürfen
-     * @return  array
+     * @param   array<mixed>   $roles  Gruppen die diesen Emoji nutzen dürfen
+     * @return  array<mixed>
      */
-    public function createGuildEmoji($name, $image, $roles = [])
+    public function createGuildEmoji(string $name, string $image, array $roles = []): array
     {
         $url = \sprintf('%s/guilds/%s/emojis', $this->apiUrl, $this->guildID);
         $params = [
@@ -1565,11 +1472,11 @@ final class DiscordApi
      * Returns the updated emoji object on success.
      * Fires a Guild Emojis Update Gateway event.
      *
-     * @param   integer $emojiID    ID des Emojis
-     * @param   array   $params     Parameter
-     * @return  array
+     * @param   int $emojiID    ID des Emojis
+     * @param   array<mixed>   $params     Parameter
+     * @return  array<mixed>
      */
-    public function modifyGuildEmoji($emojiID, array $params)
+    public function modifyGuildEmoji(int $emojiID, array $params): array
     {
         $url = \sprintf('%s/guilds/%s/emojis/%s', $this->apiUrl, $this->guildID, $emojiID);
 
@@ -1582,10 +1489,10 @@ final class DiscordApi
      * Returns 204 No Content on success.
      * Fires a Guild Emojis Update Gateway event.
      *
-     * @param   integer $emojiID    ID des Emojis
-     * @return  array
+     * @param   int $emojiID    ID des Emojis
+     * @return  array<mixed>
      */
-    public function deleteGuildEmoji($emojiID)
+    public function deleteGuildEmoji(int $emojiID): array
     {
         $url = \sprintf('%s/guilds/%s/emojis/%s', $this->apiUrl, $this->guildID, $emojiID);
 
@@ -1596,6 +1503,8 @@ final class DiscordApi
      * Returns an object containing a list of emoji objects for the given application under the `items` key. Includes a
      * `user` object for the team member that uploaded the emoji from the app's settings, or for the bot user if
      * uploaded using the API.
+     *
+     * @return array<mixed>
      */
     public function listApplicationEmojis(int $applicationID): array
     {
@@ -1606,6 +1515,8 @@ final class DiscordApi
 
     /**
      * Returns an emoji object for the given application and emoji IDs. Includes the `user` field.
+     *
+     * @return array<mixed>
      */
     public function getApplicationEmoji(int $applicationID, int $emojiID): array
     {
@@ -1619,10 +1530,12 @@ final class DiscordApi
      *
      * Emojis and animated emojis have a maximum file size of 256 KiB. Attempting to upload an emoji larger than this
      * limit will fail and return 400 Bad Request and an error message, but not a JSON status code.
+     *
+     * @return array<mixed>
      */
     public function createApplicationEmoji(int $applicationID, string $name, string $image): array
     {
-        $url = \sprintf('%s/applications/%s/emojis', $applicationID);
+        $url = \sprintf('%s/applications/%s/emojis', $this->apiUrl, $applicationID);
         $params = [
             'name' => $name,
             'image' => $image,
@@ -1633,6 +1546,8 @@ final class DiscordApi
 
     /**
      * Modify the given emoji. Returns the updated emoji object on success.
+     *
+     * @return array<mixed>
      */
     public function modifyApplicationEmoji(int $applicationID, int $emojiID, string $name): array
     {
@@ -1646,6 +1561,8 @@ final class DiscordApi
 
     /**
      * Delete the given emoji. Returns `204 No Content` on success.
+     *
+     * @return array<mixed>
      */
     public function deleteApplicationEmoji(int $applicationID, int $emojiID): array
     {
@@ -1665,10 +1582,10 @@ final class DiscordApi
     /**
      * Create a new guild. Returns a guild object on success. Fires a Guild Create Gateway event.
      *
-     * @param   array   $params     Paramter
-     * @return  array
+     * @param   array<mixed>   $params     Paramter
+     * @return  array<mixed>
      */
-    public function createGuild($params)
+    public function createGuild(array $params): array
     {
         $url = \sprintf('%s/guilds', $this->apiUrl);
 
@@ -1678,9 +1595,9 @@ final class DiscordApi
     /**
      * Returns the guild object for the given id.
      *
-     * @return  array
+     * @return  array<mixed>
      */
-    public function getGuild(bool $withCounts = false)
+    public function getGuild(bool $withCounts = false): array
     {
         $url = \sprintf('%s/guilds/%s', $this->apiUrl, $this->guildID);
         if ($withCounts) {
@@ -1693,6 +1610,8 @@ final class DiscordApi
     /**
      * Returns the guild preview object for the given id. If the user is not in the guild, then the guild must be
      * discoverable.
+     *
+     * @return array<mixed>
      */
     public function getGuildPreview(): array
     {
@@ -1707,10 +1626,10 @@ final class DiscordApi
      * Returns the updated guild object on success.
      * Fires a Guild Update Gateway event.
      *
-     * @param   array   $params     Parameter
-     * @return  array
+     * @param   array<mixed>   $params     Parameter
+     * @return  array<mixed>
      */
-    public function modifyGuild($params)
+    public function modifyGuild($params): array
     {
         $url = \sprintf('%s/guilds/%s', $this->apiUrl, $this->guildID);
 
@@ -1723,9 +1642,9 @@ final class DiscordApi
      * Returns 204 No Content on success.
      * Fires a Guild Delete Gateway event.
      *
-     * @return  array
+     * @return  array<mixed>
      */
-    public function deleteGuild()
+    public function deleteGuild(): array
     {
         $url = \sprintf('%s/guilds/%s', $this->apiUrl, $this->guildID);
 
@@ -1735,9 +1654,9 @@ final class DiscordApi
     /**
      * Returns a list of guild channel objects.
      *
-     * @return  array
+     * @return  array<mixed>
      */
-    public function getGuildChannels()
+    public function getGuildChannels(): array
     {
         $url = \sprintf('%s/guilds/%s/channels', $this->apiUrl, $this->guildID);
 
@@ -1750,10 +1669,10 @@ final class DiscordApi
      * Returns the new channel object on success.
      * Fires a Channel Create Gateway event.
      *
-     * @param   array   $params     JSON-Parameter
-     * @return  array
+     * @param   array<mixed>   $params     JSON-Parameter
+     * @return  array<mixed>
      */
-    public function createGuildChannel($params)
+    public function createGuildChannel(array $params): array
     {
         $url = \sprintf('%s/guilds/%s/channels', $this->apiUrl, $this->guildID);
 
@@ -1767,11 +1686,11 @@ final class DiscordApi
      * Fires multiple Channel Update Gateway events.
      * Only channels to be modified are required, with the minimum being a swap between at least two channels.
      *
-     * @param   integer     $channelID  ID des Channels
-     * @param   integer     $position   Position wo der Channel landen soll
-     * @return  array
+     * @param   int     $channelID  ID des Channels
+     * @param   int     $position   Position wo der Channel landen soll
+     * @return  array<mixed>
      */
-    public function modifyGuildChannelPositions($channelID, $position)
+    public function modifyGuildChannelPositions(int $channelID, int $position): array
     {
         $url = \sprintf('%s/guilds/%s/channels', $this->apiUrl, $this->guildID);
         $params = [
@@ -1785,6 +1704,8 @@ final class DiscordApi
     /**
      * Returns all active threads in the guild, including public and private threads. Threads are ordered by their
      * `id`, in descending order.
+     *
+     * @return array<mixed>
      */
     public function listActiveGuildThreads(): array
     {
@@ -1796,10 +1717,10 @@ final class DiscordApi
     /**
      * Returns a guild member object for the specified user.
      *
-     * @param   integer     $userID     ID des Benutzer
-     * @return  array
+     * @param   int     $userID     ID des Benutzer
+     * @return  array<mixed>
      */
-    public function getGuildMember($userID)
+    public function getGuildMember(int $userID): array
     {
         $url = \sprintf('%s/guilds/%s/members/%s', $this->apiUrl, $this->guildID, $userID);
 
@@ -1809,10 +1730,10 @@ final class DiscordApi
     /**
      * Returns a list of guild member objects that are members of the guild.
      *
-     * @param   array   $params     Parameter
-     * @return  array
+     * @param   array<mixed>   $params     Parameter
+     * @return  array<mixed>
      */
-    public function listGuildMembers($params = [])
+    public function listGuildMembers(array $params = []): array
     {
         $url = \sprintf('%s/guilds/%s/members', $this->apiUrl, $this->guildID);
         if ($params !== []) {
@@ -1824,6 +1745,8 @@ final class DiscordApi
 
     /**
      * Returns a list of guild member objects whose username or nickname starts with a provided string.
+     *
+     * @return array<mixed>
      */
     public function searchGuildMembers(string $query, int $limit = 1): array
     {
@@ -1844,17 +1767,17 @@ final class DiscordApi
      * Requires the bot to have the CREATE_INSTANT_INVITE permission.
      * All parameters to this endpoint except for access_token are optional.
      *
-     * @param   integer     $userID         ID des Benutzers
+     * @param   int     $userID         ID des Benutzers
      * @param   string      $accessToken    Access-Token des Benutzer
-     * @param   array       $params         Zusätzliche optionale Parameter
-     * @return  array
+     * @param   array<mixed> $params         Zusätzliche optionale Parameter
+     * @return  array<mixed>
      */
     public function addGuildMember(
-        $userID,
+        int $userID,
         #[SensitiveParameter]
-        $accessToken,
-        $params = []
-    ) {
+        string $accessToken,
+        array $params = []
+    ): array {
         $url = \sprintf('%s/guilds/%s/members/%s', $this->apiUrl, $this->guildID, $userID);
         $params = \array_merge([
             'access_token' => $accessToken,
@@ -1871,11 +1794,11 @@ final class DiscordApi
      * When moving members to channels, the API user must have permissions to both connect to the channel and have the
      * MOVE_MEMBERS permission.
      *
-     * @param   integer $userID     ID des Benutzers
-     * @param   array   $params     JSON-Parameter
-     * @return  array
+     * @param   int $userID     ID des Benutzers
+     * @param   array<mixed>   $params     JSON-Parameter
+     * @return  array<mixed>
      */
-    public function modifyGuildMember($userID, $params)
+    public function modifyGuildMember(int $userID, array $params): array
     {
         $url = \sprintf('%s/guilds/%s/members/%s', $this->apiUrl, $this->guildID, $userID);
 
@@ -1885,6 +1808,8 @@ final class DiscordApi
     /**
      * Modifies the current member in a guild. Returns a 200 with the updated member object on success. Fires a Guild
      * Member Update Gateway event.
+     *
+     * @return array<mixed>
      */
     public function modifyCurrentMember(?string $nick): array
     {
@@ -1902,10 +1827,10 @@ final class DiscordApi
      * Fires a Guild Member Update Gateway event.
      *
      * @param   string  $nick   Neuer Nickname
-     * @return  array
+     * @return  array<mixed>
      * @deprecated use modifyCurrentMember
      */
-    public function modifyCurrentUserNick($nick)
+    public function modifyCurrentUserNick(string $nick): array
     {
         $url = \sprintf('%s/guilds/%s/members/@me/nick', $this->apiUrl, $this->guildID);
         $params = [
@@ -1921,11 +1846,11 @@ final class DiscordApi
      * Returns a 204 empty response on success.
      * Fires a Guild Member Update Gateway event.
      *
-     * @param   integer     $userID     ID des Benutzer
-     * @param   integer     $roleID     ID der Benutzergruppe
-     * @return  array
+     * @param   int     $userID     ID des Benutzer
+     * @param   int     $roleID     ID der Benutzergruppe
+     * @return  array<mixed>
      */
-    public function addGuildMemberRole($userID, $roleID)
+    public function addGuildMemberRole(int $userID, int $roleID): array
     {
         $url = \sprintf('%s/guilds/%s/members/%s/roles/%s', $this->apiUrl, $this->guildID, $userID, $roleID);
 
@@ -1938,11 +1863,11 @@ final class DiscordApi
      * Returns a 204 empty response on success.
      * Fires a Guild Member Update Gateway event.
      *
-     * @param   integer     $userID     ID des Benutzer
-     * @param   integer     $roleID     ID der Benutzergruppe
-     * @return  array
+     * @param   int     $userID     ID des Benutzer
+     * @param   int     $roleID     ID der Benutzergruppe
+     * @return  array<mixed>
      */
-    public function removeGuildMemberRole($userID, $roleID)
+    public function removeGuildMemberRole(int $userID, int $roleID): array
     {
         $url = \sprintf('%s/guilds/%s/members/%s/roles/%s', $this->apiUrl, $this->guildID, $userID, $roleID);
 
@@ -1955,10 +1880,10 @@ final class DiscordApi
      * Returns a 204 empty response on success.
      * Fires a Guild Member Remove Gateway event.
      *
-     * @param   integer     $userID     ID des Benutzer
-     * @return  array
+     * @param   int     $userID     ID des Benutzer
+     * @return  array<mixed>
      */
-    public function removeGuildMember($userID)
+    public function removeGuildMember(int $userID): array
     {
         $url = \sprintf('%s/guilds/%s/members/%s', $this->apiUrl, $this->guildID, $userID);
 
@@ -1969,9 +1894,9 @@ final class DiscordApi
      * Returns a list of ban objects for the users banned from this guild.
      * Requires the BAN_MEMBERS permission.
      *
-     * @return array
+     * @return array<mixed>
      */
-    public function getGuildBans()
+    public function getGuildBans(): array
     {
         $url = \sprintf('%s/guilds/%s/bans', $this->apiUrl, $this->guildID);
 
@@ -1982,10 +1907,10 @@ final class DiscordApi
      * Returns a ban object for the given user or a 404 not found if the ban cannot be found.
      * Requires the BAN_MEMBERS permission.
      *
-     * @param   integer     $userID     ID des Benutzer
-     * @return  array
+     * @param   int $userID     ID des Benutzer
+     * @return  array<mixed>
      */
-    public function getGuildBan($userID)
+    public function getGuildBan(int $userID): array
     {
         $url = \sprintf('%s/guilds/%s/bans/%s', $this->apiUrl, $this->guildID, $userID);
 
@@ -1998,11 +1923,11 @@ final class DiscordApi
      * Returns a 204 empty response on success.
      * Fires a Guild Ban Add Gateway event.
      *
-     * @param   integer     $userID     ID des Benutzer
-     * @param   array       $params     optionale Parameter
-     * @return  array
+     * @param   int $userID     ID des Benutzer
+     * @param   array<mixed> $params     optionale Parameter
+     * @return  array<mixed>
      */
-    public function createGuildBan($userID, $params = [])
+    public function createGuildBan(int $userID, array $params = []): array
     {
         $url = \sprintf('%s/guilds/%s/bans/%s', $this->apiUrl, $this->guildID, $userID);
 
@@ -2013,10 +1938,10 @@ final class DiscordApi
      * Remove the ban for a user. Requires the BAN_MEMBERS permissions. Returns a 204 empty response on success. Fires
      * a Guild Ban Remove Gateway event.
      *
-     * @param   integer     $userID     ID des Benutzer
-     * @return  array
+     * @param   int     $userID     ID des Benutzer
+     * @return  array<mixed>
      */
-    public function removeGuildBan($userID)
+    public function removeGuildBan(int $userID): array
     {
         $url = \sprintf('%s/guilds/%s/bans/%s', $this->apiUrl, $this->guildID, $userID);
 
@@ -2026,9 +1951,9 @@ final class DiscordApi
     /**
      * Returns a list of role objects for the guild.
      *
-     * @return array
+     * @return array<mixed>
      */
-    public function getGuildRoles()
+    public function getGuildRoles(): array
     {
         $url = \sprintf('%s/guilds/%s/roles', $this->apiUrl, $this->guildID);
 
@@ -2042,10 +1967,10 @@ final class DiscordApi
      * Fires a Guild Role Create Gateway event.
      * All JSON params are optional.
      *
-     * @param   array   $params     optionale Parameter für das Gruppenrecht
-     * @return  array
+     * @param   array<mixed>   $params     optionale Parameter für das Gruppenrecht
+     * @return  array<mixed>
      */
-    public function createGuildRole($params = [])
+    public function createGuildRole(array $params = []): array
     {
         $url = \sprintf('%s/guilds/%s/roles', $this->apiUrl, $this->guildID);
 
@@ -2058,11 +1983,11 @@ final class DiscordApi
      * Returns a list of all of the guild's role objects on success.
      * Fires multiple Guild Role Update Gateway events.
      *
-     * @param   integer     $roleID     ID der Benutzergruppe
-     * @param   integer     $position   Position
-     * @return  array
+     * @param   int     $roleID     ID der Benutzergruppe
+     * @param   int     $position   Position
+     * @return  array<mixed>
      */
-    public function modifyGuildRolePosition($roleID, $position)
+    public function modifyGuildRolePosition(int $roleID, int $position): array
     {
         $url = \sprintf('%s/guilds/%s/roles', $this->apiUrl, $this->guildID);
         $params = [
@@ -2079,11 +2004,11 @@ final class DiscordApi
      * Returns the updated role on success.
      * Fires a Guild Role Update Gateway event.
      *
-     * @param   integer     $roleID     ID der Benutzergruppe
-     * @param   array       $params     Parameter
-     * @return  array
+     * @param   int     $roleID     ID der Benutzergruppe
+     * @param   array<mixed>       $params     Parameter
+     * @return  array<mixed>
      */
-    public function modifyGuildRole($roleID, $params = [])
+    public function modifyGuildRole(int $roleID, array $params = []): array
     {
         $url = \sprintf('%s/guilds/%s/roles/%s', $this->apiUrl, $this->guildID, $roleID);
 
@@ -2096,10 +2021,10 @@ final class DiscordApi
      *
      * This endpoint supports the X-Audit-Log-Reason header.
      *
-     * @param  array $params
-     * @return array
+     * @param  array<mixed> $params
+     * @return array<mixed>
      */
-    public function modifyGuildMfaLevel($params)
+    public function modifyGuildMfaLevel(array $params): array
     {
         $url = \sprintf('%s/guilds/%s/mfa', $this->apiUrl, $this->guildID);
 
@@ -2112,10 +2037,10 @@ final class DiscordApi
      * Returns a 204 empty response on success.
      * Fires a Guild Role Delete Gateway event.
      *
-     * @param   integer     $roleID     ID der Benutzergruppe
-     * @return  array
+     * @param   int     $roleID     ID der Benutzergruppe
+     * @return  array<mixed>
      */
-    public function deleteGuildRole($roleID)
+    public function deleteGuildRole(int $roleID): array
     {
         $url = \sprintf('%s/guilds/%s/roles/%s', $this->apiUrl, $this->guildID, $roleID);
 
@@ -2127,10 +2052,10 @@ final class DiscordApi
      * operation.
      * Requires the KICK_MEMBERS permission.
      *
-     * @param   integer     $days       number of days to count prune for (1 or more)
-     * @return  array
+     * @param   int     $days       number of days to count prune for (1 or more)
+     * @return  array<mixed>
      */
-    public function getGuildPruneCount($days = 1)
+    public function getGuildPruneCount(int $days = 1): array
     {
         $url = \sprintf('%s/guilds/%s/prune', $this->apiUrl, $this->guildID);
         $url .= '?' . \http_build_query([
@@ -2148,11 +2073,11 @@ final class DiscordApi
      * For large guilds it's recommended to set the compute_prune_count option to false, forcing 'pruned' to null.
      * Fires multiple Guild Member Remove Gateway events.
      *
-     * @param   integer     $days               number of days to count prune for (1 or more)
-     * @param   boolean     $computePruneCount  whether 'pruned' is returned, discouraged for large guilds
-     * @return  array
+     * @param   int     $days               number of days to count prune for (1 or more)
+     * @param   bool    $computePruneCount  whether 'pruned' is returned, discouraged for large guilds
+     * @return  array<mixed>
      */
-    public function beginGuildPrune($days, $computePruneCount = false)
+    public function beginGuildPrune(int $days, bool $computePruneCount = false): array
     {
         $url = \sprintf('%s/guilds/%s/prune', $this->apiUrl, $this->guildID);
         $params = [
@@ -2167,9 +2092,9 @@ final class DiscordApi
      * Returns a list of voice region objects for the guild.
      * Unlike the similar /voice route, this returns VIP servers when the guild is VIP-enabled.
      *
-     * @return  array
+     * @return  array<mixed>
      */
-    public function getGuildVoiceRegions()
+    public function getGuildVoiceRegions(): array
     {
         $url = \sprintf('%s/guilds/%s/regions', $this->apiUrl, $this->guildID);
 
@@ -2180,9 +2105,9 @@ final class DiscordApi
      * Returns a list of invite objects (with invite metadata) for the guild.
      * Requires the MANAGE_GUILD permission.
      *
-     * @return  array
+     * @return  array<mixed>
      */
-    public function getGuildInvites()
+    public function getGuildInvites(): array
     {
         $url = \sprintf('%s/guilds/%s/invites', $this->apiUrl, $this->guildID);
 
@@ -2193,9 +2118,9 @@ final class DiscordApi
      * Returns a list of integration objects for the guild.
      * Requires the MANAGE_GUILD permission.
      *
-     * @return  array
+     * @return  array<mixed>
      */
-    public function getGuildIntegrations()
+    public function getGuildIntegrations(): array
     {
         $url = \sprintf('%s/guilds/%s/integrations', $this->apiUrl, $this->guildID);
 
@@ -2209,10 +2134,10 @@ final class DiscordApi
      * Fires a Guild Integrations Update Gateway event.
      *
      * @param   string  $type   the integration type
-     * @param   integer $id     the integration id
-     * @return  array
+     * @param   int $id     the integration id
+     * @return  array<mixed>
      */
-    public function createGuildIntegration($type, $id)
+    public function createGuildIntegration(string $type, int $id): array
     {
         $url = \sprintf('%s/guilds/%s/integrations', $this->apiUrl, $this->guildID);
         $params = [
@@ -2229,11 +2154,11 @@ final class DiscordApi
      * Returns a 204 empty response on success.
      * Fires a Guild Integrations Update Gateway event.
      *
-     * @param   integer $integrationID  ID der Integration
-     * @param   array   $params         Parameter
-     * @return  array
+     * @param   int $integrationID  ID der Integration
+     * @param   array<mixed>   $params         Parameter
+     * @return  array<mixed>
      */
-    public function modifyGuildIntegration($integrationID, $params)
+    public function modifyGuildIntegration(int $integrationID, array $params): array
     {
         $url = \sprintf('%s/guilds/%s/integrations/%s', $this->apiUrl, $this->guildID, $integrationID);
 
@@ -2246,10 +2171,10 @@ final class DiscordApi
      * Returns a 204 empty response on success.
      * Fires a Guild Integrations Update Gateway event.
      *
-     * @param   integer $integrationID  ID der Integration
-     * @return  array
+     * @param   int $integrationID  ID der Integration
+     * @return  array<mixed>
      */
-    public function deleteGuildIntegration($integrationID)
+    public function deleteGuildIntegration(int $integrationID): array
     {
         $url = \sprintf('%s/guilds/%s/integrations/%s', $this->apiUrl, $this->guildID, $integrationID);
 
@@ -2259,9 +2184,9 @@ final class DiscordApi
     /**
      * Returns a guild widget object. Requires the MANAGE_GUILD permission.
      *
-     * @return array
+     * @return array<mixed>
      */
-    public function getGuildWidgetSettings()
+    public function getGuildWidgetSettings(): array
     {
         $url = \sprintf('%s/guilds/%s/widget', $this->apiUrl, $this->guildID);
 
@@ -2272,10 +2197,10 @@ final class DiscordApi
      * Modify a guild widget object for the guild. All attributes may be passed in with JSON and modified. Requires the
      * MANAGE_GUILD permission. Returns the updated guild widget object.
      *
-     * @param  array $params
-     * @return array
+     * @param  array<mixed> $params
+     * @return array<mixed>
      */
-    public function modifyGuildWidget($params)
+    public function modifyGuildWidget(array $params): array
     {
         $url = \sprintf('%s/guilds/%s/widget', $this->apiUrl, $this->guildID);
 
@@ -2285,9 +2210,9 @@ final class DiscordApi
     /**
      * Returns the widget for the guild.
      *
-     * @return array
+     * @return array<mixed>
      */
-    public function getGuildWidget()
+    public function getGuildWidget(): array
     {
         $url = \sprintf('%s/guilds/%s/widget.json', $this->apiUrl, $this->guildID);
 
@@ -2299,9 +2224,9 @@ final class DiscordApi
      * Requires the MANAGE_GUILD permission.
      * code will be null if a vanity url for the guild is not set.
      *
-     * @return array
+     * @return array<mixed>
      */
-    public function getGuildVanityUrl()
+    public function getGuildVanityUrl(): array
     {
         $url = \sprintf('%s/guilds/%s/vanity-url', $this->apiUrl, $this->guildID);
 
@@ -2314,9 +2239,9 @@ final class DiscordApi
      * The same documentation also applies to embed.png.
      *
      * @param   string  $style  Stil (shield, banner1, banner2, banner3, banner4)
-     * @return  array
+     * @return  array<mixed>
      */
-    public function getGuildWidgetImage($style = 'shield')
+    public function getGuildWidgetImage(string $style = 'shield'): array
     {
         $url = \sprintf('%s/guilds/%s/widget.png?style=%s', $this->apiUrl, $this->guildID, $style);
 
@@ -2326,9 +2251,9 @@ final class DiscordApi
     /**
      * Returns the Welcome Screen object for the guild.
      *
-     * @return array
+     * @return array<mixed>
      */
-    public function getGuildWelcomeScreen()
+    public function getGuildWelcomeScreen(): array
     {
         $url = \sprintf('%s/guilds/%s/welcome-screen', $this->apiUrl, $this->guildID);
 
@@ -2341,10 +2266,10 @@ final class DiscordApi
      *
      * All parameters to this endpoint are optional and nullable
      *
-     * @param  array $params
-     * @return array
+     * @param  array<mixed> $params
+     * @return array<mixed>
      */
-    public function modifyGuildWelcomeScreen($params)
+    public function modifyGuildWelcomeScreen(array $params): array
     {
         $url = \sprintf('%s/guilds/%s/welcome-screen', $this->apiUrl, $this->guildID);
 
@@ -2354,10 +2279,10 @@ final class DiscordApi
     /**
      * Updates the current user's voice state.
      *
-     * @param  array $params
-     * @return array
+     * @param  array<mixed> $params
+     * @return array<mixed>
      */
-    public function modifyCurrentUserVoiceState($params)
+    public function modifyCurrentUserVoiceState(array $params): array
     {
         $url = \sprintf('%s/guilds/%s/voice-states/@me', $this->apiUrl, $this->guildID);
 
@@ -2367,11 +2292,10 @@ final class DiscordApi
     /**
      * Updates another user's voice state.
      *
-     * @param  integer $userID
-     * @param  array $params
-     * @return array
+     * @param  array<mixed> $params
+     * @return array<mixed>
      */
-    public function modifyUserVoiceState($userID, $params)
+    public function modifyUserVoiceState(int $userID, array $params): array
     {
         $url = \sprintf('%s/guilds/%s/voice-states/%s', $this->apiUrl, $this->guildID, $userID);
 
@@ -2389,10 +2313,9 @@ final class DiscordApi
     /**
      * Returns a list of guild scheduled event objects for the given guild.
      *
-     * @param  integer $guildID
-     * @return array
+     * @return array<mixed>
      */
-    public function listScheduledEventsForGuild($guildID, $withUserCount = false)
+    public function listScheduledEventsForGuild(int $guildID, bool $withUserCount = false): array
     {
         $url = \sprintf('%s/guilds/%s/scheduled-events', $this->apiUrl, $guildID);
         if ($withUserCount) {
@@ -2407,11 +2330,10 @@ final class DiscordApi
      *
      * A guild can have a maximum of 100 events with SCHEDULED or ACTIVE status at any time.
      *
-     * @param  integer $guildID
-     * @param  array $params
-     * @return array
+     * @param  array<mixed> $params
+     * @return array<mixed>
      */
-    public function createGuildScheduledEvent($guildID, $params)
+    public function createGuildScheduledEvent(int $guildID, array $params): array
     {
         $url = \sprintf('%s/guilds/%s/scheduled-events', $this->apiUrl, $guildID);
 
@@ -2421,11 +2343,9 @@ final class DiscordApi
     /**
      * Get a guild scheduled event. Returns a guild scheduled event object on success.
      *
-     * @param  integer $guildID
-     * @param  integer $scheduledEventID
-     * @return array
+     * @return array<mixed>
      */
-    public function getGuildScheduledEvent($guildID, $scheduledEventID, $withUserCount = false)
+    public function getGuildScheduledEvent(int $guildID, int $scheduledEventID, bool $withUserCount = false): array
     {
         $url = \sprintf('%s/guilds/%s/scheduled-events/%s', $this->apiUrl, $guildID, $scheduledEventID);
         if ($withUserCount) {
@@ -2440,12 +2360,10 @@ final class DiscordApi
      *
      * To start or end an event, use this endpoint to modify the event's status field.
      *
-     * @param  integer $guildID
-     * @param  integer $scheduledEventID
-     * @param  array $params
-     * @return array
+     * @param  array<mixed> $params
+     * @return array<mixed>
      */
-    public function modifyGuildScheduledEvent($guildID, $scheduledEventID, $params)
+    public function modifyGuildScheduledEvent(int $guildID, int $scheduledEventID, array $params): array
     {
         $url = \sprintf('%s/guilds/%s/scheduled-events/%s', $this->apiUrl, $guildID, $scheduledEventID);
 
@@ -2455,11 +2373,9 @@ final class DiscordApi
     /**
      * Delete a guild scheduled event. Returns a 204 on success.
      *
-     * @param  integer $guildID
-     * @param  integer $scheduledEventID
-     * @return array
+     * @return array<mixed>
      */
-    public function deleteGuildScheduledEvent($guildID, $scheduledEventID)
+    public function deleteGuildScheduledEvent(int $guildID, int $scheduledEventID): array
     {
         $url = \sprintf('%s/guilds/%s/scheduled-events/%s', $this->apiUrl, $guildID, $scheduledEventID);
 
@@ -2471,12 +2387,12 @@ final class DiscordApi
      * scheduled event user objects on success. Guild member data, if it exists, is included if the with_member query
      * parameter is set.
      *
-     * @param  integer $guildID
-     * @param  integer $scheduledEventID
-     * @param  array $queryParams
-     * @return array
+     * @param  int $guildID
+     * @param  int $scheduledEventID
+     * @param  array<mixed> $queryParams
+     * @return array<mixed>
      */
-    public function getGuildScheduledEventUsers($guildID, $scheduledEventID, array $queryParams = [])
+    public function getGuildScheduledEventUsers(int $guildID, int $scheduledEventID, array $queryParams = []): array
     {
         $url = \sprintf('%s/guilds/%s/scheduled-events/%s/users', $this->apiUrl, $guildID, $scheduledEventID);
         if ($queryParams !== []) {
@@ -2497,10 +2413,9 @@ final class DiscordApi
     /**
      * Returns a guild template object for the given code.
      *
-     * @param  string $templateCode
-     * @return array
+     * @return array<mixed>
      */
-    public function getGuildTemplate($templateCode)
+    public function getGuildTemplate(string $templateCode): array
     {
         $url = \sprintf('%s/guilds/templates/%s', $this->apiUrl, $templateCode);
 
@@ -2512,11 +2427,10 @@ final class DiscordApi
      *
      * This endpoint can be used only by bots in less than 10 guilds.
      *
-     * @param  string $templateCode
-     * @param  array $params
-     * @return array
+     * @param  array<mixed> $params
+     * @return array<mixed>
      */
-    public function createGuildFromGuildTemplate($templateCode, $params)
+    public function createGuildFromGuildTemplate(string $templateCode, array $params): array
     {
         $url = \sprintf('%s/guilds/templates/%s', $this->apiUrl, $templateCode);
 
@@ -2526,9 +2440,9 @@ final class DiscordApi
     /**
      * Returns an array of guild template objects. Requires the MANAGE_GUILD permission.
      *
-     * @array void
+     * @return array<mixed>
      */
-    public function getGuildTemplates()
+    public function getGuildTemplates(): array
     {
         $url = \sprintf('%s/guilds/%s/templates', $this->apiUrl, $this->guildID);
 
@@ -2539,10 +2453,10 @@ final class DiscordApi
      * Creates a template for the guild. Requires the MANAGE_GUILD permission. Returns the created guild template
      * object on success.
      *
-     * @param  array $params
-     * @return array
+     * @param  array<mixed> $params
+     * @return array<mixed>
      */
-    public function createGuildTemplate($params)
+    public function createGuildTemplate(array $params): array
     {
         $url = \sprintf('%s/guilds/%s/templates', $this->apiUrl, $this->guildID);
 
@@ -2553,10 +2467,9 @@ final class DiscordApi
      * Syncs the template to the guild's current state. Requires the MANAGE_GUILD permission. Returns the guild
      * template object on success.
      *
-     * @param  string $templateCode
-     * @return array
+     * @return array<mixed>
      */
-    public function syncGuildTemplate($templateCode)
+    public function syncGuildTemplate(string $templateCode): array
     {
         $url = \sprintf('%s/guilds/templates/%s', $this->apiUrl, $templateCode);
 
@@ -2567,11 +2480,10 @@ final class DiscordApi
      * Modifies the template's metadata. Requires the MANAGE_GUILD permission. Returns the guild template object on
      * success.
      *
-     * @param  string $templateCode
-     * @param  array $params
-     * @return array
+     * @param  array<mixed> $params
+     * @return array<mixed>
      */
-    public function modifyGuildTemplate($templateCode, $params)
+    public function modifyGuildTemplate(string $templateCode, array $params): array
     {
         $url = \sprintf('%s/guilds/templates/%s', $this->apiUrl, $templateCode);
 
@@ -2581,10 +2493,9 @@ final class DiscordApi
     /**
      * Deletes the template. Requires the MANAGE_GUILD permission. Returns the deleted guild template object on success.
      *
-     * @param  string $templateCode
-     * @return array
+     * @return array<mixed>
      */
-    public function deleteGuildTemplate($templateCode)
+    public function deleteGuildTemplate(string $templateCode): array
     {
         $url = \sprintf('%s/guilds/templates/%s', $this->apiUrl, $templateCode);
 
@@ -2603,10 +2514,10 @@ final class DiscordApi
      * Returns an invite object for the given code.
      *
      * @param   string  $inviteCode EinladungsCode
-     * @param   boolean $withCounts whether the invite should contain approximate member counts
-     * @return  array
+     * @param   bool $withCounts whether the invite should contain approximate member counts
+     * @return  array<mixed>
      */
-    public function getInvite($inviteCode, $withCounts = false)
+    public function getInvite(string $inviteCode, bool $withCounts = false): array
     {
         $url = \sprintf('%s/invites/%s', $this->apiUrl, $inviteCode);
         if ($withCounts) {
@@ -2623,9 +2534,9 @@ final class DiscordApi
      * Returns an invite object on success.
      *
      * @param   string  $inviteCode EinladungsCode
-     * @return  array
+     * @return  array<mixed>
      */
-    public function deleteInvite($inviteCode)
+    public function deleteInvite(string $inviteCode): array
     {
         $url = \sprintf('%s/invites/%s', $this->apiUrl, $inviteCode);
 
@@ -2645,10 +2556,10 @@ final class DiscordApi
      *
      * Requires the user to be a moderator of the Stage channel.
      *
-     * @param  array $params
-     * @return array
+     * @param  array<mixed> $params
+     * @return array<mixed>
      */
-    public function createStageInstance($params)
+    public function createStageInstance(array $params): array
     {
         $url = \sprintf('%s/stage-instances', $this->apiUrl);
 
@@ -2658,10 +2569,9 @@ final class DiscordApi
     /**
      * Gets the stage instance associated with the Stage channel, if it exists.
      *
-     * @param  integer $channelID
-     * @return array
+     * @return array<mixed>
      */
-    public function getStageInstance($channelID)
+    public function getStageInstance(int $channelID): array
     {
         $url = \sprintf('%s/stage-instances/%s', $this->apiUrl, $channelID);
 
@@ -2673,11 +2583,10 @@ final class DiscordApi
      *
      * Requires the user to be a moderator of the Stage channel.
      *
-     * @param  integer $channelID
-     * @param  array $params
-     * @return array
+     * @param  array<mixed> $params
+     * @return array<mixed>
      */
-    public function modifyStageInstance($channelID, $params)
+    public function modifyStageInstance(int $channelID, array $params): array
     {
         $url = \sprintf('%s/stage-instances/%s', $this->apiUrl, $channelID);
 
@@ -2689,10 +2598,9 @@ final class DiscordApi
      *
      * Requires the user to be a moderator of the Stage channel.
      *
-     * @param  integer $channelID
-     * @return array
+     * @return array<mixed>
      */
-    public function deleteStageInstance($channelID)
+    public function deleteStageInstance(int $channelID): array
     {
         $url = \sprintf('%s/stage-instances/%s', $this->apiUrl, $channelID);
 
@@ -2710,10 +2618,9 @@ final class DiscordApi
     /**
      * Returns a sticker object for the given sticker ID.
      *
-     * @param  integer $stickerID
-     * @return array
+     * @return array<mixed>
      */
-    public function getSticker($stickerID)
+    public function getSticker(int $stickerID): array
     {
         $url = \sprintf('%s/stickers/%s', $this->apiUrl, $stickerID);
 
@@ -2723,9 +2630,9 @@ final class DiscordApi
     /**
      * Returns the list of sticker packs available to Nitro subscribers.
      *
-     * @return array
+     * @return array<mixed>
      */
-    public function listNitroStickerPacks()
+    public function listNitroStickerPacks(): array
     {
         $url = \sprintf('%s/sticker-packs', $this->apiUrl);
 
@@ -2736,10 +2643,9 @@ final class DiscordApi
      * Returns an array of sticker objects for the given guild. Includes user fields if the bot has the
      * MANAGE_EMOJIS_AND_STICKERS permission.
      *
-     * @param  integer $guildID
-     * @return array
+     * @return array<mixed>
      */
-    public function listGuildStickers($guildID)
+    public function listGuildStickers(int $guildID): array
     {
         $url = \sprintf('%s/guilds/%s/stickers', $this->apiUrl, $guildID);
 
@@ -2750,11 +2656,9 @@ final class DiscordApi
      * Returns a sticker object for the given guild and sticker IDs. Includes the user field if the bot has the
      * MANAGE_EMOJIS_AND_STICKERS permission.
      *
-     * @param  integer $guildID
-     * @param  integer $stickerID
-     * @return array
+     * @return array<mixed>
      */
-    public function getGuildSticker($guildID, $stickerID)
+    public function getGuildSticker(int $guildID, int $stickerID): array
     {
         $url = \sprintf('%s/guilds/%s/stickers/%s', $this->apiUrl, $guildID, $stickerID);
 
@@ -2765,12 +2669,10 @@ final class DiscordApi
      * Modify the given sticker. Requires the MANAGE_EMOJIS_AND_STICKERS permission. Returns the updated sticker object
      * on success.
      *
-     * @param  integer $guildID
-     * @param  integer $stickerID
-     * @param  array $params
-     * @return array
+     * @param  array<mixed> $params
+     * @return array<mixed>
      */
-    public function modifyGuildSticker($guildID, $stickerID, $params)
+    public function modifyGuildSticker(int $guildID, int $stickerID, array $params): array
     {
         $url = \sprintf('%s/guilds/%s/stickers/%s', $this->apiUrl, $guildID, $stickerID);
 
@@ -2780,11 +2682,9 @@ final class DiscordApi
     /**
      * Delete the given sticker. Requires the MANAGE_EMOJIS_AND_STICKERS permission. Returns 204 No Content on success.
      *
-     * @param  integer $guildID
-     * @param  integer $stickerID
-     * @return array
+     * @return array<mixed>
      */
-    public function deleteGuildSticker($guildID, $stickerID)
+    public function deleteGuildSticker(int $guildID, int $stickerID): array
     {
         $url = \sprintf('%s/guilds/%s/stickers/%s', $this->apiUrl, $guildID, $stickerID);
 
@@ -2804,9 +2704,9 @@ final class DiscordApi
      * For OAuth2, this requires the identify scope, which will return the object without an email, and optionally the
      * email scope, which returns the object with an email.
      *
-     * @return array
+     * @return array<mixed>
      */
-    public function getCurrentUser()
+    public function getCurrentUser(): array
     {
         $url = \sprintf('%s/users/@me', $this->apiUrl);
 
@@ -2816,10 +2716,10 @@ final class DiscordApi
     /**
      * Returns a user object for a given user ID.
      *
-     * @param   integer $userID ID des Benutzers
-     * @return  array
+     * @param   int $userID ID des Benutzers
+     * @return  array<mixed>
      */
-    public function getUser($userID)
+    public function getUser(int $userID): array
     {
         $url = \sprintf('%s/users/%s', $this->apiUrl, $userID);
 
@@ -2829,10 +2729,10 @@ final class DiscordApi
     /**
      * Modify the requester's user account settings. Returns a user object on success.
      *
-     * @param   array   $params Parameter
-     * @return  array
+     * @param   array<mixed>   $params Parameter
+     * @return  array<mixed>
      */
-    public function modifyCurrentUser($params)
+    public function modifyCurrentUser(array $params): array
     {
         $url = \sprintf('%s/users/@me', $this->apiUrl);
 
@@ -2843,9 +2743,10 @@ final class DiscordApi
      * Returns a list of partial guild objects the current user is a member of.
      * Requires the guilds OAuth2 scope.
      *
-     * @return array
+     * @param array<mixed> $params
+     * @return array<mixed>
      */
-    public function getCurrentUserGuilds($params = [])
+    public function getCurrentUserGuilds(array $params = []): array
     {
         $url = \sprintf('%s/users/@me/guilds', $this->apiUrl);
         if ($params !== []) {
@@ -2859,9 +2760,9 @@ final class DiscordApi
      * Leave a guild.
      * Returns a 204 empty response on success.
      *
-     * @return array
+     * @return array<mixed>
      */
-    public function leaveGuild()
+    public function leaveGuild(): array
     {
         $url = \sprintf('%s/users/@me/guilds/%s', $this->apiUrl, $this->guildID);
 
@@ -2872,9 +2773,9 @@ final class DiscordApi
      * Returns a list of DM channel objects.
      * For bots, this is no longer a supported method of getting recent DMs, and will return an empty array.
      *
-     * @return array
+     * @return array<mixed>
      */
-    public function getUserDMs()
+    public function getUserDMs(): array
     {
         $url = \sprintf('%s/users/@me/channels', $this->apiUrl);
 
@@ -2885,10 +2786,10 @@ final class DiscordApi
      * Create a new DM channel with a user.
      * Returns a DM channel object.
      *
-     * @param   integer $recipientID    ID des Empfängers
-     * @return  array
+     * @param   int $recipientID    ID des Empfängers
+     * @return  array<mixed>
      */
-    public function createDM($recipientID)
+    public function createDM(int $recipientID): array
     {
         $url = \sprintf('%s/users/@me/channels', $this->apiUrl);
         $params = [
@@ -2904,10 +2805,10 @@ final class DiscordApi
      * This endpoint was intended to be used with the now-deprecated GameBridge SDK.
      * DMs created with this endpoint will not be shown in the Discord client
      *
-     * @param   array   $params Parameter
-     * @return  array
+     * @param   array<mixed>   $params Parameter
+     * @return  array<mixed>
      */
-    public function createGroupDM($params)
+    public function createGroupDM(array $params): array
     {
         $url = \sprintf('%s/users/@me/channels', $this->apiUrl);
 
@@ -2918,9 +2819,9 @@ final class DiscordApi
      * Returns a list of connection objects.
      * Requires the connections OAuth2 scope.
      *
-     * @return  array
+     * @return  array<mixed>
      */
-    public function getUserConnections()
+    public function getUserConnections(): array
     {
         $url = \sprintf('%s/users/@me/connections', $this->apiUrl);
 
@@ -2938,9 +2839,9 @@ final class DiscordApi
     /**
      * Returns an array of voice region objects that can be used when creating servers.
      *
-     * @return  array
+     * @return  array<mixed>
      */
-    public function listVoiceRegions()
+    public function listVoiceRegions(): array
     {
         $url = \sprintf('%s/voice/regions', $this->apiUrl);
 
@@ -2960,12 +2861,12 @@ final class DiscordApi
      * Requires the MANAGE_WEBHOOKS permission.
      * Returns a webhook object on success.
      *
-     * @param   integer $channelID  ID des Channels
+     * @param   string  $channelID  ID des Channels
      * @param   string  $name       Name des Webhooks
-     * @param   string  $avatar     Avatar des Webhooks
-     * @return  array
+     * @param   ?string  $avatar     Avatar des Webhooks
+     * @return  array<mixed>
      */
-    public function createWebhook($channelID, $name, $avatar = null)
+    public function createWebhook(string $channelID, string $name, ?string $avatar = null): array
     {
         $url = \sprintf('%s/channels/%s/webhooks', $this->apiUrl, $channelID);
         $params = [
@@ -2982,10 +2883,10 @@ final class DiscordApi
      * Returns a list of channel webhook objects.
      * Requires the MANAGE_WEBHOOKS permission.
      *
-     * @param   integer $channelID  ID des Channels
-     * @return  array
+     * @param   int $channelID  ID des Channels
+     * @return  array<mixed>
      */
-    public function getChannelWebhooks($channelID)
+    public function getChannelWebhooks(int $channelID): array
     {
         $url = \sprintf('%s/channels/%s/webhooks', $this->apiUrl, $channelID);
 
@@ -2996,9 +2897,9 @@ final class DiscordApi
      * Returns a list of guild webhook objects.
      * Requires the MANAGE_WEBHOOKS permission.
      *
-     * @return array
+     * @return array<mixed>
      */
-    public function getGuildWebhooks()
+    public function getGuildWebhooks(): array
     {
         $url = \sprintf('%s/guilds/%s/webhooks', $this->apiUrl, $this->guildID);
 
@@ -3008,10 +2909,10 @@ final class DiscordApi
     /**
      * Returns the new webhook object for the given id.
      *
-     * @param   integer $webhookID  ID des Webhooks
-     * @return  array
+     * @param   int $webhookID  ID des Webhooks
+     * @return  array<mixed>
      */
-    public function getWebhook($webhookID)
+    public function getWebhook(int $webhookID): array
     {
         $url = \sprintf('%s/webhooks/%s', $this->apiUrl, $webhookID);
 
@@ -3021,15 +2922,15 @@ final class DiscordApi
     /**
      * Same as above, except this call does not require authentication and returns no user in the webhook object.
      *
-     * @param   integer $webhookID      ID des Webhooks
+     * @param   int $webhookID      ID des Webhooks
      * @param   string  $webhookToken   Token des Webhooks
-     * @return  array
+     * @return  array<mixed>
      */
     public function getWebhookWithToken(
-        $webhookID,
+        int $webhookID,
         #[SensitiveParameter]
-        $webhookToken
-    ) {
+        string $webhookToken
+    ): array {
         $url = \sprintf('%s/webhooks/%s/%s', $this->apiUrl, $webhookID, $webhookToken);
 
         return $this->execute($url);
@@ -3040,11 +2941,11 @@ final class DiscordApi
      * Requires the MANAGE_WEBHOOKS permission.
      * Returns the updated webhook object on success.
      *
-     * @param   integer $webhookID  ID des Webhooks
-     * @param   array   $params     Parameter
-     * @return  array
+     * @param   int $webhookID  ID des Webhooks
+     * @param   array<mixed>  $params     Parameter
+     * @return  array<mixed>
      */
-    public function modifyWebhook($webhookID, $params)
+    public function modifyWebhook(int $webhookID, array $params): array
     {
         $url = \sprintf('%s/webhooks/%s', $this->apiUrl, $webhookID);
 
@@ -3055,17 +2956,17 @@ final class DiscordApi
      * Same as above, except this call does not require authentication, does not accept a channel_id parameter in the
      * body, and does not return a user in the webhook object.
      *
-     * @param   integer $webhookID      ID des Webhooks
+     * @param   int $webhookID      ID des Webhooks
      * @param   string  $webhookToken   Token des Webhooks
-     * @param   array   $params         Parameter
-     * @return  array
+     * @param   array<mixed>   $params         Parameter
+     * @return  array<mixed>
      */
     public function modifyWebhookWithToken(
-        $webhookID,
+        int $webhookID,
         #[SensitiveParameter]
-        $webhookToken,
-        $params
-    ) {
+        string $webhookToken,
+        array $params
+    ): array {
         $url = \sprintf('%s/webhooks/%s/%s', $this->apiUrl, $webhookID, $webhookToken);
 
         return $this->execute($url, 'PATCH', $params, 'application/json');
@@ -3076,10 +2977,10 @@ final class DiscordApi
      * User must be owner.
      * Returns a 204 NO CONTENT response on success.
      *
-     * @param   integer $webhookID  ID des Webhooks
-     * @return  array
+     * @param   int $webhookID  ID des Webhooks
+     * @return  array<mixed>
      */
-    public function deleteWebhook($webhookID)
+    public function deleteWebhook(int $webhookID): array
     {
         $url = \sprintf('%s/webhooks/%s', $this->apiUrl, $webhookID);
 
@@ -3089,15 +2990,15 @@ final class DiscordApi
     /**
      * Same as above, except this call does not require authentication.
      *
-     * @param   integer $webhookID      ID des Webhooks
+     * @param   int $webhookID      ID des Webhooks
      * @param   string  $webhookToken   Token des Webhooks
-     * @return  array
+     * @return  array<mixed>
      */
     public function deleteWebhookWithToken(
-        $webhookID,
+        int $webhookID,
         #[SensitiveParameter]
-        $webhookToken
-    ) {
+        string $webhookToken
+    ): array {
         $url = \sprintf('%s/webhooks/%s/%s', $this->apiUrl, $webhookID, $webhookToken);
 
         return $this->execute($url, 'DELETE');
@@ -3106,22 +3007,22 @@ final class DiscordApi
     /**
      * executes a webhook
      *
-     * @param   integer $webhookID      ID des Webhooks
+     * @param   int $webhookID      ID des Webhooks
      * @param   string  $webhookToken   Token des Webhooks
-     * @param   array   $params         Parameter
-     * @param   boolean $wait           waits for server confirmation of message send before response, and returns the
+     * @param   array<mixed>   $params         Parameter
+     * @param   bool $wait           waits for server confirmation of message send before response, and returns the
      *                                  created message body (defaults to false; when false a message that is not saved
      *                                  does not return an error)
-     * @return  array
+     * @return  array<mixed>
      */
     public function executeWebhook(
-        $webhookID,
+        int $webhookID,
         #[SensitiveParameter]
-        $webhookToken,
-        $params,
-        $wait = false,
-        $threadID = null
-    ) {
+        string $webhookToken,
+        array $params,
+        bool $wait = false,
+        ?int $threadID = null
+    ): array {
         $url = new Uri(
             \sprintf('%s/webhooks/%s/%s', $this->apiUrl, $webhookID, $webhookToken)
         );
@@ -3150,21 +3051,21 @@ final class DiscordApi
      * Refer to Slack's documentation for more information. We do not support Slack's channel, icon_emoji, mrkdwn, or
      * mrkdwn_in properties.
      *
-     * @param   integer $webhookID      ID des Webhooks
+     * @param   int $webhookID      ID des Webhooks
      * @param   string  $webhookToken   Token des Webhooks
-     * @param   array   $params         Parameter
-     * @param   boolean $wait           waits for server confirmation of message send before response, and returns the
+     * @param   array<mixed>   $params         Parameter
+     * @param   bool $wait           waits for server confirmation of message send before response, and returns the
      *                                  created message body (defaults to false; when false a message that is not saved
      *                                  does not return an error)
-     * @return  array
+     * @return  array<mixed>
      */
     public function executeSlackCompatibleWebhook(
-        $webhookID,
+        int $webhookID,
         #[SensitiveParameter]
-        $webhookToken,
-        $params,
-        $wait = false
-    ) {
+        string $webhookToken,
+        array $params,
+        bool $wait = false
+    ): array {
         $url = \sprintf('%s/webhooks/%s/%s/slack', $this->apiUrl, $webhookID, $webhookToken);
 
         return $this->execute($url, 'POST', $params, 'application/json');
@@ -3175,21 +3076,21 @@ final class DiscordApi
      * can choose what events your Discord channel receives by choosing the "Let me select individual events" option
      * and selecting individual events for the new webhook you're configuring.
      *
-     * @param   integer $webhookID      ID des Webhooks
+     * @param   int $webhookID      ID des Webhooks
      * @param   string  $webhookToken   Token des Webhooks
-     * @param   array   $params         Parameter
-     * @param   boolean $wait           waits for server confirmation of message send before response, and returns the
+     * @param   array<mixed>   $params         Parameter
+     * @param   bool $wait           waits for server confirmation of message send before response, and returns the
      *                                  created message body (defaults to false; when false a message that is not saved
      *                                  does not return an error)
-     * @return  array
+     * @return  array<mixed>
      */
     public function executeGithubCompatibleWebhook(
-        $webhookID,
+        int $webhookID,
         #[SensitiveParameter]
-        $webhookToken,
-        $params,
-        $wait = false
-    ) {
+        string $webhookToken,
+        array $params,
+        bool $wait = false
+    ): array {
         $url = \sprintf('%s/webhooks/%s/%s/github', $this->apiUrl, $webhookID, $webhookToken);
 
         return $this->execute($url, 'POST', $params, 'application/json');
@@ -3206,12 +3107,12 @@ final class DiscordApi
     /**
      * methode to gnerate OAuth2 Link
      *
-     * @param   integer $clientID       ID der Awnedung
-     * @param   array   $scope          Scope-Inhalt, was Benutzer alles authorisieren soll
+     * @param   string $clientID       ID der Awnedung
+     * @param   string[]   $scope          Scope-Inhalt, was Benutzer alles authorisieren soll
      * @param   string  $redirectUri    die Redirect-URI der Website
      * @return  string
      */
-    public function oauth2Authorize($clientID, $scope, $redirectUri, $state = null)
+    public function oauth2Authorize(string $clientID, array $scope, string $redirectUri, ?string $state = null)
     {
         $url = \sprintf('%s/oauth2/authorize?response_type=code&client_id=%s&', $this->apiUrl, $clientID);
         $params = [
@@ -3229,20 +3130,20 @@ final class DiscordApi
     /**
      * Verifiziert den Code
      *
-     * @param   integer $clientID       ID der Awnedung
+     * @param   string  $clientID       ID der Awnedung
      * @param   string  $clientSecret   Geheimer Schlüssel der Anwendung
      * @param   string  $code           OAuth2-Code
      * @param   string  $redirectUri    die Redirect-URI der Website
      * @param   string  $grantType      Grant-Type (authorization_code, refresh_token, client_credentials)
-     * @return  array
+     * @return  array<mixed>
      */
     public function oauth2Token(
-        $clientID,
+        string $clientID,
         #[SensitiveParameter]
-        $clientSecret,
-        $code,
-        $redirectUri,
-        $grantType = 'authorization_code'
+        string $clientSecret,
+        string $code,
+        string $redirectUri,
+        string $grantType = 'authorization_code'
     ) {
         $url = \sprintf('%s/oauth2/token', $this->apiUrl);
         $params = [
@@ -3264,10 +3165,10 @@ final class DiscordApi
     /**
      * Returns the bot's OAuth2 application info.
      *
-     * @return array
+     * @return array<mixed>
      * @deprecated since 2.6.5, use getCurrentApplication
      */
-    public function getCurrentApplicationInformation()
+    public function getCurrentApplicationInformation(): array
     {
         $url = \sprintf('%s/oauth2/applications/@me', $this->apiUrl);
 
@@ -3276,6 +3177,8 @@ final class DiscordApi
 
     /**
      * Returns the application object associated with the requesting bot user.
+     *
+     * @return array<mixed>
      */
     public function getCurrentApplication(): array
     {
@@ -3287,6 +3190,9 @@ final class DiscordApi
     /**
      * Edit properties of the app associated with the requesting bot user. Only properties that are passed will be
      * updated. Returns the updated application object on success.
+     *
+     * @param array<mixed> $params
+     * @return array<mixed>
      */
     public function editCurrentApplication(array $params): array
     {
@@ -3297,6 +3203,8 @@ final class DiscordApi
 
     /**
      * Returns a list of application role connection metadata objects for the given application.
+     *
+     * @return array<mixed>
      */
     public function getApplicationRoleConnectionMetadataRecords(int $applicationID): array
     {
@@ -3307,8 +3215,10 @@ final class DiscordApi
 
     /**
      * Updates and returns a list of application role connection metadata objects for the given application.
+     *
+     * @return array<mixed>
      */
-    public function updateApplicationRoleConnectionMetadataRecords($applicationID): array
+    public function updateApplicationRoleConnectionMetadataRecords(int $applicationID): array
     {
         $url = \sprintf('%s/applications/%s/role-connections/metadata', $this->apiUrl, $applicationID);
 
@@ -3328,9 +3238,9 @@ final class DiscordApi
      * this value and only call this endpoint to retrieve a new URL if they are unable to properly establish a
      * connection using the cached version of the URL.
      *
-     * @return array
+     * @return array<mixed>
      */
-    public function getGateway()
+    public function getGateway(): array
     {
         $url = \sprintf('%s/gateway', $this->apiUrl);
 
@@ -3342,9 +3252,9 @@ final class DiscordApi
      * operation of large or sharded bots. Unlike the Get Gateway, this route should not be cached for extended periods
      * of time as the value is not guaranteed to be the same per-call, and changes as the bot joins/leaves guilds.
      *
-     * @return array
+     * @return array<mixed>
      */
-    public function getGatewayBot()
+    public function getGatewayBot(): array
     {
         $url = \sprintf('%s/gateway/bot', $this->apiUrl);
 
@@ -3362,7 +3272,7 @@ final class DiscordApi
     /**
      * returns encoded user flag informations
      *
-     * @param   integer $flag       Benutzer Flag als Decimalwert
+     * @param   int $flag       Benutzer Flag als Decimalwert
      * @return string[]
      */
     public function getUserFlagsArray(int $flag): array
@@ -3422,10 +3332,15 @@ final class DiscordApi
     /**
      * returns encoded snowflake informations
      *
-     * @param   integer $snowflake  Snowflake ID as decimal
-     * @return array
+     * @param  int $snowflake  Snowflake ID as decimal
+     * @return array{
+     *  timestamp: float,
+     *  internalWorkerID: int<0, 31>,
+     *  internalProcessID: int<0, 31>,
+     *  increment: int<0, 4095>
+     * }
      */
-    public function decodeSnowflake($snowflake)
+    public function decodeSnowflake(int $snowflake): array
     {
         return [
             'timestamp' => \round((($snowflake >> 22) + 1420070400000) / 1000),
@@ -3438,10 +3353,10 @@ final class DiscordApi
     /**
      * returns encoded permissions informations
      *
-     * @param   integer $snowflake  Snowflake ID as decimal
-     * @return array
+     * @param  int $permissions  Snowflake ID as decimal
+     * @return string[]
      */
-    public function permissionDecoder($permissions)
+    public function permissionDecoder(int $permissions): array
     {
         $permissionFlags = [
             0x1 => 'CREATE_INSTANT_INVITE',
@@ -3493,7 +3408,7 @@ final class DiscordApi
 
     final protected function getHttpClient(): ClientInterface
     {
-        if (!$this->httpClient) {
+        if (!isset($this->httpClient)) {
             $this->httpClient = HttpFactory::makeClient([
                 RequestOptions::TIMEOUT => 10,
             ]);
@@ -3507,16 +3422,16 @@ final class DiscordApi
      *
      * @param   string  $url            URL der API-Anfrage
      * @param   string  $method         HTTP-Methode (Standard: GET)
-     * @param   array   $parameters     Informationen die per Post oder JSON-Objekt an die API gesendet werden soll
+     * @param   array<mixed> $parameters Informationen die per Post oder JSON-Objekt an die API gesendet werden soll
      * @param   string  $contentType    Sendungstyp
-     * @return  array
+     * @return  array<mixed>
      */
     protected function execute(
-        $url,
-        $method = 'GET',
-        $parameters = [],
-        $contentType = 'application/x-www-form-urlencoded'
-    ) {
+        string $url,
+        string $method = 'GET',
+        array $parameters = [],
+        string $contentType = 'application/x-www-form-urlencoded'
+    ): array {
         $reply = [];
 
         $headers = [
@@ -3525,7 +3440,7 @@ final class DiscordApi
         ];
         if ($method !== 'GET') {
             if ($parameters === []) {
-                $headers['content-length'] = 0;
+                $headers['content-length'] = '0';
             }
         }
 
@@ -3584,15 +3499,19 @@ final class DiscordApi
     /**
      * verarbeitet die API antwort und fügt interessante Informationen an
      *
-     * @param   array   $replyTmp   die Antwort von der API
-     * @return  array
+     * @return array{
+     *  error: null,
+     *  status: int,
+     *  body: string,
+     *  rateLimit: ?array{limit: ?string, remaining: ?string, reset: ?string}
+     * }
      */
-    protected function parseReply(ResponseInterface $response)
+    protected function parseReply(ResponseInterface $response): array
     {
         $body = (string)$response->getBody();
         try {
             $body = JSON::decode($body, true);
-        } catch (Exception $e) {
+        } catch (Throwable) {
         }
         $reply = [
             'error' => null,

@@ -7,6 +7,9 @@ use wcf\data\discord\bot\DiscordBotEditor;
 use wcf\data\discord\bot\DiscordBotList;
 use wcf\data\file\FileEditor;
 
+/**
+ * @extends AbstractLinearRebuildDataWorker<DiscordBotList>
+ */
 final class DiscordWebhookAvatarRebuildDataWorker extends AbstractLinearRebuildDataWorker
 {
     /**
