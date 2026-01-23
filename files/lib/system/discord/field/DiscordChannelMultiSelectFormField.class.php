@@ -46,7 +46,7 @@ final class DiscordChannelMultiSelectFormField extends AbstractFormField impleme
     private array $allowedTypes = [];
 
     #[Override]
-    public function hasSaveValue(): false
+    public function hasSaveValue(): bool
     {
         return false;
     }
