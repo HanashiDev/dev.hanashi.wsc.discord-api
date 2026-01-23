@@ -145,7 +145,7 @@ final class DiscordChannelMultiSelectFormField extends AbstractFormField impleme
         }
 
         foreach ($options as $option) {
-            foreach (['id', 'type', 'name', 'parent_id', 'position'] as $entry) {
+            foreach (['id', 'type', 'name', 'position'] as $entry) {
                 if (!isset($option[$entry])) {
                     throw new \InvalidArgumentException("Option has no {$entry} entry for field '{$this->getId()}'.");
                 }
