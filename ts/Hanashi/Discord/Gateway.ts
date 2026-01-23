@@ -1,5 +1,5 @@
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+ 
+ 
 import * as EventHandler from "WoltLabSuite/Core/Event/Handler";
 
 /**
@@ -7,7 +7,7 @@ import * as EventHandler from "WoltLabSuite/Core/Event/Handler";
  */
 export type GatewayEvent = {
   op: number;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+   
   d: any;
   s?: number;
   t?: string;
