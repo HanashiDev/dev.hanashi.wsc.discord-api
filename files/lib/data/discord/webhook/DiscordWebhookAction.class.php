@@ -3,7 +3,10 @@
 namespace wcf\data\discord\webhook;
 
 use wcf\data\AbstractDatabaseObjectAction;
+use wcf\event\discord\webhook\DiscordWebhookCreated;
+use wcf\event\discord\webhook\DiscordWebhookUpdated;
 use wcf\system\cache\builder\DiscordGuildChannelsCacheBuilder;
+use wcf\system\event\EventHandler;
 
 /**
  * Discord-Webhook-Objekt-Action
@@ -28,15 +31,24 @@ final class DiscordWebhookAction extends AbstractDatabaseObjectAction
     public $className = DiscordWebhookEditor::class;
 
     #[\Override]
-    public function delete()
+    public function create()
     {
-        foreach ($this->objects as $object) {
-            $discordWebhook = $object->getDecoratedObject();
-            $discordApi = $discordWebhook->getDiscordApi();
-            $discordApi->deleteWebhookWithToken($discordWebhook->webhookID, $discordWebhook->webhookToken);
-        }
+        $webhook = parent::create();
 
-        return parent::delete();
+        EventHandler::getInstance()->fire(new DiscordWebhookCreated($webhook));
+
+        return $webhook;
+    }
+
+    #[\Override]
+    public function update()
+    {
+        parent::update();
+
+        foreach ($this->getObjects() as $webhook) {
+            $updatedWebhook = new DiscordWebhook($webhook->webhookID);
+            EventHandler::getInstance()->fire(new DiscordWebhookUpdated($updatedWebhook));
+        }
     }
 
     #[\Override]

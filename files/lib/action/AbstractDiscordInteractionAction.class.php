@@ -7,8 +7,8 @@ use Laminas\Diactoros\Response\JsonResponse;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
+use wcf\command\discord\interaction\log\LogDiscordInteraction;
 use wcf\data\discord\bot\DiscordBotList;
-use wcf\data\discord\interaction\log\DiscordInteractionLogAction;
 use wcf\system\discord\DiscordApi;
 use wcf\system\discord\interaction\callback\PingInteractionCallback;
 use wcf\util\JSON;
@@ -23,13 +23,7 @@ abstract class AbstractDiscordInteractionAction implements RequestHandlerInterfa
                 $body = (string)$request->getBody();
 
                 if (ENABLE_DEBUG_MODE) {
-                    $action = new DiscordInteractionLogAction([], 'create', [
-                        'data' => [
-                            'log' => $body,
-                            'time' => TIME_NOW,
-                        ],
-                    ]);
-                    $action->executeAction();
+                    (new LogDiscordInteraction($body));
                 }
 
                 if ($body === '') {

@@ -3,7 +3,10 @@
 namespace wcf\data\discord\bot;
 
 use wcf\data\AbstractDatabaseObjectAction;
+use wcf\event\discord\bot\DiscordBotCreated;
+use wcf\event\discord\bot\DiscordBotUpdated;
 use wcf\system\cache\builder\DiscordGuildChannelsCacheBuilder;
+use wcf\system\event\EventHandler;
 use wcf\system\exception\AJAXException;
 use wcf\system\exception\PermissionDeniedException;
 use wcf\system\WCF;
@@ -44,7 +47,11 @@ final class DiscordBotAction extends AbstractDatabaseObjectAction
             unset($this->parameters['data']['useApplicationCommands']);
         }
 
-        return parent::create();
+        $bot = parent::create();
+
+        EventHandler::getInstance()->fire(new DiscordBotCreated($bot));
+
+        return $bot;
     }
 
     #[\Override]
@@ -58,6 +65,11 @@ final class DiscordBotAction extends AbstractDatabaseObjectAction
         }
 
         parent::update();
+
+        foreach ($this->getObjects() as $bot) {
+            $updatedBot = new DiscordBot($bot->botID);
+            EventHandler::getInstance()->fire(new DiscordBotUpdated($updatedBot));
+        }
     }
 
     #[\Override]

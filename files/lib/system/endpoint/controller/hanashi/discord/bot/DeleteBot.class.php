@@ -5,8 +5,8 @@ namespace wcf\system\endpoint\controller\hanashi\discord\bot;
 use Laminas\Diactoros\Response\JsonResponse;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use wcf\command\discord\bot\DeleteDiscordBot;
 use wcf\data\discord\bot\DiscordBot;
-use wcf\data\discord\bot\DiscordBotAction;
 use wcf\http\Helper;
 use wcf\system\endpoint\DeleteRequest;
 use wcf\system\endpoint\IController;
@@ -22,8 +22,7 @@ final class DeleteBot implements IController
 
         WCF::getSession()->checkPermissions(['admin.discord.canManageConnection']);
 
-        $action = new DiscordBotAction([$bot], 'delete');
-        $action->executeAction();
+        (new DeleteDiscordBot($bot))();
 
         return new JsonResponse([]);
     }
