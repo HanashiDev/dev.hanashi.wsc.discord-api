@@ -6,8 +6,8 @@
 		<packagename language="de">Discord-API</packagename>
 		<packagedescription>API to cummincate with Discord.</packagedescription>
 		<packagedescription language="de">API um mit Discord zu kommunizieren.</packagedescription>
-		<version>2.8.0</version>
-		<date>2025-11-14</date>
+		<version>2.8.1</version>
+		<date>2026-01-23</date>
 		<license>https://creativecommons.org/publicdomain/zero/1.0/deed.en</license>
 	</packageinformation>
 	<authorinformation>
@@ -15,7 +15,7 @@
 		<authorurl>https://hanashi.dev/</authorurl>
 	</authorinformation>
 	<requiredpackages>
-		<requiredpackage minversion="6.2.0 Beta 2">com.woltlab.wcf</requiredpackage>
+		<requiredpackage minversion="6.2.0 RC 3">com.woltlab.wcf</requiredpackage>
 	</requiredpackages>
 	<excludedpackages>
 		<excludedpackage version="7.0.0 Alpha 1">com.woltlab.wcf</excludedpackage>
@@ -31,6 +31,9 @@
 		<instruction type="userGroupOption"/>
 		<instruction type="option"/>
 		<instruction type="database">acp/database/install_dev.hanashi.wsc.discord-api.php</instruction>
+	</instructions>
+	<instructions type="update" fromversion="2.8.0">
+		<instruction type="file"/>
 	</instructions>
 	<instructions type="update" fromversion="2.7.*">
 		<instruction type="file"/>
