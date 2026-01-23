@@ -135,7 +135,7 @@ final class DiscordChannelMultiSelectFormField extends AbstractFormField impleme
     }
 
     #[Override]
-    public function supportsNestedOptions(): false
+    public function supportsNestedOptions(): bool
     {
         return false;
     }

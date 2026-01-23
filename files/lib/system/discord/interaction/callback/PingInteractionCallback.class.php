@@ -17,7 +17,7 @@ final class PingInteractionCallback extends AbstractInteractionCallback
     }
 
     #[Override]
-    public function getData(): null
+    public function getData(): ?array
     {
         return null;
     }
